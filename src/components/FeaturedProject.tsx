@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { useLanguage } from "@/context/LanguageContext";
-import { PROJECTS } from "@/data/portfolioData";
+import { PROJECTS, DESIGNER_INFO } from "@/data/portfolioData";
 import {
   Maximize2,
   MapPin,
@@ -15,7 +15,6 @@ import {
   MessageCircle,
   ChevronLeft,
   ChevronRight,
-  Eye,
 } from "lucide-react";
 
 export default function FeaturedProject() {
@@ -27,9 +26,9 @@ export default function FeaturedProject() {
 
   const angleLabelsAr = [
     "الزاوية البانورامية الشاملة",
-    "الواجهة الأمامية والبانوهات",
-    "جدار الشاشة المودرن",
-    "الجلسة الركنية والتفاصيل",
+    "الواجهة الأمامية والبانوهات الخشبية",
+    "جدار الشاشة ووحدة التلفزيون",
+    "الجلسة الركنية وتفاصيل الأثاث",
   ];
 
   const angleLabelsEn = [
@@ -61,7 +60,7 @@ export default function FeaturedProject() {
           <div>
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#c5a880]/10 border border-[#c5a880]/20 text-[#dfbe95] text-xs font-semibold uppercase tracking-wider mb-3">
               <Sparkles className="w-3.5 h-3.5" />
-              <span>{t("مشروع الأسبوع المميز", "Featured Masterpiece")}</span>
+              <span>{t("مشروع مميز • تصميم وإشراف م. آلاء عيسى", "Featured Work • By Eng. Alaa Issa")}</span>
             </div>
             <h2 className="text-2xl sm:text-4xl font-bold text-white font-serif tracking-tight">
               {t(project.title, project.titleEn)}
@@ -69,8 +68,8 @@ export default function FeaturedProject() {
           </div>
           <p className="text-sm text-[#a8a49c] max-w-md">
             {t(
-              "تجربة معمارية واقعية نفذناها في التجمع الخامس؛ حيث يلتقي خشب الجوز الطبيعي مع الخطوط العمودية والإضاءة الهادئة.",
-              "A real-world project executed in New Cairo, harmonizing natural walnut joinery, fluted textures, and serene ambient warmth."
+              "أحدث مشاريعي في التجمع الخامس؛ حيث وظفت خشب الجوز الطبيعي مع البانوهات المخططة والإضاءات المخفية الدافئة لخلق فراغ متوازن ومريح بصرياً.",
+              "My latest interior project in New Cairo, balancing natural walnut timber, fluted panels, and warm ambient backlights."
             )}
           </p>
         </div>
@@ -200,7 +199,7 @@ export default function FeaturedProject() {
             {/* Description */}
             <div>
               <h3 className="text-sm font-bold text-white mb-2 uppercase tracking-wider font-serif">
-                {t("عن المشروع ورؤية التصميم", "About The Concept")}
+                {t("رؤيتي في تصميم المشروع", "My Design Vision")}
               </h3>
               <p className="text-xs sm:text-sm text-[#b5b0a6] leading-relaxed">
                 {t(project.description, project.descriptionEn)}
@@ -239,7 +238,7 @@ export default function FeaturedProject() {
             {/* Architectural Highlights list */}
             <div>
               <h4 className="text-xs font-bold text-white uppercase tracking-wider mb-2.5">
-                {t("أبرز العناصر والمواد المنفذة", "Execution Highlights")}
+                {t("العناصر والمواصفات التي صممتها", "Key Custom Elements")}
               </h4>
               <ul className="flex flex-col gap-2">
                 {(lang === "ar" ? project.features : project.featuresEn).map((feat, idx) => (
@@ -254,15 +253,15 @@ export default function FeaturedProject() {
             {/* CTA action */}
             <div className="pt-4 border-t border-white/10 flex flex-col sm:flex-row gap-3">
               <a
-                href={`https://wa.me/201000000000?text=${encodeURIComponent(
-                  `مرحباً استوديو Decor Portfolio، أعجبني مشروع "${project.title}" وأود طلب استشارة لتنفيذ تصميم مماثل لمساحتي.`
+                href={`https://wa.me/${DESIGNER_INFO.whatsappNumber}?text=${encodeURIComponent(
+                  `مرحباً م. آلاء عيسى، أعجبني مشروع "${project.title}" وأود طلب استشارة معك لتنفيذ تصميم مماثل لمساحتي.`
                 )}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl text-xs sm:text-sm font-semibold bg-gradient-to-r from-[#c5a880] to-[#b39162] hover:from-[#dfbe95] hover:to-[#c5a880] text-[#141316] shadow-lg shadow-[#c5a880]/20 transition-all"
+                className="flex-1 flex items-center justify-center gap-2 py-3.5 rounded-xl text-xs sm:text-sm font-semibold bg-gradient-to-r from-[#c5a880] to-[#b39162] hover:from-[#dfbe95] hover:to-[#c5a880] text-[#141316] shadow-lg shadow-[#c5a880]/20 transition-all"
               >
                 <MessageCircle className="w-4 h-4" />
-                <span>{t("طلب تصميم مماثل لمساحتك", "Request Similar Design")}</span>
+                <span>{t("طلب تصميم مماثل مع م. آلاء عيسى", "Request Similar Design with Eng. Alaa")}</span>
               </a>
             </div>
           </div>
@@ -291,4 +290,3 @@ export default function FeaturedProject() {
     </section>
   );
 }
-

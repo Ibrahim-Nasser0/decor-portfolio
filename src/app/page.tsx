@@ -4,6 +4,7 @@ import React from "react";
 import { LanguageProvider } from "@/context/LanguageContext";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
+import AboutSection from "@/components/AboutSection";
 import FeaturedProject from "@/components/FeaturedProject";
 import PortfolioGallery from "@/components/PortfolioGallery";
 import BeforeAfterSlider from "@/components/BeforeAfterSlider";
@@ -20,6 +21,7 @@ export default function Home() {
       <main className="min-h-screen bg-[#0e0e10] text-[#f4f2ee] selection:bg-[#c5a880]/30 selection:text-[#e8d5be] overflow-x-hidden">
         <Navbar />
         <Hero />
+        <AboutSection />
         <FeaturedProject />
         <PortfolioGallery />
         <BeforeAfterSlider />

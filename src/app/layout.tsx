@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Decor Portfolio | استوديو التصميم الداخلي والديكور الفاخر",
-  description: "استوديو هندسي متخصص في التصميم الداخلي الراقي، التشطيبات الفاخرة، وحلول الديكور العصري والكلاسيكي.",
+  title: "م. آلاء عيسى | مهندسة ديكور وتصميم داخلي - Alaa Issa Interior Design",
+  description:
+    "معرض أعمال وخدمات مهندسة الديكور والتصميم الداخلي م. آلاء عيسى؛ تصاميم 3D واقعية، تشطيبات فاخرة، وإشراف هندسي متكامل.",
   icons: {
     icon: "/favicon.ico",
   },

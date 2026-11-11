@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { useLanguage } from "@/context/LanguageContext";
-import { FAQS } from "@/data/portfolioData";
+import { FAQS, DESIGNER_INFO } from "@/data/portfolioData";
 import {
   Phone,
   Mail,
@@ -13,6 +13,7 @@ import {
   CheckCircle2,
   ChevronDown,
   HelpCircle,
+  Sparkles,
 } from "lucide-react";
 
 export default function ContactSection() {
@@ -25,7 +26,6 @@ export default function ContactSection() {
     phone: "",
     city: "",
     projectType: "residential",
-    budget: "medium",
     message: "",
   });
 
@@ -40,14 +40,14 @@ export default function ContactSection() {
     setActiveFaq(activeFaq === index ? null : index);
   };
 
-  const directWhatsappLink = `https://wa.me/201000000000?text=${encodeURIComponent(
-    `مرحباً استوديو Decor Portfolio، اسمي ${formData.name || "عميل"} وأود حجز موعد استشارة لمشروع ${
+  const directWhatsappLink = `https://wa.me/${DESIGNER_INFO.whatsappNumber}?text=${encodeURIComponent(
+    `مرحباً م. آلاء عيسى، اسمي ${formData.name || "عميل"} وأود حجز موعد استشارة تصميم داخلي لمشروع ${
       formData.projectType === "residential"
-        ? "سكني"
+        ? "شقة سكنية"
         : formData.projectType === "villa"
         ? "فيلا خاصة"
-        : "تجاري"
-    } في منطقة ${formData.phone || ""}.`
+        : "مشروع تجاري"
+    } في منطقة ${formData.city || "القاهرة"}.`
   )}`;
 
   return (
@@ -60,12 +60,12 @@ export default function ContactSection() {
             <span>{t("ابدأ مشروعك اليوم", "Get In Touch")}</span>
           </div>
           <h2 className="text-3xl sm:text-5xl font-bold text-white font-serif tracking-tight mb-4">
-            {t("تواصل معنا واحجز استشارتك", "Consult with Our Architects")}
+            {t("تواصلي مباشرة مع م. آلاء عيسى", "Consult Directly with Eng. Alaa")}
           </h2>
           <p className="text-xs sm:text-sm text-[#a8a49c]">
             {t(
-              "يسعدنا استقبالك في استوديو التصميم أو التحدث معك مباشرة عبر الهاتف والواتساب لمناقشة تفاصيل مشروعك.",
-              "We welcome you to visit our design studio or contact us directly via WhatsApp to discuss your upcoming project."
+              "يسعدني التحدث معكِ مباشرة ومناقشة تفاصيل وأفكار منزلكِ الجديد أو مشروعكِ التجاري عبر الهاتف أو الواتساب أو تحديد موعد لقاء استشاري.",
+              "I would love to discuss your interior aspirations directly via WhatsApp, phone, or in person for an in-depth design consultation."
             )}
           </p>
         </div>
@@ -74,50 +74,27 @@ export default function ContactSection() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
           {/* Info & FAQs (5 cols) */}
           <div className="lg:col-span-5 space-y-8">
-            {/* Direct Studio Cards */}
+            {/* Direct Designer Contact Cards */}
             <div className="glass-panel p-6 sm:p-7 rounded-3xl border border-white/10 space-y-5">
-              <h3 className="text-lg font-bold text-white font-serif">
-                {t("بيانات الاستوديو والتواصل المباشر", "Studio Contact Details")}
-              </h3>
+              <div className="flex items-center gap-3 pb-3 border-b border-white/10">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#dfbe95] to-[#c5a880] p-[1px]">
+                  <div className="w-full h-full bg-[#141418] rounded-[11px] flex items-center justify-center">
+                    <Sparkles className="w-5 h-5 text-[#dfbe95]" />
+                  </div>
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-white font-serif">
+                    {t(DESIGNER_INFO.nameAr, DESIGNER_INFO.nameEn)}
+                  </h3>
+                  <p className="text-xs text-[#dfbe95]">
+                    {t(DESIGNER_INFO.titleAr, DESIGNER_INFO.titleEn)}
+                  </p>
+                </div>
+              </div>
 
               <div className="space-y-4 text-xs sm:text-sm">
                 <a
-                  href="https://maps.google.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-start gap-3 text-[#cac5bb] hover:text-[#dfbe95] transition-colors"
-                >
-                  <div className="p-2.5 rounded-xl bg-white/5 text-[#dfbe95] shrink-0 border border-white/5">
-                    <MapPin className="w-4 h-4" />
-                  </div>
-                  <div>
-                    <div className="font-semibold text-white">{t("مقر الاستوديو", "Studio Address")}</div>
-                    <div className="text-xs text-[#9c978e] mt-0.5">
-                      {t(
-                        "التجمع الخامس، شارع التسعين الشمالي، القاهرة الجديدة، مصر",
-                        "North 90th St, New Cairo, Egypt"
-                      )}
-                    </div>
-                  </div>
-                </a>
-
-                <a
-                  href="tel:+201000000000"
-                  className="flex items-start gap-3 text-[#cac5bb] hover:text-[#dfbe95] transition-colors"
-                >
-                  <div className="p-2.5 rounded-xl bg-white/5 text-[#dfbe95] shrink-0 border border-white/5">
-                    <Phone className="w-4 h-4" />
-                  </div>
-                  <div>
-                    <div className="font-semibold text-white">{t("الهاتف المباشر", "Direct Phone")}</div>
-                    <div className="text-xs text-[#9c978e] mt-0.5 font-mono" dir="ltr">
-                      +20 100 000 0000 / +20 120 000 0000
-                    </div>
-                  </div>
-                </a>
-
-                <a
-                  href="https://wa.me/201000000000"
+                  href={`https://wa.me/${DESIGNER_INFO.whatsappNumber}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-start gap-3 text-[#cac5bb] hover:text-[#dfbe95] transition-colors"
@@ -126,19 +103,49 @@ export default function ContactSection() {
                     <MessageCircle className="w-4 h-4" />
                   </div>
                   <div>
-                    <div className="font-semibold text-white">{t("واتساب الاستشارات", "WhatsApp Inquiries")}</div>
+                    <div className="font-semibold text-white">{t("واتساب الاستشارات المباشر", "Direct WhatsApp Chat")}</div>
                     <div className="text-xs text-[#9c978e] mt-0.5">
-                      {t("متاح على مدار الساعة للمحادثات السريعة", "Available 24/7 for quick chats")}
+                      {t("متاح للمحادثات السريعة ومشاركة الصور والمخططات", "Available for instant messaging and blueprint review")}
+                    </div>
+                  </div>
+                </a>
+
+                <a
+                  href={`tel:+${DESIGNER_INFO.whatsappNumber}`}
+                  className="flex items-start gap-3 text-[#cac5bb] hover:text-[#dfbe95] transition-colors"
+                >
+                  <div className="p-2.5 rounded-xl bg-white/5 text-[#dfbe95] shrink-0 border border-white/5">
+                    <Phone className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <div className="font-semibold text-white">{t("رقم الاتصال المباشر", "Direct Phone Call")}</div>
+                    <div className="text-xs text-[#9c978e] mt-0.5 font-mono" dir="ltr">
+                      +20 100 000 0000
                     </div>
                   </div>
                 </a>
 
                 <div className="flex items-start gap-3 text-[#cac5bb]">
                   <div className="p-2.5 rounded-xl bg-white/5 text-[#dfbe95] shrink-0 border border-white/5">
+                    <MapPin className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <div className="font-semibold text-white">{t("نطاق العمل الميداني", "Coverage & Service Area")}</div>
+                    <div className="text-xs text-[#9c978e] mt-0.5">
+                      {t(
+                        "القاهرة الجديدة (التجمع الخامس)، الشيخ زايد، 6 أكتوبر، والمعادي (ومتاح تصميم أونلاين لجميع المحافظات ودول الخليج).",
+                        "New Cairo, Sheikh Zayed, 6th of October, and online consultation across GCC."
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3 text-[#cac5bb]">
+                  <div className="p-2.5 rounded-xl bg-white/5 text-[#dfbe95] shrink-0 border border-white/5">
                     <Clock className="w-4 h-4" />
                   </div>
                   <div>
-                    <div className="font-semibold text-white">{t("ساعات العمل الرسمية", "Working Hours")}</div>
+                    <div className="font-semibold text-white">{t("مواعيد الاستشارات", "Consultation Hours")}</div>
                     <div className="text-xs text-[#9c978e] mt-0.5">
                       {t("السبت - الخميس: 10:00 ص - 8:00 م", "Sat - Thu: 10:00 AM - 8:00 PM")}
                     </div>
@@ -152,7 +159,7 @@ export default function ContactSection() {
               <div className="flex items-center gap-2 mb-4">
                 <HelpCircle className="w-4 h-4 text-[#dfbe95]" />
                 <h3 className="text-base font-bold text-white font-serif">
-                  {t("الأسئلة الشائعة", "Frequently Asked Questions")}
+                  {t("الأسئلة الشائعة حول خدمات التصميم", "Frequently Asked Questions")}
                 </h3>
               </div>
 
@@ -188,12 +195,12 @@ export default function ContactSection() {
                   <CheckCircle2 className="w-8 h-8" />
                 </div>
                 <h3 className="text-2xl font-bold text-white font-serif mb-2">
-                  {t("تم استلام طلب استشارتك بنجاح!", "Consultation Request Received!")}
+                  {t("تم استلام طلبك بنجاح!", "Your Request Has Been Received!")}
                 </h3>
                 <p className="text-sm text-[#b5b0a6] max-w-md mb-8 leading-relaxed">
                   {t(
-                    "شكراً لاهتمامك بفريق Decor Portfolio؛ سيقوم كبير مهندسي التصميم بالتواصل معك هاتفياً خلال أقل من 24 ساعة لمناقشة التفاصيل.",
-                    "Thank you for contacting Decor Portfolio. Our senior interior architect will reach out within 24 hours to schedule your consultation."
+                    "شكراً لاهتمامكِ وتواصلكِ؛ سأقوم شخصياً بمراجعة تفاصيل طلبكِ والتواصل معكِ هاتفياً خلال أقل من 24 ساعة.",
+                    "Thank you for reaching out. Eng. Alaa Issa will personally review your project details and contact you within 24 hours."
                   )}
                 </p>
 
@@ -205,13 +212,13 @@ export default function ContactSection() {
                     className="flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-bold text-xs sm:text-sm bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-600/30 transition-all"
                   >
                     <MessageCircle className="w-4 h-4" />
-                    <span>{t("فتح المحادثة عبر واتساب الآن", "Open WhatsApp Chat Now")}</span>
+                    <span>{t("فتح محادثة واتساب مع م. آلاء الآن", "Chat with Eng. Alaa on WhatsApp")}</span>
                   </a>
                   <button
                     onClick={() => setSubmitted(false)}
                     className="px-6 py-3 rounded-xl text-xs sm:text-sm font-medium bg-white/10 hover:bg-white/15 text-white transition-colors"
                   >
-                    {t("إرسال طلب جديد", "Submit Another Request")}
+                    {t("إرسال طلب استشارة آخر", "Submit Another Request")}
                   </button>
                 </div>
               </div>
@@ -219,12 +226,12 @@ export default function ContactSection() {
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
                   <h3 className="text-xl sm:text-2xl font-bold text-white font-serif">
-                    {t("احجز جلسة استشارة مع كبير مهندسينا", "Book an Architectural Consultation")}
+                    {t("احجزي استشارتكِ المباشرة مع م. آلاء عيسى", "Book a Direct Consultation with Eng. Alaa")}
                   </h3>
                   <p className="text-xs sm:text-sm text-[#a8a49c] mt-1">
                     {t(
-                      "املأ النموذج وسنتواصل معك لعقد جلسة أولية لمناقشة الأفكار والمخططات المتاحة.",
-                      "Fill out the form and our design lead will contact you to discuss your vision."
+                      "سجلي بياناتكِ وسأتواصل معكِ لترتيب جلسة لمناقشة أفكاركِ وتطلعاتكِ لمساحتكِ الخاصة.",
+                      "Fill out the form and I will personally get in touch to schedule our design discovery session."
                     )}
                   </p>
                 </div>
@@ -233,14 +240,14 @@ export default function ContactSection() {
                   {/* Name */}
                   <div>
                     <label className="block text-xs font-semibold text-[#dfbe95] mb-2 uppercase">
-                      {t("الاسم الكامل *", "Full Name *")}
+                      {t("الاسم الكريم *", "Your Name *")}
                     </label>
                     <input
                       type="text"
                       required
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      placeholder={t("مثال: م. أحمد السعيد", "e.g. John Doe")}
+                      placeholder={t("الاسم الكامل", "Full Name")}
                       className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 focus:border-[#c5a880] focus:outline-none text-white text-xs sm:text-sm placeholder-[#777] transition-colors"
                     />
                   </div>
@@ -280,7 +287,7 @@ export default function ContactSection() {
                   {/* Project Type */}
                   <div>
                     <label className="block text-xs font-semibold text-[#dfbe95] mb-2 uppercase">
-                      {t("نوع المشروع", "Project Type")}
+                      {t("نوع الفراغ أو المشروع", "Project Type")}
                     </label>
                     <select
                       value={formData.projectType}
@@ -298,15 +305,15 @@ export default function ContactSection() {
                 {/* Message */}
                 <div>
                   <label className="block text-xs font-semibold text-[#dfbe95] mb-2 uppercase">
-                    {t("تفاصيل إضافية أو مساحة الفراغ", "Additional Notes or Approximate Area")}
+                    {t("تفاصيل إضافية أو المساحة التقديرية", "Additional Notes or Approximate Area")}
                   </label>
                   <textarea
                     rows={4}
                     value={formData.message}
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                     placeholder={t(
-                      "أخبرنا بالمساحة، الطراز المفضل (مودرن، كلاسيك، جاباندي)، وتاريخ البدء المرغوب...",
-                      "Tell us about space area, preferred aesthetic, target timeline..."
+                      "أخبريني بمساحة منزلكِ، الألوان أو الطراز المفضل لديكِ، وموعد البدء المتوقع...",
+                      "Tell me about space area, preferred styles, and timeline..."
                     )}
                     className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 focus:border-[#c5a880] focus:outline-none text-white text-xs sm:text-sm placeholder-[#777] transition-colors resize-none"
                   />
@@ -318,7 +325,7 @@ export default function ContactSection() {
                   className="w-full py-4 rounded-xl font-bold text-sm bg-gradient-to-r from-[#dfbe95] via-[#c5a880] to-[#b39162] hover:brightness-110 text-[#121216] shadow-xl shadow-[#c5a880]/20 transition-all flex items-center justify-center gap-2 transform hover:-translate-y-0.5"
                 >
                   <Send className="w-4 h-4" />
-                  <span>{t("تأكيد وحجز موعد الاستشارة الهندسية", "Confirm Consultation Booking")}</span>
+                  <span>{t("تأكيد حجز جلسة الاستشارة مع م. آلاء", "Confirm Consultation with Eng. Alaa")}</span>
                 </button>
               </form>
             )}

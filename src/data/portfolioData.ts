@@ -43,6 +43,22 @@ export interface Testimonial {
   avatar: string;
 }
 
+export const DESIGNER_INFO = {
+  nameAr: "م. آلاء عيسى",
+  nameEn: "Eng. Alaa Issa",
+  titleAr: "مهندسة تصميم داخلي وديكور معماري",
+  titleEn: "Interior Architect & Decor Designer",
+  bioAr:
+    "مهندسة ديكور وتصميم داخلي شغوفة بتحويل الفراغات الصامتة إلى بيئات حية تنبض بالدفء والرقي. أؤمن أن التصميم الناجح لا يقتصر على الجماليات فقط، بل يبدأ من فهم أسلوب حياة العميل وتطويع المساحات لتحقيق التوازن المثالي بين الوظيفة والراحة النفسية والأناقة المعمارية.",
+  bioEn:
+    "An interior architect passionate about transforming blank spaces into warm, sophisticated living sanctuaries. I believe that true design begins with understanding your unique lifestyle, harmonizing spatial functionality, tactile textures, and ambient lighting to craft a home that feels distinctly yours.",
+  experienceYears: "+7",
+  projectsCount: "+85",
+  rating: "4.98",
+  whatsappNumber: "201000000000",
+  email: "alaa.issa.design@gmail.com",
+};
+
 export const PROJECTS: Project[] = [
   {
     id: "luxury-japandi-residence",
@@ -66,16 +82,16 @@ export const PROJECTS: Project[] = [
     style: "مودرن جاباندي (Japandi Warm Minimalist)",
     styleEn: "Japandi Warm Minimalist",
     description:
-      "تصميم صالون ومنطقة معيشة متكاملة تجسد أسلوب الجاباندي المعاصر؛ مزجنا بين الدفء الترابي والخشب الجوزي الداكن مع بانوهات عمودية مخططة وإضاءات مخفية LED دافئة 3000K تمنح المكان راحة بصرية فائقة وأناقة راقية.",
+      "تصميم صالون واستقبال نفذته برؤية جاباندي معاصرة؛ ركزت على تناغم درجات البيج والرمادي الدافئ مع خشب الجوز الداكن والبانوهات المخططة رأسياً، مدعومة بإضاءات مخفية 3000K لمنح الفراغ سكينة بصرية وشعوراً بالاتساع والهدوء.",
     descriptionEn:
-      "A complete living room & lounge space embodying contemporary Japandi aesthetic. Warm earth tones meet dark walnut wood panels, vertical fluting, and 3000K concealed warm LED lighting for supreme visual tranquility.",
+      "A living salon & reception crafted with a warm Japandi design philosophy. Blending warm taupe undertones with dark walnut accents, vertical fluted panels, and recessed 3000K warm lighting for acoustic and visual serenity.",
     palette: ["#E7E3DC", "#4A3A2C", "#A2907D", "#1C1B1F", "#D0BA98"],
     features: [
-      "تكسيات خشبية رأسية مدمجة مع بانوهات عازلة للصوت",
-      "إضاءة خطية مخفية مدروسة مع سيناريوهات إضاءة ذكية",
-      "طقم جلوس زاوية مخصص من قماش البوكليه الفاخر",
-      "وحدة تلفزيون عائمة مع أرفف ديكورية مدمجة",
-      "سجادة منسوجة يدوياً بتدرجات طبيعية رخامية",
+      "تكسيات خشبية رأسية صممتها ونفذتها خصيصاً مع خلفيات عازلة للصدى",
+      "سيناريوهات إضاءة خطية مخفية موزعة بدقة هندسية",
+      "تصميم أريكة ركنية مخصصة بمقاسات الفراغ بقماش البوكليه العاجي",
+      "وحدة تلفزيون جدارية عائمة مع مكتبة ديكورية مدمجة",
+      "سجادة منسوجة يدوياً تم اختيار خاماتها ونقوشها بعناية",
     ],
     featuresEn: [
       "Custom vertical fluted wall cladding with acoustic backing",
@@ -88,7 +104,7 @@ export const PROJECTS: Project[] = [
   },
   {
     id: "dunes-master-suite",
-    title: "فيلا ديونز - جناح النوم الرئيسي الفاخر",
+    title: "فيلا ديونز - جناح النوم الرئيسي المعاصر",
     titleEn: "Dunes Villa - Master Bedroom Suite",
     category: "bedroom",
     categoryLabel: "أجنحة النوم",
@@ -105,15 +121,15 @@ export const PROJECTS: Project[] = [
     style: "نيو كلاسيك مودرن هادئ",
     styleEn: "Quiet Luxury Neoclassical",
     description:
-      "ملاذ هادئ يجمع بين البساطة والرفاهية، صُمم السرير بظهر جلدي مبطن وألواح خشبية دافئة مع غرفة ملابس مفتوحة (Walk-in Closet) وحمام رخامي متصل.",
+      "تصميم جناح نوم رئيسي مستوحى من طراز الفنادق العالمية الفاخرة؛ صممت السرير بظهر مبطن وألواح خشبية دافئة تتصل بغرفة ملابس مدمجة وحمام رخامي خاص.",
     descriptionEn:
-      "A serene retreat marrying minimalist tranquility with refined luxury. Features custom upholstered headboard, integrated walk-in dressing suite, and master ensuite bathroom.",
+      "A boutique hotel-inspired master retreat with a custom upholstered headboard, seamless walk-in dressing wardrobe, and private marble ensuite.",
     palette: ["#F2EDE4", "#3D3A36", "#B8A38E", "#E2D3BE"],
     features: [
-      "لوح سرير ممتد بعرض الجدار مع إضاءة قراءة مدمجة",
-      "خزائن ملابس مخصصة بزجاج عاكس وإضاءة داخلية",
-      "أرضيات خشب باركيه صلب بتصميم هيرنجبون الفرنسي",
-      "ستائر كهربائية ذكية مع تحكم مركزي",
+      "تصميم لوح سرير ممتد بعرض الجدار مع إضاءة قراءة مدمجة",
+      "خزائن ملابس مخصصة بزجاج عاكس وإضاءة داخلية ذكية",
+      "أرضيات خشب باركيه هيرنجبون عالي المقاومة",
+      "ستائر كهربائية مخفية بنظام تحكم ذكي",
     ],
     featuresEn: [
       "Wall-to-wall integrated headboard with recessed reading lights",
@@ -142,15 +158,15 @@ export const PROJECTS: Project[] = [
     style: "مودرن ألترا مينيمال",
     styleEn: "Ultra-Minimalist Modern",
     description:
-      "مطبخ جزيرة مفتوح يتصل بغرفة الطعام، مستوحى من خطوط المطابخ الإيطالية المعاصرة؛ أسطح من حجر الكلكتا الطبيعي وأبواب بدون مقابض بتقنية الفتح باللمس.",
+      "مطبخ مفتوح يتناغم مع غرفة الطعام بأسلوب المينيماليزم الإيطالي، يتميز بجزيرة من رخام الكلكتا الطبيعي وخزائن مطفية مقاومة للبصمات مع ركن قهوة مخفي.",
     descriptionEn:
-      "Open-concept island kitchen seamlessly connecting with the grand dining area. Calacatta marble surfaces and matte handle-less cabinetry with integrated appliances.",
+      "An open-plan Italian minimalist kitchen with waterfall Calacatta marble island, anti-fingerprint matte cabinetry, and concealed barista station.",
     palette: ["#1D1D20", "#FFFFFF", "#C5A880", "#8E8880"],
     features: [
-      "جزيرة مطبخ شلالية من رخام كلكتا طبيعي مقاوم للحرارة",
-      "أجهزة كهربائية ألمانية مدمجة كلياً داخل التجاليد",
-      "إضاءة تحت الخزائن مع حساسات حركة خفية",
-      "ركن قهوة وبوفيه مدمج بأبواب قابلة للطي والاختفاء",
+      "جزيرة مطبخ رخام كلكتا طبيعي مع إضاءة محيطية سفلية",
+      "أجهزة مطبخ ألمانية مدمجة مخفية بالكامل",
+      "إضاءة حساسة للحركة تحت الخزائن العلوية",
+      "ركن قهوة وبوفيه بأبواب تنزلق وتختفي جانبياً (Pocket Doors)",
     ],
     featuresEn: [
       "Calacatta waterfall island with under-counter ambient glow",
@@ -162,7 +178,7 @@ export const PROJECTS: Project[] = [
   },
   {
     id: "lumiere-lounge-cafe",
-    title: "كافيه واستراحة لوميير - تجربة ضيافة استثنائية",
+    title: "كافيه واستراحة لوميير - تجربة ضيافة حيوية",
     titleEn: "Lumière Boutique Lounge & Café",
     category: "commercial",
     categoryLabel: "تجاري وإداري",
@@ -179,15 +195,15 @@ export const PROJECTS: Project[] = [
     style: "بيوفيليك مودرن (Biophilic Contemporary)",
     styleEn: "Biophilic Contemporary",
     description:
-      "تصميم مساحة ضيافة معمارية تمزج بين الخرسانة الممسوسة، الأقواس الناعمة، والمسطحات النباتية الحية مع إنارة سينمائية جذابة تناسب جلسات العمل واللقاءات.",
+      "تصميم تجاري لمشروع ضيافة يدمج بين خرسانة المايكروسيمنت، الأقواس الناعمة، والنباتات الطبيعية لتوفير بيئة اجتماعية مرحبة ومريحة بصرياً.",
     descriptionEn:
-      "Hospitality interior blending micro-cement finishes, soft architectural arches, living green walls, and moody warm lighting tailored for social moments.",
+      "A commercial café concept designed with micro-cement textures, soft architectural arches, and indoor flora for an uplifting social atmosphere.",
     palette: ["#2B2A27", "#76806C", "#DFBE95", "#E8E2D7"],
     features: [
-      "جدار نباتي حي مزود بنظام ري وإضاءة نمو ذكية",
+      "جدار نباتي طبيعي بنظام ري وإضاءة نمو مدمجة",
       "بار قهوة مقوس مكسو بقطع التيرازو المصنوعة يدوياً",
       "جلسات متباينة تجمع بين الطاولات المرتفعة والأرائك الوثيرة",
-      "توزيع صوتي محيطي ومواد ماصة للصدى لراحة الرواد",
+      "معالجات صوتية معمارية للأسقف للحد من الصدى والضوضاء",
     ],
     featuresEn: [
       "Living green wall with automated smart irrigation and grow lights",
@@ -216,15 +232,15 @@ export const PROJECTS: Project[] = [
     style: "لاكشري مودرن بارتفاع مزدوج",
     styleEn: "Double-Height Luxury Modern",
     description:
-      "استقبال رئيسي ممتد بارتفاع سقف 6 أمتار، يضم جدارية حجرية منحوتة ومدفأة بيوإيثانول عصرية تمتد بكامل الجدار مع واجهات زجاجية مطلة على الحديقة الخاصة.",
+      "استقبال رئيسي ممتد بارتفاع سقف 6 أمتار؛ استثمرت الارتفاع المزدوج بجدارية حجرية منحوتة ومدفأة بيوإيثانول عصرية مع إطلالة بانورامية على الحديقة.",
     descriptionEn:
-      "Grand double-height reception featuring a 6-meter ceiling, bookmatched stone feature wall, modern linear bioethanol fireplace, and expansive garden views.",
+      "A grand double-height reception featuring a 6-meter ceiling, bookmatched stone feature wall, modern linear bioethanol fireplace, and garden vistas.",
     palette: ["#161619", "#B89B72", "#EBE5D8", "#635D55"],
     features: [
-      "جدارية رخام أونيكس طبيعي بإضاءة خلفية ساحرة",
-      "مدفأة بيوإيثانول خطية بطول 2.5 متر خالية من الدخان",
-      "نظام تكييف مركزي خفي بشبكات تدفق هواء خطية سوداء",
-      "ثريا زجاجية عصرية مخصصة بارتفاع 4 أمتار",
+      "جدارية رخام أونيكس طبيعي بإضاءة خلفية دافئة",
+      "مدفأة بيوإيثانول خطية أنيقة صديقة للبيئة",
+      "تكييف مركزي خفي بشبكات تدفق خطية معمارية",
+      "ثريا معاصرة مخصصة بارتفاع 4 أمتار",
     ],
     featuresEn: [
       "Backlit bookmatched natural Onyx feature wall",
@@ -236,7 +252,7 @@ export const PROJECTS: Project[] = [
   },
   {
     id: "executive-falcon-hq",
-    title: "مقر شركة فالكون - المكاتب وقاعة الاجتماعات التنفيذية",
+    title: "مقر شركة فالكون - قاعة الاجتماعات والمكاتب التنفيذية",
     titleEn: "Falcon Capital - Executive Boardroom & Offices",
     category: "commercial",
     categoryLabel: "تجاري وإداري",
@@ -250,18 +266,18 @@ export const PROJECTS: Project[] = [
     locationEn: "New Administrative Capital, CBD",
     year: "2026",
     area: "320 م²",
-    style: "كوربوريت فاخر معاصر",
+    style: "مودرن كوربوريت تنفيذي",
     styleEn: "Modern Executive Corporate",
     description:
-      "تصميم مساحات عمل راقية تعزز الإنتاجية وتبرز هوية الشركة؛ قاعة اجتماعات ذكية مزودة بشاشات تفاعلية وجدران عازلة للصوت بتشطيبات الجلد والخشب الفاخر.",
+      "تصميم مساحات عمل تنفيذية تعزز الإلهام والإنتاجية؛ صممت قاعة الاجتماعات الذكية بتجاليد جلدية وخشبية عازلة للصوت مع حلول إضاءة تتكيف مع فترات اليوم.",
     descriptionEn:
-      "High-end executive work environment designed to foster productivity and impress global partners. Smart boardroom with acoustic leather panels and walnut joinery.",
+      "Executive corporate workspace designed with acoustic leather panels, walnut joinery, and circadian lighting systems tailored for focus and prestige.",
     palette: ["#111317", "#2D3748", "#C5A880", "#CBD5E0"],
     features: [
-      "طاولة اجتماعات ذكية تتسع لـ 18 شخصاً مجهزة بأنظمة مؤتمرات متطورة",
-      "قواطع زجاجية ذكية قابلة للتحول من شفاف إلى معتم بضغطة زر (Smart Glass)",
-      "نظام إضاءة إيقاعي يتماشى مع ساعات العمل والنشاط الذهني",
-      "كابينات عازلة للمكالمات الهاتفية الفردية (Phone Pods)",
+      "طاولة اجتماعات مخصصة تتسع لـ 18 شخصاً مع منافذ ذكية مدمجة",
+      "قواطع زجاجية ذكية (Smart Glass) للخصوصية بضغطة زر",
+      "إضاءة بيوديناميكية تتغير حسب ساعات العمل",
+      "كابينات عازلة للصوت للمكالمات الهاتفية الفردية",
     ],
     featuresEn: [
       "18-seater smart boardroom table with integrated video-conferencing",
@@ -279,59 +295,59 @@ export const SERVICES: Service[] = [
     title: "التصميم الداخلي 3D والواقع الافتراضي",
     titleEn: "3D Interior Design & VR Walkthrough",
     description:
-      "نحول خيالك إلى مجسمات ثلاثية الأبعاد فائقة الدقة قبل البدء بالتنفيذ، لتشاهد كل ملمس، إضاءة، وقطعة أثاث كما ستكون تماماً.",
+      "أترجم رؤيتك واحتياجاتك إلى مجسمات ثلاثية الأبعاد فائقة الدقة قبل البدء بالتنفيذ، لتشاهدي كل خامة، إضاءة، وقطعة أثاث كما ستكون تماماً في الواقع.",
     descriptionEn:
-      "We turn visions into photorealistic 3D renders and interactive VR tours before construction begins, showing every texture, light, and piece exactly as built.",
+      "I transform your lifestyle and ideas into ultra-photorealistic 3D visuals and virtual tours, allowing you to see every texture and lighting scheme before breaking ground.",
     iconName: "Cuboid",
     features: [
-      "مخططات توزيع الفراغات والأثاث (2D Layouts)",
-      "رندرات واقعية فائقة الجودة بزوايا متعددة",
-      "جولة افتراضية بزاوية 360 درجة",
-      "لوحات المزاج واختيار الألوان (Moodboards)",
+      "مخططات توزيع الفراغات والأثاث والمسارات (2D Layouts)",
+      "رندرات واقعية ثلاثية الأبعاد بدقة تصويرية سينمائية",
+      "لوحات الإلهام وتنسيق الألوان والخامات (Moodboards)",
+      "جولة تفاعلية افتراضية بزاوية 360 درجة",
     ],
     featuresEn: [
       "Detailed 2D space planning & furniture layouts",
       "Ultra-photorealistic multi-angle 3D renders",
-      "Interactive 360° virtual reality walkthroughs",
       "Curated material & color palette moodboards",
+      "Interactive 360° virtual reality walkthroughs",
     ],
   },
   {
     id: "turnkey-fitout",
-    title: "التنفيذ والتشطيبات الفاخرة (تسليم مفتاح)",
-    titleEn: "Turnkey Contracting & Fit-Out",
+    title: "الإشراف والتنفيذ المتكامل (تسليم مفتاح)",
+    titleEn: "Turnkey Contracting & Fit-Out Supervision",
     description:
-      "إدارة تنفيذية كاملة بمطابقة دقيقة للمخططات المعتمدة، مع الالتزام الصارم بالجداول الزمنية وضمان شامل على كافة الأعمال.",
+      "أشرف شخصياً على تنفيذ المخططات خطوة بخطوة بالتعاون مع أمهر الفنيين، مع الالتزام الصارم بالمقايسة المعتمدة والجدول الزمني المحدد.",
     descriptionEn:
-      "End-to-end site execution strictly adhering to approved blueprints, uncompromising timeline control, and comprehensive warranty on all fit-out works.",
+      "I personally supervise on-site execution step-by-step alongside vetted master craftsmen, ensuring strict adherence to blueprints, budgets, and milestones.",
     iconName: "Hammer",
     features: [
-      "أعمال السباكة والكهرباء والتكييف الدفينة (MEP)",
-      "تركيب الأرضيات الرخامية والباركيه الفاخر",
-      "أعمال الدهانات الديكورية والجبس بورد المعلق",
-      "تجليد الحوائط بالأخشاب والبدائل والرخام",
+      "متابعة أعمال التأسيسات الإنشائية والكهرباء والسباكة الدفينة",
+      "توريد وتركيب الرخام الطبيعي والباركيه الخشبي الفاخر",
+      "تنفيذ الديكورات الجدارية والجبس بورد المعلق بدقة",
+      "تقارير متابعة دورية بالصور والفيديو أولاً بأول",
     ],
     featuresEn: [
-      "Concealed MEP (plumbing, electrical & HVAC) infrastructure",
+      "Concealed MEP (plumbing, electrical & HVAC) infrastructure supervision",
       "Luxury natural marble & engineered hardwood flooring installation",
-      "Specialty artisan wall finishes & dropped gypsum ceilings",
-      "Custom wall cladding (natural veneers, fluted panels, stone slabs)",
+      "Artisan wall finishes & dropped gypsum ceiling execution",
+      "Regular photo & video milestone updates for homeowners",
     ],
   },
   {
     id: "custom-furniture",
-    title: "تصنيع الأثاث المودرن والتفصيل المخصص",
+    title: "تصميم وتفصيل الأثاث المودرن المخصص",
     titleEn: "Bespoke Modern Furniture & Joinery",
     description:
-      "نصمم ونصنّع قطع أثاث فريدة في ورش عملنا التخصصية لتلائم مقاسات فراغك وهويتك الشخصية بأعلى معايير الحرفية والنجارة الراقية.",
+      "أصمم قطع أثاث حصرية ومدروسة بمقاسات فراغك الخاصة، مع الإشراف على تصنيعها في ورش نجارة متخصصة لاختيار أجود الأخشاب وأفخم الأقمشة.",
     descriptionEn:
-      "We design and craft tailor-made statement furniture in our dedicated joinery workshops to perfectly match your space dimensions and aesthetic identity.",
+      "I design one-of-a-kind statement furniture scaled precisely to your space, crafted in specialized workshops with selected solid woods and premium textiles.",
     iconName: "Armchair",
     features: [
-      "تفصيل غرف النوم والخزائن المدمجة الذكية",
+      "تفصيل غرف النوم والخزائن المدمجة الذكية (Dressing Rooms)",
       "أطقم الصالونات والمجالس بأقمشة مستوردة مقاومة للبقع",
-      "طاولات طعام وقهوة من الأخشاب الصلبة والرخام الطبيعي",
-      "وحدات التلفزيون والأرفف الديكورية المعلقة",
+      "طاولات قهوة وطعام من خشب الجوز والرخام الطبيعي",
+      "وحدات التلفزيون والأرفف الديكورية العائمة",
     ],
     featuresEn: [
       "Tailor-made bedroom suites and integrated walk-in closets",
@@ -342,68 +358,68 @@ export const SERVICES: Service[] = [
   },
   {
     id: "lighting-automation",
-    title: "هندسة الإضاءة والأنظمة الذكية (Smart Home)",
-    titleEn: "Architectural Lighting & Smart Automation",
+    title: "هندسة الإضاءة المعمارية والأجواء الدافئة",
+    titleEn: "Architectural Lighting & Atmosphere",
     description:
-      "الإضاءة هي روح المكان؛ نصمم سيناريوهات إضاءة متوازنة تجمع بين الإنارة الوظيفية والجمالية المحيطية وتكامل أنظمة المنازل الذكية.",
+      "الإضاءة هي توقيعي الخاص؛ أدرس زوايا سقوط الضوء وتوزيع درجات الحرارة الدافئة 3000K والإنارة المخفية لتحويل منزلك إلى ملاذ هادئ ومريح.",
     descriptionEn:
-      "Lighting is the soul of any space. We engineer layered lighting designs combining task, accent, and ambient light with seamless smart home integration.",
+      "Lighting is my signature touch. I calculate lux levels, 3000K warm color temperatures, and concealed linear LEDs to make your space genuinely soothing.",
     iconName: "Sparkles",
     features: [
-      "حساب درجات حرارة الإضاءة (Kelvin) وتوزيع اللوكس بدقة",
-      "تأسيس وحدات المغناطيس المودرن (Magnetic Track Lights)",
-      "برمجة سيناريوهات الإضاءة الصباحية والمسائية والسينمائية",
-      "التحكم بالستائر والتكييف والصوتيات عبر الهاتف والمساعد الصوتي",
+      "توزيع وحدات التراك لايت المغناطيسي الحديث (Magnetic Track)",
+      "تصميم سيناريوهات الإضاءة المسائية والصباحية الهادئة",
+      "إضاءات خفية للأرفف والبانوهات الجدارية والأرضيات",
+      "تكامل مع أنظمة التحكم الذكي (Smart Lighting Control)",
     ],
     featuresEn: [
-      "Lux calculation and Kelvin color-temperature tuning",
       "Modern recessed magnetic track light systems",
-      "Morning, evening, and cinema smart lighting presets",
-      "Unified smartphone & voice control for curtains, AC, and audio",
+      "Morning, evening, and relaxed warm ambient presets",
+      "Concealed backlights for wall fluting, niches, and joinery",
+      "Seamless integration with smart lighting controllers",
     ],
   },
   {
     id: "site-supervision",
-    title: "الإشراف الهندسي وإدارة المشاريع",
-    titleEn: "Site Supervision & Project Management",
+    title: "المخططات التنفيذية وجداول الكميات (Shop Drawings)",
+    titleEn: "Executive Blueprints & BOQ Specifications",
     description:
-      "فريق هندسي متخصص يتابع كل خطوة في الموقع، مع تقارير دورية وجدول زمني محدد لضمان جودة الخامات والتنفيذ دون مفاجآت.",
+      "أقدم لك ملفاً هندسياً متكاملاً يتضمن المقاسات الدقيقة، تفريد الأخشاب، ومواصفات الخامات لتكون لديك خريطة طريق واضحة وقابلة للتنفيذ بكل ثقة.",
     descriptionEn:
-      "Dedicated senior site architects supervising daily operations with regular progress reports and rigorous quality control at every milestone.",
+      "A complete technical execution package including exact dimensions, joinery details, and material specifications for total execution confidence.",
     iconName: "Compass",
     features: [
-      "مراقبة مطابقة المواد الموردة للمواصفات الفنية",
-      "تقارير تقدم دورية بالصور والفيديو للعميل",
-      "إدارة ميزانية المشروع وتفادي الهدر والتكاليف غير المبررة",
-      "استلام الأعمال بمحاضر تسليم هندسية معتمدة",
+      "مخططات الكهرباء والإنارة والمفاتيح (Lighting & Power)",
+      "رسومات تفصيلية لتجاليد الجدران ووحدات الأثاث",
+      "جدول كميات ومواصفات المواد وأكواد الدهانات المعتمدة",
+      "مطابقة الأعمال الموقعية للأصول الهندسية المعتمدة",
     ],
     featuresEn: [
-      "Material inspection ensuring conformity with technical specs",
-      "Periodic photo and video progress reports for owners",
-      "Budget control preventing waste and unexpected cost spikes",
-      "Formal engineering handover protocols for every milestone",
+      "Complete electrical, switching, and plumbing layouts",
+      "Detailed shop drawings for wall cladding and joinery",
+      "Bill of quantities with exact paint codes and material specs",
+      "On-site technical inspection ensuring construction integrity",
     ],
   },
   {
     id: "consultation-styling",
-    title: "استشارات الديكور والتنسيق النهائي (Styling)",
-    titleEn: "Decor Consultation & Final Staging",
+    title: "استشارات الديكور والتنسيق النهائي (Interior Styling)",
+    titleEn: "Interior Styling & Decor Consultation",
     description:
-      "لمساتنا الأخيرة تصنع الفارق؛ نساعدك في اختيار الإكسسوارات، اللوحات الفنية، النباتات، وتنسيق الألوان لخلق بيئة متجانسة تأسر الحواس.",
+      "جلسات استشارية فردية أساعدك فيها على اختيار الألوان، السجاد، اللوحات الفنية، والإكسسوارات لخلق تناغم جمالي مفعم بالحياة في منزلك القائم أو الجديد.",
     descriptionEn:
-      "The finishing touches make all the difference. We curate artwork, accessories, indoor botanicals, and soft accents to bring your interior to life.",
+      "One-on-one styling sessions where I curate accessories, curated artwork, rugs, and drapery to breathe character and harmony into your space.",
     iconName: "Palette",
     features: [
-      "انتقاء اللوحات الجدارية والمنحوتات الفنية المعاصرة",
-      "تنسيق السجاد والستائر والوسائد المتناسقة",
-      "اختيار نباتات داخلية تلائم إضاءة الفراغ",
-      "جلسات استشارية فردية لاختيار الألوان ومطابقة العينات",
+      "اختيار اللوحات الجدارية والمنحوتات الفنية المتناسقة",
+      "تنسيق السجاد والستائر والوسائد والأقمشة التكميلية",
+      "انتقاء وتوزيع النباتات الطبيعية الملائمة لإضاءة المكان",
+      "زيارات ميدانية مشتركة لمعارض الأثاث والخامات لاختيار الأنسب",
     ],
     featuresEn: [
       "Curation of original contemporary wall art and sculptures",
       "Harmonious rug, curtain, and soft textile coordination",
       "Selection of interior greenery matching natural light levels",
-      "One-on-one color consultation and tactile sample matching",
+      "Personal accompanied showroom visits for material selection",
     ],
   },
 ];
@@ -413,29 +429,29 @@ export const TESTIMONIALS: Testimonial[] = [
     id: "test-1",
     name: "د. هاني الشناوي",
     role: "مالك فيلا في التجمع الخامس",
-    project: "تصميم وتنفيذ كامل لفيلا 450 م²",
+    project: "تصميم وإشراف صالون ومنطقة استقبال 120 م²",
     comment:
-      "تعاملت مع العديد من مكاتب الديكور، لكن فريق Decor Portfolio أثبت كفاءة استثنائية. ما شاهدته في التصميم ثلاثي الأبعاد تم تنفيذه في الواقع بنسبة 100% وبدقة فائقة في التفاصيل الخشبية والإضاءة.",
+      "المهندسة آلاء عيسى تتمتع بذوق رفيع ودقة متناهية في التفاصيل. النتيجة التي شاهدتها في الرندر ثلاثي الأبعاد كانت مطابقة للواقع بنسبة 100%، وخاصة تناسق الأخشاب والإضاءة المخفية التي جعلت بيتنا دافئاً وراقياً جداً.",
     rating: 5,
     avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80",
   },
   {
     id: "test-2",
-    name: "المهندسة نورا الفقي",
-    role: "شريكة مؤسسة لسلسلة كافيهات لوميير",
-    project: "تصميم وتنفيذ فرع ووترواي",
+    name: "أ. ميار القاضي",
+    role: "مالكة شقة في الشيخ زايد",
+    project: "تصميم شقة سكنية متكاملة 185 م²",
     comment:
-      "المكان أصبح حديث رواد وسائل التواصل بفضل التصميم المبتكر والراحة البصرية التي وفرها التوزيع الذكي للإضاءة والنباتات. الالتزام بالوقت كان مبهراً وسلموا المشروع قبل الموعد بأسبوع.",
+      "أكثر ما يميز م. آلاء هو إنصاتها الحقيقي لاحتياجاتنا كعائلة. استطاعت استغلال كل متر في الشقة وتنسيق ألوان وخامات هادئة مريحة للأعصاب. أسلوبها في التعامل راقٍ ومواعيدها كانت في قمة الالتزام.",
     rating: 5,
     avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80",
   },
   {
     id: "test-3",
-    name: "أ. كريم عبد العزيز",
-    role: "رئيس مجلس إدارة شركة استثمارية",
-    project: "تشطيب وتجهيز مقر إداري 320 م²",
+    name: "أ. شريف الباز",
+    role: "شريك مؤسس - كافيه لوميير",
+    project: "تصميم وتنفيذ استراحة ووترواي",
     comment:
-      "احترافية عالية في إدارة الميزانية والشفافية في التعامل مع الموردين. قاعة الاجتماعات والمكاتب التنفيذية عكست هوية مؤسستنا بأسلوب فاخر وعصري يشهد له جميع ضيوفنا.",
+      "لمست في المهندسة آلاء احترافية معمارية متميزة، أفكارها في اختيار الخامات الطبيعية والإنارة السينمائية جعلت الكافيه مكاناً مفضلاً لكل زواره. فخور بالتعاون معها وأنصح بها لكل من يبحث عن التميز.",
     rating: 5,
     avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80",
   },
@@ -444,57 +460,56 @@ export const TESTIMONIALS: Testimonial[] = [
 export const WORKFLOW_STEPS = [
   {
     step: "01",
-    title: "جلسة التعارف ودراسة الاحتياج",
-    titleEn: "Consultation & Vision Discovery",
-    desc: "نستمع لتطلعاتك، نمط حياتك، واحتياجات أسرتك، ونقوم برفع المقاسات وتحديد الميزانية المناسبة لمشروعك.",
+    title: "جلستي الاستشارية معك",
+    titleEn: "Personal Discovery Session",
+    desc: "أجتمع معك لنستمع بعناية لذوقك الخاص، روتين يومك، واحتياجات أسرتك، ونحدد الميزانية المستهدفة ونرفع مقاسات الفراغ بدقة.",
   },
   {
     step: "02",
-    title: "المخططات والتصميم 3D",
-    titleEn: "Concept & 3D Visualization",
-    desc: "نطور مخططات توزيع الفراغات (2D) ورندرات واقعية ثلاثية الأبعاد (3D) مع تقديم خيارات الألوان والأثاث حتى نصل للرضا التام.",
+    title: "التصميم 3D وتوزيع الفراغات",
+    titleEn: "Spatial Layout & 3D Renders",
+    desc: "أصمم المخططات ثنائية الأبعاد (2D) ورندرات واقعية ثلاثية الأبعاد (3D) لتشاهدي كيف سيبدو منزلك بكل زاوية ولون وملمس قبل أي خطوة.",
   },
   {
     step: "03",
-    title: "جداول الخامات والمقايسة التفصيلية",
-    titleEn: "Bill of Quantities & Material Spec",
-    desc: "نجهز مقايسة تسعير شفافة تشمل كل مسمار وبند وخامة، مع لوحة عينات ملموسة نختارها معاً من أفضل الموردين.",
+    title: "اعتماد الخامات والمقايسة التفصيلية",
+    titleEn: "Material Palette & BOQ",
+    desc: "نختار سوياً عينات الأقمشة، الرخام، والأخشاب، وأقدم لك مقايسة واضحة ومحددة تضمن الشفافية الكاملة وضبط الميزانية.",
   },
   {
     step: "04",
-    title: "التنفيذ والإشراف وتسليم المفتاح",
-    titleEn: "Precision Execution & Handover",
-    desc: "ينطلق فريقنا الهندسي لتنفيذ المشروع على أرض الواقع مع متابعة أسبوعية دقيقة، حتى تتسلم مساحتك جاهزة تماماً للحياة.",
+    title: "إشرافي على التنفيذ والتسليم",
+    titleEn: "Supervision & Handover",
+    desc: "أتابع سير العمل في الموقع مع الحرفيين خطوة بخطوة حتى تتسلمي مساحتك جاهزة تماماً للحياة بأعلى درجات الإتقان والجمال.",
   },
 ];
 
 export const STATS = [
-  { value: "+180", label: "مشروع منجز", labelEn: "Completed Projects" },
-  { value: "+12", label: "عاماً من الإبداع", labelEn: "Years of Experience" },
-  { value: "100%", label: "تطابق التصميم مع الواقع", labelEn: "Design Fidelity" },
-  { value: "4.95", label: "تقييم رضا العملاء", labelEn: "Client Rating ★" },
+  { value: "+85", label: "مشروع صممته وأشرفت عليه", labelEn: "Completed Designs" },
+  { value: "+7", label: "سنوات خبرة في التصميم", labelEn: "Years of Experience" },
+  { value: "100%", label: "تطابق الرندر مع التنفيذ", labelEn: "Design Fidelity" },
+  { value: "4.98", label: "تقييم رضا العملاء", labelEn: "Client Satisfaction ★" },
 ];
 
 export const FAQS = [
   {
-    q: "كم تستغرق مرحلة التصميم الداخلي 3D؟",
-    qEn: "How long does the 3D interior design phase take?",
-    a: "تستغرق مرحلة التصميم الداخلي للشقق والمساحات المتوسطة (من 100 إلى 250 م²) ما بين أسبوعين إلى 3 أسابيع، وتشمل دراسة المساحات، لوحات الألوان، الرندرات ثلاثية الأبعاد، وإجراء التعديلات المطلوبة حتى الوصول للشكل النهائي.",
+    q: "كيف يتم العمل مع م. آلاء عيسى؟",
+    qEn: "How does working with Eng. Alaa Issa work?",
+    a: "تبدأ الرحلة بجلسة تعارف واستشارة أولية لمناقشة أفكارك والمساحة المتاحة، ثم أقوم بإعداد دراسة توزيع الفراغات والتصميم ثلاثي الأبعاد 3D. بعد اعتمادك للتصميم، أزودك بالمخططات التنفيذية أو أتولى الإشراف المباشر على التنفيذ حتى تسليم المفتاح.",
   },
   {
-    q: "هل يمكنني طلب التصميم فقط دون التنفيذ؟",
-    qEn: "Can I request design only without execution?",
-    a: "نعم بالتأكيد، نقدم باقة 'التصميم والمخططات التنفيذية المتكاملة' (Shop Drawings) والتي تمنحك ملفاً هندسياً شاملاً يحتوي على كافة القياسات، أكواد الألوان، أنواع الخامات، وتوزيع الإنارة والسباكة لتتمكن من تنفيذه مع أي مقاول بسهولة.",
+    q: "هل يمكنني طلب التصميم 3D والمخططات فقط؟",
+    qEn: "Can I request 3D design and blueprints only?",
+    a: "نعم بالتأكيد؛ أقدم باقة 'التصميم والمخططات التنفيذية الشاملة' (Shop Drawings) والتي تمنحك دليلاً هندسياً كاملاً بالمقاسات وأكواد الدهانات وتفاصيل النجارة لتتمكن من تنفيذه بسهولة مع فريقك المفضل.",
   },
   {
-    q: "كيف تضمنون عدم تجاوز الميزانية المتفق عليها أثناء التشطيب؟",
-    qEn: "How do you guarantee staying within the agreed budget?",
-    a: "نعتمد نظام 'المقايسة التفصيلية الملزمة' المسبقة؛ قبل وضع أي حجر أو بدء التكسير، تكون كل خامة وبند مسعراً ومحدداً بدقة في العقد، مما يحميك من أي تكاليف مفاجئة أو غير مدروسة.",
+    q: "هل تشرف م. آلاء عيسى على موقع التنفيذ شخصياً؟",
+    qEn: "Does Eng. Alaa Issa personally supervise the site?",
+    a: "نعم، في باقات الإشراف والتنفيذ الكامل أقوم بزيارات ميدانية دورية لمتابعة أدق التفاصيل من تأسيسات السباكة والكهرباء وحتى تركيب الأخشاب والرخام لضمان مطابقة الواقع للتصميم المعتمد.",
   },
   {
-    q: "هل تقدمون ضماناً على أعمال التشطيب والتنفيذ؟",
-    qEn: "Do you provide a warranty on fit-out and execution?",
-    a: "نعم، نقدم ضماناً كتابياً شاملاً لمدة 10 سنوات على أعمال التأسيس الإنشائي والسباكة والكهرباء الدفينة، وضماناً لمدة 3 سنوات على كافة أعمال التشطيبات والديكورات والأثاث المصنع من خلالنا.",
+    q: "ما هو الطراز الذي تتميز به تصاميم م. آلاء؟",
+    qEn: "What design style does Eng. Alaa specialize in?",
+    a: "أتميز بطراز المودرن جاباندي الدافئ (Warm Japandi)، النيو كلاسيك المعاصر، والمينيماليزم الهادئ (Quiet Luxury) الذي يركز على الخامات الطبيعية، البانوهات الخشبية، ودرجات الإضاءة الدافئة والمريحة للأعصاب.",
   },
 ];
-

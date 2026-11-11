@@ -2,6 +2,7 @@
 
 import React, { useState, useMemo } from "react";
 import { useLanguage } from "@/context/LanguageContext";
+import { DESIGNER_INFO } from "@/data/portfolioData";
 import {
   Calculator,
   Building,
@@ -13,13 +14,10 @@ import {
   Sparkles,
   MessageCircle,
   ShieldCheck,
-  ChevronRight,
-  ChevronLeft,
 } from "lucide-react";
 
 export default function CostEstimator() {
   const { lang, t } = useLanguage();
-  const isRtl = lang === "ar";
 
   // State
   const [propertyType, setPropertyType] = useState<string>("apartment");
@@ -111,13 +109,13 @@ export default function CostEstimator() {
   };
 
   const whatsappMessage = encodeURIComponent(
-    `مرحباً استوديو Decor Portfolio، قمت باستخدام حاسبة التكلفة التقديرية بموقكم بالمواصفات التالية:
+    `مرحباً م. آلاء عيسى، قمت باستخدام حاسبة التكلفة التقديرية بموقعك بالمواصفات التالية:
 - نوع العقار: ${selectedPropObj.labelAr}
 - المساحة: ${area} م²
 - باقة التشطيب: ${selectedTierObj.labelAr}
 - نوع الخدمة: ${scope === "design" ? "تصميم ومخططات فقط" : scope === "supervision" ? "تصميم مع إشراف هندسي" : "تسليم مفتاح متكامل"}
 - التكلفة التقديرية: ${formatNumber(calculation.totalLow)} - ${formatNumber(calculation.totalHigh)} ج.م
-أود حجز جلسة استشارية وتحديد موعد لمعاينة العقار.`
+أود حجز جلسة استشارية معك لتحديد موعد معاينة ومناقشة تفاصيل مشروعي.`
   );
 
   return (
@@ -127,14 +125,14 @@ export default function CostEstimator() {
         <div className="text-center max-w-2xl mx-auto mb-14">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#c5a880]/10 border border-[#c5a880]/20 text-[#dfbe95] text-xs font-semibold uppercase tracking-wider mb-3">
             <Calculator className="w-3.5 h-3.5" />
-            <span>{t("شفافية التكاليف والميزانية", "Cost Transparency")}</span>
+            <span>{t("تخطيط الميزانية بكل شفافية", "Budget Planning & Transparency")}</span>
           </div>
           <h2 className="text-3xl sm:text-5xl font-bold text-white font-serif tracking-tight mb-4">
-            {t("حاسبة تكلفة الديكور والتشطيب التقديرية", "Interactive Project Cost Estimator")}
+            {t("حاسبة التكلفة التقديرية لمشروعك", "Interactive Project Cost Estimator")}
           </h2>
           <p className="text-xs sm:text-sm text-[#a8a49c]">
             {t(
-              "حدد نوع ومساحة فراغك ومستوى التشطيب المطلوب للحصول على تقدير استرشادي فوري لمتوسط التكلفة والمدة الزمنية.",
+              "حددي نوع ومساحة فراغك ومستوى التشطيب المفضل للحصول على تقدير استرشادي فوري للتكلفة والجدول الزمني قبل بدء التصميم.",
               "Select your space type, area, and desired finish tier to instantly estimate design & fit-out costs and project timelines."
             )}
           </p>
@@ -287,7 +285,7 @@ export default function CostEstimator() {
             <div>
               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#dfbe95]/15 text-[#dfbe95] text-xs font-bold mb-4">
                 <ShieldCheck className="w-3.5 h-3.5" />
-                <span>{t("تقدير استرشادي فوري", "Instant Estimation")}</span>
+                <span>{t("تقدير استرشادي فوري مع م. آلاء", "Instant Estimation with Eng. Alaa")}</span>
               </div>
 
               <div className="text-xs text-[#b8b3a8] uppercase tracking-wider mb-1">
@@ -305,8 +303,8 @@ export default function CostEstimator() {
 
               <p className="text-[11px] text-[#9c978e] leading-relaxed mb-6">
                 {t(
-                  "* الأسعار استرشادية وتخضع للمعاينة الميدانية الدقيقة واعتماد الخامات والمواصفات التفصيلية.",
-                  "* Figures are indicative and subject to exact on-site survey and finalized material specifications."
+                  "* التكلفة استرشادية، ويتم تحديد السعر النهائي بدقة خلال جلسة المعاينة الميدانية واعتماد خامات التشطيب.",
+                  "* Figures are indicative and finalized during our initial site visit and material specification session."
                 )}
               </p>
 
@@ -324,16 +322,16 @@ export default function CostEstimator() {
               {/* Included Highlights */}
               <div className="space-y-2.5">
                 <div className="text-xs font-bold text-white uppercase tracking-wider">
-                  {t("البنود المشمولة في هذا التقدير:", "What's Included in This Scope:")}
+                  {t("ما يشمله هذا التقدير معكِ:", "What's Included in This Scope:")}
                 </div>
                 <div className="flex flex-col gap-2">
                   {[
-                    t("جلسة تحليل الاحتياجات ورفع المقاسات الميدانية", "Site survey & lifestyle needs discovery"),
+                    t("جلسة تحليل الاحتياجات ورفع المقاسات الميدانية بدقة", "Site survey & lifestyle needs discovery"),
                     t("مخططات 2D لتوزيع الفراغات والأثاث والمسارات", "2D layout & circulation space plans"),
                     t("رندرات 3D واقعية متكاملة لجميع الغرف والزوايا", "Photorealistic 3D visual renders for all zones"),
                     scope !== "design"
-                      ? t("إشراف هندسي وضمان جودة الأعمال والمطابقة", "On-site engineering quality supervision")
-                      : t("كتيب مواصفات الخامات والألوان (Specs Sheet)", "Detailed material & paint specification book"),
+                      ? t("إشرافي الهندسي الشخصي على جودة ومطابقة التنفيذ", "Personal on-site quality supervision by Eng. Alaa")
+                      : t("كتيب مواصفات الخامات وأكواد الدهانات المعتمدة", "Detailed material & paint specification book"),
                     scope === "turnkey" &&
                       t("توريد وتركيب الخامات والتسليم على المفتاح مع ضمان شامل", "Turnkey material supply, installation & full warranty"),
                   ]
@@ -351,17 +349,17 @@ export default function CostEstimator() {
             {/* Direct WhatsApp Action Button */}
             <div className="pt-4 border-t border-white/10 flex flex-col gap-2.5">
               <a
-                href={`https://wa.me/201000000000?text=${whatsappMessage}`}
+                href={`https://wa.me/${DESIGNER_INFO.whatsappNumber}?text=${whatsappMessage}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl font-bold text-xs sm:text-sm bg-gradient-to-r from-[#dfbe95] via-[#c5a880] to-[#a8885b] text-[#121216] hover:brightness-110 shadow-lg shadow-[#c5a880]/30 transition-all transform hover:-translate-y-0.5"
               >
                 <MessageCircle className="w-4 h-4" />
-                <span>{t("طلب مقايسة رسمية ومناقشة التقدير عبر واتساب", "Get Official Quote via WhatsApp")}</span>
+                <span>{t("مناقشة التقدير مباشرة مع م. آلاء عبر واتساب", "Discuss Estimate Directly with Eng. Alaa")}</span>
               </a>
 
               <p className="text-[10px] text-center text-[#88847c]">
-                {t("استشارة أولية مجانية بدون أي التزام مالي", "Free initial discovery session with zero obligation")}
+                {t("جلسة استشارية أولية دون أي التزام مسبق", "Free initial discovery session with zero obligation")}
               </p>
             </div>
           </div>

@@ -2,10 +2,10 @@
 
 import React, { useState, useEffect } from "react";
 import { useLanguage } from "@/context/LanguageContext";
+import { DESIGNER_INFO } from "@/data/portfolioData";
 import {
   Menu,
   X,
-  Phone,
   MessageCircle,
   Globe,
   Compass,
@@ -27,13 +27,13 @@ export default function Navbar() {
 
   const navLinks = [
     { href: "#home", labelAr: "الرئيسية", labelEn: "Home" },
-    { href: "#featured", labelAr: "أحدث أعمالنا", labelEn: "Featured" },
+    { href: "#about", labelAr: "عن المهندسة", labelEn: "About Alaa" },
+    { href: "#featured", labelAr: "أحدث أعمالي", labelEn: "Featured" },
     { href: "#portfolio", labelAr: "معرض المشاريع", labelEn: "Portfolio" },
     { href: "#before-after", labelAr: "قبل وبعد", labelEn: "Before & After" },
-    { href: "#services", labelAr: "خدماتنا", labelEn: "Services" },
+    { href: "#services", labelAr: "خدماتي", labelEn: "Services" },
     { href: "#estimator", labelAr: "حاسبة التكلفة", labelEn: "Cost Estimator" },
-    { href: "#process", labelAr: "مراحل العمل", labelEn: "Process" },
-    { href: "#contact", labelAr: "تواصل معنا", labelEn: "Contact" },
+    { href: "#contact", labelAr: "تواصل معي", labelEn: "Contact" },
   ];
 
   return (
@@ -46,7 +46,7 @@ export default function Navbar() {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
-          {/* Brand Logo */}
+          {/* Brand Logo - Eng. Alaa Issa */}
           <a href="#home" className="flex items-center gap-3 group">
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#dfbe95] via-[#c5a880] to-[#8c6d42] p-[1px] shadow-lg shadow-[#c5a880]/10">
               <div className="w-full h-full bg-[#141418] rounded-[11px] flex items-center justify-center group-hover:bg-[#1a191f] transition-colors">
@@ -55,10 +55,10 @@ export default function Navbar() {
             </div>
             <div className="flex flex-col">
               <span className="text-lg sm:text-xl font-bold tracking-wider uppercase text-white font-serif">
-                Decor <span className="text-[#c5a880]">Portfolio</span>
+                {lang === "ar" ? "م. آلاء عيسى" : "Alaa Issa"}
               </span>
-              <span className="text-[10px] tracking-widest text-[#a8a49c] uppercase font-sans">
-                {t("استوديو التصميم الداخلي الفاخر", "Luxury Interior Architecture")}
+              <span className="text-[10px] tracking-widest text-[#dfbe95] uppercase font-sans">
+                {t("تصميم داخلي وديكور", "Interior Architecture & Decor")}
               </span>
             </div>
           </a>
@@ -90,11 +90,13 @@ export default function Navbar() {
 
             {/* Direct WhatsApp CTA */}
             <a
-              href="https://wa.me/201000000000?text=مرحباً،%20أود%20الاستفسار%20عن%20خدمات%20التصميم%20الداخلي"
+              href={`https://wa.me/${DESIGNER_INFO.whatsappNumber}?text=${encodeURIComponent(
+                "مرحباً م. آلاء عيسى، أود الاستفسار عن خدمات التصميم الداخلي لمشروعي."
+              )}`}
               target="_blank"
               rel="noopener noreferrer"
               className="p-2 rounded-lg bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 border border-emerald-500/20 transition-all"
-              title={t("مراسلة واتساب مباشرة", "Direct WhatsApp Chat")}
+              title={t("مراسلة م. آلاء عبر واتساب", "Direct WhatsApp Chat with Eng. Alaa")}
             >
               <MessageCircle className="w-4 h-4" />
             </a>
@@ -104,7 +106,7 @@ export default function Navbar() {
               href="#contact"
               className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs xl:text-sm font-semibold bg-gradient-to-r from-[#c5a880] to-[#b39162] hover:from-[#dfbe95] hover:to-[#c5a880] text-[#141316] shadow-md shadow-[#c5a880]/20 hover:shadow-lg hover:shadow-[#c5a880]/30 transition-all transform hover:-translate-y-0.5"
             >
-              <span>{t("احجز استشارتك", "Book Consultation")}</span>
+              <span>{t("احجز استشارتك مع م. آلاء", "Book Consultation")}</span>
               <ArrowUpRight className="w-3.5 h-3.5" />
             </a>
           </div>
@@ -149,11 +151,13 @@ export default function Navbar() {
               onClick={() => setMobileMenuOpen(false)}
               className="w-full flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-semibold bg-gradient-to-r from-[#c5a880] to-[#b39162] text-[#141316]"
             >
-              <span>{t("احجز استشارتك المجانية", "Book Free Consultation")}</span>
+              <span>{t("احجز استشارتك مع م. آلاء", "Book Consultation")}</span>
               <ArrowUpRight className="w-4 h-4" />
             </a>
             <a
-              href="https://wa.me/201000000000?text=مرحباً،%20أود%20الاستفسار%20عن%20خدمات%20التصميم%20الداخلي"
+              href={`https://wa.me/${DESIGNER_INFO.whatsappNumber}?text=${encodeURIComponent(
+                "مرحباً م. آلاء عيسى، أود الاستفسار عن خدمات التصميم الداخلي لمشروعي."
+              )}`}
               target="_blank"
               rel="noopener noreferrer"
               className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/25"
@@ -167,4 +171,3 @@ export default function Navbar() {
     </header>
   );
 }
-

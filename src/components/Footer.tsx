@@ -2,13 +2,13 @@
 
 import React from "react";
 import { useLanguage } from "@/context/LanguageContext";
+import { DESIGNER_INFO } from "@/data/portfolioData";
 import {
   Compass,
   MessageCircle,
   Phone,
   Mail,
   ArrowUp,
-  Globe,
 } from "lucide-react";
 
 export default function Footer() {
@@ -32,18 +32,18 @@ export default function Footer() {
               </div>
               <div className="flex flex-col">
                 <span className="text-xl font-bold tracking-wider uppercase text-white font-serif">
-                  Decor <span className="text-[#c5a880]">Portfolio</span>
+                  {lang === "ar" ? "م. آلاء عيسى" : "Alaa Issa"}
                 </span>
-                <span className="text-[10px] tracking-widest text-[#a8a49c] uppercase font-sans">
-                  {t("استوديو التصميم الداخلي الفاخر", "Luxury Interior Architecture")}
+                <span className="text-[10px] tracking-widest text-[#dfbe95] uppercase font-sans">
+                  {t("تصميم داخلي وديكور معماري", "Interior Architecture & Decor")}
                 </span>
               </div>
             </a>
 
             <p className="text-xs sm:text-sm text-[#9c978e] leading-relaxed max-w-sm">
               {t(
-                "استوديو هندسي متكامل متخصص في التصميم المعماري الداخلي، التشطيبات الفاخرة بنظام تسليم المفتاح، وتصنيع الأثاث المودرن المخصص في أرقى المجمعات السكنية والتجارية.",
-                "Full-service interior architecture and turnkey fit-out studio crafting bespoke residences and commercial destinations."
+                "مهندسة ديكور وتصميم داخلي متخصصة في ابتكار المساحات السكنية والتجارية الراقية، والإشراف الهندسي المباشر على التنفيذ وتفصيل الأثاث المودرن في أرقى أحياء القاهرة والشيخ زايد.",
+                "Interior architect specializing in refined residential sanctuaries, bespoke furniture joinery, and attentive on-site execution supervision."
               )}
             </p>
 
@@ -61,18 +61,7 @@ export default function Footer() {
                 </svg>
               </a>
               <a
-                href="https://linkedin.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-9 h-9 rounded-xl bg-white/5 hover:bg-[#c5a880] text-[#cac5bb] hover:text-black flex items-center justify-center transition-all border border-white/5"
-                title="LinkedIn"
-              >
-                <svg className="w-4 h-4 fill-currentColor" viewBox="0 0 24 24">
-                  <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
-                </svg>
-              </a>
-              <a
-                href="https://wa.me/201000000000"
+                href={`https://wa.me/${DESIGNER_INFO.whatsappNumber}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-9 h-9 rounded-xl bg-white/5 hover:bg-emerald-500 text-[#cac5bb] hover:text-white flex items-center justify-center transition-all border border-white/5"
@@ -86,7 +75,7 @@ export default function Footer() {
           {/* Navigation Links */}
           <div>
             <h4 className="text-xs font-bold uppercase tracking-wider text-white mb-4">
-              {t("روابط سريعة", "Navigation")}
+              {t("أقسام الموقع", "Navigation")}
             </h4>
             <ul className="space-y-2 text-xs text-[#a8a49c]">
               <li>
@@ -95,8 +84,13 @@ export default function Footer() {
                 </a>
               </li>
               <li>
+                <a href="#about" className="hover:text-[#dfbe95] transition-colors">
+                  {t("عن المهندسة آلاء", "About Eng. Alaa")}
+                </a>
+              </li>
+              <li>
                 <a href="#featured" className="hover:text-[#dfbe95] transition-colors">
-                  {t("مشروع الأسبوع المميز", "Featured Masterpiece")}
+                  {t("أحدث أعمالي", "Featured Work")}
                 </a>
               </li>
               <li>
@@ -111,7 +105,7 @@ export default function Footer() {
               </li>
               <li>
                 <a href="#estimator" className="hover:text-[#dfbe95] transition-colors">
-                  {t("حاسبة التكلفة التقديرية", "Cost Calculator")}
+                  {t("حاسبة التكلفة", "Cost Calculator")}
                 </a>
               </li>
             </ul>
@@ -120,7 +114,7 @@ export default function Footer() {
           {/* Services Links */}
           <div>
             <h4 className="text-xs font-bold uppercase tracking-wider text-white mb-4">
-              {t("الخدمات والحلول", "Services")}
+              {t("خدماتي", "My Services")}
             </h4>
             <ul className="space-y-2 text-xs text-[#a8a49c]">
               <li>
@@ -130,7 +124,7 @@ export default function Footer() {
               </li>
               <li>
                 <a href="#services" className="hover:text-[#dfbe95] transition-colors">
-                  {t("تشطيبات فاخرة تسليم مفتاح", "Turnkey Fit-Out")}
+                  {t("إشراف تنفيذي وتسليم مفتاح", "Turnkey Fit-Out Supervision")}
                 </a>
               </li>
               <li>
@@ -140,12 +134,12 @@ export default function Footer() {
               </li>
               <li>
                 <a href="#services" className="hover:text-[#dfbe95] transition-colors">
-                  {t("إضاءة معمارية ومنازل ذكية", "Smart Lighting Automation")}
+                  {t("إضاءة معمارية وأجواء دافئة", "Architectural Lighting")}
                 </a>
               </li>
               <li>
                 <a href="#services" className="hover:text-[#dfbe95] transition-colors">
-                  {t("إشراف هندسي وضمان جودة", "Site Quality Supervision")}
+                  {t("مخططات تنفيذية (Shop Drawings)", "Executive Blueprints")}
                 </a>
               </li>
             </ul>
@@ -154,7 +148,7 @@ export default function Footer() {
           {/* Studio Hours & Contact */}
           <div>
             <h4 className="text-xs font-bold uppercase tracking-wider text-white mb-4">
-              {t("المقر والاستشارات", "Studio")}
+              {t("التواصل المباشر", "Direct Contact")}
             </h4>
             <ul className="space-y-2.5 text-xs text-[#a8a49c]">
               <li className="flex items-center gap-2">
@@ -163,12 +157,12 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-2">
                 <Mail className="w-3.5 h-3.5 text-[#dfbe95]" />
-                <span>info@decorportfolio.com</span>
+                <span>{DESIGNER_INFO.email}</span>
               </li>
               <li className="text-[11px] text-[#88847c] pt-2">
                 {t(
-                  "متاح استقبال الزيارات في الاستوديو بالتنسيق المسبق",
-                  "Studio consultations by prior appointment"
+                  "متاح استقبال طلبات التصميم والمعاينات في القاهرة والشيخ زايد",
+                  "Inquiries & site visits available in Cairo & Zayed"
                 )}
               </li>
             </ul>
@@ -178,7 +172,7 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#7d7970]">
           <div>
-            © {new Date().getFullYear()} Decor Portfolio Studio. {t("جميع الحقوق محفوظة.", "All rights reserved.")}
+            © {new Date().getFullYear()} {t("م. آلاء عيسى للتصميم الداخلي والديكور.", "Eng. Alaa Issa | Interior Design & Decor. All rights reserved.")}
           </div>
 
           <div className="flex items-center gap-4">
@@ -195,14 +189,16 @@ export default function Footer() {
 
       {/* Floating Instant WhatsApp Button */}
       <a
-        href="https://wa.me/201000000000?text=مرحباً،%20أود%20الاستفسار%20عن%20خدمات%20Decor%20Portfolio"
+        href={`https://wa.me/${DESIGNER_INFO.whatsappNumber}?text=${encodeURIComponent(
+          "مرحباً م. آلاء عيسى، أود الاستفسار عن خدمات التصميم الداخلي لمشروعي."
+        )}`}
         target="_blank"
         rel="noopener noreferrer"
         className="fixed bottom-6 end-6 z-40 flex items-center gap-2.5 px-4 py-3 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs sm:text-sm shadow-2xl shadow-emerald-600/40 transition-all transform hover:scale-105"
-        title="WhatsApp Direct"
+        title="WhatsApp Direct with Eng. Alaa"
       >
         <MessageCircle className="w-5 h-5" />
-        <span className="hidden sm:inline">{t("محادثة واتساب سريعة", "WhatsApp Quick Chat")}</span>
+        <span className="hidden sm:inline">{t("محادثة مع م. آلاء عبر واتساب", "Chat with Eng. Alaa")}</span>
       </a>
     </footer>
   );
