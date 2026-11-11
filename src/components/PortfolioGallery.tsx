@@ -2,16 +2,10 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import { PROJECTS, Project } from "@/data/portfolioData";
+import { PROJECTS, Project, DESIGNER_INFO } from "@/data/portfolioData";
 import { useLanguage } from "@/context/LanguageContext";
 import ProjectModal from "./ProjectModal";
-import {
-  Sparkles,
-  ArrowUpRight,
-  MapPin,
-  Maximize,
-  SlidersHorizontal,
-} from "lucide-react";
+import { ArrowUpRight, MapPin, Maximize } from "lucide-react";
 
 export default function PortfolioGallery() {
   const { lang, t } = useLanguage();
@@ -19,12 +13,11 @@ export default function PortfolioGallery() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
   const categories = [
-    { id: "all", labelAr: "كافة المشاريع", labelEn: "All Works" },
-    { id: "living", labelAr: "صالونات ومعيشة", labelEn: "Living & Lounges" },
-    { id: "bedroom", labelAr: "أجنحة النوم", labelEn: "Master Bedrooms" },
-    { id: "kitchen", labelAr: "مطابخ وحمامات", labelEn: "Kitchens & Baths" },
-    { id: "villas", labelAr: "فلل وقصور", labelEn: "Villas" },
-    { id: "commercial", labelAr: "تجاري وإداري", labelEn: "Commercial" },
+    { id: "all", labelAr: "كافة المشاريع", labelEn: "ALL WORKS" },
+    { id: "living", labelAr: "صالونات ومعيشة", labelEn: "LIVING & LOUNGES" },
+    { id: "bedroom", labelAr: "أجنحة النوم", labelEn: "MASTER BEDROOMS" },
+    { id: "kitchen", labelAr: "مطابخ وحمامات", labelEn: "KITCHENS & BATHS" },
+    { id: "commercial", labelAr: "تجاري وضيافة", labelEn: "COMMERCIAL & RETAIL" },
   ];
 
   const filteredProjects =
@@ -33,35 +26,36 @@ export default function PortfolioGallery() {
       : PROJECTS.filter((p) => p.category === activeCategory);
 
   return (
-    <section id="portfolio" className="py-24 bg-[#0e0e12] relative">
+    <section id="portfolio" className="py-24 bg-white border-t border-neutral-200 relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-12">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#c5a880]/10 border border-[#c5a880]/20 text-[#dfbe95] text-xs font-semibold uppercase tracking-wider mb-3">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>{t("معرض الإبداعات المعمارية", "Curated Portfolio")}</span>
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-14 pb-6 border-b border-black/10 gap-6">
+          <div>
+            <div className="text-xs font-technical font-bold uppercase tracking-widest text-neutral-500 mb-2">
+              {t("أعمال مختارة • م. آلاء عيسى", "PORTFOLIO • SELECTED WORKS")}
+            </div>
+            <h2 className="text-3xl sm:text-5xl font-editorial font-bold text-black tracking-tight">
+              {t("معرض المشاريع المعمارية", "Selected Architectural Works")}
+            </h2>
           </div>
-          <h2 className="text-3xl sm:text-5xl font-bold text-white font-serif tracking-tight mb-4">
-            {t("أحدث مشاريعنا المنفذة", "Our Latest Interior Works")}
-          </h2>
-          <p className="text-xs sm:text-sm text-[#a8a49c] max-w-xl mx-auto">
+          <p className="text-xs font-technical text-neutral-500 max-w-sm">
             {t(
-              "تصفح مجموعة من أرقى المساحات السكنية والتجارية التي تم تصميمها وإخراجها وتنفيذها بأعلى معايير الإتقان والدقة الهندسية.",
-              "Explore a curated collection of prime residences, penthouses, and commercial spaces designed and finished to international standards."
+              "مجموعة مختارة من المشاريع السكنية والتجارية التي قمت بتصميمها وإعداد مخططاتها التنفيذية وإشرافها.",
+              "A curated monograph of residential retreats and hospitality environments designed and detailed by Eng. Alaa Issa."
             )}
           </p>
         </div>
 
         {/* Filter Tabs */}
-        <div className="flex items-center justify-center flex-wrap gap-2 mb-12">
+        <div className="flex items-center gap-4 flex-wrap mb-12">
           {categories.map((cat) => (
             <button
               key={cat.id}
               onClick={() => setActiveCategory(cat.id)}
-              className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all ${
+              className={`text-xs font-technical uppercase tracking-widest py-1.5 px-3.5 transition-colors border ${
                 activeCategory === cat.id
-                  ? "bg-gradient-to-r from-[#c5a880] to-[#b39162] text-[#121216] font-semibold shadow-lg shadow-[#c5a880]/20 scale-105"
-                  : "bg-white/5 hover:bg-white/10 text-[#cbc6bc] border border-white/5 hover:border-white/20"
+                  ? "bg-black text-white border-black"
+                  : "bg-white text-neutral-600 border-neutral-200 hover:border-black hover:text-black"
               }`}
             >
               {t(cat.labelAr, cat.labelEn)}
@@ -74,11 +68,11 @@ export default function PortfolioGallery() {
           {filteredProjects.map((project) => (
             <div
               key={project.id}
-              className="group rounded-2xl overflow-hidden glass-panel border border-white/10 hover:border-[#c5a880]/50 transition-all duration-500 hover:-translate-y-1.5 shadow-xl flex flex-col"
+              className="group bg-white border border-neutral-200 hover:border-black transition-all duration-300 flex flex-col justify-between"
             >
-              {/* Card Image */}
+              {/* Image Container */}
               <div
-                className="relative aspect-[4/3] w-full overflow-hidden bg-black/40 cursor-pointer"
+                className="relative aspect-[4/3] w-full overflow-hidden bg-neutral-100 cursor-pointer"
                 onClick={() => setSelectedProject(project)}
               >
                 <Image
@@ -86,69 +80,50 @@ export default function PortfolioGallery() {
                   alt={project.title}
                   fill
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  className="object-cover transition-transform duration-700 group-hover:scale-108"
+                  className="object-cover transition-transform duration-700 group-hover:scale-103"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#141418] via-transparent to-black/30 opacity-70 group-hover:opacity-40 transition-opacity" />
-
-                {/* Top badges */}
-                <div className="absolute top-3.5 start-3.5 flex items-center gap-2">
-                  <span className="px-3 py-1 rounded-lg bg-black/75 backdrop-blur-md text-[11px] font-semibold text-[#dfbe95] border border-white/10">
-                    {t(project.categoryLabel, project.categoryLabelEn)}
-                  </span>
+                <div className="absolute top-3 start-3 px-2 py-0.5 bg-white/95 text-[10px] font-technical uppercase tracking-wider text-black border border-black/10">
+                  {t(project.categoryLabel, project.categoryLabelEn)}
                 </div>
-
-                <div className="absolute top-3.5 end-3.5">
-                  <span className="w-8 h-8 rounded-full bg-black/60 backdrop-blur-md flex items-center justify-center text-white/80 group-hover:text-[#dfbe95] group-hover:bg-black transition-all">
-                    <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                  </span>
-                </div>
-
-                {/* Image count pill */}
-                {project.gallery.length > 1 && (
-                  <div className="absolute bottom-3 end-3 px-2 py-0.5 rounded bg-black/70 backdrop-blur-sm text-[10px] font-mono text-white/90">
-                    {project.gallery.length} {t("صور", "photos")}
-                  </div>
-                )}
               </div>
 
-              {/* Card Content */}
-              <div className="p-5 flex-1 flex flex-col justify-between">
+              {/* Content Body */}
+              <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
                 <div>
-                  <div className="flex items-center gap-3 text-[11px] text-[#9b968c] mb-2">
+                  <div className="flex items-center gap-3 text-[11px] font-technical text-neutral-500 mb-2">
                     <span className="flex items-center gap-1">
-                      <MapPin className="w-3 h-3 text-[#dfbe95]" />
+                      <MapPin className="w-3 h-3 text-black" />
                       {t(project.location, project.locationEn)}
                     </span>
                     <span>•</span>
                     <span className="flex items-center gap-1">
-                      <Maximize className="w-3 h-3 text-[#dfbe95]" />
+                      <Maximize className="w-3 h-3 text-black" />
                       {project.area}
                     </span>
                   </div>
 
                   <h3
                     onClick={() => setSelectedProject(project)}
-                    className="text-base sm:text-lg font-bold text-white group-hover:text-[#dfbe95] transition-colors cursor-pointer font-serif line-clamp-1"
+                    className="text-lg font-editorial font-bold text-black group-hover:underline cursor-pointer"
                   >
                     {t(project.title, project.titleEn)}
                   </h3>
 
-                  <p className="text-xs text-[#a39e94] mt-2 line-clamp-2 leading-relaxed">
+                  <p className="text-xs text-neutral-600 mt-2 line-clamp-2 leading-relaxed font-sans">
                     {t(project.description, project.descriptionEn)}
                   </p>
                 </div>
 
-                {/* Card Action footer */}
-                <div className="mt-5 pt-4 border-t border-white/5 flex items-center justify-between">
-                  <span className="text-[11px] font-medium text-[#c5a880]">
-                    {t(project.style, project.styleEn)}
+                {/* Footer action */}
+                <div className="pt-4 border-t border-neutral-100 flex items-center justify-between">
+                  <span className="text-[10px] font-technical uppercase tracking-wider text-neutral-500">
+                    {project.style}
                   </span>
-
                   <button
                     onClick={() => setSelectedProject(project)}
-                    className="text-xs font-semibold text-white hover:text-[#dfbe95] flex items-center gap-1 transition-colors"
+                    className="text-xs font-technical uppercase tracking-wider text-black font-semibold flex items-center gap-1 hover:underline"
                   >
-                    <span>{t("التفاصيل", "View Details")}</span>
+                    <span>{t("عرض المخطط والتفاصيل", "View Details")}</span>
                     <ArrowUpRight className="w-3.5 h-3.5" />
                   </button>
                 </div>
@@ -158,7 +133,7 @@ export default function PortfolioGallery() {
         </div>
       </div>
 
-      {/* Project Details Modal */}
+      {/* Modal */}
       <ProjectModal
         project={selectedProject}
         onClose={() => setSelectedProject(null)}

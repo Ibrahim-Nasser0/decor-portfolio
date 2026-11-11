@@ -2,60 +2,66 @@
 
 @layer base {
   :root {
-    --font-arabic: 'Cairo', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    --font-serif: 'Playfair Display', Georgia, serif;
+    --font-serif: 'Playfair Display', Didot, 'Bodoni MT', Georgia, serif;
+    --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Cairo', sans-serif;
   }
 
   body {
-    font-family: var(--font-arabic);
+    font-family: var(--font-sans);
+    background-color: #ffffff;
+    color: #111111;
   }
 }
 
-/* Custom luxury scrollbar */
+/* Editorial Monograph Typography & Accents */
+.font-editorial {
+  font-family: var(--font-serif);
+}
+
+.font-technical {
+  font-family: var(--font-sans);
+  letter-spacing: 0.08em;
+}
+
+/* Hairline dividers */
+.hairline-b {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.hairline-t {
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.hairline-r {
+  border-right: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.hairline-l {
+  border-left: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+/* Clean scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #111114;
+  background: #f8f8f8;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #323138;
-  border-radius: 4px;
+  background: #c5c5c5;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #c5a880;
+  background: #111111;
 }
 
-/* Glassmorphism helpers */
-.glass-panel {
-  background: rgba(26, 26, 31, 0.75);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.glass-panel-gold {
-  background: rgba(30, 27, 24, 0.85);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(197, 168, 128, 0.2);
-}
-
-.gold-gradient-text {
-  background: linear-gradient(135deg, #f4e3c7 0%, #c5a880 50%, #9c7b50 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.gold-gradient-bg {
-  background: linear-gradient(135deg, #c5a880 0%, #a8885b 100%);
-}
-
-.gold-border-glow:hover {
-  border-color: rgba(197, 168, 128, 0.5);
-  box-shadow: 0 0 25px rgba(197, 168, 128, 0.15);
+/* Subtle architectural grid pattern background */
+.architectural-grid {
+  background-size: 40px 40px;
+  background-image: 
+    linear-gradient(to right, rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
 }

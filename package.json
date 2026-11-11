@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --webpack",
+    "prebuild": "node -e \"const fs = require('fs'); fs.mkdirSync('.next/static/chunks/next/dist/client/components', { recursive: true });\"",
     "build": "next build --webpack",
     "start": "next start",
     "lint": "eslint"

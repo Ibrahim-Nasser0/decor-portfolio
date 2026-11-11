@@ -3,14 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { useLanguage } from "@/context/LanguageContext";
 import { DESIGNER_INFO } from "@/data/portfolioData";
-import {
-  Menu,
-  X,
-  MessageCircle,
-  Globe,
-  Compass,
-  ArrowUpRight,
-} from "lucide-react";
+import { Menu, X, MessageCircle, Globe, ArrowUpRight } from "lucide-react";
 
 export default function Navbar() {
   const { lang, toggleLang, t } = useLanguage();
@@ -27,101 +20,81 @@ export default function Navbar() {
 
   const navLinks = [
     { href: "#home", labelAr: "الرئيسية", labelEn: "Home" },
-    { href: "#about", labelAr: "عن المهندسة", labelEn: "About Alaa" },
-    { href: "#featured", labelAr: "أحدث أعمالي", labelEn: "Featured" },
-    { href: "#portfolio", labelAr: "معرض المشاريع", labelEn: "Portfolio" },
-    { href: "#before-after", labelAr: "قبل وبعد", labelEn: "Before & After" },
-    { href: "#services", labelAr: "خدماتي", labelEn: "Services" },
+    { href: "#about", labelAr: "عن المهندسة", labelEn: "About Me" },
+    { href: "#resume", labelAr: "السيرة والمهارات", labelEn: "Resume & Skills" },
+    { href: "#case-study", labelAr: "المخططات والمشروع", labelEn: "Case Study & Plans" },
+    { href: "#portfolio", labelAr: "الأعمال المختارة", labelEn: "Selected Works" },
     { href: "#estimator", labelAr: "حاسبة التكلفة", labelEn: "Cost Estimator" },
     { href: "#contact", labelAr: "تواصل معي", labelEn: "Contact" },
   ];
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-200 ${
         isScrolled
-          ? "bg-[#111114]/90 backdrop-blur-md border-b border-white/10 shadow-2xl py-3.5"
-          : "bg-gradient-to-b from-black/80 via-black/40 to-transparent py-5"
+          ? "bg-white/95 backdrop-blur-md border-b border-black/10 shadow-sm py-4"
+          : "bg-white border-b border-black/5 py-6"
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
-          {/* Brand Logo - Eng. Alaa Issa */}
-          <a href="#home" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#dfbe95] via-[#c5a880] to-[#8c6d42] p-[1px] shadow-lg shadow-[#c5a880]/10">
-              <div className="w-full h-full bg-[#141418] rounded-[11px] flex items-center justify-center group-hover:bg-[#1a191f] transition-colors">
-                <Compass className="w-5 h-5 text-[#dfbe95] group-hover:rotate-45 transition-transform duration-500" />
-              </div>
-            </div>
-            <div className="flex flex-col">
-              <span className="text-lg sm:text-xl font-bold tracking-wider uppercase text-white font-serif">
-                {lang === "ar" ? "م. آلاء عيسى" : "Alaa Issa"}
-              </span>
-              <span className="text-[10px] tracking-widest text-[#dfbe95] uppercase font-sans">
-                {t("تصميم داخلي وديكور", "Interior Architecture & Decor")}
-              </span>
-            </div>
+          {/* Brand Name - Minimalist Monograph Style */}
+          <a href="#home" className="flex flex-col group">
+            <span className="text-xl sm:text-2xl font-bold tracking-tight text-black font-editorial uppercase">
+              {lang === "ar" ? "م. آلاء عيسى" : "ALAA ISSA"}
+            </span>
+            <span className="text-[10px] tracking-widest text-neutral-500 uppercase font-technical">
+              {t("تصميم داخلي • عمارة وديكور", "INTERIOR ARCHITECTURE & DESIGN")}
+            </span>
           </a>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden lg:flex items-center gap-1 xl:gap-2">
+          <nav className="hidden lg:flex items-center gap-7">
             {navLinks.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
-                className="px-3 py-1.5 text-xs xl:text-sm font-medium text-[#d4cfc7] hover:text-[#dfbe95] hover:bg-white/5 rounded-lg transition-colors"
+                className="text-xs uppercase tracking-wider font-medium text-neutral-600 hover:text-black transition-colors"
               >
                 {t(link.labelAr, link.labelEn)}
               </a>
             ))}
           </nav>
 
-          {/* Actions & CTA */}
-          <div className="hidden sm:flex items-center gap-3">
-            {/* Language Switcher */}
+          {/* Actions & Language Switcher */}
+          <div className="hidden sm:flex items-center gap-4">
             <button
               onClick={toggleLang}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-white/5 hover:bg-white/10 text-[#d4cfc7] border border-white/10 transition-all hover:border-[#c5a880]/40"
-              title={t("تغيير اللغة إلى الإنجليزية", "Switch language to Arabic")}
+              className="px-3 py-1 text-xs font-semibold tracking-wider text-black border border-black/20 hover:border-black rounded transition-colors"
+              title="Toggle language"
             >
-              <Globe className="w-3.5 h-3.5 text-[#c5a880]" />
-              <span>{lang === "ar" ? "EN" : "عربي"}</span>
+              {lang === "ar" ? "EN" : "عربي"}
             </button>
 
-            {/* Direct WhatsApp CTA */}
             <a
               href={`https://wa.me/${DESIGNER_INFO.whatsappNumber}?text=${encodeURIComponent(
                 "مرحباً م. آلاء عيسى، أود الاستفسار عن خدمات التصميم الداخلي لمشروعي."
               )}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="p-2 rounded-lg bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 border border-emerald-500/20 transition-all"
-              title={t("مراسلة م. آلاء عبر واتساب", "Direct WhatsApp Chat with Eng. Alaa")}
+              className="px-4 py-2 text-xs font-medium uppercase tracking-wider bg-black hover:bg-neutral-800 text-white rounded transition-colors flex items-center gap-2"
             >
-              <MessageCircle className="w-4 h-4" />
-            </a>
-
-            {/* Book Consultation Button */}
-            <a
-              href="#contact"
-              className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs xl:text-sm font-semibold bg-gradient-to-r from-[#c5a880] to-[#b39162] hover:from-[#dfbe95] hover:to-[#c5a880] text-[#141316] shadow-md shadow-[#c5a880]/20 hover:shadow-lg hover:shadow-[#c5a880]/30 transition-all transform hover:-translate-y-0.5"
-            >
-              <span>{t("احجز استشارتك مع م. آلاء", "Book Consultation")}</span>
+              <span>{t("تواصل مباشر", "Get In Touch")}</span>
               <ArrowUpRight className="w-3.5 h-3.5" />
             </a>
           </div>
 
-          {/* Mobile Menu Toggle Button */}
+          {/* Mobile Menu Toggle */}
           <div className="flex items-center gap-2 lg:hidden">
             <button
               onClick={toggleLang}
-              className="px-2 py-1 rounded text-xs font-semibold bg-white/5 text-[#d4cfc7] border border-white/10"
+              className="px-2 py-1 text-xs font-semibold text-black border border-black/20 rounded"
             >
               {lang === "ar" ? "EN" : "عربي"}
             </button>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 rounded-xl bg-white/5 border border-white/10 text-white hover:bg-white/10"
+              className="p-2 text-black hover:bg-neutral-100 rounded"
               aria-label="Toggle menu"
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -132,38 +105,27 @@ export default function Navbar() {
 
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
-        <div className="lg:hidden mt-3 px-4 pb-6 pt-2 bg-[#121216]/98 backdrop-blur-2xl border-b border-white/10 animate-in fade-in slide-in-from-top-4 duration-200">
-          <nav className="flex flex-col gap-1.5">
+        <div className="lg:hidden mt-3 px-6 pb-6 pt-4 bg-white border-b border-black/10">
+          <nav className="flex flex-col gap-3">
             {navLinks.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className="px-4 py-2.5 text-sm font-medium text-[#d4cfc7] hover:text-[#dfbe95] hover:bg-white/5 rounded-xl transition-all"
+                className="text-xs uppercase tracking-wider font-medium text-neutral-700 hover:text-black py-1"
               >
                 {t(link.labelAr, link.labelEn)}
               </a>
             ))}
           </nav>
-          <div className="mt-4 pt-4 border-t border-white/10 flex flex-col gap-2.5">
+          <div className="mt-4 pt-4 border-t border-black/10 flex flex-col gap-2">
             <a
-              href="#contact"
-              onClick={() => setMobileMenuOpen(false)}
-              className="w-full flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-semibold bg-gradient-to-r from-[#c5a880] to-[#b39162] text-[#141316]"
-            >
-              <span>{t("احجز استشارتك مع م. آلاء", "Book Consultation")}</span>
-              <ArrowUpRight className="w-4 h-4" />
-            </a>
-            <a
-              href={`https://wa.me/${DESIGNER_INFO.whatsappNumber}?text=${encodeURIComponent(
-                "مرحباً م. آلاء عيسى، أود الاستفسار عن خدمات التصميم الداخلي لمشروعي."
-              )}`}
+              href={`https://wa.me/${DESIGNER_INFO.whatsappNumber}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/25"
+              className="w-full py-2.5 text-center text-xs uppercase tracking-wider font-medium bg-black text-white rounded"
             >
-              <MessageCircle className="w-4 h-4" />
-              <span>{t("تواصل عبر واتساب", "WhatsApp Chat")}</span>
+              {t("مراسلة م. آلاء عبر واتساب", "WhatsApp Chat with Eng. Alaa")}
             </a>
           </div>
         </div>

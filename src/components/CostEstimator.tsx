@@ -5,15 +5,13 @@ import { useLanguage } from "@/context/LanguageContext";
 import { DESIGNER_INFO } from "@/data/portfolioData";
 import {
   Calculator,
-  Building,
   Home,
+  Building,
   Briefcase,
   Coffee,
-  CheckCircle2,
+  Check,
   Clock,
-  Sparkles,
   MessageCircle,
-  ShieldCheck,
 } from "lucide-react";
 
 export default function CostEstimator() {
@@ -63,7 +61,6 @@ export default function CostEstimator() {
     },
   ];
 
-  // Calculation
   const calculation = useMemo(() => {
     const selectedProp = propertyTypes.find((p) => p.id === propertyType) || propertyTypes[0];
     const selectedTier = tiers.find((t) => t.id === tier) || tiers[1];
@@ -85,20 +82,13 @@ export default function CostEstimator() {
       totalHigh = Math.round((designCost + supervisionFee) * 1.1);
       durationWeeks = Math.max(8, Math.round(area / 18));
     } else {
-      // turnkey
       const totalTurnkey = designCost + fitoutCost;
       totalLow = Math.round(totalTurnkey * 0.95);
       totalHigh = Math.round(totalTurnkey * 1.1);
       durationWeeks = Math.max(10, Math.round(area / 15));
     }
 
-    return {
-      totalLow,
-      totalHigh,
-      designCost,
-      fitoutCost,
-      durationWeeks,
-    };
+    return { totalLow, totalHigh, designCost, fitoutCost, durationWeeks };
   }, [propertyType, area, tier, scope]);
 
   const selectedTierObj = tiers.find((t) => t.id === tier) || tiers[1];
@@ -109,45 +99,46 @@ export default function CostEstimator() {
   };
 
   const whatsappMessage = encodeURIComponent(
-    `مرحباً م. آلاء عيسى، قمت باستخدام حاسبة التكلفة التقديرية بموقعك بالمواصفات التالية:
+    `مرحباً م. آلاء عيسى، قمت بحساب تقدير لتشطيب مشروعي بموقعك بالمواصفات التالية:
 - نوع العقار: ${selectedPropObj.labelAr}
 - المساحة: ${area} م²
 - باقة التشطيب: ${selectedTierObj.labelAr}
 - نوع الخدمة: ${scope === "design" ? "تصميم ومخططات فقط" : scope === "supervision" ? "تصميم مع إشراف هندسي" : "تسليم مفتاح متكامل"}
 - التكلفة التقديرية: ${formatNumber(calculation.totalLow)} - ${formatNumber(calculation.totalHigh)} ج.م
-أود حجز جلسة استشارية معك لتحديد موعد معاينة ومناقشة تفاصيل مشروعي.`
+أود حجز جلسة استشارية وتحديد موعد لمعاينة العقار.`
   );
 
   return (
-    <section id="estimator" className="py-24 bg-[#0a0a0d] border-t border-white/5 relative">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="estimator" className="py-24 bg-white border-t border-neutral-200 relative">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto mb-14">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#c5a880]/10 border border-[#c5a880]/20 text-[#dfbe95] text-xs font-semibold uppercase tracking-wider mb-3">
-            <Calculator className="w-3.5 h-3.5" />
-            <span>{t("تخطيط الميزانية بكل شفافية", "Budget Planning & Transparency")}</span>
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-14 pb-6 border-b border-black/10 gap-6">
+          <div>
+            <div className="text-xs font-technical font-bold uppercase tracking-widest text-neutral-500 mb-2">
+              {t("تخطيط الميزانية وتقدير التكلفة", "BUDGET ESTIMATION & PLANNING")}
+            </div>
+            <h2 className="text-3xl sm:text-5xl font-editorial font-bold text-black tracking-tight">
+              {t("حاسبة التكلفة التقديرية", "Project Cost Estimator")}
+            </h2>
           </div>
-          <h2 className="text-3xl sm:text-5xl font-bold text-white font-serif tracking-tight mb-4">
-            {t("حاسبة التكلفة التقديرية لمشروعك", "Interactive Project Cost Estimator")}
-          </h2>
-          <p className="text-xs sm:text-sm text-[#a8a49c]">
+          <p className="text-xs font-technical text-neutral-500 max-w-sm">
             {t(
-              "حددي نوع ومساحة فراغك ومستوى التشطيب المفضل للحصول على تقدير استرشادي فوري للتكلفة والجدول الزمني قبل بدء التصميم.",
-              "Select your space type, area, and desired finish tier to instantly estimate design & fit-out costs and project timelines."
+              "حددي نوع ومساحة فراغك ومستوى التشطيب للحصول على تقدير استرشادي فوري للتكلفة والجدول الزمني.",
+              "Select your space parameters and desired finish tier to instantly calculate an indicative budget range."
             )}
           </p>
         </div>
 
-        {/* Estimator Card Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        {/* Estimator Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
           {/* Controls (7 cols) */}
-          <div className="lg:col-span-7 glass-panel p-6 sm:p-8 rounded-3xl border border-white/10 shadow-2xl space-y-8">
+          <div className="lg:col-span-7 bg-neutral-50/60 border border-neutral-300 p-6 sm:p-8 space-y-8">
             {/* 1. Property Type */}
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-[#dfbe95] mb-3">
-                1. {t("نوع العقار أو الفراغ", "Property Type")}
+              <label className="block text-xs font-technical font-bold uppercase tracking-widest text-black mb-3">
+                1. {t("نوع العقار أو الفراغ", "PROPERTY TYPE")}
               </label>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                 {propertyTypes.map((item) => {
                   const Icon = item.icon;
                   const isSelected = propertyType === item.id;
@@ -156,31 +147,32 @@ export default function CostEstimator() {
                       key={item.id}
                       type="button"
                       onClick={() => setPropertyType(item.id)}
-                      className={`flex flex-col items-center justify-center p-3 rounded-2xl border text-center transition-all ${
+                      className={`p-3 border text-center transition-colors flex flex-col items-center justify-center ${
                         isSelected
-                          ? "bg-[#c5a880]/20 border-[#c5a880] text-white shadow-lg shadow-[#c5a880]/15"
-                          : "bg-white/5 border-white/5 text-[#a8a49c] hover:bg-white/10 hover:border-white/20"
+                          ? "bg-black text-white border-black"
+                          : "bg-white text-neutral-700 border-neutral-200 hover:border-black"
                       }`}
                     >
-                      <Icon className={`w-5 h-5 mb-1.5 ${isSelected ? "text-[#dfbe95]" : "text-[#888]"}`} />
-                      <span className="text-xs font-semibold">{t(item.labelAr, item.labelEn)}</span>
+                      <Icon className={`w-4 h-4 mb-1.5 ${isSelected ? "text-white" : "text-neutral-500"}`} />
+                      <span className="text-xs font-technical uppercase tracking-wider">
+                        {t(item.labelAr, item.labelEn)}
+                      </span>
                     </button>
                   );
                 })}
               </div>
             </div>
 
-            {/* 2. Space Area Slider */}
+            {/* 2. Area Slider */}
             <div>
               <div className="flex items-center justify-between mb-3">
-                <label className="text-xs font-bold uppercase tracking-wider text-[#dfbe95]">
-                  2. {t("المساحة الإجمالية بالمتر المربع (م²)", "Total Floor Area (m²)")}
+                <label className="text-xs font-technical font-bold uppercase tracking-widest text-black">
+                  2. {t("المساحة الإجمالية بالمتر المربع", "FLOOR AREA (M²)")}
                 </label>
-                <div className="px-3 py-1 rounded-lg bg-[#c5a880]/20 border border-[#c5a880]/40 text-sm font-bold text-white font-mono">
-                  {area} {t("م²", "m²")}
-                </div>
+                <span className="text-sm font-technical font-bold text-black border border-black/20 px-3 py-0.5 bg-white">
+                  {area} m²
+                </span>
               </div>
-
               <input
                 type="range"
                 min="40"
@@ -188,19 +180,17 @@ export default function CostEstimator() {
                 step="10"
                 value={area}
                 onChange={(e) => setArea(Number(e.target.value))}
-                className="w-full h-2 bg-white/10 rounded-lg appearance-none cursor-pointer accent-[#c5a880]"
+                className="w-full h-1.5 bg-neutral-300 appearance-none cursor-pointer accent-black"
               />
-
-              {/* Area Presets */}
-              <div className="flex items-center justify-between text-xs text-[#8c887f] mt-2">
+              <div className="flex items-center justify-between text-[11px] font-technical text-neutral-500 mt-2">
                 {[80, 150, 220, 350, 500].map((preset) => (
                   <button
                     key={preset}
                     type="button"
                     onClick={() => setArea(preset)}
-                    className="hover:text-[#dfbe95] transition-colors py-1 px-1.5"
+                    className="hover:text-black py-0.5"
                   >
-                    {preset} م²
+                    {preset} m²
                   </button>
                 ))}
               </div>
@@ -208,10 +198,10 @@ export default function CostEstimator() {
 
             {/* 3. Finishing Tier */}
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-[#dfbe95] mb-3">
-                3. {t("مستوى وباقة التشطيب والديكور", "Finishing & Material Tier")}
+              <label className="block text-xs font-technical font-bold uppercase tracking-widest text-black mb-3">
+                3. {t("مستوى وباقة التشطيب", "FINISHING TIER")}
               </label>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                 {tiers.map((tItem) => {
                   const isSelected = tier === tItem.id;
                   return (
@@ -219,20 +209,17 @@ export default function CostEstimator() {
                       key={tItem.id}
                       type="button"
                       onClick={() => setTier(tItem.id as any)}
-                      className={`p-3.5 rounded-2xl border text-start transition-all flex flex-col justify-between ${
+                      className={`p-3 border text-start transition-colors ${
                         isSelected
-                          ? "bg-gradient-to-br from-[#c5a880]/25 to-transparent border-[#c5a880] text-white shadow-lg"
-                          : "bg-white/5 border-white/5 text-[#a8a49c] hover:bg-white/10"
+                          ? "bg-black text-white border-black"
+                          : "bg-white text-neutral-700 border-neutral-200 hover:border-black"
                       }`}
                     >
-                      <div>
-                        <div className="flex items-center justify-between">
-                          <span className="text-xs font-bold text-white">{t(tItem.labelAr, tItem.labelEn)}</span>
-                          {isSelected && <Sparkles className="w-3.5 h-3.5 text-[#dfbe95]" />}
-                        </div>
-                        <p className="text-[11px] text-[#9c978e] mt-1 line-clamp-2 leading-relaxed">
-                          {t(tItem.subAr, tItem.subEn)}
-                        </p>
+                      <div className="text-xs font-technical font-bold uppercase tracking-wider">
+                        {t(tItem.labelAr, tItem.labelEn)}
+                      </div>
+                      <div className={`text-[10px] mt-1 line-clamp-2 ${isSelected ? "text-neutral-300" : "text-neutral-500"}`}>
+                        {t(tItem.subAr, tItem.subEn)}
                       </div>
                     </button>
                   );
@@ -242,35 +229,23 @@ export default function CostEstimator() {
 
             {/* 4. Scope of Service */}
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-[#dfbe95] mb-3">
-                4. {t("نطاق الخدمة المطلوب", "Service Scope")}
+              <label className="block text-xs font-technical font-bold uppercase tracking-widest text-black mb-3">
+                4. {t("نطاق الخدمة المطلوب", "SERVICE SCOPE")}
               </label>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                 {[
-                  {
-                    id: "design",
-                    labelAr: "تصميم 3D ومخططات فقط",
-                    labelEn: "3D Design & Blueprints",
-                  },
-                  {
-                    id: "supervision",
-                    labelAr: "تصميم + إشراف دوري",
-                    labelEn: "Design + Supervision",
-                  },
-                  {
-                    id: "turnkey",
-                    labelAr: "تسليم مفتاح متكامل",
-                    labelEn: "Full Turnkey Fit-Out",
-                  },
+                  { id: "design", labelAr: "تصميم 3D ومخططات فقط", labelEn: "Design & Blueprints" },
+                  { id: "supervision", labelAr: "تصميم + إشراف دوري", labelEn: "Design + Supervision" },
+                  { id: "turnkey", labelAr: "تسليم مفتاح متكامل", labelEn: "Full Turnkey Fit-Out" },
                 ].map((s) => (
                   <button
                     key={s.id}
                     type="button"
                     onClick={() => setScope(s.id as any)}
-                    className={`py-2.5 px-3 rounded-xl text-xs font-semibold border transition-all text-center ${
+                    className={`py-2 px-3 border text-xs font-technical uppercase tracking-wider transition-colors text-center ${
                       scope === s.id
-                        ? "bg-[#c5a880] text-[#121216] border-[#c5a880] shadow-md"
-                        : "bg-white/5 text-[#cbc6bc] border-white/10 hover:bg-white/10"
+                        ? "bg-black text-white border-black font-bold"
+                        : "bg-white text-neutral-700 border-neutral-200 hover:border-black"
                     }`}
                   >
                     {t(s.labelAr, s.labelEn)}
@@ -281,86 +256,66 @@ export default function CostEstimator() {
           </div>
 
           {/* Results Summary Box (5 cols) */}
-          <div className="lg:col-span-5 glass-panel-gold p-6 sm:p-8 rounded-3xl border border-[#c5a880]/30 shadow-2xl flex flex-col justify-between gap-6">
+          <div className="lg:col-span-5 bg-white border border-neutral-400 p-6 sm:p-8 space-y-6 shadow-sm">
             <div>
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#dfbe95]/15 text-[#dfbe95] text-xs font-bold mb-4">
-                <ShieldCheck className="w-3.5 h-3.5" />
-                <span>{t("تقدير استرشادي فوري مع م. آلاء", "Instant Estimation with Eng. Alaa")}</span>
+              <div className="text-[10px] font-technical uppercase tracking-widest text-neutral-500 mb-1">
+                {t("التقدير الإجمالي التقديري", "INDICATIVE BUDGET ESTIMATE")}
               </div>
-
-              <div className="text-xs text-[#b8b3a8] uppercase tracking-wider mb-1">
-                {t("التكلفة الإجمالية التقديرية", "Estimated Total Budget Range")}
+              <div className="text-2xl sm:text-3xl font-editorial font-bold text-black tracking-tight mb-2">
+                <span>{formatNumber(calculation.totalLow)}</span>
+                <span className="mx-2 text-neutral-400 font-sans">-</span>
+                <span>{formatNumber(calculation.totalHigh)}</span>
+                <span className="text-xs font-technical text-neutral-500 ms-2 font-normal">EGP</span>
               </div>
-
-              <div className="text-2xl sm:text-3xl font-extrabold text-white font-serif tracking-tight mb-2">
-                <span className="text-[#dfbe95]">{formatNumber(calculation.totalLow)}</span>
-                <span className="text-white/60 text-lg mx-2">-</span>
-                <span className="text-[#dfbe95]">{formatNumber(calculation.totalHigh)}</span>
-                <span className="text-xs sm:text-sm font-sans font-normal text-[#a8a49c] ms-2">
-                  {t("ج.م تقريباً", "EGP approx")}
-                </span>
-              </div>
-
-              <p className="text-[11px] text-[#9c978e] leading-relaxed mb-6">
+              <p className="text-[11px] text-neutral-500 leading-relaxed font-sans">
                 {t(
-                  "* التكلفة استرشادية، ويتم تحديد السعر النهائي بدقة خلال جلسة المعاينة الميدانية واعتماد خامات التشطيب.",
-                  "* Figures are indicative and finalized during our initial site visit and material specification session."
+                  "* التكلفة استرشادية، ويتم اعتماد السعر النهائي بدقة خلال جلسة المعاينة الميدانية واعتماد المواصفات.",
+                  "* Figures are indicative and subject to exact on-site survey and finalized material specifications."
                 )}
               </p>
-
-              {/* Timeline estimate */}
-              <div className="p-3.5 rounded-2xl bg-black/40 border border-white/10 flex items-center justify-between mb-5">
-                <div className="flex items-center gap-2.5">
-                  <Clock className="w-4 h-4 text-[#dfbe95]" />
-                  <span className="text-xs text-[#cfcac0]">{t("المدة الزمنية المقدرة للتنفيذ", "Estimated Timeline")}</span>
-                </div>
-                <span className="text-xs font-bold text-white font-mono">
-                  {calculation.durationWeeks} {t("أسبوع", "Weeks")}
-                </span>
-              </div>
-
-              {/* Included Highlights */}
-              <div className="space-y-2.5">
-                <div className="text-xs font-bold text-white uppercase tracking-wider">
-                  {t("ما يشمله هذا التقدير معكِ:", "What's Included in This Scope:")}
-                </div>
-                <div className="flex flex-col gap-2">
-                  {[
-                    t("جلسة تحليل الاحتياجات ورفع المقاسات الميدانية بدقة", "Site survey & lifestyle needs discovery"),
-                    t("مخططات 2D لتوزيع الفراغات والأثاث والمسارات", "2D layout & circulation space plans"),
-                    t("رندرات 3D واقعية متكاملة لجميع الغرف والزوايا", "Photorealistic 3D visual renders for all zones"),
-                    scope !== "design"
-                      ? t("إشرافي الهندسي الشخصي على جودة ومطابقة التنفيذ", "Personal on-site quality supervision by Eng. Alaa")
-                      : t("كتيب مواصفات الخامات وأكواد الدهانات المعتمدة", "Detailed material & paint specification book"),
-                    scope === "turnkey" &&
-                      t("توريد وتركيب الخامات والتسليم على المفتاح مع ضمان شامل", "Turnkey material supply, installation & full warranty"),
-                  ]
-                    .filter(Boolean)
-                    .map((item, idx) => (
-                      <div key={idx} className="flex items-start gap-2 text-xs text-[#cfcac0]">
-                        <CheckCircle2 className="w-3.5 h-3.5 text-[#dfbe95] shrink-0 mt-0.5" />
-                        <span>{item}</span>
-                      </div>
-                    ))}
-                </div>
-              </div>
             </div>
 
-            {/* Direct WhatsApp Action Button */}
-            <div className="pt-4 border-t border-white/10 flex flex-col gap-2.5">
+            {/* Timeline */}
+            <div className="flex items-center justify-between py-3 border-y border-neutral-200 text-xs font-technical">
+              <span className="text-neutral-600">{t("المدة الزمنية المتوقعة", "ESTIMATED TIMELINE")}</span>
+              <span className="font-bold text-black">{calculation.durationWeeks} {t("أسبوع", "WEEKS")}</span>
+            </div>
+
+            {/* Scope highlights */}
+            <div className="space-y-2 text-xs">
+              <div className="font-technical font-bold uppercase tracking-wider text-black mb-1">
+                {t("ما تشمله الباقة معكِ:", "INCLUDED IN SCOPE:")}
+              </div>
+              {[
+                t("جلسة تحليل الاحتياجات ورفع المقاسات الميدانية بدقة", "Site survey & lifestyle discovery session"),
+                t("مخططات 2D لتوزيع الفراغات والأثاث والمسارات", "2D layout & circulation space plans"),
+                t("رندرات 3D واقعية متكاملة لجميع الغرف والزوايا", "Photorealistic 3D visual renders for all zones"),
+                scope !== "design"
+                  ? t("إشرافي الهندسي الشخصي على جودة ومطابقة التنفيذ", "Personal on-site quality supervision by Eng. Alaa")
+                  : t("كتيب مواصفات الخامات وأكواد الدهانات المعتمدة", "Detailed material & paint specification book"),
+                scope === "turnkey" &&
+                  t("توريد وتركيب الخامات والتسليم على المفتاح مع ضمان شامل", "Turnkey material supply, installation & full warranty"),
+              ]
+                .filter(Boolean)
+                .map((item, idx) => (
+                  <div key={idx} className="flex items-start gap-2 text-neutral-600">
+                    <Check className="w-3.5 h-3.5 text-black shrink-0 mt-0.5" />
+                    <span>{item}</span>
+                  </div>
+                ))}
+            </div>
+
+            {/* WhatsApp CTA */}
+            <div className="pt-2">
               <a
                 href={`https://wa.me/${DESIGNER_INFO.whatsappNumber}?text=${whatsappMessage}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl font-bold text-xs sm:text-sm bg-gradient-to-r from-[#dfbe95] via-[#c5a880] to-[#a8885b] text-[#121216] hover:brightness-110 shadow-lg shadow-[#c5a880]/30 transition-all transform hover:-translate-y-0.5"
+                className="w-full py-3.5 px-4 bg-black hover:bg-neutral-800 text-white text-xs uppercase tracking-widest font-medium transition-colors text-center flex items-center justify-center gap-2"
               >
                 <MessageCircle className="w-4 h-4" />
-                <span>{t("مناقشة التقدير مباشرة مع م. آلاء عبر واتساب", "Discuss Estimate Directly with Eng. Alaa")}</span>
+                <span>{t("مناقشة المقايسة مع م. آلاء عيسى", "Discuss Quote with Eng. Alaa")}</span>
               </a>
-
-              <p className="text-[10px] text-center text-[#88847c]">
-                {t("جلسة استشارية أولية دون أي التزام مسبق", "Free initial discovery session with zero obligation")}
-              </p>
             </div>
           </div>
         </div>
