@@ -1,36 +1,119 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Decor Portfolio | استوديو التصميم الداخلي والديكور الفاخر
 
-## Getting Started
+تطبيق ويب عصري وفاخر لمعرض أعمال الديكور والتصميم الداخلي (Decor & Interior Design Portfolio) مبني باستخدام **Next.js 15 (App Router)**، **TypeScript**، و **Tailwind CSS**.
 
-First, run the development server:
+---
 
+## ✨ المميزات الرئيسية للمشروع (Features)
+
+1. **تصميم فاخر وعصري (Luxury Aesthetics):**
+   - هوية بصرية مستوحاة من أرقى مكاتب واستوديوهات العمارة الداخلية (Dark luxury palette، لمسات ذهبية برونزية دافئة، خط عربي أنيق "Cairo" وخط سيريفر "Playfair Display").
+   
+2. **دعم كامل للغتين (العربية والإنجليزية RTL / LTR):**
+   - تبديل فوري وسلس بين اللغة العربية والإنجليزية بضغطة زر واحدة.
+
+3. **مشروع الأسبوع المميز (Featured Project with Multi-Angle View):**
+   - استعراض واقعي لمشروع ريزيدنس التجمع الفاخر مع 4 زوايا تصوير ثلاثية الأبعاد فائقة الدقة:
+     - الزاوية البانورامية الشاملة.
+     - الواجهة الأمامية والبانوهات الخشبية.
+     - جدار الشاشة ووحدة التلفزيون العائمة.
+     - الجلسة الركنية وتفاصيل أقمشة البوكليه.
+   - لوحة ألوان تفاعلية (Color Palette) تتيح نسخ أكواد الألوان مباشرة.
+   - نافذة تكبير عالية الدقة (Fullscreen Lightbox).
+
+4. **مقارنة تفاعلية قبل وبعد (Interactive Before & After Slider):**
+   - مؤشر سحب تفاعلي لمقارنة الرندر المبدئي بالنتيجة النهائية فائقة الدقة والواقعية.
+
+5. **معرض مشاريع مصنف وفلترة ذكية (Filterable Portfolio Gallery):**
+   - تصنيفات: الكل، صالونات ومعيشة، أجنحة النوم، مطابخ وحمامات، فلل وقصور، تجاري وإداري.
+   - نافذة منبثقة تفاعلية (Modal) لاستعراض مواصفات وصور كل مشروع بالكامل.
+
+6. **حاسبة تكلفة تشطيب وديكور تفاعلية (Interactive Cost Estimator):**
+   - اختيار نوع العقار (شقة، دوبلكس، فيلا، مكتب، كافيه).
+   - مسطرة تحديد المساحة بالمتر المربع (من 40 إلى 800 م²).
+   - باقات تشطيب متعددة (مودرن كوزي، بريميوم لاكشري، رويال ألترا).
+   - حساب فوري للتكلفة التقديرية والمدة الزمنية مع زر مباشر لإرسال التفاصيل عبر الواتساب.
+
+7. **خدمات الاستوديو ومنهجية العمل (Services & 4-Step Process):**
+   - عرض للخدمات المتكاملة (تصميم 3D، تشطيبات تسليم مفتاح، تفصيل الأثاث، الإضاءة المعمارية، والإشراف الهندسي).
+   - توضيح مراحل العمل الأربعة لراحة بال العميل.
+
+8. **تواصل وحجز استشارة فوري:**
+   - نموذج حجز استشارة هندسية تفاعلي.
+   - زر واتساب عائم مباشر (Floating WhatsApp Button) لمحادثة فورية من أي صفحة.
+   - قسم الأسئلة الشائعة (FAQ Accordion).
+
+---
+
+## 🚀 تشغيل المشروع (How to Run)
+
+### 1. تثبيت الحزم (إذا لزم الأمر):
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. تشغيل بيئة التطوير (Development Server):
+```bash
+npm run dev
+```
+ثم افتح المتصفح على: `http://localhost:3000`
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 3. بناء نسخة الإنتاج (Production Build):
+```bash
+npm run build
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 4. تشغيل نسخة الإنتاج (Start Production Server):
+```bash
+npm run start
+```
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## 📁 هيكلية المجلدات (Folder Structure)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+decor-portfolio/
+├── public/
+│   └── images/
+│       └── projects/          # صور المشاريع والزوايا المختلفة
+├── src/
+│   ├── app/
+│   │   ├── globals.css        # الأنماط والتدرجات والخطوط
+│   │   ├── layout.tsx         # الهيكل الأساسي والميتا داتا
+│   │   └── page.tsx           # الصفحة الرئيسية التفاعلية
+│   ├── components/
+│   │   ├── Navbar.tsx         # القائمة العلوية وتغيير اللغة
+│   │   ├── Hero.tsx           # الواجهة الترحيبية والإحصائيات
+│   │   ├── FeaturedProject.tsx# المشروع المميز وتغيير الزوايا
+│   │   ├── BeforeAfterSlider.tsx # شريط مقارنة قبل وبعد
+│   │   ├── PortfolioGallery.tsx  # معرض المشاريع والفلترة
+│   │   ├── ProjectModal.tsx   # نافذة تفاصيل المشروع المنبثقة
+│   │   ├── CostEstimator.tsx  # حاسبة التكلفة التقديرية
+│   │   ├── ServicesSection.tsx# بطاقات الخدمات الهندسية
+│   │   ├── WorkflowSection.tsx# خطوات ومراحل العمل
+│   │   ├── TestimonialsSection.tsx # آراء وتقييمات العملاء
+│   │   ├── ContactSection.tsx # نموذج الحجز والتواصل وFAQ
+│   │   └── Footer.tsx         # التذييل وزر الواتساب العائم
+│   ├── context/
+│   │   └── LanguageContext.tsx# إدارة اللغات (عربي / إنجليزي)
+│   └── data/
+│       └── portfolioData.ts   # بيانات المشاريع، الخدمات، والأسئلة
+└── package.json
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## 🛠️ تخصيص البيانات وأرقام التواصل (Customization)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **لتعديل أرقام الهواتف أو روابط الواتساب:**
+  قم بتعديل رقم الواتساب في ملفات:
+  - `src/components/Navbar.tsx`
+  - `src/components/CostEstimator.tsx`
+  - `src/components/ContactSection.tsx`
+  - `src/components/Footer.tsx`
+  (استبدل `201000000000` برقم هاتفك المسجل على واتساب).
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **لإضافة مشاريع جديدة:**
+  أضف بيانات وصور المشروع الجديد في مصفوفة `PROJECTS` داخل الملف:
+  `src/data/portfolioData.ts`.
