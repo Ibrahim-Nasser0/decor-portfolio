@@ -25,8 +25,8 @@ export default async function Home() {
         <Navbar profile={profile} />
         <Hero profile={profile} projectsCount={projects.length} />
         <AboutSection profile={profile} />
-        <SkillsSection />
-        <ExperienceSection />
+        <SkillsSection profile={profile} />
+        <ExperienceSection profile={profile} />
         <PortfolioGallery initialProjects={projects} />
         <ContactSection />
         <Footer />

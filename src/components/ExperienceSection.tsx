@@ -2,7 +2,9 @@ import React from "react";
 import { DESIGNER_INFO } from "@/data/portfolioData";
 import { Briefcase, GraduationCap, MapPin, Calendar, ArrowUpRight, Award } from "lucide-react";
 
-export default function ExperienceSection() {
+export default function ExperienceSection({ profile }: { profile?: any }) {
+  const experience = profile?.experience || DESIGNER_INFO.experience || [];
+  const education = profile?.education || DESIGNER_INFO.education || [];
   return (
     <section id="experience" className="py-16 sm:py-24 2xl:py-32 bg-[#faf9f6] border-t border-neutral-200 relative">
       <div className="max-w-7xl 2xl:max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 2xl:px-12">
@@ -33,7 +35,7 @@ export default function ExperienceSection() {
             </div>
 
             <div className="space-y-6 sm:space-y-8 2xl:space-y-10 relative before:absolute before:inset-0 before:left-2.5 sm:before:left-3 before:w-[1px] before:bg-neutral-200">
-              {DESIGNER_INFO.experience?.map((exp, idx) => (
+              {experience.map((exp: any, idx: number) => (
                 <div key={idx} className="relative pl-6 sm:pl-8 2xl:pl-10 space-y-2.5 sm:space-y-3 2xl:space-y-4 group">
                   {/* Timeline Dot */}
                   <div className="absolute left-[7px] sm:left-[9px] top-1.5 w-2 h-2 rounded-full bg-black group-hover:scale-150 transition-transform" />
@@ -62,7 +64,7 @@ export default function ExperienceSection() {
                   </p>
 
                   <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap pt-1">
-                    {exp.skills.map((s, sIdx) => (
+                    {exp.skills?.map((s: string, sIdx: number) => (
                       <span
                         key={sIdx}
                         className="text-[9px] sm:text-[10px] 2xl:text-xs font-technical uppercase tracking-wider px-2 2xl:px-3 py-0.5 2xl:py-1 bg-white border border-neutral-200 text-neutral-600"
@@ -88,7 +90,7 @@ export default function ExperienceSection() {
               </div>
 
               <div className="space-y-5 sm:space-y-6 2xl:space-y-8">
-                {DESIGNER_INFO.education.map((edu, idx) => (
+                {education.map((edu: any, idx: number) => (
                   <div key={idx} className="space-y-1.5 pb-5 border-b border-neutral-100 last:border-none last:pb-0">
                     <div className="flex items-center justify-between text-[10px] sm:text-[11px] 2xl:text-xs font-technical text-neutral-500">
                       <span>• {edu.year}</span>
