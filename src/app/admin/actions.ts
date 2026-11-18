@@ -10,6 +10,7 @@ import {
   updateDesignerProfile,
   updateInquiryStatus,
   updateInquiryNotes,
+  createInquiry,
   ClientInquiry,
 } from '@/lib/dataRepository'
 import { Project } from '@/data/portfolioData'
@@ -130,5 +131,30 @@ export async function updateInquiryNotesAction(id: string, notes: string) {
     return { success: true }
   } catch (err: any) {
     return { success: false, error: err.message || 'Failed to update private notes' }
+  }
+}
+
+// 7. INQUIRY: SUBMIT INQUIRY FROM PUBLIC CONTACT FORM
+export async function submitInquiryAction(formData: {
+  name: string
+  phone: string
+  city?: string
+  projectType?: string
+  message?: string
+}) {
+  try {
+    await createInquiry({
+      client_name: formData.name,
+      phone_number: formData.phone,
+      service_type: formData.projectType || 'residential',
+      area_size: formData.city || 'Cairo',
+      message: formData.message || '',
+    })
+    revalidatePath('/admin/inquiries')
+    revalidatePath('/admin')
+    return { success: true }
+  } catch (err: any) {
+    console.error('Failed to submit client inquiry:', err)
+    return { success: false, error: err.message || 'Failed to submit inquiry' }
   }
 }

@@ -5,10 +5,28 @@ import { useLanguage } from "@/context/LanguageContext";
 import { DESIGNER_INFO } from "@/data/portfolioData";
 import { MessageCircle, Phone, Mail, ArrowUp } from "lucide-react";
 
-export default function Footer() {
+interface FooterProps {
+  profile?: {
+    nameEn?: string;
+    titleEn?: string;
+    locationEn?: string;
+    email?: string;
+    phone?: string;
+    whatsappNumber?: string;
+  };
+}
+
+export default function Footer({ profile }: FooterProps) {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
+
+  const name = profile?.nameEn || DESIGNER_INFO.nameEn || "ALAA ISSA";
+  const title = profile?.titleEn || DESIGNER_INFO.titleEn || "INTERIOR ARCHITECTURE & DESIGN";
+  const location = profile?.locationEn || DESIGNER_INFO.locationEn || "NEW CAIRO • SHEIKH ZAYED • CAIRO, EGYPT";
+  const phone = profile?.phone || DESIGNER_INFO.phone;
+  const email = profile?.email || DESIGNER_INFO.email;
+  const whatsappNumber = profile?.whatsappNumber || DESIGNER_INFO.whatsappNumber;
 
   return (
     <footer className="bg-white border-t border-neutral-300 pt-12 sm:pt-16 2xl:pt-24 pb-10 sm:pb-12 2xl:pb-16 relative text-black">
@@ -18,10 +36,10 @@ export default function Footer() {
           <div className="lg:col-span-2 space-y-3 sm:space-y-4 2xl:space-y-5">
             <a href="#hero" className="flex flex-col">
               <span className="text-xl sm:text-2xl 2xl:text-3xl font-editorial font-bold tracking-tight text-black uppercase">
-                ALAA ISSA
+                {name}
               </span>
               <span className="text-[9px] sm:text-[10px] 2xl:text-xs font-technical uppercase tracking-widest text-neutral-500 mt-1">
-                INTERIOR ARCHITECTURE & DESIGN
+                {title}
               </span>
             </a>
 
@@ -30,7 +48,7 @@ export default function Footer() {
             </p>
 
             <div className="text-[11px] sm:text-xs 2xl:text-sm font-technical text-neutral-500 pt-1 sm:pt-2">
-              NEW CAIRO • SHEIKH ZAYED • CAIRO, EGYPT
+              {location}
             </div>
           </div>
 
@@ -81,15 +99,15 @@ export default function Footer() {
             <ul className="space-y-2.5 sm:space-y-3 2xl:space-y-3.5 text-xs 2xl:text-sm font-sans">
               <li className="flex items-center gap-2 text-neutral-700">
                 <Phone className="w-3.5 h-3.5 2xl:w-4 2xl:h-4 text-black shrink-0" />
-                <span dir="ltr" className="font-mono">{DESIGNER_INFO.phone}</span>
+                <span dir="ltr" className="font-mono">{phone}</span>
               </li>
               <li className="flex items-center gap-2 text-neutral-700">
                 <Mail className="w-3.5 h-3.5 2xl:w-4 2xl:h-4 text-black shrink-0" />
-                <span className="font-mono truncate">{DESIGNER_INFO.email}</span>
+                <span className="font-mono truncate">{email}</span>
               </li>
               <li className="pt-2">
                 <a
-                  href={`https://wa.me/${DESIGNER_INFO.whatsappNumber}`}
+                  href={`https://wa.me/${whatsappNumber}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 text-xs 2xl:text-sm font-technical uppercase tracking-wider text-black font-bold hover:underline"
@@ -105,7 +123,7 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="pt-6 sm:pt-8 2xl:pt-10 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] sm:text-xs 2xl:text-sm font-technical text-neutral-500 text-center sm:text-left">
           <div>
-            © {new Date().getFullYear()} ALAA ISSA INTERIOR DESIGN. ALL RIGHTS RESERVED.
+            © {new Date().getFullYear()} {name} INTERIOR DESIGN. ALL RIGHTS RESERVED.
           </div>
 
           <button
@@ -120,16 +138,16 @@ export default function Footer() {
 
       {/* Floating Instant WhatsApp Button */}
       <a
-        href={`https://wa.me/${DESIGNER_INFO.whatsappNumber}?text=${encodeURIComponent(
-          "Hello Eng. Alaa Issa, I would like to inquire about interior design services for my project."
+        href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
+          `Hello Eng. ${name}, I would like to inquire about interior design services for my project.`
         )}`}
         target="_blank"
         rel="noopener noreferrer"
         className="fixed bottom-5 end-5 sm:bottom-6 sm:end-6 2xl:bottom-8 2xl:end-8 z-40 flex items-center gap-2 px-3 sm:px-4 2xl:px-5 py-2.5 2xl:py-3 bg-black hover:bg-neutral-800 text-white text-[11px] sm:text-xs 2xl:text-sm font-technical uppercase tracking-widest shadow-xl transition-all transform hover:scale-105 border border-white/20"
-        title="WhatsApp Direct with Eng. Alaa"
+        title={`WhatsApp Direct with ${name}`}
       >
         <MessageCircle className="w-4 h-4 2xl:w-5 2xl:h-5 text-emerald-400 shrink-0" />
-        <span className="hidden sm:inline">Chat with Eng. Alaa</span>
+        <span className="hidden sm:inline">Chat with {name.split(' ')[0]}</span>
         <span className="sm:hidden">WhatsApp</span>
       </a>
     </footer>

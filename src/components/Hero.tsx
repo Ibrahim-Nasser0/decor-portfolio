@@ -135,33 +135,44 @@ export default function Hero({ profile, projectsCount = 5 }: HeroProps) {
               {bio}
             </p>
 
+            {/* Horizontal Line Divider matching Monograph Ref Image 2 */}
+            <div className="w-full h-[1px] bg-neutral-200/90 my-2 sm:my-3 animate-line-draw [animation-delay:750ms]" />
+
             {/* Key Metrics / Credibility Ribbon with Count-up Animations */}
-            <div className="grid grid-cols-3 gap-3 sm:gap-6 2xl:gap-10 pt-4 2xl:pt-6 border-t border-neutral-200 max-w-lg 2xl:max-w-xl animate-hero-entrance [animation-delay:800ms]">
+            <div className="grid grid-cols-3 gap-4 sm:gap-8 2xl:gap-12 max-w-lg 2xl:max-w-xl animate-hero-entrance [animation-delay:800ms]">
               <div className="group cursor-default">
-                <span className="block text-2xl sm:text-3xl 2xl:text-4xl font-editorial font-bold text-black leading-none group-hover:translate-x-1 transition-transform">
-                  {animatedBuiltWorks}
-                  <span className="text-sm sm:text-base 2xl:text-lg font-sans font-normal text-neutral-400">+</span>
-                </span>
-                <span className="text-[9px] sm:text-[10px] 2xl:text-xs font-technical uppercase tracking-wider 2xl:tracking-widest text-neutral-500 mt-1.5 block truncate">
-                  Built Works
+                <div className="flex items-baseline">
+                  <span className="text-3xl sm:text-4xl 2xl:text-5xl font-editorial font-bold text-black leading-none group-hover:translate-x-0.5 transition-transform">
+                    {animatedBuiltWorks}
+                  </span>
+                  <span className="text-lg sm:text-xl 2xl:text-2xl font-light text-neutral-400 ms-0.5">+</span>
+                </div>
+                <span className="text-[9px] sm:text-[10px] 2xl:text-xs font-technical uppercase tracking-[0.16em] sm:tracking-[0.2em] text-neutral-500 mt-2 block truncate font-medium">
+                  BUILT WORKS
                 </span>
               </div>
+
               <div className="group cursor-default">
-                <span className="block text-2xl sm:text-3xl 2xl:text-4xl font-editorial font-bold text-black leading-none group-hover:translate-x-1 transition-transform">
-                  {String(animatedYears).padStart(2, "0")}
-                  <span className="text-sm sm:text-base 2xl:text-lg font-sans font-normal text-neutral-400">+</span>
-                </span>
-                <span className="text-[9px] sm:text-[10px] 2xl:text-xs font-technical uppercase tracking-wider 2xl:tracking-widest text-neutral-500 mt-1.5 block truncate">
-                  Years Practice
+                <div className="flex items-baseline">
+                  <span className="text-3xl sm:text-4xl 2xl:text-5xl font-editorial font-bold text-black leading-none group-hover:translate-x-0.5 transition-transform">
+                    {String(animatedYears).padStart(2, "0")}
+                  </span>
+                  <span className="text-lg sm:text-xl 2xl:text-2xl font-light text-neutral-400 ms-0.5">+</span>
+                </div>
+                <span className="text-[9px] sm:text-[10px] 2xl:text-xs font-technical uppercase tracking-[0.16em] sm:tracking-[0.2em] text-neutral-500 mt-2 block truncate font-medium">
+                  YEARS PRACTICE
                 </span>
               </div>
+
               <div className="group cursor-default">
-                <span className="block text-2xl sm:text-3xl 2xl:text-4xl font-editorial font-bold text-black leading-none group-hover:translate-x-1 transition-transform">
-                  {animatedFidelity}
-                  <span className="text-sm sm:text-base 2xl:text-lg font-sans font-normal text-neutral-400">%</span>
-                </span>
-                <span className="text-[9px] sm:text-[10px] 2xl:text-xs font-technical uppercase tracking-wider 2xl:tracking-widest text-neutral-500 mt-1.5 block truncate">
-                  CAD Fidelity
+                <div className="flex items-baseline">
+                  <span className="text-3xl sm:text-4xl 2xl:text-5xl font-editorial font-bold text-black leading-none group-hover:translate-x-0.5 transition-transform">
+                    {animatedFidelity}
+                  </span>
+                  <span className="text-base sm:text-lg 2xl:text-xl font-light text-neutral-400 ms-0.5">%</span>
+                </div>
+                <span className="text-[9px] sm:text-[10px] 2xl:text-xs font-technical uppercase tracking-[0.16em] sm:tracking-[0.2em] text-neutral-500 mt-2 block truncate font-medium">
+                  CAD FIDELITY
                 </span>
               </div>
             </div>

@@ -429,3 +429,5 @@ export async function submitClientInquiry(inquiry: Omit<ClientInquiry, 'id' | 's
   invalidateInquiriesCache()
   return true
 }
+
+export const createInquiry = submitClientInquiry

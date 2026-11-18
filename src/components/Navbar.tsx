@@ -113,10 +113,10 @@ export default function Navbar({ profile }: NavbarProps) {
                   <span className={`${isCompact ? "text-xs sm:text-sm" : "text-sm sm:text-base md:text-lg 2xl:text-xl"} font-bold tracking-[0.12em] sm:tracking-[0.14em] text-black font-editorial uppercase leading-tight transition-all`}>
                     {brandName}
                   </span>
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block animate-pulse" title="Available for projects" />
+                  <span className="w-2 h-2 rounded-full bg-[#7AD1B8] inline-block shadow-xs" title="Available for projects" />
                 </div>
                 {!isCompact && (
-                  <span className="text-[8px] sm:text-[9px] md:text-[10px] 2xl:text-[11px] tracking-[0.14em] sm:tracking-[0.2em] text-neutral-500 uppercase font-technical font-medium">
+                  <span className="text-[8px] sm:text-[9px] md:text-[10px] 2xl:text-[11px] tracking-[0.16em] sm:tracking-[0.2em] text-neutral-500 uppercase font-technical font-medium">
                     {brandSubtitle}
                   </span>
                 )}

@@ -28,8 +28,8 @@ export default async function Home() {
         <SkillsSection profile={profile} />
         <ExperienceSection profile={profile} />
         <PortfolioGallery initialProjects={projects} />
-        <ContactSection />
-        <Footer />
+        <ContactSection profile={profile} />
+        <Footer profile={profile} />
       </main>
     </LanguageProvider>
   );

@@ -14,9 +14,28 @@ import {
   ChevronDown,
 } from "lucide-react";
 
-export default function ContactSection() {
+import { submitInquiryAction } from "@/app/admin/actions";
+
+interface ContactSectionProps {
+  profile?: {
+    nameEn?: string;
+    titleEn?: string;
+    locationEn?: string;
+    phone?: string;
+    email?: string;
+    whatsappNumber?: string;
+  };
+}
+
+export default function ContactSection({ profile }: ContactSectionProps) {
   const { lang, t } = useLanguage();
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
+
+  const name = profile?.nameEn || DESIGNER_INFO.nameEn || "Alaa Issa";
+  const phone = profile?.phone || DESIGNER_INFO.phone;
+  const email = profile?.email || DESIGNER_INFO.email;
+  const whatsappNumber = profile?.whatsappNumber || DESIGNER_INFO.whatsappNumber;
+  const location = profile?.locationEn || DESIGNER_INFO.locationEn;
 
   const [formData, setFormData] = useState({
     name: "",
@@ -27,9 +46,13 @@ export default function ContactSection() {
   });
 
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
+    await submitInquiryAction(formData);
+    setIsSubmitting(false);
     setSubmitted(true);
   };
 
@@ -37,8 +60,8 @@ export default function ContactSection() {
     setActiveFaq(activeFaq === index ? null : index);
   };
 
-  const directWhatsappLink = `https://wa.me/${DESIGNER_INFO.whatsappNumber}?text=${encodeURIComponent(
-    `Hello Eng. Alaa Issa, my name is ${formData.name || "a client"} and I would like to book an interior design consultation for a ${
+  const directWhatsappLink = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
+    `Hello Eng. ${name}, my name is ${formData.name || "a client"} and I would like to book an interior design consultation for a ${
       formData.projectType === "residential"
         ? "residential apartment"
         : formData.projectType === "villa"
@@ -75,16 +98,16 @@ export default function ContactSection() {
                   ARCHITECTURAL DESIGNER
                 </span>
                 <h3 className="text-lg sm:text-xl 2xl:text-2xl font-editorial font-bold text-black mt-1">
-                  Eng. Alaa Issa
+                  {name}
                 </h3>
                 <p className="text-xs 2xl:text-sm text-neutral-600 mt-0.5">
-                  Architectural Interior Designer
+                  {profile?.titleEn || "Architectural Interior Designer"}
                 </p>
               </div>
 
               <div className="space-y-4 2xl:space-y-5 text-xs 2xl:text-sm font-sans">
                 <a
-                  href={`https://wa.me/${DESIGNER_INFO.whatsappNumber}`}
+                  href={`https://wa.me/${whatsappNumber}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-start gap-3 text-neutral-700 hover:text-black transition-colors"
@@ -97,13 +120,13 @@ export default function ContactSection() {
                       WhatsApp Inquiries
                     </div>
                     <div className="text-[11px] 2xl:text-xs text-neutral-500 font-mono mt-0.5 truncate" dir="ltr">
-                      {DESIGNER_INFO.phone}
+                      {phone}
                     </div>
                   </div>
                 </a>
 
                 <a
-                  href={`mailto:${DESIGNER_INFO.email}`}
+                  href={`mailto:${email}`}
                   className="flex items-start gap-3 text-neutral-700 hover:text-black transition-colors"
                 >
                   <div className="w-8 h-8 2xl:w-10 2xl:h-10 rounded border border-neutral-300 flex items-center justify-center text-black shrink-0">
@@ -114,7 +137,7 @@ export default function ContactSection() {
                       Email
                     </div>
                     <div className="text-[11px] 2xl:text-xs text-neutral-500 font-mono mt-0.5 truncate">
-                      {DESIGNER_INFO.email}
+                      {email}
                     </div>
                   </div>
                 </a>
@@ -190,7 +213,7 @@ export default function ContactSection() {
                   Inquiry Received Successfully!
                 </h3>
                 <p className="text-xs sm:text-sm text-neutral-600 max-w-md mb-8 leading-relaxed font-sans">
-                  Thank you for contacting me. Eng. Alaa Issa will personally review your project requirements and follow up within 24 hours.
+                  Thank you for contacting me. Eng. {name} will personally review your project requirements and follow up within 24 hours.
                 </p>
 
                 <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
