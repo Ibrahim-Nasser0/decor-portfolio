@@ -138,16 +138,21 @@ export async function updateInquiryNotesAction(id: string, notes: string) {
 export async function submitInquiryAction(formData: {
   name: string
   phone: string
+  email?: string
   city?: string
   projectType?: string
+  areaSize?: string
+  budgetRange?: string
   message?: string
 }) {
   try {
     await createInquiry({
       client_name: formData.name,
       phone_number: formData.phone,
+      email: formData.email,
       service_type: formData.projectType || 'residential',
-      area_size: formData.city || 'Cairo',
+      area_size: formData.areaSize ? `${formData.city ? formData.city + ' • ' : ''}${formData.areaSize}` : (formData.city || 'Cairo'),
+      budget_range: formData.budgetRange,
       message: formData.message || '',
     })
     revalidatePath('/admin/inquiries')
