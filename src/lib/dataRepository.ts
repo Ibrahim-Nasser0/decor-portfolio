@@ -7,12 +7,57 @@ import {
   DESIGNER_INFO as STATIC_DESIGNER_INFO,
 } from '@/data/portfolioData'
 
-// Public Supabase client for reads without cookie overhead
+// Public Supabase client for reads without cookie overhead (Singleton connection pool)
+let _publicClient: ReturnType<typeof createSupabaseClient> | null = null
+
 function getPublicClient() {
+  if (_publicClient) return _publicClient
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL || ''
   const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
   if (!url || !key) return null
-  return createSupabaseClient(url, key)
+  _publicClient = createSupabaseClient(url, key, {
+    auth: {
+      persistSession: false,
+      autoRefreshToken: false,
+    },
+  })
+  return _publicClient
+}
+
+// -------------------------------------------------------------
+// IN-MEMORY SERVER CACHE (Sub-millisecond reads across routes)
+// -------------------------------------------------------------
+interface CacheEntry<T> {
+  data: T
+  timestamp: number
+}
+
+const CACHE_TTL_MS = 60 * 1000 // 60 seconds TTL
+const INQUIRIES_CACHE_TTL_MS = 15 * 1000 // 15 seconds TTL for CRM leads
+
+let profileCache: CacheEntry<any> | null = null
+let projectsCache: CacheEntry<Project[]> | null = null
+const projectByIdCache = new Map<string, CacheEntry<Project | null>>()
+let inquiriesCache: CacheEntry<ClientInquiry[]> | null = null
+
+export function invalidateProfileCache() {
+  profileCache = null
+}
+
+export function invalidateProjectsCache() {
+  projectsCache = null
+  projectByIdCache.clear()
+}
+
+export function invalidateInquiriesCache() {
+  inquiriesCache = null
+}
+
+export function invalidateAllDataCache() {
+  profileCache = null
+  projectsCache = null
+  projectByIdCache.clear()
+  inquiriesCache = null
 }
 
 export interface ClientInquiry {
@@ -99,8 +144,13 @@ export function projectToRow(p: Project, displayOrder: number = 0) {
   }
 }
 
-// 1. GET ALL PROJECTS (Supabase with fallback to static, memoized per request)
+// 1. GET ALL PROJECTS (In-memory cached with 60s TTL + Supabase fallback to static)
 export const getProjects = cache(async function getProjects(): Promise<Project[]> {
+  const now = Date.now()
+  if (projectsCache && now - projectsCache.timestamp < CACHE_TTL_MS) {
+    return projectsCache.data
+  }
+
   try {
     const supabase = getPublicClient()
     if (!supabase) return STATIC_PROJECTS
@@ -110,19 +160,35 @@ export const getProjects = cache(async function getProjects(): Promise<Project[]
       .select('*')
       .order('display_order', { ascending: true })
 
-    if (error || !data || data.length === 0) {
+    if (error || !data || (data as any[]).length === 0) {
       return STATIC_PROJECTS
     }
 
-    return data.map(rowToProject)
+    const mapped = (data as any[]).map(rowToProject)
+    projectsCache = { data: mapped, timestamp: now }
+    return mapped
   } catch (err) {
     console.error('Error fetching projects from Supabase:', err)
-    return STATIC_PROJECTS
+    return projectsCache ? projectsCache.data : STATIC_PROJECTS
   }
 })
 
-// 2. GET SINGLE PROJECT BY ID (memoized per request)
+// 2. GET SINGLE PROJECT BY ID (In-memory cached with 60s TTL)
 export const getProjectById = cache(async function getProjectById(id: string): Promise<Project | null> {
+  const now = Date.now()
+  const cached = projectByIdCache.get(id)
+  if (cached && now - cached.timestamp < CACHE_TTL_MS) {
+    return cached.data
+  }
+
+  if (projectsCache && now - projectsCache.timestamp < CACHE_TTL_MS) {
+    const found = projectsCache.data.find((p) => p.id === id) || null
+    if (found) {
+      projectByIdCache.set(id, { data: found, timestamp: now })
+      return found
+    }
+  }
+
   try {
     const supabase = getPublicClient()
     if (!supabase) return STATIC_PROJECTS.find((p) => p.id === id) || null
@@ -137,7 +203,9 @@ export const getProjectById = cache(async function getProjectById(id: string): P
       return STATIC_PROJECTS.find((p) => p.id === id) || null
     }
 
-    return rowToProject(data)
+    const mapped = rowToProject(data as any)
+    projectByIdCache.set(id, { data: mapped, timestamp: now })
+    return mapped
   } catch (err) {
     console.error(`Error fetching project ${id}:`, err)
     return STATIC_PROJECTS.find((p) => p.id === id) || null
@@ -159,7 +227,8 @@ export async function saveProject(project: Project, displayOrder: number = 0) {
     throw new Error(`Failed to save project: ${error.message}`)
   }
 
-  return rowToProject(data)
+  invalidateProjectsCache()
+  return rowToProject(data as any)
 }
 
 // 4. DELETE PROJECT
@@ -171,11 +240,17 @@ export async function deleteProject(id: string) {
     throw new Error(`Failed to delete project: ${error.message}`)
   }
 
+  invalidateProjectsCache()
   return true
 }
 
-// 5. GET DESIGNER PROFILE (memoized per request)
+// 5. GET DESIGNER PROFILE (In-memory cached with 60s TTL)
 export const getDesignerProfile = cache(async function getDesignerProfile() {
+  const now = Date.now()
+  if (profileCache && now - profileCache.timestamp < CACHE_TTL_MS) {
+    return profileCache.data
+  }
+
   try {
     const supabase = getPublicClient()
     if (!supabase) return STATIC_DESIGNER_INFO
@@ -190,34 +265,38 @@ export const getDesignerProfile = cache(async function getDesignerProfile() {
       return STATIC_DESIGNER_INFO
     }
 
-    return {
-      nameAr: data.name_ar,
-      nameEn: data.name_en,
-      titleAr: data.title_ar,
-      titleEn: data.title_en,
-      subtitleAr: data.subtitle_ar,
-      subtitleEn: data.subtitle_en,
-      locationAr: data.location_ar,
-      locationEn: data.location_en,
-      email: data.email,
-      phone: data.phone,
-      whatsappNumber: data.whatsapp_number,
-      linkedin: data.linkedin,
-      instagram: data.instagram,
-      aboutIntroAr: data.about_intro_ar,
-      aboutIntroEn: data.about_intro_en,
-      aboutExperienceAr: data.about_experience_ar,
-      aboutExperienceEn: data.about_experience_en,
-      statementAr: data.statement_ar,
-      statementEn: data.statement_en,
-      software: data.software || STATIC_DESIGNER_INFO.software,
-      skills: data.skills || STATIC_DESIGNER_INFO.skills,
-      experience: data.experience || STATIC_DESIGNER_INFO.experience,
-      education: data.education || STATIC_DESIGNER_INFO.education,
+    const row = data as any
+    const mapped = {
+      nameAr: row.name_ar,
+      nameEn: row.name_en,
+      titleAr: row.title_ar,
+      titleEn: row.title_en,
+      subtitleAr: row.subtitle_ar,
+      subtitleEn: row.subtitle_en,
+      locationAr: row.location_ar,
+      locationEn: row.location_en,
+      email: row.email,
+      phone: row.phone,
+      whatsappNumber: row.whatsapp_number,
+      linkedin: row.linkedin,
+      instagram: row.instagram,
+      aboutIntroAr: row.about_intro_ar,
+      aboutIntroEn: row.about_intro_en,
+      aboutExperienceAr: row.about_experience_ar,
+      aboutExperienceEn: row.about_experience_en,
+      statementAr: row.statement_ar,
+      statementEn: row.statement_en,
+      software: row.software || STATIC_DESIGNER_INFO.software,
+      skills: row.skills || STATIC_DESIGNER_INFO.skills,
+      experience: row.experience || STATIC_DESIGNER_INFO.experience,
+      education: row.education || STATIC_DESIGNER_INFO.education,
     }
+
+    profileCache = { data: mapped, timestamp: now }
+    return mapped
   } catch (err) {
     console.error('Error fetching profile from Supabase:', err)
-    return STATIC_DESIGNER_INFO
+    return profileCache ? profileCache.data : STATIC_DESIGNER_INFO
   }
 })
 
@@ -260,11 +339,17 @@ export async function updateDesignerProfile(profile: any) {
     throw new Error(`Failed to update profile: ${error.message}`)
   }
 
+  invalidateProfileCache()
   return true
 }
 
-// 7. INQUIRIES
+// 7. INQUIRIES (In-memory cached with 15s TTL)
 export async function getClientInquiries(limit?: number): Promise<ClientInquiry[]> {
+  const now = Date.now()
+  if (inquiriesCache && now - inquiriesCache.timestamp < INQUIRIES_CACHE_TTL_MS) {
+    return limit ? inquiriesCache.data.slice(0, limit) : inquiriesCache.data
+  }
+
   try {
     const supabase = await createClient()
     let query = supabase
@@ -272,20 +357,18 @@ export async function getClientInquiries(limit?: number): Promise<ClientInquiry[
       .select('*')
       .order('created_at', { ascending: false })
 
-    if (limit) {
-      query = query.limit(limit)
-    }
-
     const { data, error } = await query
 
     if (error || !data) {
       return []
     }
 
-    return data as ClientInquiry[]
+    const inquiries = data as ClientInquiry[]
+    inquiriesCache = { data: inquiries, timestamp: now }
+    return limit ? inquiries.slice(0, limit) : inquiries
   } catch (err) {
     console.error('Error fetching inquiries:', err)
-    return []
+    return inquiriesCache ? (limit ? inquiriesCache.data.slice(0, limit) : inquiriesCache.data) : []
   }
 }
 
@@ -300,6 +383,7 @@ export async function updateInquiryStatus(id: string, status: ClientInquiry['sta
     throw new Error(`Failed to update inquiry status: ${error.message}`)
   }
 
+  invalidateInquiriesCache()
   return true
 }
 
@@ -314,6 +398,7 @@ export async function updateInquiryNotes(id: string, notes: string) {
     throw new Error(`Failed to update inquiry notes: ${error.message}`)
   }
 
+  invalidateInquiriesCache()
   return true
 }
 
@@ -325,5 +410,6 @@ export async function submitClientInquiry(inquiry: Omit<ClientInquiry, 'id' | 's
     throw new Error(`Failed to submit inquiry: ${error.message}`)
   }
 
+  invalidateInquiriesCache()
   return true
 }

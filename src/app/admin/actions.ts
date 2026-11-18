@@ -99,6 +99,11 @@ export async function saveProfileAction(profileData: any) {
   try {
     await updateDesignerProfile(profileData)
     revalidatePath('/')
+    revalidatePath('/admin')
+    revalidatePath('/admin/hero')
+    revalidatePath('/admin/about')
+    revalidatePath('/admin/skills')
+    revalidatePath('/admin/experience')
     revalidatePath('/admin/profile')
     return { success: true }
   } catch (err: any) {
