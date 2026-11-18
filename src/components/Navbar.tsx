@@ -6,13 +6,31 @@ import { useLanguage } from "@/context/LanguageContext";
 import { DESIGNER_INFO } from "@/data/portfolioData";
 import { Menu, X, ArrowUpRight, MessageCircle, Phone, Minimize2, Maximize2 } from "lucide-react";
 
-export default function Navbar() {
+interface NavbarProps {
+  profile?: {
+    nameEn?: string;
+    titleEn?: string;
+    locationEn?: string;
+    avatarUrl?: string;
+    whatsappNumber?: string;
+  };
+}
+
+export default function Navbar({ profile }: NavbarProps) {
   const { lang, setLang, toggleLang, t } = useLanguage();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isCompact, setIsCompact] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [activeSection, setActiveSection] = useState("home");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // Dynamic branding from Supabase designer profile
+  const avatarSrc = profile?.avatarUrl || "/images/alaa.webp";
+  const brandName = profile?.nameEn || "ALAA ISSA";
+  const titleShort = profile?.titleEn ? profile.titleEn.split('&')[0].trim().toUpperCase() : "INTERIOR ARCHITECT";
+  const locationShort = profile?.locationEn ? profile.locationEn.split(',')[0].split('|')[0].trim().toUpperCase() : "CAIRO";
+  const brandSubtitle = `${titleShort} • ${locationShort}`;
+  const whatsappNumber = profile?.whatsappNumber || DESIGNER_INFO.whatsappNumber;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -81,8 +99,8 @@ export default function Navbar() {
               {/* Eng. Alaa Issa Portrait Avatar Icon */}
               <div className={`relative ${isCompact ? "w-7 h-7 sm:w-8 sm:h-8" : "w-8 h-8 sm:w-9 sm:h-9 2xl:w-10 2xl:h-10"} rounded-full overflow-hidden border border-black/80 bg-neutral-100 shadow-xs group-hover:ring-2 group-hover:ring-black transition-all shrink-0`}>
                 <Image
-                  src="/images/alaa.webp"
-                  alt="Eng. Alaa Issa - Interior Architect"
+                  src={avatarSrc}
+                  alt={`${brandName} - Interior Architect`}
                   fill
                   priority
                   sizes="(max-width: 640px) 32px, (max-width: 1536px) 36px, 40px"
@@ -93,13 +111,13 @@ export default function Navbar() {
               <div className="flex flex-col">
                 <div className="flex items-center gap-1.5 sm:gap-2">
                   <span className={`${isCompact ? "text-xs sm:text-sm" : "text-sm sm:text-base md:text-lg 2xl:text-xl"} font-bold tracking-[0.12em] sm:tracking-[0.14em] text-black font-editorial uppercase leading-tight transition-all`}>
-                    ALAA ISSA
+                    {brandName}
                   </span>
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block animate-pulse" title="Available for projects" />
                 </div>
                 {!isCompact && (
                   <span className="text-[8px] sm:text-[9px] md:text-[10px] 2xl:text-[11px] tracking-[0.14em] sm:tracking-[0.2em] text-neutral-500 uppercase font-technical font-medium">
-                    INTERIOR ARCHITECT • CAIRO
+                    {brandSubtitle}
                   </span>
                 )}
               </div>
@@ -147,8 +165,8 @@ export default function Navbar() {
 
               {/* Quick WhatsApp Pill */}
               <a
-                href={`https://wa.me/${DESIGNER_INFO.whatsappNumber}?text=${encodeURIComponent(
-                  "Hello Eng. Alaa Issa, I would like to inquire about booking an interior design consultation for my project."
+                href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
+                  `Hello Eng. ${brandName}, I would like to inquire about booking an interior design consultation for my project.`
                 )}`}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -265,8 +283,8 @@ export default function Navbar() {
               <div className="flex items-center gap-2.5">
                 <div className="relative w-7 h-7 rounded-full overflow-hidden border border-black/80 shrink-0">
                   <Image
-                    src="/images/alaa.jpeg"
-                    alt="Eng. Alaa Issa"
+                    src={avatarSrc}
+                    alt={brandName}
                     fill
                     sizes="28px"
                     className="object-cover object-top"
@@ -274,12 +292,12 @@ export default function Navbar() {
                 </div>
                 <span>Designer:</span>
               </div>
-              <span className="font-bold text-black">Eng. Alaa Issa</span>
+              <span className="font-bold text-black">{brandName}</span>
             </div>
 
             <div className="flex gap-2">
               <a
-                href={`https://wa.me/${DESIGNER_INFO.whatsappNumber}`}
+                href={`https://wa.me/${whatsappNumber}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => setMobileMenuOpen(false)}

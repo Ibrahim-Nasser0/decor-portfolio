@@ -159,34 +159,17 @@ export default function AboutClient({ initialProfile }: { initialProfile: any })
               <div>
                 <div className="flex items-center justify-between mb-2">
                   <label className="text-xs font-mono text-neutral-300 uppercase">
-                    Introduction (English)
+                    Architectural Narrative & Introduction *
                   </label>
-                  <span className="text-[9px] font-mono bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded border border-blue-500/30">
-                    [EN]
+                  <span className="text-[9px] font-mono bg-amber-500/15 text-amber-300 px-2 py-0.5 rounded border border-amber-500/30">
+                    BIO INTRO
                   </span>
                 </div>
                 <textarea
                   rows={4}
-                  value={profile.aboutIntroEn}
+                  value={profile.aboutIntroEn || ''}
                   onChange={(e) => setProfile({ ...profile, aboutIntroEn: e.target.value })}
-                  className="w-full bg-[#090a0c] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-4 py-3 text-xs text-white focus:outline-none leading-relaxed font-sans"
-                />
-              </div>
-
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <label className="text-xs font-mono text-neutral-300 uppercase">
-                    النبذة التمهيدية (بالعربية)
-                  </label>
-                  <span className="text-[9px] font-mono bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded border border-emerald-500/30">
-                    [AR]
-                  </span>
-                </div>
-                <textarea
-                  rows={4}
-                  dir="rtl"
-                  value={profile.aboutIntroAr}
-                  onChange={(e) => setProfile({ ...profile, aboutIntroAr: e.target.value })}
+                  placeholder="Architectural background and practice ethos..."
                   className="w-full bg-[#090a0c] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-4 py-3 text-xs text-white focus:outline-none leading-relaxed font-sans"
                 />
               </div>
@@ -204,34 +187,17 @@ export default function AboutClient({ initialProfile }: { initialProfile: any })
               <div>
                 <div className="flex items-center justify-between mb-2">
                   <label className="text-xs font-mono text-neutral-300 uppercase">
-                    Practice Experience (English)
+                    Practice Experience Narrative *
                   </label>
-                  <span className="text-[9px] font-mono bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded border border-blue-500/30">
-                    [EN]
+                  <span className="text-[9px] font-mono bg-white/[0.06] text-neutral-400 px-2 py-0.5 rounded border border-white/[0.08]">
+                    EXPERIENCE
                   </span>
                 </div>
                 <textarea
                   rows={4}
-                  value={profile.aboutExperienceEn}
+                  value={profile.aboutExperienceEn || ''}
                   onChange={(e) => setProfile({ ...profile, aboutExperienceEn: e.target.value })}
-                  className="w-full bg-[#090a0c] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-4 py-3 text-xs text-white focus:outline-none leading-relaxed font-sans"
-                />
-              </div>
-
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <label className="text-xs font-mono text-neutral-300 uppercase">
-                    المسيرة والمشاريع السكنية الفاخرة (بالعربية)
-                  </label>
-                  <span className="text-[9px] font-mono bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded border border-emerald-500/30">
-                    [AR]
-                  </span>
-                </div>
-                <textarea
-                  rows={4}
-                  dir="rtl"
-                  value={profile.aboutExperienceAr}
-                  onChange={(e) => setProfile({ ...profile, aboutExperienceAr: e.target.value })}
+                  placeholder="Turnkey residential execution and bespoke craftsmanship..."
                   className="w-full bg-[#090a0c] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-4 py-3 text-xs text-white focus:outline-none leading-relaxed font-sans"
                 />
               </div>
@@ -249,34 +215,17 @@ export default function AboutClient({ initialProfile }: { initialProfile: any })
               <div>
                 <div className="flex items-center justify-between mb-2">
                   <label className="text-xs font-mono text-neutral-300 uppercase">
-                    Design Philosophy Statement (English)
+                    Design Philosophy Statement *
                   </label>
-                  <span className="text-[9px] font-mono bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded border border-blue-500/30">
-                    [EN]
+                  <span className="text-[9px] font-mono bg-white/[0.06] text-neutral-400 px-2 py-0.5 rounded border border-white/[0.08]">
+                    PHILOSOPHY
                   </span>
                 </div>
                 <textarea
                   rows={5}
-                  value={profile.statementEn}
+                  value={profile.statementEn || ''}
                   onChange={(e) => setProfile({ ...profile, statementEn: e.target.value })}
-                  className="w-full bg-[#090a0c] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-4 py-3 text-xs text-white focus:outline-none leading-relaxed font-sans"
-                />
-              </div>
-
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <label className="text-xs font-mono text-neutral-300 uppercase">
-                    الفلسفة المعمارية ورؤية التصميم (بالعربية)
-                  </label>
-                  <span className="text-[9px] font-mono bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded border border-emerald-500/30">
-                    [AR]
-                  </span>
-                </div>
-                <textarea
-                  rows={5}
-                  dir="rtl"
-                  value={profile.statementAr}
-                  onChange={(e) => setProfile({ ...profile, statementAr: e.target.value })}
+                  placeholder="Timeless spatial order, authentic materials, and circadian light..."
                   className="w-full bg-[#090a0c] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-4 py-3 text-xs text-white focus:outline-none leading-relaxed font-sans"
                 />
               </div>

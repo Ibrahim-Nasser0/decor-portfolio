@@ -165,7 +165,7 @@ export default function ProfileClient({ initialProfile }: { initialProfile: any 
                   Principal Consultant
                 </span>
                 <h2 className="text-xl font-serif text-white tracking-wide">
-                  {profile.nameEn} • {profile.nameAr}
+                  {profile.nameEn}
                 </h2>
                 <p className="text-xs text-neutral-400 font-mono mt-0.5">
                   {profile.titleEn}

@@ -3,7 +3,14 @@ import Image from "next/image";
 import { DESIGNER_INFO } from "@/data/portfolioData";
 import { MapPin, Mail, MessageCircle, ArrowUpRight, CheckCircle2, Award } from "lucide-react";
 
-export default function AboutSection() {
+export default function AboutSection({ profile }: { profile?: any }) {
+  const name = profile?.nameEn || DESIGNER_INFO.nameEn || "Alaa Issa";
+  const title = profile?.titleEn || DESIGNER_INFO.titleEn || "Interior Architect & Spatial Designer";
+  const location = profile?.locationEn || DESIGNER_INFO.locationEn || "Cairo, Egypt";
+  const email = profile?.email || DESIGNER_INFO.email;
+  const whatsappNumber = profile?.whatsappNumber || DESIGNER_INFO.whatsappNumber;
+  const intro = profile?.aboutIntroEn || DESIGNER_INFO.aboutIntroEn;
+  const experienceText = profile?.aboutExperienceEn || DESIGNER_INFO.aboutExperienceEn;
   return (
     <section id="about" className="py-16 sm:py-24 2xl:py-32 bg-white border-t border-neutral-200 relative">
       <div className="max-w-7xl 2xl:max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 2xl:px-12">
@@ -48,10 +55,10 @@ export default function AboutSection() {
                 {/* Name Badge Overlay */}
                 <div className="absolute bottom-3 sm:bottom-4 2xl:bottom-5 start-3 sm:start-4 2xl:start-5 end-3 sm:end-4 2xl:end-5 text-white text-xs font-technical p-2.5 sm:p-3 2xl:p-4 backdrop-blur-xs bg-black/40 border border-white/20">
                   <div className="font-bold text-xs sm:text-sm 2xl:text-base font-editorial tracking-wider">
-                    ENG. ALAA ISSA
+                    {name.toUpperCase()}
                   </div>
                   <div className="text-[9px] sm:text-[10px] 2xl:text-xs uppercase text-neutral-300 tracking-widest mt-0.5 truncate">
-                    Interior Architect & Spatial Designer
+                    {title}
                   </div>
                 </div>
               </div>
@@ -63,7 +70,7 @@ export default function AboutSection() {
                 <span className="text-neutral-500 uppercase text-[10px] 2xl:text-xs">Based in:</span>
                 <span className="font-bold text-black flex items-center gap-1">
                   <MapPin className="w-3.5 h-3.5 2xl:w-4 2xl:h-4 text-neutral-700 shrink-0" />
-                  <span className="truncate">Cairo, Egypt (Available Globally)</span>
+                  <span className="truncate">{location} (Available Globally)</span>
                 </span>
               </div>
 
@@ -76,15 +83,15 @@ export default function AboutSection() {
 
               <div className="flex items-center justify-between pt-1 flex-wrap gap-2">
                 <a
-                  href={`mailto:${DESIGNER_INFO.email}`}
+                  href={`mailto:${email}`}
                   className="text-neutral-700 hover:text-black font-mono text-[10px] sm:text-[11px] 2xl:text-xs flex items-center gap-1.5 transition-colors truncate"
                 >
                   <Mail className="w-3.5 h-3.5 2xl:w-4 2xl:h-4 shrink-0" />
-                  <span className="truncate">{DESIGNER_INFO.email}</span>
+                  <span className="truncate">{email}</span>
                 </a>
 
                 <a
-                  href={`https://wa.me/${DESIGNER_INFO.whatsappNumber}`}
+                  href={`https://wa.me/${whatsappNumber}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-emerald-700 hover:text-emerald-800 font-bold text-[10px] sm:text-[11px] 2xl:text-xs uppercase tracking-wider flex items-center gap-1 shrink-0"

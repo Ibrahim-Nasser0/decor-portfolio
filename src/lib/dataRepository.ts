@@ -244,6 +244,9 @@ export async function deleteProject(id: string) {
   return true
 }
 
+// 4.1 ARCHITECTURAL STATS CALCULATION HELPERS
+export { calculateYearsOfExperience, calculateBuiltWorks } from './metrics'
+
 // 5. GET DESIGNER PROFILE (In-memory cached with 60s TTL)
 export const getDesignerProfile = cache(async function getDesignerProfile() {
   const now = Date.now()
@@ -266,30 +269,35 @@ export const getDesignerProfile = cache(async function getDesignerProfile() {
     }
 
     const row = data as any
+    const skillsObj = (typeof row.skills === 'object' && row.skills !== null) ? row.skills : {}
     const mapped = {
       nameAr: row.name_ar,
-      nameEn: row.name_en,
+      nameEn: row.name_en || STATIC_DESIGNER_INFO.nameEn,
       titleAr: row.title_ar,
-      titleEn: row.title_en,
+      titleEn: row.title_en || STATIC_DESIGNER_INFO.titleEn,
       subtitleAr: row.subtitle_ar,
-      subtitleEn: row.subtitle_en,
+      subtitleEn: row.subtitle_en || STATIC_DESIGNER_INFO.subtitleEn,
       locationAr: row.location_ar,
-      locationEn: row.location_en,
-      email: row.email,
-      phone: row.phone,
-      whatsappNumber: row.whatsapp_number,
-      linkedin: row.linkedin,
-      instagram: row.instagram,
+      locationEn: row.location_en || STATIC_DESIGNER_INFO.locationEn,
+      email: row.email || STATIC_DESIGNER_INFO.email,
+      phone: row.phone || STATIC_DESIGNER_INFO.phone,
+      whatsappNumber: row.whatsapp_number || STATIC_DESIGNER_INFO.whatsappNumber,
+      linkedin: row.linkedin || STATIC_DESIGNER_INFO.linkedin,
+      instagram: row.instagram || STATIC_DESIGNER_INFO.instagram,
       aboutIntroAr: row.about_intro_ar,
-      aboutIntroEn: row.about_intro_en,
+      aboutIntroEn: row.about_intro_en || STATIC_DESIGNER_INFO.aboutIntroEn,
       aboutExperienceAr: row.about_experience_ar,
-      aboutExperienceEn: row.about_experience_en,
+      aboutExperienceEn: row.about_experience_en || STATIC_DESIGNER_INFO.aboutExperienceEn,
       statementAr: row.statement_ar,
-      statementEn: row.statement_en,
+      statementEn: row.statement_en || STATIC_DESIGNER_INFO.statementEn,
       software: row.software || STATIC_DESIGNER_INFO.software,
       skills: row.skills || STATIC_DESIGNER_INFO.skills,
       experience: row.experience || STATIC_DESIGNER_INFO.experience,
       education: row.education || STATIC_DESIGNER_INFO.education,
+      // Dynamic Monograph Metadata stored safely in skills JSONB
+      builtWorksOffset: skillsObj.builtWorksOffset !== undefined ? Number(skillsObj.builtWorksOffset) : 80,
+      cadFidelity: skillsObj.cadFidelity !== undefined ? Number(skillsObj.cadFidelity) : 100,
+      avatarUrl: skillsObj.avatarUrl || '/images/alaa.webp',
     }
 
     profileCache = { data: mapped, timestamp: now }
@@ -303,31 +311,39 @@ export const getDesignerProfile = cache(async function getDesignerProfile() {
 // 6. UPDATE DESIGNER PROFILE
 export async function updateDesignerProfile(profile: any) {
   const supabase = await createClient()
+  const rawSkills = (typeof profile.skills === 'object' && profile.skills !== null) ? profile.skills : {}
+  const skillsWithMeta = {
+    ...rawSkills,
+    builtWorksOffset: profile.builtWorksOffset !== undefined ? Number(profile.builtWorksOffset) : (rawSkills.builtWorksOffset ?? 80),
+    cadFidelity: profile.cadFidelity !== undefined ? Number(profile.cadFidelity) : (rawSkills.cadFidelity ?? 100),
+    avatarUrl: profile.avatarUrl || rawSkills.avatarUrl || '/images/alaa.webp',
+  }
+
   const row = {
     id: 'main',
-    name_ar: profile.nameAr,
-    name_en: profile.nameEn,
-    title_ar: profile.titleAr,
-    title_en: profile.titleEn,
-    subtitle_ar: profile.subtitleAr,
-    subtitle_en: profile.subtitleEn,
-    location_ar: profile.locationAr,
-    location_en: profile.locationEn,
-    email: profile.email,
-    phone: profile.phone,
-    whatsapp_number: profile.whatsappNumber,
-    linkedin: profile.linkedin,
-    instagram: profile.instagram,
-    about_intro_ar: profile.aboutIntroAr,
-    about_intro_en: profile.aboutIntroEn,
-    about_experience_ar: profile.aboutExperienceAr,
-    about_experience_en: profile.aboutExperienceEn,
-    statement_ar: profile.statementAr,
-    statement_en: profile.statementEn,
-    software: profile.software,
-    skills: profile.skills,
-    experience: profile.experience,
-    education: profile.education,
+    name_ar: profile.nameAr || profile.nameEn || 'م. آلاء عيسى',
+    name_en: profile.nameEn || 'ALAA ISSA',
+    title_ar: profile.titleAr || profile.titleEn || 'مهندسة تصميم داخلي وديكور معماري',
+    title_en: profile.titleEn || 'INTERIOR ARCHITECTURE & DESIGN',
+    subtitle_ar: profile.subtitleAr || profile.subtitleEn || 'أعمال مختارة | 2026-2027',
+    subtitle_en: profile.subtitleEn || 'SELECTED WORKS | 2026-2027',
+    location_ar: profile.locationAr || profile.locationEn || 'القاهرة | مصر',
+    location_en: profile.locationEn || 'CAIRO | EGYPT',
+    email: profile.email || 'alaa.issa.design@gmail.com',
+    phone: profile.phone || '+20 100 000 0000',
+    whatsapp_number: profile.whatsappNumber || '201000000000',
+    linkedin: profile.linkedin || 'Alaa Issa',
+    instagram: profile.instagram || '@alaaissa.interiors',
+    about_intro_ar: profile.aboutIntroAr || profile.aboutIntroEn || '',
+    about_intro_en: profile.aboutIntroEn || '',
+    about_experience_ar: profile.aboutExperienceAr || profile.aboutExperienceEn || '',
+    about_experience_en: profile.aboutExperienceEn || '',
+    statement_ar: profile.statementAr || profile.statementEn || '',
+    statement_en: profile.statementEn || '',
+    software: profile.software || STATIC_DESIGNER_INFO.software,
+    skills: skillsWithMeta,
+    experience: profile.experience || STATIC_DESIGNER_INFO.experience,
+    education: profile.education || STATIC_DESIGNER_INFO.education,
     updated_at: new Date().toISOString(),
   }
 
