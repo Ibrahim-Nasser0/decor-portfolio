@@ -9,7 +9,6 @@ import {
   ArrowUp,
   ArrowUpRight,
   MapPin,
-  Clock,
   MessageCircle,
   Building2,
   Compass,
@@ -273,7 +272,7 @@ export default function Footer({ profile }: FooterProps) {
 
               <li>
                 <span className="text-[10px] font-technical uppercase tracking-widest text-neutral-400 block mb-0.5">
-                  Studio Email
+                  Direct Email
                 </span>
                 <a
                   href={`mailto:${email}`}
@@ -283,16 +282,6 @@ export default function Footer({ profile }: FooterProps) {
                   <span className="truncate">{email}</span>
                   <ArrowUpRight className="w-3 h-3 text-neutral-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                 </a>
-              </li>
-
-              <li className="pt-0.5">
-                <span className="text-[10px] font-technical uppercase tracking-widest text-neutral-400 block mb-0.5">
-                  Studio Schedule
-                </span>
-                <div className="flex items-center gap-1.5 text-neutral-600 font-technical text-[11px]">
-                  <Clock className="w-3.5 h-3.5 text-neutral-400 shrink-0" />
-                  <span>Sun – Thu: 10:00 – 18:00 CLT</span>
-                </div>
               </li>
             </ul>
 
@@ -315,18 +304,34 @@ export default function Footer({ profile }: FooterProps) {
 
         {/* Full-Width Architectural Wordmark Banner */}
         <div
-          className={`py-8 overflow-hidden flex items-center justify-between font-editorial text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-black uppercase tracking-tight text-neutral-300/60 select-none border-b border-neutral-200 transition-all duration-700 delay-500 ${
-            isVisible ? "opacity-100" : "opacity-0"
+          className={`my-8 sm:my-10 py-5 sm:py-7 border-y border-neutral-200 transition-all duration-700 delay-500 group select-none ${
+            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
           }`}
         >
-          <span>ALAA ISSA</span>
-          <span className="text-neutral-200 font-light">•</span>
-          <span>INTERIOR ARCHITECTURE</span>
+          {/* Subtle architectural drafting coordinates */}
+          <div className="flex items-center justify-between text-[9px] sm:text-[10px] font-mono uppercase tracking-[0.2em] text-neutral-400 mb-2">
+            <span>DOC REF • MONO-2026</span>
+            <span className="hidden sm:inline">ARCHITECTURE &amp; SPATIAL PRACTICE</span>
+            <span>EDITION 01</span>
+          </div>
+
+          {/* Balanced Non-Overflowing Editorial Masthead */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-4 font-editorial uppercase">
+            <span className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-neutral-300 group-hover:text-black transition-colors duration-500">
+              {name}
+            </span>
+            <span className="text-neutral-200 font-serif italic text-lg sm:text-2xl hidden sm:inline select-none">
+              •
+            </span>
+            <span className="text-lg sm:text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight text-neutral-400 group-hover:text-neutral-800 transition-colors duration-500">
+              INTERIOR ARCHITECTURE
+            </span>
+          </div>
         </div>
 
         {/* Bottom Editorial Legal Bar & Ibrahim Nasser Creator Signature */}
         <div
-          className={`pt-8 sm:pt-10 flex flex-col md:flex-row items-center justify-between gap-4 text-[11px] sm:text-xs font-technical text-neutral-500 text-center md:text-left transition-all duration-700 delay-600 ease-out ${
+          className={`pt-8 sm:pt-10 flex flex-col md:flex-row items-center justify-between gap-4 text-[11px] sm:text-xs font-technical text-neutral-500 text-center md:text-left transition-all duration-700 delay-500 ease-out ${
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
           }`}
         >
@@ -335,29 +340,31 @@ export default function Footer({ profile }: FooterProps) {
             © {new Date().getFullYear()} {name} INTERIOR ARCHITECTURE. ALL RIGHTS RESERVED.
           </div>
 
-          {/* Creator & Engineering Attribution Card (By Ibrahim Nasser) */}
-          <div className="flex items-center gap-2 text-xs font-technical text-neutral-500">
-            <span className="hidden sm:inline">Crafted & Engineered by</span>
-            <span className="sm:hidden">By</span>
-            <a
-              href="https://ibrahim-nasser.vercel.app/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group inline-flex items-center gap-1.5 px-3 py-1.5 bg-neutral-100 hover:bg-black text-black hover:text-white border border-neutral-300 hover:border-black rounded-xs font-mono text-[11px] font-bold transition-all duration-300 shadow-2xs hover:shadow-xs active:scale-95 cursor-pointer"
-              title="Visit Ibrahim Nasser's Portfolio"
-            >
-              <span>Ibrahim Nasser</span>
-              <ArrowUpRight className="w-3.5 h-3.5 text-neutral-500 group-hover:text-white transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-            </a>
-          </div>
+          {/* Unified Architectural Creator Capsule */}
+          <a
+            href="https://ibrahim-nasser.vercel.app/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-neutral-300 hover:border-black bg-white hover:bg-black transition-all duration-300 shadow-2xs hover:shadow-xs cursor-pointer active:scale-95"
+            title="Crafted & Engineered by Ibrahim Nasser"
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-[#7AD1B8] group-hover:bg-emerald-400 transition-colors animate-pulse" />
+            <span className="text-[10px] sm:text-[11px] font-technical uppercase tracking-[0.14em] text-neutral-500 group-hover:text-neutral-300 transition-colors">
+              Crafted & Engineered by
+            </span>
+            <span className="text-[10px] sm:text-[11px] font-technical uppercase tracking-[0.16em] font-bold text-black group-hover:text-white transition-colors">
+              Ibrahim Nasser
+            </span>
+            <ArrowUpRight className="w-3.5 h-3.5 text-neutral-400 group-hover:text-white transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+          </a>
 
           {/* Back to Top */}
           <button
             type="button"
             onClick={scrollToTop}
-            className="group flex items-center gap-2 hover:text-black transition-colors cursor-pointer active:scale-95 px-3.5 py-1.5 border border-neutral-200 hover:border-black rounded-xs bg-neutral-50 hover:bg-white"
+            className="group flex items-center gap-2 hover:text-black transition-colors cursor-pointer active:scale-95 px-3.5 py-1.5 border border-neutral-200 hover:border-black rounded-full bg-white hover:bg-neutral-50 text-[10px] sm:text-[11px] font-technical uppercase tracking-widest text-neutral-600 hover:text-black shadow-2xs"
           >
-            <span className="tracking-widest uppercase font-medium">BACK TO TOP</span>
+            <span className="font-medium">BACK TO TOP</span>
             <ArrowUp className="w-3.5 h-3.5 transition-transform duration-200 group-hover:-translate-y-0.5" />
           </button>
         </div>
