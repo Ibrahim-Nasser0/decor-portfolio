@@ -18,7 +18,7 @@ export default async function Home() {
 
   return (
     <LanguageProvider>
-      <main className="min-h-screen bg-white text-[#111111] overflow-x-hidden selection:bg-black selection:text-white">
+      <main className="min-h-screen bg-white text-[#111111] overflow-x-clip selection:bg-black selection:text-white">
         <Navbar />
         <Hero />
         <AboutSection />

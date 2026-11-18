@@ -68,10 +68,10 @@ export default function Navbar() {
   return (
     <>
       <header
-        className={`sticky top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           isCompact || isScrolled
             ? "bg-white/95 backdrop-blur-md border-b border-black/10 py-2.5 sm:py-3 shadow-xs"
-            : "bg-white/90 backdrop-blur-sm border-b border-neutral-200 py-4 sm:py-5"
+            : "bg-white/90 backdrop-blur-sm border-b border-neutral-200 py-3.5 sm:py-4.5"
         }`}
       >
         <div className="max-w-7xl 2xl:max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 2xl:px-12">
@@ -213,6 +213,14 @@ export default function Navbar() {
           />
         </div>
       </header>
+
+      {/* Matching Height Spacer so Fixed Header Never Overlaps Content on Top */}
+      <div
+        className={`w-full transition-all duration-300 pointer-events-none ${
+          isCompact ? "h-14 sm:h-16" : "h-18 sm:h-20"
+        }`}
+        aria-hidden="true"
+      />
 
       {/* Full-Screen Architectural Mobile Menu Overlay */}
       {mobileMenuOpen && (
