@@ -241,7 +241,7 @@ export default function FeaturedProject() {
                 {t("العناصر والمواصفات التي صممتها", "Key Custom Elements")}
               </h4>
               <ul className="flex flex-col gap-2">
-                {(lang === "ar" ? project.features : project.featuresEn).map((feat, idx) => (
+                {project.featuresEn.map((feat, idx) => (
                   <li key={idx} className="flex items-start gap-2.5 text-xs text-[#c9c4bb]">
                     <Check className="w-4 h-4 text-[#c5a880] shrink-0 mt-0.5" />
                     <span>{feat}</span>

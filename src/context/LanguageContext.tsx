@@ -1,8 +1,8 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useEffect } from "react";
 
-type Language = "ar" | "en";
+type Language = "en";
 
 interface LanguageContextType {
   lang: Language;
@@ -12,33 +12,34 @@ interface LanguageContextType {
 }
 
 const LanguageContext = createContext<LanguageContextType>({
-  lang: "ar",
+  lang: "en",
   setLang: () => {},
   toggleLang: () => {},
-  t: (ar) => ar,
+  t: (_ar, en) => en,
 });
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  const [lang, setLang] = useState<Language>("ar");
-
   useEffect(() => {
-    // Update document dir and lang attribute
-    document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
-    document.documentElement.lang = lang;
-  }, [lang]);
+    document.documentElement.dir = "ltr";
+    document.documentElement.lang = "en";
+  }, []);
 
-  const toggleLang = () => {
-    setLang((prev) => (prev === "ar" ? "en" : "ar"));
-  };
-
-  const t = (ar: string, en: string) => (lang === "ar" ? ar : en);
+  const t = (_ar: string, en: string) => en;
 
   return (
-    <LanguageContext.Provider value={{ lang, setLang, toggleLang, t }}>
+    <LanguageContext.Provider
+      value={{
+        lang: "en",
+        setLang: () => {},
+        toggleLang: () => {},
+        t,
+      }}
+    >
       {children}
     </LanguageContext.Provider>
   );
 }
 
 export const useLanguage = () => useContext(LanguageContext);
+
 

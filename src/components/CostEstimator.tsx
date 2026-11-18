@@ -95,17 +95,18 @@ export default function CostEstimator() {
   const selectedPropObj = propertyTypes.find((p) => p.id === propertyType) || propertyTypes[0];
 
   const formatNumber = (num: number) => {
-    return new Intl.NumberFormat(lang === "ar" ? "ar-EG" : "en-US").format(num);
+    return new Intl.NumberFormat("en-US").format(num);
   };
 
   const whatsappMessage = encodeURIComponent(
-    `مرحباً م. آلاء عيسى، قمت بحساب تقدير لتشطيب مشروعي بموقعك بالمواصفات التالية:
-- نوع العقار: ${selectedPropObj.labelAr}
-- المساحة: ${area} م²
-- باقة التشطيب: ${selectedTierObj.labelAr}
-- نوع الخدمة: ${scope === "design" ? "تصميم ومخططات فقط" : scope === "supervision" ? "تصميم مع إشراف هندسي" : "تسليم مفتاح متكامل"}
-- التكلفة التقديرية: ${formatNumber(calculation.totalLow)} - ${formatNumber(calculation.totalHigh)} ج.م
-أود حجز جلسة استشارية وتحديد موعد لمعاينة العقار.`
+    `Hello Eng. Alaa Issa, I calculated an indicative estimate for my project on your website:
+- Property Type: ${selectedPropObj.labelEn}
+- Area: ${area} m²
+- Specification: ${selectedTierObj.labelEn}
+- Scope of Work: ${scope === "design" ? "Design & Working Drawings" : scope === "supervision" ? "Design & Site Supervision" : "Full Turnkey Fit-Out"}
+- Estimated Range: ${formatNumber(calculation.totalLow)} - ${formatNumber(calculation.totalHigh)} EGP
+
+I would like to schedule a discovery consultation.`
   );
 
   return (

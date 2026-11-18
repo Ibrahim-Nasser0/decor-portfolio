@@ -61,7 +61,7 @@ export default function ResumeSection() {
                 <div className="font-bold text-black font-sans mb-1">
                   {t("المجالات الفنية والمعمارية:", "Artistic Domains:")}
                 </div>
-                {(lang === "ar" ? DESIGNER_INFO.skills.technicalAr : DESIGNER_INFO.skills.technicalEn).map(
+                {DESIGNER_INFO.skills.technicalEn.map(
                   (skill, idx) => (
                     <div key={idx} className="flex items-start gap-2 text-neutral-700">
                       <span className="text-neutral-400">•</span>
@@ -78,7 +78,7 @@ export default function ResumeSection() {
                 {t("الاهتمامات والاستكشافات الإبداعية", "Hobbies & Design Explorations")}
               </h3>
               <div className="text-xs space-y-3">
-                {(lang === "ar" ? DESIGNER_INFO.skills.hobbiesAr : DESIGNER_INFO.skills.hobbiesEn).map(
+                {DESIGNER_INFO.skills.hobbiesEn.map(
                   (hobby, idx) => (
                     <div key={idx} className="flex items-start gap-2 text-neutral-600 leading-relaxed">
                       <span className="text-neutral-400">•</span>

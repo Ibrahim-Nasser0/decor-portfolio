@@ -4,12 +4,14 @@
   "private": true,
   "scripts": {
     "dev": "next dev --webpack",
-    "prebuild": "node -e \"const fs = require('fs'); fs.mkdirSync('.next/static/chunks/next/dist/client/components', { recursive: true });\"",
+    "prebuild": "node -e \"const fs = require('fs'); fs.mkdirSync('.next/static/chunks/next/dist/client/components', { recursive: true }); fs.mkdirSync('.next/server/app/projects', { recursive: true });\"",
     "build": "next build --webpack",
     "start": "next start",
     "lint": "eslint"
   },
   "dependencies": {
+    "@supabase/ssr": "^0.12.7",
+    "@supabase/supabase-js": "^2.119.0",
     "lucide-react": "^1.48.0",
     "next": "16.2.12",
     "react": "19.2.4",

@@ -73,7 +73,7 @@ export default function ServicesSection() {
 
                   {/* Features list */}
                   <div className="space-y-2 mb-6">
-                    {(lang === "ar" ? service.features : service.featuresEn).map((feat, idx) => (
+                    {service.featuresEn.map((feat, idx) => (
                       <div key={idx} className="flex items-start gap-2 text-xs text-[#cfcac0]">
                         <CheckCircle2 className="w-3.5 h-3.5 text-[#dfbe95] shrink-0 mt-0.5" />
                         <span>{feat}</span>

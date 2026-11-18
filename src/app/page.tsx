@@ -1,28 +1,30 @@
-"use client";
-
 import React from "react";
 import { LanguageProvider } from "@/context/LanguageContext";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import AboutSection from "@/components/AboutSection";
-import ResumeSection from "@/components/ResumeSection";
-import ArchitecturalCaseStudy from "@/components/ArchitecturalCaseStudy";
+import SkillsSection from "@/components/SkillsSection";
+import ExperienceSection from "@/components/ExperienceSection";
 import PortfolioGallery from "@/components/PortfolioGallery";
-import CostEstimator from "@/components/CostEstimator";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
+import { getProjects } from "@/lib/dataRepository";
 
-export default function Home() {
+// Enable Incremental Static Regeneration (sub-50ms static cache with background revalidation)
+export const revalidate = 60;
+
+export default async function Home() {
+  const projects = await getProjects();
+
   return (
     <LanguageProvider>
       <main className="min-h-screen bg-white text-[#111111] overflow-x-hidden selection:bg-black selection:text-white">
         <Navbar />
         <Hero />
         <AboutSection />
-        <ResumeSection />
-        <ArchitecturalCaseStudy />
-        <PortfolioGallery />
-        <CostEstimator />
+        <SkillsSection />
+        <ExperienceSection />
+        <PortfolioGallery initialProjects={projects} />
         <ContactSection />
         <Footer />
       </main>
