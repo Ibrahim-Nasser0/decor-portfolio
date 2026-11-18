@@ -188,10 +188,10 @@ export default function ProjectDetailView({ project }: ProjectDetailViewProps) {
             </div>
 
             <div>
-              <span className="text-[9px] sm:text-[10px] 2xl:text-xs text-neutral-400 uppercase tracking-widest block truncate">Clear Ceiling</span>
+              <span className="text-[9px] sm:text-[10px] 2xl:text-xs text-neutral-400 uppercase tracking-widest block truncate">Practice / Firm</span>
               <span className="font-bold text-black flex items-center gap-1 mt-1 text-[11px] sm:text-xs 2xl:text-sm">
-                <Ruler className="w-3.5 h-3.5 text-neutral-600 shrink-0" />
-                <span>3.20m Finished</span>
+                <Building2 className="w-3.5 h-3.5 text-neutral-600 shrink-0" />
+                <span className="truncate">{project.firmEn || project.specs?.firmEn || "Freelance Practice"}</span>
               </span>
             </div>
 

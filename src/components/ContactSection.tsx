@@ -1,9 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { DESIGNER_INFO } from "@/data/portfolioData";
 import {
-  MessageCircle,
   Mail,
   Phone,
   MapPin,
@@ -11,6 +10,7 @@ import {
   Send,
   CheckCircle2,
   Loader2,
+  RotateCcw,
 } from "lucide-react";
 import { submitInquiryAction } from "@/app/admin/actions";
 import SocialLinks from "@/components/SocialIcons";
@@ -37,6 +37,29 @@ export default function ContactSection({ profile }: ContactSectionProps) {
   const whatsappNumber = profile?.whatsappNumber || DESIGNER_INFO.whatsappNumber;
   const location = profile?.locationEn || DESIGNER_INFO.locationEn || "Cairo, Egypt";
 
+  const sectionRef = useRef<HTMLElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        }
+      },
+      { threshold: 0.1, rootMargin: "0px 0px -40px 0px" }
+    );
+
+    const currentRef = sectionRef.current;
+    if (currentRef) {
+      observer.observe(currentRef);
+    }
+
+    return () => {
+      if (currentRef) observer.unobserve(currentRef);
+    };
+  }, []);
+
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -62,17 +85,19 @@ export default function ContactSection({ profile }: ContactSectionProps) {
     setSubmitted(true);
   };
 
-  const whatsappMessage = `Hello Eng. ${name}, my name is ${formData.name || "a client"}. I would like to inquire about interior design services.${
-    formData.message ? ` Details: ${formData.message}` : ""
-  }`;
-
-  const directWhatsappLink = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`;
-
   return (
-    <section id="contact" className="py-20 sm:py-28 bg-[#faf9f6] border-t border-neutral-200">
+    <section
+      ref={sectionRef}
+      id="contact"
+      className="py-20 sm:py-28 bg-[#faf9f6] border-t border-neutral-200 relative overflow-hidden select-none"
+    >
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="mb-12 sm:mb-16">
+        {/* Header with Smooth Scroll Entrance */}
+        <div
+          className={`mb-12 sm:mb-16 transition-all duration-700 ease-out ${
+            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
+        >
           <span className="text-[10px] sm:text-[11px] font-technical uppercase tracking-[0.25em] text-neutral-400 block mb-2 font-medium">
             06 • CONTACT
           </span>
@@ -86,8 +111,12 @@ export default function ContactSection({ profile }: ContactSectionProps) {
 
         {/* Clean Two-Column Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
-          {/* Left Column: Direct Info */}
-          <div className="lg:col-span-5 space-y-8">
+          {/* Left Column: Direct Info & Social Channels */}
+          <div
+            className={`lg:col-span-5 space-y-8 transition-all duration-700 delay-150 ease-out ${
+              isVisible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-6"
+            }`}
+          >
             <div>
               <span className="text-[10px] font-technical uppercase tracking-[0.2em] text-neutral-400 block">
                 DIRECT INQUIRIES
@@ -110,11 +139,11 @@ export default function ContactSection({ profile }: ContactSectionProps) {
                   href={`https://wa.me/${whatsappNumber}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-base sm:text-lg text-black font-mono font-medium hover:text-neutral-600 transition-colors inline-flex items-center gap-1.5"
+                  className="text-base sm:text-lg text-black font-mono font-medium hover:text-neutral-600 transition-colors inline-flex items-center gap-1.5 group"
                   dir="ltr"
                 >
                   <span>{phone}</span>
-                  <ArrowUpRight className="w-3.5 h-3.5 text-neutral-400" />
+                  <ArrowUpRight className="w-3.5 h-3.5 text-neutral-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                 </a>
               </div>
 
@@ -125,10 +154,10 @@ export default function ContactSection({ profile }: ContactSectionProps) {
                 </span>
                 <a
                   href={`mailto:${email}`}
-                  className="text-base sm:text-lg text-black font-mono hover:text-neutral-600 transition-colors inline-flex items-center gap-1.5"
+                  className="text-base sm:text-lg text-black font-mono hover:text-neutral-600 transition-colors inline-flex items-center gap-1.5 group"
                 >
                   <span>{email}</span>
-                  <ArrowUpRight className="w-3.5 h-3.5 text-neutral-400" />
+                  <ArrowUpRight className="w-3.5 h-3.5 text-neutral-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                 </a>
               </div>
 
@@ -155,43 +184,39 @@ export default function ContactSection({ profile }: ContactSectionProps) {
                 behance={profile?.behance || "https://behance.net"}
                 className="flex items-center gap-2.5"
                 iconClassName="w-4 h-4"
-                itemClassName="w-9 h-9 rounded border border-neutral-300 hover:border-black flex items-center justify-center text-neutral-700 hover:text-black hover:bg-neutral-100 transition-colors"
+                itemClassName="w-9 h-9 rounded border border-neutral-300 hover:border-black flex items-center justify-center text-neutral-700 hover:text-black hover:bg-neutral-100 transition-all hover:scale-105 active:scale-95"
               />
             </div>
           </div>
 
           {/* Right Column: Clean Minimalist Form */}
-          <div className="lg:col-span-7 bg-white border border-neutral-200 p-6 sm:p-10 shadow-xs">
+          <div
+            className={`lg:col-span-7 bg-white border border-neutral-200 p-6 sm:p-10 shadow-xs transition-all duration-700 delay-300 ease-out ${
+              isVisible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-6"
+            }`}
+          >
             {submitted ? (
-              <div className="py-10 text-center space-y-4">
-                <div className="w-12 h-12 rounded-full bg-neutral-100 flex items-center justify-center text-black mx-auto">
-                  <CheckCircle2 className="w-6 h-6 text-[#7AD1B8]" />
+              <div className="py-12 text-center space-y-4 animate-card-entrance">
+                <div className="w-14 h-14 rounded-full bg-neutral-100 flex items-center justify-center text-black mx-auto animate-scale-check">
+                  <CheckCircle2 className="w-7 h-7 text-[#7AD1B8]" />
                 </div>
-                <h3 className="text-xl sm:text-2xl font-editorial font-bold text-black uppercase">
-                  Message Received
+                <h3 className="text-xl sm:text-2xl font-editorial font-bold text-black uppercase tracking-tight">
+                  Inquiry Received
                 </h3>
                 <p className="text-xs sm:text-sm text-neutral-600 max-w-sm mx-auto leading-relaxed font-sans">
-                  Thank you for reaching out. Eng. {name} will personally review your inquiry and follow up shortly.
+                  Thank you for reaching out. Eng. {name} will personally review your brief and get back to you shortly.
                 </p>
-                <div className="pt-4 flex flex-col sm:flex-row gap-3 justify-center">
-                  <a
-                    href={directWhatsappLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="px-6 py-3 bg-black text-white text-xs uppercase tracking-widest font-technical font-medium flex items-center justify-center gap-2"
-                  >
-                    <MessageCircle className="w-4 h-4 text-[#7AD1B8]" />
-                    <span>Open in WhatsApp</span>
-                  </a>
+                <div className="pt-4 flex justify-center">
                   <button
                     type="button"
                     onClick={() => {
                       setSubmitted(false);
                       setFormData({ name: "", phone: "", email: "", message: "" });
                     }}
-                    className="px-6 py-3 border border-neutral-200 hover:border-black text-black text-xs uppercase tracking-widest font-technical font-medium"
+                    className="px-6 py-3 border border-neutral-300 hover:border-black text-black text-xs uppercase tracking-widest font-technical font-medium transition-all active:scale-95 inline-flex items-center gap-2"
                   >
-                    Send Another Message
+                    <RotateCcw className="w-3.5 h-3.5" />
+                    <span>Send Another Inquiry</span>
                   </button>
                 </div>
               </div>
@@ -258,7 +283,7 @@ export default function ContactSection({ profile }: ContactSectionProps) {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full py-3.5 bg-black hover:bg-neutral-800 text-white text-xs uppercase tracking-widest font-technical font-medium transition-colors flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60"
+                  className="w-full py-3.5 bg-black hover:bg-neutral-800 text-white text-xs uppercase tracking-widest font-technical font-medium transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60 active:scale-[0.99]"
                 >
                   {isSubmitting ? (
                     <>
@@ -268,7 +293,7 @@ export default function ContactSection({ profile }: ContactSectionProps) {
                   ) : (
                     <>
                       <Send className="w-4 h-4" />
-                      <span>Send Message</span>
+                      <span>Send Inquiry</span>
                     </>
                   )}
                 </button>

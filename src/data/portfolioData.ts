@@ -1,9 +1,10 @@
 export interface ProjectSpecs {
-  scopeEn: string;
-  durationEn: string;
-  lightingEn: string;
-  flooringEn: string;
-  joineryEn: string;
+  scopeEn?: string;
+  durationEn?: string;
+  lightingEn?: string;
+  flooringEn?: string;
+  joineryEn?: string;
+  firmEn?: string;
 }
 
 export interface ProjectAngle {
@@ -21,9 +22,10 @@ export interface Project {
   id: string;
   title: string;
   titleEn: string;
-  category: "all" | "living" | "bedroom" | "kitchen" | "commercial" | "villas";
+  category: string;
   categoryLabel: string;
   categoryLabelEn: string;
+  firmEn?: string;
   coverImage: string;
   gallery: string[];
   beforeImage?: string;
@@ -184,6 +186,7 @@ export const PROJECTS: Project[] = [
     category: "living",
     categoryLabel: "صالونات ومعيشة",
     categoryLabelEn: "Living & Lounges",
+    firmEn: "Alaa Issa Studio",
     coverImage: "/images/projects/project-1.jpg",
     gallery: [
       "/images/projects/project-1.jpg",
@@ -254,6 +257,7 @@ export const PROJECTS: Project[] = [
     category: "bedroom",
     categoryLabel: "أجنحة النوم",
     categoryLabelEn: "Master Bedrooms",
+    firmEn: "Atelier Arch",
     coverImage: "https://images.unsplash.com/photo-1616594039964-ae9021a400a0?auto=format&fit=crop&w=1200&q=80",
     gallery: [
       "https://images.unsplash.com/photo-1616594039964-ae9021a400a0?auto=format&fit=crop&w=1200&q=80",
@@ -319,6 +323,7 @@ export const PROJECTS: Project[] = [
     category: "kitchen",
     categoryLabel: "مطابخ وحمامات",
     categoryLabelEn: "Kitchens & Baths",
+    firmEn: "Freelance Practice",
     coverImage: "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=1200&q=80",
     gallery: [
       "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=1200&q=80",
@@ -384,6 +389,7 @@ export const PROJECTS: Project[] = [
     category: "commercial",
     categoryLabel: "تجاري وإداري",
     categoryLabelEn: "Commercial & Retail",
+    firmEn: "Blueprint Architectural Consultancy",
     coverImage: "https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=1200&q=80",
     gallery: [
       "https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=1200&q=80",

@@ -24,6 +24,7 @@ import {
   Sliders,
   ChevronLeft,
   ChevronRight,
+  Building2,
 } from 'lucide-react'
 import { Project, ProjectSpecs, MaterialSwatch, ProjectAngle } from '@/data/portfolioData'
 import { saveProjectAction } from '../actions'
@@ -62,6 +63,7 @@ export default function ProjectForm({
     category: (initialProject?.category as any) || 'living',
     categoryLabel: initialProject?.categoryLabel || 'صالونات ومعيشة',
     categoryLabelEn: initialProject?.categoryLabelEn || 'Living & Lounges',
+    firmEn: initialProject?.firmEn || (initialProject?.specs as any)?.firmEn || 'Freelance Practice',
     coverImage: initialProject?.coverImage || '',
     gallery: initialProject?.gallery || [],
     beforeImage: initialProject?.beforeImage || '',
@@ -349,22 +351,126 @@ export default function ProjectForm({
               </span>
             </div>
 
-            {/* Category */}
-            <div>
-              <label className="block text-xs font-mono text-neutral-300 mb-2 uppercase">
-                Architectural Category *
-              </label>
-              <select
-                value={formData.category}
-                onChange={(e) => handleCategoryChange(e.target.value)}
-                className="w-full bg-[#090a0c] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-4 py-3 text-xs text-white focus:outline-none font-mono"
-              >
-                {CATEGORY_OPTIONS.map((c) => (
-                  <option key={c.value} value={c.value} className="bg-neutral-900 text-white">
-                    {c.labelEn} ({c.labelAr})
-                  </option>
+            {/* Category (Customizable & Dynamic) */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <label className="block text-xs font-mono text-neutral-300 uppercase">
+                  Category (Customizable) *
+                </label>
+                <span className="text-[10px] font-mono text-amber-400">
+                  Tag: {formData.category || 'slug'}
+                </span>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <input
+                  type="text"
+                  required
+                  value={formData.categoryLabelEn || ''}
+                  onChange={(e) => {
+                    const label = e.target.value;
+                    const slug = label
+                      .toLowerCase()
+                      .trim()
+                      .replace(/[^a-z0-9]+/g, '-')
+                      .replace(/(^-|-$)/g, '');
+                    setFormData((prev) => ({
+                      ...prev,
+                      categoryLabelEn: label,
+                      categoryLabel: label,
+                      category: slug || 'custom',
+                    }));
+                  }}
+                  placeholder="Category Name (e.g. Dining, Penthouses...)"
+                  className="w-full bg-[#090a0c] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-neutral-600 focus:outline-none font-sans"
+                />
+                <input
+                  type="text"
+                  required
+                  value={formData.category || ''}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      category: e.target.value.toLowerCase().replace(/\s+/g, '-'),
+                    }))
+                  }
+                  placeholder="Slug (e.g. dining-rooms)"
+                  className="w-full bg-[#090a0c] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-neutral-600 focus:outline-none font-mono"
+                />
+              </div>
+              {/* Presets */}
+              <div className="flex items-center gap-1.5 flex-wrap pt-0.5">
+                {[
+                  { slug: 'living', en: 'Living & Lounges' },
+                  { slug: 'bedroom', en: 'Master Bedrooms' },
+                  { slug: 'kitchen', en: 'Kitchens & Baths' },
+                  { slug: 'commercial', en: 'Commercial & Retail' },
+                  { slug: 'villas', en: 'Private Luxury Villas' },
+                  { slug: 'penthouses', en: 'Penthouses & Duplexes' },
+                  { slug: 'landscape', en: 'Terraces & Landscape' },
+                ].map((preset) => (
+                  <button
+                    type="button"
+                    key={preset.slug}
+                    onClick={() => {
+                      setFormData((prev) => ({
+                        ...prev,
+                        category: preset.slug,
+                        categoryLabelEn: preset.en,
+                        categoryLabel: preset.en,
+                      }))
+                    }}
+                    className={`px-2 py-0.5 rounded text-[10px] font-mono border transition-all cursor-pointer ${
+                      formData.category === preset.slug
+                        ? 'bg-amber-500/20 text-amber-300 border-amber-500/50 font-bold'
+                        : 'bg-white/[0.02] text-neutral-400 border-white/[0.06] hover:text-white'
+                    }`}
+                  >
+                    {preset.en}
+                  </button>
                 ))}
-              </select>
+              </div>
+            </div>
+
+            {/* Firm / Freelance Attribution */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <label className="block text-xs font-mono text-neutral-300 uppercase flex items-center gap-1.5">
+                  <Building2 className="w-3.5 h-3.5 text-amber-400" />
+                  <span>Practice / Firm / Freelance *</span>
+                </label>
+                <span className="text-[10px] font-mono text-emerald-400">
+                  {formData.firmEn || 'Freelance Practice'}
+                </span>
+              </div>
+              <input
+                type="text"
+                value={formData.firmEn || ''}
+                onChange={(e) => setFormData((prev) => ({ ...prev, firmEn: e.target.value }))}
+                placeholder="e.g. Freelance Practice, Alaa Issa Studio, Atelier Arch, Blueprint Consultancy..."
+                className="w-full bg-[#090a0c] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-4 py-2.5 text-xs text-white placeholder-neutral-600 focus:outline-none font-sans"
+              />
+              {/* Presets */}
+              <div className="flex items-center gap-1.5 flex-wrap pt-0.5">
+                {[
+                  'Freelance Practice',
+                  'Alaa Issa Studio',
+                  'Atelier Arch',
+                  'Blueprint Architectural Consultancy',
+                ].map((opt) => (
+                  <button
+                    type="button"
+                    key={opt}
+                    onClick={() => setFormData((prev) => ({ ...prev, firmEn: opt }))}
+                    className={`px-2 py-0.5 rounded text-[10px] font-mono border transition-all cursor-pointer ${
+                      formData.firmEn === opt
+                        ? 'bg-amber-500/20 text-amber-300 border-amber-500/50 font-bold'
+                        : 'bg-white/[0.02] text-neutral-400 border-white/[0.06] hover:text-white'
+                    }`}
+                  >
+                    {opt}
+                  </button>
+                ))}
+              </div>
             </div>
 
             {/* English Title */}

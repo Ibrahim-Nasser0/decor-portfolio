@@ -76,13 +76,15 @@ export interface ClientInquiry {
 
 // Map PostgreSQL snake_case row to TypeScript Project interface
 export function rowToProject(row: any): Project {
+  const specs = (typeof row.specs === 'object' && row.specs !== null) ? row.specs : {}
   return {
     id: row.id,
     title: row.title || '',
     titleEn: row.title_en || '',
-    category: row.category,
+    category: row.category || 'living',
     categoryLabel: row.category_label || '',
     categoryLabelEn: row.category_label_en || '',
+    firmEn: row.firm_en || specs.firmEn || specs.firm || undefined,
     coverImage: row.cover_image || '',
     gallery: row.gallery || [],
     beforeImage: row.before_image || undefined,
@@ -101,7 +103,7 @@ export function rowToProject(row: any): Project {
     conceptEn: row.concept_en || undefined,
     materialsDescriptionEn: row.materials_description_en || undefined,
     angles: row.angles || [],
-    specs: row.specs || undefined,
+    specs: specs,
     materialSwatches: row.material_swatches || [],
     challengeEn: row.challenge_en || undefined,
     solutionEn: row.solution_en || undefined,
@@ -110,6 +112,12 @@ export function rowToProject(row: any): Project {
 
 // Map TypeScript Project interface to PostgreSQL snake_case row
 export function projectToRow(p: Project, displayOrder: number = 0) {
+  const rawSpecs = (typeof p.specs === 'object' && p.specs !== null) ? p.specs : {}
+  const mergedSpecs = {
+    ...rawSpecs,
+    firmEn: p.firmEn || rawSpecs.firmEn || undefined,
+  }
+
   return {
     id: p.id,
     title: p.title,
@@ -137,7 +145,7 @@ export function projectToRow(p: Project, displayOrder: number = 0) {
     features_en: p.featuresEn,
     featured: Boolean(p.featured),
     display_order: displayOrder,
-    specs: p.specs || null,
+    specs: mergedSpecs,
     angles: p.angles || [],
     material_swatches: p.materialSwatches || [],
     updated_at: new Date().toISOString(),

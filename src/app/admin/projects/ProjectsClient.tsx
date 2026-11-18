@@ -89,6 +89,33 @@ export default function ProjectsClient({ initialProjects }: { initialProjects: P
     return projects.filter((p) => p.category === catId).length
   }
 
+  // Dynamic categories including custom ones
+  const dynamicCategories = useMemo(() => {
+    const list = [{ id: 'all', label: 'All Works' }]
+    const seen = new Set<string>()
+
+    const defaultLabels: Record<string, string> = {
+      living: 'Living & Lounges',
+      bedroom: 'Master Bedrooms',
+      kitchen: 'Kitchens & Baths',
+      commercial: 'Commercial & Retail',
+      villas: 'Luxury Villas',
+    }
+
+    projects.forEach((p) => {
+      const cat = p.category
+      if (cat && !seen.has(cat)) {
+        seen.add(cat)
+        list.push({
+          id: cat,
+          label: p.categoryLabelEn || defaultLabels[cat] || cat.replace(/-/g, ' ').toUpperCase(),
+        })
+      }
+    })
+
+    return list
+  }, [projects])
+
   // Toggle Featured status
   async function handleToggleFeatured(project: Project) {
     setTogglingFeaturedId(project.id)
@@ -219,7 +246,7 @@ export default function ProjectsClient({ initialProjects }: { initialProjects: P
 
       {/* Category Pills with Project Counts */}
       <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar">
-        {CATEGORIES.map((cat) => {
+        {dynamicCategories.map((cat) => {
           const count = getCategoryCount(cat.id)
           const isActive = activeCategory === cat.id
 
@@ -290,9 +317,16 @@ export default function ProjectsClient({ initialProjects }: { initialProjects: P
 
                   {/* Top Badges */}
                   <div className="absolute top-3 left-3 right-3 flex items-center justify-between">
-                    <span className="text-[10px] font-mono uppercase bg-black/70 backdrop-blur-md text-neutral-200 px-2.5 py-1 rounded-md border border-white/[0.1]">
-                      {project.categoryLabelEn}
-                    </span>
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                      <span className="text-[10px] font-mono uppercase bg-black/70 backdrop-blur-md text-neutral-200 px-2.5 py-1 rounded-md border border-white/[0.1]">
+                        {project.categoryLabelEn || project.category}
+                      </span>
+                      {project.firmEn && (
+                        <span className="text-[10px] font-mono uppercase bg-amber-500/20 backdrop-blur-md text-amber-300 px-2 py-0.5 rounded-md border border-amber-500/40">
+                          {project.firmEn}
+                        </span>
+                      )}
+                    </div>
 
                     <button
                       onClick={() => handleToggleFeatured(project)}
@@ -420,8 +454,13 @@ export default function ProjectsClient({ initialProjects }: { initialProjects: P
                         {project.titleEn}
                       </h3>
                       <span className="text-[10px] font-mono uppercase bg-white/[0.05] text-neutral-300 px-2 py-0.5 rounded border border-white/[0.08]">
-                        {project.categoryLabelEn}
+                        {project.categoryLabelEn || project.category}
                       </span>
+                      {project.firmEn && (
+                        <span className="text-[10px] font-mono uppercase bg-amber-500/15 text-amber-300 px-2 py-0.5 rounded border border-amber-500/30">
+                          {project.firmEn}
+                        </span>
+                      )}
                     </div>
                     <p className="text-xs text-neutral-400 truncate">
                       {project.title}
