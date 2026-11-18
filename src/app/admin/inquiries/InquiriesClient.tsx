@@ -57,8 +57,8 @@ export default function InquiriesClient({ initialInquiries }: { initialInquiries
       if (!matchesFilter) return false
       if (!q) return true
       return (
-        inq.client_name.toLowerCase().includes(q) ||
-        inq.phone_number.includes(q) ||
+        (inq.client_name || '').toLowerCase().includes(q) ||
+        (inq.phone_number || '').includes(q) ||
         (inq.email && inq.email.toLowerCase().includes(q)) ||
         (inq.service_type && inq.service_type.toLowerCase().includes(q))
       )
@@ -111,11 +111,12 @@ export default function InquiriesClient({ initialInquiries }: { initialInquiries
     service: string | undefined,
     templateKey: 'discovery' | 'cad' | 'monograph'
   ) => {
-    const cleanPhone = phone.replace(/\D/g, '')
+    const cleanPhone = (phone || '').replace(/\D/g, '')
+    const name = clientName || 'Client'
     let text = ''
 
     if (templateKey === 'discovery') {
-      text = `Hello ${clientName}, this is Eng. Alaa Issa following up on your consultation request for ${
+      text = `Hello ${name}, this is Eng. Alaa Issa following up on your consultation request for ${
         service || 'interior architecture'
       }. I would love to schedule a brief discovery call to discuss your vision and spatial requirements. When would be a convenient time for you?`
     } else if (templateKey === 'cad') {

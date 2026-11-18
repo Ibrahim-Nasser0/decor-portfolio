@@ -279,8 +279,8 @@ export default function ProjectsClient({ initialProjects }: { initialProjects: P
                 {/* Visual Cover Image */}
                 <div className="relative aspect-[16/10] bg-neutral-950 overflow-hidden">
                   <Image
-                    src={project.coverImage}
-                    alt={project.titleEn}
+                    src={project.coverImage || '/images/projects/project-1.jpg'}
+                    alt={project.titleEn || project.title || 'Project'}
                     fill
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 380px"
                     loading="lazy"
@@ -402,8 +402,8 @@ export default function ProjectsClient({ initialProjects }: { initialProjects: P
                 <div className="flex items-start sm:items-center gap-4 min-w-0">
                   <div className="relative w-20 h-14 sm:w-24 sm:h-16 rounded-xl overflow-hidden bg-neutral-900 shrink-0 border border-white/[0.08]">
                     <Image
-                      src={project.coverImage}
-                      alt={project.titleEn}
+                      src={project.coverImage || '/images/projects/project-1.jpg'}
+                      alt={project.titleEn || project.title || 'Project'}
                       fill
                       sizes="96px"
                       loading="lazy"

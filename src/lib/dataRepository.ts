@@ -12,8 +12,8 @@ let _publicClient: ReturnType<typeof createSupabaseClient> | null = null
 
 function getPublicClient() {
   if (_publicClient) return _publicClient
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL || ''
-  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://doagrgbkcmftsxzckimk.supabase.co'
+  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'sb_publishable__gAlNoRbvX6VIjNvsfx_-A_ReBjh1Q7'
   if (!url || !key) return null
   _publicClient = createSupabaseClient(url, key, {
     auth: {

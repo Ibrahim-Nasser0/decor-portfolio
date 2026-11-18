@@ -367,8 +367,8 @@ export default async function AdminOverviewPage() {
                 <div className="flex items-center gap-4 min-w-0">
                   <div className="relative w-18 h-14 sm:w-22 sm:h-16 rounded-2xl overflow-hidden bg-neutral-900 shrink-0 border border-white/[0.08]">
                     <Image
-                      src={project.coverImage}
-                      alt={project.titleEn}
+                      src={project.coverImage || '/images/projects/project-1.jpg'}
+                      alt={project.titleEn || project.title || 'Project'}
                       fill
                       sizes="90px"
                       loading="lazy"
@@ -475,10 +475,10 @@ export default async function AdminOverviewPage() {
                     <div className="flex items-center justify-between pt-2.5 border-t border-white/[0.04] text-[10px] text-neutral-400 font-mono">
                       <span className="flex items-center gap-1">
                         <Clock className="w-3 h-3" />
-                        {new Date(inquiry.created_at).toLocaleDateString()}
+                        {new Date(inquiry.created_at || Date.now()).toLocaleDateString()}
                       </span>
                       <a
-                        href={`https://wa.me/${inquiry.phone_number.replace(/\D/g, '')}?text=${encodeURIComponent(`Dear ${inquiry.client_name}, this is Eng. Alaa Issa following up on your interior architecture consultation request.`)}`}
+                        href={`https://wa.me/${(inquiry.phone_number || '').replace(/\D/g, '')}?text=${encodeURIComponent(`Dear ${inquiry.client_name || 'Client'}, this is Eng. Alaa Issa following up on your interior architecture consultation request.`)}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-emerald-400 hover:text-emerald-300 inline-flex items-center gap-1 hover:underline font-semibold"
