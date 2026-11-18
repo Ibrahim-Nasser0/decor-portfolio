@@ -255,23 +255,29 @@ export default function AboutClient({ initialProfile }: { initialProfile: any })
                   02 • ARCHITECTURAL NARRATIVE
                 </div>
 
-                <div>
-                  <h3 className="text-lg font-editorial font-bold text-black uppercase mb-2">
+                <div className="space-y-3">
+                  <h3 className="text-lg font-editorial font-bold text-black uppercase">
                     Spatial Philosophy & Practice
                   </h3>
-                  <p className="text-xs text-neutral-700 leading-relaxed font-sans line-clamp-5">
+                  <div className="w-12 h-[1.5px] bg-black my-2" />
+                  <p className="text-xs text-neutral-700 leading-relaxed font-sans line-clamp-3">
                     {profile.aboutIntroEn}
+                  </p>
+                  <p className="text-xs text-neutral-600 leading-relaxed font-sans line-clamp-3">
+                    {profile.aboutExperienceEn}
                   </p>
                 </div>
 
-                <div className="p-4 bg-neutral-100 rounded-2xl border border-neutral-200">
-                  <span className="text-[9px] font-mono uppercase text-neutral-500 block mb-1">
-                    Design Philosophy Quote:
-                  </span>
-                  <p className="text-[11px] text-neutral-800 italic leading-relaxed line-clamp-4">
-                    &quot;{profile.statementEn}&quot;
-                  </p>
-                </div>
+                {profile.statementEn && (
+                  <div className="p-4 bg-neutral-100 rounded-2xl border-l-2 border-black border-y border-r border-neutral-200">
+                    <span className="text-[9px] font-mono uppercase text-neutral-500 block mb-1">
+                      Design Philosophy Callout:
+                    </span>
+                    <p className="text-[11px] text-neutral-800 italic leading-relaxed line-clamp-3">
+                      &ldquo;{profile.statementEn}&rdquo;
+                    </p>
+                  </div>
+                )}
               </div>
             </div>
           </div>
