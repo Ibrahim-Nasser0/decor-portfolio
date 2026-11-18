@@ -1,8 +1,19 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
+import Image from "next/image";
 import { DESIGNER_INFO } from "@/data/portfolioData";
-import { Phone, Mail, ArrowUp, ArrowUpRight, MapPin, Clock, Sparkles } from "lucide-react";
+import {
+  Phone,
+  Mail,
+  ArrowUp,
+  ArrowUpRight,
+  MapPin,
+  Clock,
+  MessageCircle,
+  Building2,
+  Compass,
+} from "lucide-react";
 import SocialLinks from "@/components/SocialIcons";
 
 interface FooterProps {
@@ -10,6 +21,7 @@ interface FooterProps {
     nameEn?: string;
     titleEn?: string;
     locationEn?: string;
+    avatarUrl?: string;
     email?: string;
     phone?: string;
     whatsappNumber?: string;
@@ -47,8 +59,9 @@ export default function Footer({ profile }: FooterProps) {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  const avatarSrc = profile?.avatarUrl || "/images/alaa.webp";
   const name = profile?.nameEn || DESIGNER_INFO.nameEn || "ALAA ISSA";
-  const title = profile?.titleEn || DESIGNER_INFO.titleEn || "INTERIOR ARCHITECTURE & DESIGN";
+  const title = profile?.titleEn || DESIGNER_INFO.titleEn || "INTERIOR ARCHITECTURE & SPATIAL DESIGN";
   const location = profile?.locationEn || DESIGNER_INFO.locationEn || "NEW CAIRO • SHEIKH ZAYED • CAIRO, EGYPT";
   const phone = profile?.phone || DESIGNER_INFO.phone;
   const email = profile?.email || DESIGNER_INFO.email;
@@ -66,73 +79,110 @@ export default function Footer({ profile }: FooterProps) {
     { num: "06", label: "DIRECT CONTACT", href: "#contact" },
   ];
 
+  const typologies = [
+    "Private Residential Sanctuaries",
+    "Penthouse & Duplex Styling",
+    "Tailored Joinery & Millwork",
+    "Turnkey Execution & Site Supervision",
+    "Boutique Commercial Concepts",
+  ];
+
   return (
     <footer
       ref={footerRef}
       className="bg-white border-t border-neutral-300 pt-16 sm:pt-20 2xl:pt-28 pb-10 sm:pb-14 relative text-black select-none overflow-hidden"
     >
-      {/* Background Subtle Monograph Watermark */}
-      <div className="absolute top-1/2 right-4 -translate-y-1/2 text-[16vw] font-editorial font-black text-black/[0.015] pointer-events-none select-none -z-10 leading-none tracking-tighter">
-        STUDIO
-      </div>
-
       <div className="max-w-7xl 2xl:max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 2xl:px-12">
         {/* Top Architectural Invitation Marquee Card */}
         <div
-          className={`pb-12 sm:pb-16 border-b border-black/15 transition-all duration-700 ease-out ${
+          className={`pb-12 sm:pb-16 transition-all duration-700 ease-out ${
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
           }`}
         >
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 bg-neutral-50 border border-neutral-200/80 p-6 sm:p-10 shadow-xs">
-            <div className="space-y-3">
-              <div className="flex items-center gap-2 text-[10px] sm:text-xs font-technical uppercase tracking-[0.25em] text-neutral-500 font-bold">
-                <span className="relative flex h-2 w-2 items-center justify-center">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#7AD1B8] opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-[#7AD1B8]"></span>
-                </span>
-                <span>OPEN FOR COMMISSIONS • 2026/2027</span>
-              </div>
-              <h3 className="text-2xl sm:text-3xl md:text-4xl font-editorial font-bold text-black uppercase tracking-tight">
-                Have an Intentional Space in Mind?
-              </h3>
-              <p className="text-xs sm:text-sm text-neutral-600 max-w-xl font-sans leading-relaxed">
-                Whether formulating a private residential sanctuary, penthouse suite, or bespoke commercial concept, let us explore the spatial possibilities.
-              </p>
-            </div>
+          <div className="relative bg-[#faf9f6] border border-neutral-300/80 p-6 sm:p-10 lg:p-12 shadow-xs overflow-hidden">
+            {/* Drafting Crosshairs in Card Corners */}
+            <span className="absolute top-2 start-2 font-mono text-[9px] text-neutral-400 select-none">+</span>
+            <span className="absolute top-2 end-2 font-mono text-[9px] text-neutral-400 select-none">+</span>
+            <span className="absolute bottom-2 start-2 font-mono text-[9px] text-neutral-400 select-none">+</span>
+            <span className="absolute bottom-2 end-2 font-mono text-[9px] text-neutral-400 select-none">+</span>
 
-            <div className="shrink-0">
-              <a
-                href="#contact"
-                className="group px-6 py-3.5 bg-black hover:bg-neutral-800 text-white text-xs uppercase tracking-widest font-technical font-medium transition-all duration-200 flex items-center justify-center gap-2 shadow-xs hover:shadow-md active:scale-98"
-              >
-                <span>Start a Project Brief</span>
-                <ArrowUpRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-              </a>
+            <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 relative z-10">
+              <div className="space-y-3.5 max-w-2xl">
+                <div className="flex items-center gap-2.5 text-[10px] sm:text-xs font-technical uppercase tracking-[0.25em] text-neutral-500 font-bold">
+                  <span className="relative flex h-2 w-2 items-center justify-center">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#7AD1B8] opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-[#7AD1B8]"></span>
+                  </span>
+                  <span>COMMISSIONS OPEN • 2026/2027 CALENDAR</span>
+                </div>
+
+                <h3 className="text-2xl sm:text-4xl lg:text-5xl font-editorial font-bold text-black uppercase tracking-tight leading-[1.05]">
+                  Have an Intentional Space in Mind?
+                </h3>
+
+                <p className="text-xs sm:text-sm text-neutral-600 font-sans leading-relaxed">
+                  Whether formulating a private residential sanctuary, penthouse suite, or bespoke commercial concept, let us explore the spatial possibilities from layout logic to turnkey execution.
+                </p>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 shrink-0">
+                <a
+                  href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
+                    `Hello Eng. ${name}, I would like to inquire about booking an interior design consultation.`
+                  )}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-5 py-3.5 border border-neutral-300 hover:border-black bg-white hover:bg-neutral-50 text-black text-xs uppercase tracking-widest font-technical font-medium transition-all duration-200 flex items-center justify-center gap-2 shadow-2xs active:scale-98"
+                >
+                  <MessageCircle className="w-4 h-4 text-emerald-600" />
+                  <span>WhatsApp Direct</span>
+                </a>
+
+                <a
+                  href="#contact"
+                  className="group px-6 py-3.5 bg-black hover:bg-neutral-800 text-white text-xs uppercase tracking-widest font-technical font-medium transition-all duration-200 flex items-center justify-center gap-2 shadow-xs hover:shadow-md active:scale-98"
+                >
+                  <span>Start a Project Brief</span>
+                  <ArrowUpRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                </a>
+              </div>
             </div>
           </div>
         </div>
 
         {/* Main 4-Column Monograph Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 sm:gap-12 py-12 sm:py-16 border-b border-neutral-200">
-          {/* Column 1: Identity & Ethos (5 cols) */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 sm:gap-12 py-12 sm:py-16 border-t border-b border-neutral-200">
+          {/* Column 1: Identity & Studio Ethos (4 cols) */}
           <div
-            className={`lg:col-span-5 space-y-5 transition-all duration-700 delay-100 ease-out ${
+            className={`lg:col-span-4 space-y-5 transition-all duration-700 delay-100 ease-out ${
               isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
             }`}
           >
-            <div>
-              <a href="#hero" className="group inline-flex flex-col">
-                <span className="text-2xl sm:text-3xl font-editorial font-bold tracking-tight text-black uppercase group-hover:text-neutral-700 transition-colors">
-                  {name}
-                </span>
-                <span className="text-[10px] sm:text-[11px] font-technical uppercase tracking-[0.2em] text-neutral-500 mt-1 font-medium">
+            <div className="flex items-center gap-3">
+              <div className="relative w-9 h-9 rounded-full overflow-hidden border border-black/80 bg-neutral-100 shrink-0">
+                <Image
+                  src={avatarSrc}
+                  alt={name}
+                  fill
+                  sizes="36px"
+                  className="object-cover object-top filter grayscale-20"
+                />
+              </div>
+              <div>
+                <a href="#hero" className="group block">
+                  <span className="text-xl sm:text-2xl font-editorial font-bold tracking-tight text-black uppercase group-hover:text-neutral-700 transition-colors">
+                    {name}
+                  </span>
+                </a>
+                <span className="text-[9px] font-technical uppercase tracking-[0.2em] text-neutral-500 font-medium block">
                   {title}
                 </span>
-              </a>
+              </div>
             </div>
 
-            <p className="text-xs sm:text-sm text-neutral-600 leading-relaxed max-w-md font-sans">
-              Architectural interior design practice specializing in bespoke residential sanctuaries, tailored millwork detailing, and attentive on-site executive supervision.
+            <p className="text-xs sm:text-[13px] text-neutral-600 leading-relaxed font-sans">
+              Dedicated to the architectural composition of refined residential sanctuaries, bespoke furniture joinery, and attentive turnkey execution supervision.
             </p>
 
             <div className="space-y-2 pt-1 text-xs font-technical text-neutral-500">
@@ -140,8 +190,9 @@ export default function Footer({ profile }: FooterProps) {
                 <MapPin className="w-3.5 h-3.5 text-neutral-700 shrink-0" />
                 <span>{location}</span>
               </div>
-              <div className="text-[10px] text-neutral-400 font-mono tracking-wider pl-5">
-                COORDINATES: 30°02&apos;N 31°14&apos;E • CLT (UTC+2)
+              <div className="flex items-center gap-2 text-[10px] text-neutral-400 font-mono tracking-wider">
+                <Compass className="w-3 h-3 text-neutral-400 shrink-0" />
+                <span>30°02&apos;N 31°14&apos;E • CAIRO CLT (UTC+2)</span>
               </div>
             </div>
           </div>
@@ -152,10 +203,10 @@ export default function Footer({ profile }: FooterProps) {
               isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
             }`}
           >
-            <h4 className="text-[11px] font-technical font-bold uppercase tracking-[0.2em] text-black">
+            <h4 className="text-[11px] font-technical font-bold uppercase tracking-[0.2em] text-black pb-1 border-b border-black/10 inline-block">
               PORTFOLIO INDEX
             </h4>
-            <ul className="space-y-2.5 text-xs font-technical text-neutral-600">
+            <ul className="space-y-2.5 text-xs font-technical text-neutral-600 pt-1">
               {navLinks.map((link) => (
                 <li key={link.href}>
                   <a
@@ -174,25 +225,44 @@ export default function Footer({ profile }: FooterProps) {
             </ul>
           </div>
 
-          {/* Column 3: Direct Reach (3 cols) */}
+          {/* Column 3: Typologies & Scope (3 cols) */}
           <div
             className={`lg:col-span-3 space-y-4 transition-all duration-700 delay-300 ease-out ${
               isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
             }`}
           >
-            <h4 className="text-[11px] font-technical font-bold uppercase tracking-[0.2em] text-black">
+            <h4 className="text-[11px] font-technical font-bold uppercase tracking-[0.2em] text-black pb-1 border-b border-black/10 inline-block">
+              PRACTICE TYPOLOGIES
+            </h4>
+            <ul className="space-y-2.5 text-xs font-sans text-neutral-600 pt-1">
+              {typologies.map((item, idx) => (
+                <li key={idx} className="flex items-center gap-2">
+                  <span className="w-1 h-1 rounded-full bg-neutral-400 shrink-0" />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Column 4: Direct Inquiries & Design Network (3 cols) */}
+          <div
+            className={`lg:col-span-3 space-y-4 transition-all duration-700 delay-400 ease-out ${
+              isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+            }`}
+          >
+            <h4 className="text-[11px] font-technical font-bold uppercase tracking-[0.2em] text-black pb-1 border-b border-black/10 inline-block">
               DIRECT REACH
             </h4>
-            <ul className="space-y-3.5 text-xs font-sans">
+            <ul className="space-y-3 text-xs font-sans pt-1">
               <li>
-                <span className="text-[10px] font-technical uppercase tracking-widest text-neutral-400 block mb-1">
-                  Mobile / WhatsApp
+                <span className="text-[10px] font-technical uppercase tracking-widest text-neutral-400 block mb-0.5">
+                  Mobile & WhatsApp
                 </span>
                 <a
                   href={`https://wa.me/${whatsappNumber}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="font-mono text-black hover:text-neutral-600 transition-colors inline-flex items-center gap-1.5 group"
+                  className="font-mono text-black hover:text-neutral-600 transition-colors inline-flex items-center gap-1.5 group font-medium"
                   dir="ltr"
                 >
                   <Phone className="w-3.5 h-3.5 text-neutral-700" />
@@ -202,8 +272,8 @@ export default function Footer({ profile }: FooterProps) {
               </li>
 
               <li>
-                <span className="text-[10px] font-technical uppercase tracking-widest text-neutral-400 block mb-1">
-                  Email Correspondence
+                <span className="text-[10px] font-technical uppercase tracking-widest text-neutral-400 block mb-0.5">
+                  Studio Email
                 </span>
                 <a
                   href={`mailto:${email}`}
@@ -215,8 +285,8 @@ export default function Footer({ profile }: FooterProps) {
                 </a>
               </li>
 
-              <li className="pt-1">
-                <span className="text-[10px] font-technical uppercase tracking-widest text-neutral-400 block mb-1">
+              <li className="pt-0.5">
+                <span className="text-[10px] font-technical uppercase tracking-widest text-neutral-400 block mb-0.5">
                   Studio Schedule
                 </span>
                 <div className="flex items-center gap-1.5 text-neutral-600 font-technical text-[11px]">
@@ -225,74 +295,67 @@ export default function Footer({ profile }: FooterProps) {
                 </div>
               </li>
             </ul>
-          </div>
-
-          {/* Column 4: Design Socials & Practice (2 cols) */}
-          <div
-            className={`lg:col-span-2 space-y-4 transition-all duration-700 delay-400 ease-out ${
-              isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
-            }`}
-          >
-            <h4 className="text-[11px] font-technical font-bold uppercase tracking-[0.2em] text-black">
-              DESIGN NETWORK
-            </h4>
-            <p className="text-xs text-neutral-500 font-sans leading-relaxed">
-              Explore ongoing construction updates, spatial photography, and visual moodboards.
-            </p>
-
-            <SocialLinks
-              whatsappNumber={whatsappNumber}
-              instagram={instagram}
-              linkedin={linkedin}
-              behance={behance}
-              className="flex items-center gap-2 pt-1"
-              iconClassName="w-4 h-4"
-              itemClassName="w-9 h-9 rounded border border-neutral-300 hover:border-black flex items-center justify-center text-neutral-700 hover:text-black hover:bg-neutral-100 transition-all hover:scale-105 active:scale-95"
-            />
 
             <div className="pt-2">
-              <a
-                href={`https://wa.me/${whatsappNumber}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group inline-flex items-center gap-1 text-[11px] font-technical uppercase tracking-wider text-black font-semibold hover:underline"
-              >
-                <span>Chat Direct via WhatsApp</span>
-                <ArrowUpRight className="w-3 h-3 text-neutral-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-              </a>
+              <span className="text-[10px] font-technical uppercase tracking-widest text-neutral-400 block mb-2">
+                PORTFOLIO & SOCIAL CHANNELS
+              </span>
+              <SocialLinks
+                whatsappNumber={whatsappNumber}
+                instagram={instagram}
+                linkedin={linkedin}
+                behance={behance}
+                className="flex items-center gap-2"
+                iconClassName="w-4 h-4"
+                itemClassName="w-9 h-9 rounded border border-neutral-300 hover:border-black flex items-center justify-center text-neutral-700 hover:text-black hover:bg-neutral-100 transition-all hover:scale-105 active:scale-95"
+              />
             </div>
           </div>
         </div>
 
-        {/* Bottom Editorial Legal Bar */}
+        {/* Full-Width Architectural Wordmark Banner */}
         <div
-          className={`pt-8 sm:pt-10 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] sm:text-xs font-technical text-neutral-500 text-center sm:text-left transition-all duration-700 delay-500 ease-out ${
+          className={`py-8 overflow-hidden flex items-center justify-between font-editorial text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-black uppercase tracking-tight text-neutral-300/60 select-none border-b border-neutral-200 transition-all duration-700 delay-500 ${
+            isVisible ? "opacity-100" : "opacity-0"
+          }`}
+        >
+          <span>ALAA ISSA</span>
+          <span className="text-neutral-200 font-light">•</span>
+          <span>INTERIOR ARCHITECTURE</span>
+        </div>
+
+        {/* Bottom Editorial Legal Bar & Ibrahim Nasser Creator Signature */}
+        <div
+          className={`pt-8 sm:pt-10 flex flex-col md:flex-row items-center justify-between gap-4 text-[11px] sm:text-xs font-technical text-neutral-500 text-center md:text-left transition-all duration-700 delay-600 ease-out ${
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
           }`}
         >
+          {/* Copyright */}
           <div>
             © {new Date().getFullYear()} {name} INTERIOR ARCHITECTURE. ALL RIGHTS RESERVED.
           </div>
 
-          {/* Creator & Engineering Attribution */}
-          <div className="flex items-center gap-1.5 text-[11px] sm:text-xs font-technical text-neutral-500">
-            <span>Crafted with architectural precision by</span>
+          {/* Creator & Engineering Attribution Card (By Ibrahim Nasser) */}
+          <div className="flex items-center gap-2 text-xs font-technical text-neutral-500">
+            <span className="hidden sm:inline">Crafted & Engineered by</span>
+            <span className="sm:hidden">By</span>
             <a
               href="https://ibrahim-nasser.vercel.app/"
               target="_blank"
               rel="noopener noreferrer"
-              className="group inline-flex items-center gap-1 font-mono font-bold text-black hover:text-neutral-600 transition-colors underline decoration-neutral-300 hover:decoration-black underline-offset-4"
-              title="Visit Ibrahim Nasser Portfolio"
+              className="group inline-flex items-center gap-1.5 px-3 py-1.5 bg-neutral-100 hover:bg-black text-black hover:text-white border border-neutral-300 hover:border-black rounded-xs font-mono text-[11px] font-bold transition-all duration-300 shadow-2xs hover:shadow-xs active:scale-95 cursor-pointer"
+              title="Visit Ibrahim Nasser's Portfolio"
             >
               <span>Ibrahim Nasser</span>
-              <ArrowUpRight className="w-3 h-3 text-neutral-400 group-hover:text-black group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+              <ArrowUpRight className="w-3.5 h-3.5 text-neutral-500 group-hover:text-white transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </a>
           </div>
 
+          {/* Back to Top */}
           <button
             type="button"
             onClick={scrollToTop}
-            className="group flex items-center gap-2 hover:text-black transition-colors cursor-pointer active:scale-95 px-3 py-1.5 border border-neutral-200 hover:border-black rounded-xs bg-neutral-50 hover:bg-white"
+            className="group flex items-center gap-2 hover:text-black transition-colors cursor-pointer active:scale-95 px-3.5 py-1.5 border border-neutral-200 hover:border-black rounded-xs bg-neutral-50 hover:bg-white"
           >
             <span className="tracking-widest uppercase font-medium">BACK TO TOP</span>
             <ArrowUp className="w-3.5 h-3.5 transition-transform duration-200 group-hover:-translate-y-0.5" />
