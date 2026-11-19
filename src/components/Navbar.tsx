@@ -4,7 +4,8 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { useLanguage } from "@/context/LanguageContext";
 import { DESIGNER_INFO } from "@/data/portfolioData";
-import { Menu, X, ArrowUpRight, MessageCircle, Minimize2, Maximize2 } from "lucide-react";
+import { Menu, X, ArrowUpRight, MessageCircle } from "lucide-react";
+import AudioNavButton from "@/components/AudioNavButton";
 
 interface NavbarProps {
   profile?: {
@@ -175,76 +176,20 @@ export default function Navbar({ profile }: NavbarProps) {
               })}
             </nav>
 
-            {/* Actions: Size Toggle + WhatsApp + CTA */}
-            <div className="hidden sm:flex items-center gap-2.5 sm:gap-3 2xl:gap-4 shrink-0">
-              {/* Compact / Shrink Mode Toggle Button */}
-              <button
-                type="button"
-                onClick={() => setIsCompact(!isCompact)}
-                className="w-8 h-8 sm:w-9 sm:h-9 2xl:w-10 2xl:h-10 rounded-sm border border-neutral-300 hover:border-black text-neutral-600 hover:text-black flex items-center justify-center transition-all duration-200 cursor-pointer active:scale-95"
-                title={isCompact ? "Expand to Full Navbar" : "Shrink to Compact Navbar"}
-              >
-                {isCompact ? (
-                  <Maximize2 className="w-3.5 h-3.5 transition-transform group-hover:scale-110" />
-                ) : (
-                  <Minimize2 className="w-3.5 h-3.5 transition-transform group-hover:scale-110" />
-                )}
-              </button>
-
-              {/* Quick WhatsApp Pill */}
-              <a
-                href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
-                  `Hello Eng. ${brandName}, I would like to inquire about booking an interior design consultation for my project.`
-                )}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-8 h-8 sm:w-9 sm:h-9 2xl:w-10 2xl:h-10 rounded-sm border border-neutral-300 hover:border-emerald-600 hover:text-emerald-600 flex items-center justify-center text-neutral-700 transition-all duration-200 hover:scale-105 active:scale-95"
-                title="WhatsApp Consultation"
-              >
-                <MessageCircle className="w-4 h-4 2xl:w-4.5 2xl:h-4.5" />
-              </a>
-
-              {/* Consultation Booking Button */}
-              <a
-                href="#contact"
-                className={`group ${
-                  isCompact ? "px-3.5 py-1.5 text-[10px]" : "px-5 2xl:px-6 py-2.5 2xl:py-3 text-[11px] 2xl:text-xs"
-                } bg-black hover:bg-neutral-800 text-white uppercase tracking-[0.16em] font-technical font-medium transition-all duration-200 flex items-center gap-1.5 shadow-xs hover:shadow-md active:scale-98`}
-              >
-                <span>Book Discovery</span>
-                <ArrowUpRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-              </a>
+            {/* Desktop Action: Ambient Monograph Audio Controller */}
+            <div className="hidden lg:flex items-center gap-3 shrink-0">
+              <AudioNavButton />
             </div>
 
-            {/* Mobile Controls */}
+            {/* Mobile Controls: Compact Audio Button + Hamburger */}
             <div className="flex items-center gap-2 lg:hidden">
-              {/* Compact Toggle Mobile */}
-              <button
-                type="button"
-                onClick={() => setIsCompact(!isCompact)}
-                className="p-1.5 border border-black/10 hover:border-black text-neutral-600 transition-colors"
-                title={isCompact ? "Expand" : "Shrink"}
-              >
-                {isCompact ? <Maximize2 className="w-4 h-4" /> : <Minimize2 className="w-4 h-4" />}
-              </button>
-              {/* Quick WhatsApp Pill Mobile */}
-              <a
-                href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
-                  `Hello Eng. ${brandName}, I would like to inquire about booking an interior design consultation.`
-                )}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-2 border border-black/10 hover:border-black text-emerald-600 transition-all duration-200 hover:scale-105 active:scale-95"
-                title="WhatsApp Consultation"
-              >
-                <MessageCircle className="w-5 h-5" />
-              </a>
+              <AudioNavButton showVolumeSlider={false} />
 
               {/* Hamburger Button */}
               <button
                 type="button"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="p-2 border border-black/10 hover:border-black text-black transition-colors"
+                className="p-2 border border-black/10 hover:border-black text-black transition-colors rounded-xs"
                 aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
               >
                 {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}

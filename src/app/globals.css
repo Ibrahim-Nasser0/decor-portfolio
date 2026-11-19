@@ -6,6 +6,10 @@
     --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Cairo', sans-serif;
   }
 
+  html {
+    scroll-behavior: smooth;
+  }
+
   html,
   body {
     font-family: var(--font-sans);
@@ -227,4 +231,41 @@
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+/* Luxury Ambient Sound Equalizer Waveform Animations */
+@keyframes soundwave1 {
+  0%, 100% { height: 4px; }
+  50% { height: 16px; }
+}
+
+@keyframes soundwave2 {
+  0%, 100% { height: 14px; }
+  50% { height: 6px; }
+}
+
+@keyframes soundwave3 {
+  0%, 100% { height: 7px; }
+  50% { height: 18px; }
+}
+
+@keyframes soundwave4 {
+  0%, 100% { height: 13px; }
+  50% { height: 5px; }
+}
+
+.animate-soundwave-1 {
+  animation: soundwave1 1.1s ease-in-out infinite;
+}
+
+.animate-soundwave-2 {
+  animation: soundwave2 0.85s ease-in-out infinite;
+}
+
+.animate-soundwave-3 {
+  animation: soundwave3 1.3s ease-in-out infinite;
+}
+
+.animate-soundwave-4 {
+  animation: soundwave4 0.95s ease-in-out infinite;
 }

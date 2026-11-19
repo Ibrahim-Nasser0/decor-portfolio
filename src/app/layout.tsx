@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { AudioProvider } from "@/context/AudioContext";
 
 export const metadata: Metadata = {
   title: "Alaa Issa | Interior Architecture & Design Portfolio",
@@ -33,7 +34,9 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-screen bg-white text-[#111111] antialiased selection:bg-black selection:text-white font-sans">
-        {children}
+        <AudioProvider>
+          {children}
+        </AudioProvider>
       </body>
     </html>
   );

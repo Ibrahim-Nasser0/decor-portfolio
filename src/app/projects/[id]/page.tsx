@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { getProjectById, getProjects } from "@/lib/dataRepository";
+import { getProjectById, getProjects, getDesignerProfile } from "@/lib/dataRepository";
 import ProjectDetailView from "@/components/ProjectDetailView";
 
 export const revalidate = 60;
@@ -38,11 +38,14 @@ export default async function ProjectPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const project = await getProjectById(id);
+  const [project, profile] = await Promise.all([
+    getProjectById(id),
+    getDesignerProfile(),
+  ]);
 
   if (!project) {
     notFound();
   }
 
-  return <ProjectDetailView project={project} />;
+  return <ProjectDetailView project={project} profile={profile} />;
 }
