@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { useLanguage } from "@/context/LanguageContext";
 import { DESIGNER_INFO } from "@/data/portfolioData";
-import { Menu, X, ArrowUpRight, MessageCircle } from "lucide-react";
+import { Menu, X, ArrowUpRight, MessageCircle, Music } from "lucide-react";
 import AudioNavButton from "@/components/AudioNavButton";
 
 interface NavbarProps {
@@ -98,9 +98,9 @@ export default function Navbar({ profile }: NavbarProps) {
         }`}
       >
         <div className="max-w-7xl 2xl:max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 2xl:px-12">
-          <div className="flex items-center justify-between gap-4">
+          <div className="flex items-center justify-between gap-3 sm:gap-4">
             {/* Brand Logo & Editorial Typography */}
-            <a href="#hero" className="flex items-center gap-2.5 sm:gap-3 2xl:gap-3.5 group shrink-0">
+            <a href="#hero" className="flex items-center gap-2 sm:gap-2.5 2xl:gap-3 group shrink-0 min-w-0">
               {/* Eng. Alaa Issa Portrait Avatar Icon */}
               <div
                 className={`relative ${
@@ -117,25 +117,25 @@ export default function Navbar({ profile }: NavbarProps) {
                 />
               </div>
 
-              <div className="flex flex-col">
+              <div className="flex flex-col min-w-0">
                 <div className="flex items-center gap-1.5 sm:gap-2">
                   <span
                     className={`${
                       isCompact
                         ? "text-xs sm:text-sm"
-                        : "text-sm sm:text-base md:text-lg 2xl:text-xl"
-                    } font-bold tracking-[0.12em] sm:tracking-[0.14em] text-black font-editorial uppercase leading-tight transition-all duration-300 group-hover:text-neutral-800`}
+                        : "text-xs sm:text-sm md:text-base 2xl:text-lg"
+                    } font-bold tracking-[0.12em] sm:tracking-[0.14em] text-black font-editorial uppercase leading-tight transition-all duration-300 group-hover:text-neutral-800 truncate`}
                   >
                     {brandName}
                   </span>
                   {/* Subtle pulsing live indicator */}
-                  <span className="relative flex h-2 w-2 items-center justify-center" title="Available for projects">
+                  <span className="relative flex h-2 w-2 items-center justify-center shrink-0" title="Available for projects">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#7AD1B8] opacity-75"></span>
                     <span className="relative inline-flex rounded-full h-2 w-2 bg-[#7AD1B8]"></span>
                   </span>
                 </div>
                 {!isCompact && (
-                  <span className="text-[8px] sm:text-[9px] md:text-[10px] 2xl:text-[11px] tracking-[0.16em] sm:tracking-[0.2em] text-neutral-500 uppercase font-technical font-medium">
+                  <span className="text-[8px] sm:text-[9px] md:text-[10px] 2xl:text-[11px] tracking-[0.16em] sm:tracking-[0.2em] text-neutral-500 uppercase font-technical font-medium truncate hidden xs:inline">
                     {brandSubtitle}
                   </span>
                 )}
@@ -143,14 +143,14 @@ export default function Navbar({ profile }: NavbarProps) {
             </a>
 
             {/* Desktop Navigation Links with Architectural Micro-Animations */}
-            <nav className="hidden lg:flex items-center gap-6 xl:gap-8 2xl:gap-10">
+            <nav className="hidden lg:flex items-center gap-4 xl:gap-7 2xl:gap-9">
               {navLinks.map((link) => {
                 const isActive = activeSection === link.id;
                 return (
                   <a
                     key={link.href}
                     href={link.href}
-                    className={`relative py-1 text-[11px] 2xl:text-xs uppercase tracking-[0.15em] 2xl:tracking-[0.18em] font-technical transition-all duration-200 group flex items-center gap-1.5 ${
+                    className={`relative py-1 text-[10px] xl:text-[11px] 2xl:text-xs uppercase tracking-[0.14em] 2xl:tracking-[0.18em] font-technical transition-all duration-200 group flex items-center gap-1.5 ${
                       isActive ? "text-black font-bold" : "text-neutral-500 hover:text-black"
                     }`}
                   >
@@ -182,14 +182,14 @@ export default function Navbar({ profile }: NavbarProps) {
             </div>
 
             {/* Mobile Controls: Compact Audio Button + Hamburger */}
-            <div className="flex items-center gap-2 lg:hidden">
+            <div className="flex items-center gap-2 lg:hidden shrink-0">
               <AudioNavButton showVolumeSlider={false} />
 
               {/* Hamburger Button */}
               <button
                 type="button"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="p-2 border border-black/10 hover:border-black text-black transition-colors rounded-xs"
+                className="p-2 border border-black/10 hover:border-black text-black transition-colors rounded-xs active:scale-95"
                 aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
               >
                 {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -255,6 +255,24 @@ export default function Navbar({ profile }: NavbarProps) {
 
           {/* Mobile Menu Footer Details */}
           <div className="pt-6 border-t border-neutral-200 space-y-4">
+            {/* Ambient Atmosphere Audio Controller */}
+            <div className="p-3 bg-neutral-50 border border-neutral-200/90 rounded-sm flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <div className="w-7 h-7 rounded-full bg-black text-white flex items-center justify-center shrink-0">
+                  <Music className="w-3.5 h-3.5" />
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-[11px] font-technical uppercase tracking-wider font-bold text-black">
+                    Atmosphere Audio
+                  </span>
+                  <span className="text-[9px] text-neutral-500 font-editorial">
+                    Erik Satie • Classical Piano
+                  </span>
+                </div>
+              </div>
+              <AudioNavButton showVolumeSlider={false} />
+            </div>
+
             <div className="flex items-center justify-between text-xs font-technical text-neutral-600">
               <div className="flex items-center gap-2.5">
                 <div className="relative w-7 h-7 rounded-full overflow-hidden border border-black/80 shrink-0">

@@ -30,6 +30,7 @@ import {
   Copy,
   Eye,
   CheckCircle2,
+  Music,
 } from "lucide-react";
 import Footer from "@/components/Footer";
 import AudioNavButton from "@/components/AudioNavButton";
@@ -209,25 +210,24 @@ export default function ProjectDetailView({ project, profile }: ProjectDetailVie
         }`}
       >
         <div className="max-w-7xl 2xl:max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 2xl:px-12">
-          <div className="flex items-center justify-between gap-3 sm:gap-4">
+          <div className="flex items-center justify-between gap-2 sm:gap-4">
             {/* Left: Back to Works + Brand Capsule with Portrait & Pulse Indicator */}
-            <div className="flex items-center gap-2.5 sm:gap-3.5 shrink-0">
+            <div className="flex items-center gap-1.5 sm:gap-3 shrink-0 min-w-0">
               <Link
                 href="/#projects"
-                className="group inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 border border-neutral-200 hover:border-black bg-neutral-50/80 hover:bg-black hover:text-white text-[10px] sm:text-xs font-technical uppercase tracking-wider text-neutral-700 transition-all duration-200 shrink-0 active:scale-95 shadow-2xs"
+                className="group inline-flex items-center gap-1 px-2 sm:px-3 py-1.5 border border-neutral-200 hover:border-black bg-neutral-50/80 hover:bg-black hover:text-white text-[10px] sm:text-xs font-technical uppercase tracking-wider text-neutral-700 transition-all duration-200 shrink-0 active:scale-95 shadow-2xs rounded-xs"
                 title="Return to Works Index"
               >
                 <ArrowLeft className="w-3.5 h-3.5 transition-transform duration-200 group-hover:-translate-x-1" />
-                <span className="hidden sm:inline">Back to Works</span>
-                <span className="sm:hidden">Works</span>
+                <span className="hidden xs:inline">Works</span>
               </Link>
 
-              <span className="h-4 w-px bg-neutral-300 hidden sm:inline-block" />
+              <span className="h-4 w-px bg-neutral-300 hidden sm:inline-block shrink-0" />
 
-              <Link href="/" className="flex items-center gap-2 sm:gap-2.5 group shrink-0">
+              <Link href="/" className="flex items-center gap-1.5 sm:gap-2.5 group shrink-0 min-w-0">
                 <div
                   className={`relative ${
-                    isCompact ? "w-7 h-7 sm:w-8 sm:h-8" : "w-8 h-8 sm:w-9 sm:h-9"
+                    isCompact ? "w-6 h-6 sm:w-8 sm:h-8" : "w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9"
                   } rounded-full overflow-hidden border border-black/80 bg-neutral-100 shadow-xs group-hover:ring-2 group-hover:ring-black transition-all duration-300 shrink-0 group-hover:scale-105`}
                 >
                   <Image
@@ -239,22 +239,22 @@ export default function ProjectDetailView({ project, profile }: ProjectDetailVie
                     className="object-cover object-top filter grayscale-15 group-hover:grayscale-0 transition-all duration-500"
                   />
                 </div>
-                <div className="flex flex-col">
+                <div className="flex flex-col min-w-0">
                   <div className="flex items-center gap-1.5">
                     <span
                       className={`${
                         isCompact ? "text-xs sm:text-sm" : "text-xs sm:text-sm md:text-base"
-                      } font-bold tracking-[0.12em] text-black font-editorial uppercase leading-tight group-hover:text-neutral-700 transition-colors`}
+                      } font-bold tracking-[0.12em] text-black font-editorial uppercase leading-tight group-hover:text-neutral-700 transition-colors truncate`}
                     >
                       {brandName}
                     </span>
-                    <span className="relative flex h-2 w-2 items-center justify-center" title="Available for projects">
+                    <span className="relative flex h-2 w-2 items-center justify-center shrink-0" title="Available for projects">
                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#7AD1B8] opacity-75"></span>
                       <span className="relative inline-flex rounded-full h-2 w-2 bg-[#7AD1B8]"></span>
                     </span>
                   </div>
                   {!isCompact && (
-                    <span className="text-[8px] sm:text-[9px] tracking-[0.16em] text-neutral-500 uppercase font-technical font-medium hidden md:inline">
+                    <span className="text-[8px] sm:text-[9px] tracking-[0.16em] text-neutral-500 uppercase font-technical font-medium truncate hidden md:inline">
                       {brandSubtitle}
                     </span>
                   )}
@@ -263,14 +263,14 @@ export default function ProjectDetailView({ project, profile }: ProjectDetailVie
             </div>
 
             {/* Center: Monograph Architectural Section Navigation (Desktop XL) */}
-            <nav className="hidden xl:flex items-center gap-6 2xl:gap-8">
+            <nav className="hidden xl:flex items-center gap-5 2xl:gap-8">
               {projectNavLinks.map((link) => {
                 const isActive = activeSection === link.id;
                 return (
                   <a
                     key={link.href}
                     href={link.href}
-                    className={`relative py-1 text-[11px] 2xl:text-xs uppercase tracking-[0.14em] font-technical transition-all duration-200 group flex items-center gap-1.5 ${
+                    className={`relative py-1 text-[10px] 2xl:text-xs uppercase tracking-[0.14em] font-technical transition-all duration-200 group flex items-center gap-1.5 ${
                       isActive ? "text-black font-bold" : "text-neutral-500 hover:text-black"
                     }`}
                   >
@@ -297,7 +297,7 @@ export default function ProjectDetailView({ project, profile }: ProjectDetailVie
             </nav>
 
             {/* Right: Ambient Audio Controller + Share Monograph + Mobile Controls */}
-            <div className="flex items-center gap-2 sm:gap-2.5 2xl:gap-3 shrink-0">
+            <div className="flex items-center gap-1.5 sm:gap-2.5 2xl:gap-3 shrink-0">
               {/* Desktop Ambient Audio Controller */}
               <div className="hidden sm:inline-flex">
                 <AudioNavButton />
@@ -307,7 +307,7 @@ export default function ProjectDetailView({ project, profile }: ProjectDetailVie
               <button
                 type="button"
                 onClick={handleCopyLink}
-                className="px-2.5 sm:px-3 py-1.5 sm:py-2 border border-neutral-300 hover:border-black rounded-sm text-neutral-700 hover:text-black text-[10px] sm:text-[11px] font-technical uppercase tracking-wider transition-all duration-200 flex items-center gap-1.5 active:scale-95 cursor-pointer bg-neutral-50 hover:bg-white shadow-2xs"
+                className="px-2 sm:px-3 py-1.5 sm:py-2 border border-neutral-300 hover:border-black rounded-sm text-neutral-700 hover:text-black text-[10px] sm:text-[11px] font-technical uppercase tracking-wider transition-all duration-200 flex items-center gap-1.5 active:scale-95 cursor-pointer bg-neutral-50 hover:bg-white shadow-2xs"
                 title="Share Monograph Link"
               >
                 {copiedLink ? (
@@ -331,10 +331,10 @@ export default function ProjectDetailView({ project, profile }: ProjectDetailVie
                 <button
                   type="button"
                   onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                  className="p-2 border border-black/10 hover:border-black text-black transition-colors rounded-xs"
+                  className="p-1.5 sm:p-2 border border-black/10 hover:border-black text-black transition-colors rounded-xs active:scale-95"
                   aria-label={mobileMenuOpen ? "Close section navigation" : "Open section navigation"}
                 >
-                  {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+                  {mobileMenuOpen ? <X className="w-4 h-4 sm:w-5 sm:h-5" /> : <Menu className="w-4 h-4 sm:w-5 sm:h-5" />}
                 </button>
               </div>
             </div>
@@ -383,6 +383,24 @@ export default function ProjectDetailView({ project, profile }: ProjectDetailVie
                   );
                 })}
               </nav>
+            </div>
+
+            {/* Atmosphere Audio Sound Controller in Mobile Drawer */}
+            <div className="p-3 bg-neutral-50 border border-neutral-200/90 rounded-sm flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <div className="w-7 h-7 rounded-full bg-black text-white flex items-center justify-center shrink-0">
+                  <Music className="w-3.5 h-3.5" />
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-[11px] font-technical uppercase tracking-wider font-bold text-black">
+                    Atmosphere Audio
+                  </span>
+                  <span className="text-[9px] text-neutral-500 font-editorial">
+                    Erik Satie • Classical Piano
+                  </span>
+                </div>
+              </div>
+              <AudioNavButton showVolumeSlider={false} />
             </div>
 
             <div className="pt-6 border-t border-neutral-200 space-y-3">
