@@ -12,6 +12,7 @@ import {
   MessageCircle,
   Building2,
   Compass,
+  FileDown,
 } from "lucide-react";
 import SocialLinks from "@/components/SocialIcons";
 
@@ -193,6 +194,20 @@ export default function Footer({ profile }: FooterProps) {
                 <Compass className="w-3 h-3 text-neutral-400 shrink-0" />
                 <span>30°02&apos;N 31°14&apos;E • CAIRO CLT (UTC+2)</span>
               </div>
+            </div>
+
+            {/* Architectural Monograph PDF Download Button */}
+            <div className="pt-2">
+              <a
+                href="/api/portfolio-pdf"
+                download="Alaa-Issa-Architectural-Portfolio-2026.pdf"
+                className="group inline-flex items-center gap-2.5 px-4 py-2.5 bg-neutral-900 hover:bg-black text-white rounded-sm border border-neutral-800 text-[11px] font-technical uppercase tracking-wider transition-all duration-300 hover:shadow-md active:scale-95"
+                title="Download Architectural Monograph (PDF)"
+              >
+                <FileDown className="w-4 h-4 text-[#7AD1B8] group-hover:scale-110 transition-transform" />
+                <span>Download Monograph (PDF)</span>
+                <span className="text-[9px] font-mono text-neutral-400">A4 • 2026</span>
+              </a>
             </div>
           </div>
 

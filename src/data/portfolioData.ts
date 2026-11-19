@@ -74,14 +74,14 @@ export const DESIGNER_INFO = {
     "As an Interior Architect and Designer, I am passionate about creating spaces that combine functionality, creativity, and aesthetic value. Throughout my professional journey, I have developed a strong foundation in space planning, material selection, lighting, bespoke furniture design, and 2D/3D visualization. I enjoy transforming ideas into thoughtful designs that reflect both the needs of the user and the character of the space.",
   
   aboutExperienceAr:
-    "أتاحت لي مسيرتي العمل على باقة متنوعة من المشاريع السكنية والتجارية الفاخرة، مما عزز قدرتي على مقاربة كل مشروع بحلول إبداعية مبتكرة، واهتمام دقيق بأدق التفاصيل، وإدارة للتنفيذ تحول المخططات إلى واقع حي يفوق التوقعات.",
+    "ممارسة مهنية مكرسة لتصميم الملاذات السكنية الراقية والمساحات التجارية المميزة، من خلال وضوح التخطيط المكاني، تفصيل الأثاث المخصص، والإشراف الدقيق على التنفيذ وتحويل المخططات إلى واقع حي.",
   aboutExperienceEn:
-    "My professional practice has allowed me to work on a variety of residential and commercial design projects, strengthening my ability to approach each space with creativity, attention to detail, and problem-solving skills. I am eager to continue growing and creating meaningful spaces that leave a lasting impact.",
+    "Dedicated to bespoke residential retreats and boutique commercial interiors, approaching each project through spatial clarity, tailored material palettes, and attentive turnkey execution.",
 
   statementAr:
-    "كمهندسة تصميم داخلي، أتميز بقدرتي على دمج التقنيات الهندسية المتقدمة مع الإحساس الفني الفطري لخلق فراغات تتسم بالجمال والراحة الوظيفية العالية. يتيح لي إدراكي الدقيق للتفاصيل وقدرتي على استشعار احتياجات الساكنين تحويل الأفكار المجردة إلى مفاهيم مبتكرة ومتماسكة.",
+    "دمج الدقة الهندسية المعمارية مع الحس الفني الفطري لابتكار فراغات هادئة، أصيلة، وخالدة تتجاوز الصيحات العابرة.",
   statementEn:
-    "As a designer, I stand out for my ability to combine advanced techniques with innate creativity to bring to life spaces that are both aesthetic and functional. My keen sense of detail and my capacity to anticipate users' needs allow me to transform abstract ideas into innovative and coherent concepts. Always in search of the latest trends and technologies, I fully invest myself in each project, prioritizing close and transparent collaboration with my clients to ensure a final result that exceeds expectations.",
+    "Merging structural engineering discipline with innate aesthetic poetry to craft serene, high-fidelity spaces that endure beyond fleeting trends.",
 
   experience: [
     {

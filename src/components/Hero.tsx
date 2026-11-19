@@ -103,8 +103,8 @@ export default function Hero({ profile, projectsCount = 5 }: HeroProps) {
       {/* Main Two-Column Composition: Text on LEFT, Portrait Photo on RIGHT */}
       <div className="max-w-7xl 2xl:max-w-[1536px] w-full mx-auto px-4 sm:px-6 lg:px-8 2xl:px-12 my-auto py-8 sm:py-12 lg:py-16 2xl:py-24">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 sm:gap-12 lg:gap-16 2xl:gap-24 items-center">
-          {/* Left Column (7 cols): Editorial Typography & Bio */}
-          <div className="lg:col-span-7 flex flex-col justify-center space-y-6 sm:space-y-7 2xl:space-y-9 order-1 lg:pe-6 2xl:pe-10">
+          {/* Left Column (7 cols on Desktop, 2nd on Mobile): Editorial Typography & Bio */}
+          <div className="lg:col-span-7 flex flex-col justify-center space-y-6 sm:space-y-7 2xl:space-y-9 order-2 lg:order-1 lg:pe-6 2xl:pe-10">
             <div className="space-y-2.5 sm:space-y-3 2xl:space-y-4">
               {/* Architectural Discipline Tagline */}
               <div className="animate-hero-entrance [animation-delay:200ms] flex items-center gap-2">
@@ -196,8 +196,8 @@ export default function Hero({ profile, projectsCount = 5 }: HeroProps) {
             </div>
           </div>
 
-          {/* Right Column (5 cols): Real Portrait Photo with Architectural Drafting Guides */}
-          <div className="lg:col-span-5 relative order-2 animate-hero-entrance [animation-delay:400ms]">
+          {/* Portrait Photo: 1st on Mobile, Right Column (5 cols) on Desktop */}
+          <div className="lg:col-span-5 relative order-1 lg:order-2 animate-hero-entrance [animation-delay:400ms]">
             <div className="relative mx-auto max-w-[290px] xs:max-w-xs sm:max-w-sm lg:max-w-none">
               {/* Outer architectural guide frame with Drafting Tick Marks (+) */}
               <div className="absolute -inset-3 sm:-inset-5 2xl:-inset-6 border border-neutral-300/80 -z-10 pointer-events-none transition-all duration-700">

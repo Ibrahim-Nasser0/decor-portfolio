@@ -16,6 +16,8 @@ import {
   Sliders,
   Layers,
   GraduationCap,
+  FileDown,
+  Briefcase,
 } from "lucide-react";
 
 interface AboutSectionProps {
@@ -44,7 +46,6 @@ export default function AboutSection({ profile }: AboutSectionProps) {
   const location = profile?.locationEn || DESIGNER_INFO.locationEn || "Cairo, Egypt";
   const email = profile?.email || DESIGNER_INFO.email;
   const whatsappNumber = profile?.whatsappNumber || DESIGNER_INFO.whatsappNumber;
-  const intro = profile?.aboutIntroEn || DESIGNER_INFO.aboutIntroEn;
   const experienceText = profile?.aboutExperienceEn || DESIGNER_INFO.aboutExperienceEn;
   const philosophyStatement = profile?.statementEn || DESIGNER_INFO.statementEn;
   const photoUrl = profile?.avatarUrl || "/images/alaa2.webp";
@@ -265,37 +266,38 @@ export default function AboutSection({ profile }: AboutSectionProps) {
                 }`}
               />
 
-              {/* Supabase Dynamic Narrative Paragraphs */}
-              <div className="space-y-3.5 sm:space-y-4 2xl:space-y-5 text-xs sm:text-sm 2xl:text-base text-neutral-700 leading-relaxed 2xl:leading-loose font-sans text-justify">
-                <p className="first-letter:text-2xl first-letter:font-editorial first-letter:font-bold first-letter:float-left first-letter:mr-2 first-letter:leading-none">
-                  {intro}
-                </p>
+              {/* Architectural Practice Narrative */}
+              <div className="text-xs sm:text-sm md:text-[14px] 2xl:text-base text-neutral-600 leading-relaxed font-sans">
                 <p>
                   {experienceText}
                 </p>
               </div>
             </div>
 
-            {/* Editorial Philosophy Statement Callout Card (From Supabase statementEn) */}
+            {/* Architectural Philosophy Manifesto */}
             {philosophyStatement && (
               <div
-                className={`relative p-5 sm:p-6 bg-neutral-50/90 border-l-2 border-black border-y border-r border-neutral-200 rounded-r-xl transition-all duration-700 ease-out delay-400 group hover:border-black shadow-xs ${
-                  isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+                className={`relative py-3.5 px-4 sm:px-5 bg-neutral-50/70 border-l-2 border-black border-y border-r border-neutral-200/80 rounded-xs transition-all duration-700 ease-out delay-300 group hover:border-black shadow-2xs ${
+                  isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
                 }`}
               >
-                <Quote className="w-5 h-5 text-neutral-400 mb-2 group-hover:text-black transition-colors" />
-                <p className="text-xs sm:text-sm font-sans italic text-neutral-800 leading-relaxed">
-                  &ldquo;{philosophyStatement}&rdquo;
-                </p>
-                <div className="mt-3 flex items-center justify-between text-[10px] font-mono tracking-widest text-neutral-500 uppercase">
-                  <span>— Eng. {name}</span>
-                  <span className="text-neutral-400">ARCHITECTURAL STATEMENT</span>
+                <div className="flex items-start gap-3">
+                  <Quote className="w-4 h-4 text-neutral-400 shrink-0 mt-0.5 group-hover:text-black transition-colors" />
+                  <div className="space-y-1.5 min-w-0">
+                    <p className="text-xs sm:text-[13px] 2xl:text-sm font-sans italic text-neutral-800 leading-relaxed">
+                      &ldquo;{philosophyStatement}&rdquo;
+                    </p>
+                    <div className="flex items-center justify-between text-[9px] sm:text-[10px] font-mono tracking-widest text-neutral-500 uppercase pt-0.5">
+                      <span className="font-semibold text-black">— Eng. {name}</span>
+                      <span className="text-neutral-400">ARCHITECTURAL STATEMENT</span>
+                    </div>
+                  </div>
                 </div>
               </div>
             )}
 
-            {/* 4 Architectural Core Pillars with Staggered Scroll Entrance */}
-            <div className="space-y-3 pt-2">
+            {/* 4 Architectural Core Pillars with Drafting Numbers */}
+            <div className="space-y-2.5 pt-1">
               <span className="text-[9px] sm:text-[10px] 2xl:text-xs font-mono uppercase tracking-[0.2em] text-neutral-400 block">
                 Foundational Principles
               </span>
@@ -304,19 +306,22 @@ export default function AboutSection({ profile }: AboutSectionProps) {
                 {pillars.map((pillar, idx) => (
                   <div
                     key={pillar.title}
-                    style={{ transitionDelay: `${450 + idx * 100}ms` }}
-                    className={`p-4 sm:p-5 2xl:p-6 bg-neutral-50/80 border border-neutral-200 rounded-xl space-y-2 transition-all duration-600 ease-out hover:border-black hover:bg-white hover:shadow-md hover:-translate-y-1 group ${
-                      isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+                    style={{ transitionDelay: `${350 + idx * 70}ms` }}
+                    className={`p-3.5 sm:p-4 2xl:p-5 bg-neutral-50/70 border border-neutral-200/90 rounded-xs space-y-1.5 transition-all duration-500 ease-out hover:border-black hover:bg-white hover:shadow-md hover:-translate-y-0.5 group ${
+                      isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
                     }`}
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <CheckCircle2 className="w-4 h-4 2xl:w-5 2xl:h-5 text-neutral-400 group-hover:text-black transition-colors shrink-0" />
+                        <span className="text-[10px] 2xl:text-xs font-mono font-bold text-neutral-400 group-hover:text-black transition-colors">
+                          0{idx + 1}
+                        </span>
+                        <span className="w-1.5 h-[1px] bg-neutral-300 group-hover:bg-black transition-colors" />
                         <h4 className="text-xs 2xl:text-sm font-technical font-bold uppercase tracking-wider text-black">
                           {pillar.title}
                         </h4>
                       </div>
-                      <span className="text-[8px] font-mono text-neutral-400 group-hover:text-neutral-700">
+                      <span className="text-[8px] font-mono uppercase tracking-widest text-neutral-400 group-hover:text-neutral-600">
                         {pillar.tag}
                       </span>
                     </div>
@@ -328,25 +333,63 @@ export default function AboutSection({ profile }: AboutSectionProps) {
               </div>
             </div>
 
-            {/* Action buttons with interactive hover micro-transitions */}
+            {/* Architectural Dual-Action Grid (Perfect Alignment with 2-Col Grid Above) */}
             <div
-              className={`pt-2 2xl:pt-4 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 2xl:gap-5 transition-all duration-700 ease-out delay-700 ${
+              className={`pt-2 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 2xl:gap-6 transition-all duration-700 ease-out delay-500 ${
                 isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
               }`}
             >
+              {/* Left Button: Download Monograph PDF */}
               <a
-                href="#skills"
-                className="group w-full sm:w-auto px-7 2xl:px-9 py-4 2xl:py-4.5 bg-black text-white text-xs 2xl:text-sm uppercase tracking-widest font-technical font-medium transition-all duration-300 flex items-center justify-center gap-2.5 shadow-md hover:bg-neutral-900 active:scale-[0.98]"
+                href="/api/portfolio-pdf"
+                download="Alaa-Issa-Architectural-Portfolio-2026.pdf"
+                className="group relative p-3.5 sm:p-4 bg-black hover:bg-neutral-900 text-white border border-black shadow-sm hover:shadow-lg transition-all duration-300 flex items-center justify-between active:scale-[0.98] overflow-hidden rounded-xs"
+                title="Download Architectural Monograph (PDF)"
               >
-                <span>View Skills & Toolset</span>
-                <ArrowUpRight className="w-4 h-4 2xl:w-5 2xl:h-5 text-neutral-400 group-hover:text-white group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" />
+                {/* Subtle sheen highlight */}
+                <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out pointer-events-none" />
+
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="w-8 h-8 rounded-full bg-white/10 border border-white/20 flex items-center justify-center shrink-0 group-hover:bg-[#7AD1B8] transition-colors duration-300">
+                    <FileDown className="w-4 h-4 text-[#7AD1B8] group-hover:text-black transition-colors duration-300" />
+                  </div>
+                  <div className="flex flex-col min-w-0">
+                    <span className="text-xs sm:text-[13px] font-technical uppercase tracking-[0.14em] font-bold text-white truncate">
+                      Download Portfolio
+                    </span>
+                    <span className="text-[9px] font-mono tracking-wider text-neutral-400 group-hover:text-neutral-300 transition-colors truncate">
+                      Monograph PDF • A4 2026
+                    </span>
+                  </div>
+                </div>
+
+                <div className="w-6 h-6 rounded-full border border-white/20 flex items-center justify-center shrink-0 group-hover:border-white transition-colors ms-2">
+                  <span className="text-xs text-neutral-300 group-hover:text-white transition-colors font-mono">↓</span>
+                </div>
               </a>
 
+              {/* Right Button: Career & Practice */}
               <a
                 href="#experience"
-                className="w-full sm:w-auto px-7 2xl:px-9 py-4 2xl:py-4.5 border border-black/30 hover:border-black text-black hover:bg-black hover:text-white text-xs 2xl:text-sm uppercase tracking-widest font-technical font-medium transition-all duration-300 text-center justify-center flex items-center active:scale-[0.98]"
+                className="group relative p-3.5 sm:p-4 bg-white hover:bg-black text-black hover:text-white border border-neutral-300 hover:border-black shadow-2xs hover:shadow-lg transition-all duration-300 flex items-center justify-between active:scale-[0.98] rounded-xs"
               >
-                Career & Experience
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="w-8 h-8 rounded-full bg-neutral-100 border border-neutral-200 flex items-center justify-center shrink-0 group-hover:bg-white/10 group-hover:border-white/20 transition-colors duration-300">
+                    <Briefcase className="w-4 h-4 text-neutral-700 group-hover:text-[#7AD1B8] transition-colors duration-300" />
+                  </div>
+                  <div className="flex flex-col min-w-0">
+                    <span className="text-xs sm:text-[13px] font-technical uppercase tracking-[0.14em] font-bold text-black group-hover:text-white transition-colors truncate">
+                      Career & Practice
+                    </span>
+                    <span className="text-[10px] font-mono tracking-wider text-neutral-500 group-hover:text-neutral-400 transition-colors truncate">
+                      Chronology & Skills
+                    </span>
+                  </div>
+                </div>
+
+                <div className="w-6 h-6 rounded-full border border-neutral-300 group-hover:border-white/40 flex items-center justify-center shrink-0 transition-colors ms-2">
+                  <ArrowUpRight className="w-3.5 h-3.5 text-neutral-500 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-200" />
+                </div>
               </a>
             </div>
           </div>
