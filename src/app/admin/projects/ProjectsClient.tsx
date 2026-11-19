@@ -24,6 +24,8 @@ import {
   Code,
   Smartphone,
   ShieldCheck,
+  Sliders,
+  ArrowLeftRight,
 } from 'lucide-react'
 import { Project } from '@/data/portfolioData'
 import { deleteProjectAction, saveProjectAction, duplicateProjectAction } from '../actions'
@@ -48,6 +50,8 @@ export default function ProjectsClient({ initialProjects }: { initialProjects: P
   // Modals & States
   const [projectToDelete, setProjectToDelete] = useState<Project | null>(null)
   const [isDeleting, setIsDeleting] = useState(false)
+  const [showCvModal, setShowCvModal] = useState(false)
+  const [swappingProjectId, setSwappingProjectId] = useState<string | null>(null)
   const [togglingFeaturedId, setTogglingFeaturedId] = useState<string | null>(null)
   const [togglingCvId, setTogglingCvId] = useState<string | null>(null)
   const [duplicatingId, setDuplicatingId] = useState<string | null>(null)
@@ -56,6 +60,33 @@ export default function ProjectsClient({ initialProjects }: { initialProjects: P
   // CV Projects Count & Limit Tracking (Max 4 Rule)
   const cvProjects = useMemo(() => projects.filter((p) => p.includeInCv !== false), [projects])
   const cvCount = cvProjects.length
+
+  // Swap CV Projects (1-Click Replacement)
+  async function handleSwapCv(targetProjectToAdd: Project, oldProjectToRemove: Project) {
+    const updatedOld = { ...oldProjectToRemove, includeInCv: false }
+    const updatedNew = { ...targetProjectToAdd, includeInCv: true }
+
+    const resOld = await saveProjectAction(updatedOld)
+    const resNew = await saveProjectAction(updatedNew)
+
+    if (resOld.success && resNew.success) {
+      setProjects((prev) =>
+        prev.map((p) => {
+          if (p.id === oldProjectToRemove.id) return updatedOld
+          if (p.id === targetProjectToAdd.id) return updatedNew
+          return p
+        })
+      )
+      setSwappingProjectId(null)
+      setStatusMessage({
+        type: 'success',
+        text: `Swapped CV slot: "${targetProjectToAdd.titleEn}" replaced "${oldProjectToRemove.titleEn}".`,
+      })
+      setTimeout(() => setStatusMessage(null), 3500)
+    } else {
+      setStatusMessage({ type: 'error', text: 'Failed to complete project swap' })
+    }
+  }
 
   // Duplicate Project (1-Click Clone)
   async function handleDuplicate(project: Project) {
@@ -265,6 +296,16 @@ export default function ProjectsClient({ initialProjects }: { initialProjects: P
               />
             ))}
           </div>
+
+          <button
+            type="button"
+            onClick={() => setShowCvModal(true)}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 border border-emerald-500/30 text-xs font-mono transition-all cursor-pointer active:scale-95"
+            title="Open CV Slots Manager Matrix"
+          >
+            <Sliders className="w-3.5 h-3.5" />
+            <span>Manage 4 Slots</span>
+          </button>
 
           <a
             href="/api/cv-pdf"
@@ -909,6 +950,202 @@ export default function ProjectsClient({ initialProjects }: { initialProjects: P
                 ) : (
                   <span>Delete Project</span>
                 )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* CV Showcase Manager Matrix Modal */}
+      {showCvModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-fade-in overflow-y-auto">
+          <div className="w-full max-w-3xl bg-[#121316] border border-white/[0.1] rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6 my-8">
+            <div className="flex items-center justify-between pb-4 border-b border-white/[0.08]">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+                  <FileText className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="text-base font-semibold text-white flex items-center gap-2">
+                    <span>LaTeX CV Showcase Matrix</span>
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-bold">
+                      {cvCount} / 4 Slots
+                    </span>
+                  </h3>
+                  <p className="text-xs text-neutral-400 font-mono">
+                    Precisely 4 projects typeset on the LaTeX PDF CV. Easily swap or replace.
+                  </p>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setShowCvModal(false)
+                  setSwappingProjectId(null)
+                }}
+                className="p-2 text-neutral-400 hover:text-white rounded-xl bg-white/[0.03] border border-white/[0.08] cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Active 4 Slots Grid */}
+            <div className="space-y-3">
+              <span className="text-[10px] font-mono uppercase tracking-wider text-neutral-400 block">
+                Active CV Slots (1 to 4):
+              </span>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {[0, 1, 2, 3].map((slotIdx) => {
+                  const p = cvProjects[slotIdx]
+                  return (
+                    <div
+                      key={slotIdx}
+                      className={`p-3.5 rounded-2xl border transition-all ${
+                        p
+                          ? 'bg-[#090a0c] border-emerald-500/30'
+                          : 'bg-white/[0.01] border-dashed border-white/10 flex items-center justify-center min-h-[90px]'
+                      }`}
+                    >
+                      {p ? (
+                        <div className="flex items-center justify-between gap-3">
+                          <div className="flex items-center gap-3 min-w-0">
+                            <div className="relative w-14 h-14 rounded-xl overflow-hidden border border-white/10 shrink-0 bg-neutral-900">
+                              <Image
+                                src={p.coverImage}
+                                alt={p.titleEn}
+                                fill
+                                sizes="56px"
+                                className="object-cover"
+                              />
+                              <div className="absolute top-1 left-1 bg-black/80 px-1 py-0.5 rounded text-[8px] font-mono text-emerald-400 font-bold">
+                                #{slotIdx + 1}
+                              </div>
+                            </div>
+                            <div className="min-w-0">
+                              <div className="text-xs font-semibold text-white truncate">
+                                {p.titleEn}
+                              </div>
+                              <div className="text-[10px] text-neutral-400 font-mono truncate">
+                                {p.categoryLabelEn || p.category} • {p.year}
+                              </div>
+                            </div>
+                          </div>
+
+                          <button
+                            type="button"
+                            onClick={() => handleToggleCv(p)}
+                            className="p-1.5 text-neutral-400 hover:text-red-400 hover:bg-red-950/30 rounded-lg transition-colors cursor-pointer shrink-0"
+                            title="Remove from CV"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="text-center py-2">
+                          <span className="text-xs font-mono text-neutral-500">
+                            Slot #{slotIdx + 1} Empty
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+
+            {/* Available Projects to Swap or Add */}
+            <div className="space-y-3 pt-3 border-t border-white/[0.08]">
+              <span className="text-[10px] font-mono uppercase tracking-wider text-neutral-400 block">
+                Other Portfolio Works (1-Click Add or Swap):
+              </span>
+              <div className="max-h-60 overflow-y-auto space-y-2 pr-1 scrollbar-none">
+                {projects
+                  .filter((p) => p.includeInCv === false)
+                  .map((p) => (
+                    <div
+                      key={p.id}
+                      className="p-3 bg-[#090a0c] border border-white/[0.06] rounded-2xl flex items-center justify-between gap-3 hover:border-white/20 transition-colors"
+                    >
+                      <div className="flex items-center gap-3 min-w-0">
+                        <div className="relative w-10 h-10 rounded-xl overflow-hidden border border-white/10 shrink-0 bg-neutral-900">
+                          <Image src={p.coverImage} alt={p.titleEn} fill sizes="40px" className="object-cover" />
+                        </div>
+                        <div className="min-w-0">
+                          <div className="text-xs font-medium text-white truncate">{p.titleEn}</div>
+                          <div className="text-[10px] text-neutral-500 font-mono truncate">
+                            {p.categoryLabelEn || p.category}
+                          </div>
+                        </div>
+                      </div>
+
+                      {cvCount < 4 ? (
+                        <button
+                          type="button"
+                          onClick={() => handleToggleCv(p)}
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 border border-emerald-500/30 text-xs font-mono transition-all cursor-pointer"
+                        >
+                          <Plus className="w-3 h-3" />
+                          <span>Add to CV</span>
+                        </button>
+                      ) : swappingProjectId === p.id ? (
+                        <div className="flex items-center gap-1">
+                          <span className="text-[9px] font-mono text-neutral-400 mr-1">Replace:</span>
+                          {cvProjects.slice(0, 4).map((oldP, idx) => (
+                            <button
+                              key={oldP.id}
+                              type="button"
+                              onClick={() => handleSwapCv(p, oldP)}
+                              className="px-2 py-1 rounded bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-[10px] font-mono font-bold transition-all cursor-pointer"
+                              title={`Replace ${oldP.titleEn}`}
+                            >
+                              #{idx + 1}
+                            </button>
+                          ))}
+                          <button
+                            type="button"
+                            onClick={() => setSwappingProjectId(null)}
+                            className="p-1 text-neutral-500 hover:text-white"
+                          >
+                            ✕
+                          </button>
+                        </div>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={() => setSwappingProjectId(p.id)}
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] text-neutral-300 hover:text-white border border-white/[0.08] text-xs font-mono transition-all cursor-pointer"
+                        >
+                          <ArrowLeftRight className="w-3 h-3 text-amber-400" />
+                          <span>Swap into CV</span>
+                        </button>
+                      )}
+                    </div>
+                  ))}
+              </div>
+            </div>
+
+            {/* Modal Bottom Strip */}
+            <div className="flex items-center justify-between pt-4 border-t border-white/[0.08]">
+              <a
+                href="/api/cv-pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 text-xs font-mono text-emerald-400 hover:underline"
+              >
+                <span>Preview compiled LaTeX PDF</span>
+                <ExternalLink className="w-3.5 h-3.5" />
+              </a>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setShowCvModal(false)
+                  setSwappingProjectId(null)
+                }}
+                className="px-4 py-2 rounded-xl bg-white text-neutral-950 font-semibold text-xs font-mono cursor-pointer"
+              >
+                Done
               </button>
             </div>
           </div>

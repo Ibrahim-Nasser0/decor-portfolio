@@ -258,21 +258,27 @@ export default function InquiriesClient({ initialInquiries }: { initialInquiries
                     </div>
                   </div>
 
-                  {/* Status Dropdown */}
-                  <div className="flex items-center gap-2 self-start sm:self-center">
-                    <span className="text-[10px] font-mono text-neutral-400 uppercase">
-                      Status:
-                    </span>
-                    <select
-                      value={inq.status}
-                      onChange={(e) => handleStatusChange(inq.id, e.target.value as any)}
-                      className="bg-[#090a0c] border border-white/[0.08] focus:border-amber-500/60 text-neutral-300 rounded-xl px-3 py-1.5 text-xs font-mono focus:outline-none cursor-pointer"
-                    >
-                      <option value="new">● New (Unread)</option>
-                      <option value="contacted">● Contacted</option>
-                      <option value="quoted">● Proposal Sent</option>
-                      <option value="archived">● Archive</option>
-                    </select>
+                  {/* 1-Tap Touch Status Pipeline Chips (Mobile First) */}
+                  <div className="flex items-center gap-1.5 flex-wrap self-start sm:self-center">
+                    {[
+                      { key: 'new', label: 'New', color: 'hover:border-amber-500/50', active: 'bg-amber-500/20 text-amber-300 border-amber-500/60 font-bold' },
+                      { key: 'contacted', label: 'Contacted', color: 'hover:border-sky-500/50', active: 'bg-sky-500/20 text-sky-300 border-sky-500/60 font-bold' },
+                      { key: 'quoted', label: 'Quoted', color: 'hover:border-purple-500/50', active: 'bg-purple-500/20 text-purple-300 border-purple-500/60 font-bold' },
+                      { key: 'archived', label: 'Archived', color: 'hover:border-neutral-500/50', active: 'bg-white/[0.08] text-neutral-300 border-white/20 font-bold' },
+                    ].map((st) => (
+                      <button
+                        key={st.key}
+                        type="button"
+                        onClick={() => handleStatusChange(inq.id, st.key as any)}
+                        className={`px-2.5 py-1 rounded-lg text-[10px] font-mono border transition-all cursor-pointer active:scale-95 ${
+                          inq.status === st.key
+                            ? st.active
+                            : `bg-white/[0.02] text-neutral-400 border-white/[0.06] ${st.color} hover:text-white`
+                        }`}
+                      >
+                        {st.label}
+                      </button>
+                    ))}
                   </div>
                 </div>
 

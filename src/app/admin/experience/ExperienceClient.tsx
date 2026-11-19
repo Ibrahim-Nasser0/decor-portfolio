@@ -297,11 +297,8 @@ export default function ExperienceClient({ initialProfile }: { initialProfile: a
                 {
                   year: '2024 – 2025',
                   titleEn: 'Advanced Diploma in Lighting & Millwork',
-                  titleAr: 'دبلوم متقدم في هندسة الإضاءة وتفاصيل النجارة',
                   institutionEn: 'Institute of Architecture',
-                  institutionAr: 'المعهد المعماري',
                   descEn: 'Focusing on circadian lighting and joinery.',
-                  descAr: 'تخصص في الإضاءة الإيقاعية والتنفيذ الموقعي.',
                 },
               ])
             }

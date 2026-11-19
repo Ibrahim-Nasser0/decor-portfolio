@@ -26,6 +26,7 @@ import { saveProfileAction } from '../actions'
 import UnsavedChangesBar from '@/components/admin/UnsavedChangesBar'
 import { calculateYearsOfExperience, calculateBuiltWorks } from '@/lib/metrics'
 import { DESIGNER_INFO } from '@/data/portfolioData'
+import { compressImage } from '@/lib/imageCompression'
 
 export default function HeroClient({
   initialProfile,
@@ -50,13 +51,14 @@ export default function HeroClient({
 
   // Handle Hero Portrait Upload to Supabase Storage (profile-media)
   const handleHeroUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (!file) return
+    const rawFile = e.target.files?.[0]
+    if (!rawFile) return
 
     try {
       setIsUploadingHero(true)
+      const file = await compressImage(rawFile)
       const supabase = createClient()
-      const ext = file.name.split('.').pop()
+      const ext = file.name.split('.').pop() || 'webp'
       const fileName = `hero-portrait-${Date.now()}.${ext}`
 
       let bucket = 'profile-media'

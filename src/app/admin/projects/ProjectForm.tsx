@@ -25,18 +25,33 @@ import {
   ChevronLeft,
   ChevronRight,
   Building2,
+  Lock,
+  Unlock,
+  RefreshCw,
 } from 'lucide-react'
 import { Project, ProjectSpecs, MaterialSwatch, ProjectAngle } from '@/data/portfolioData'
 import { saveProjectAction } from '../actions'
 import { createClient } from '@/lib/supabase/client'
 import UnsavedChangesBar from '@/components/admin/UnsavedChangesBar'
+import { compressImage } from '@/lib/imageCompression'
 
 const CATEGORY_OPTIONS = [
-  { value: 'living', labelEn: 'Living & Lounges', labelAr: 'صالونات ومعيشة' },
-  { value: 'bedroom', labelEn: 'Master Bedrooms', labelAr: 'أجنحة النوم' },
-  { value: 'kitchen', labelEn: 'Kitchens & Baths', labelAr: 'مطابخ وحمامات' },
-  { value: 'commercial', labelEn: 'Commercial & Retail', labelAr: 'تجاري وإداري' },
-  { value: 'villas', labelEn: 'Private Luxury Villas', labelAr: 'فلل وقصور خاصة' },
+  { value: 'living', labelEn: 'Living & Lounges' },
+  { value: 'bedroom', labelEn: 'Master Bedrooms' },
+  { value: 'kitchen', labelEn: 'Kitchens & Baths' },
+  { value: 'commercial', labelEn: 'Commercial & Retail' },
+  { value: 'villas', labelEn: 'Private Luxury Villas' },
+]
+
+export const ARCHITECTURAL_SWATCH_PRESETS = [
+  { nameEn: 'Travertine Navona', color: '#E7E3DC', finishEn: 'Honed & Unfilled Slab' },
+  { nameEn: 'Smoked Oak Millwork', color: '#4A3A2C', finishEn: 'Matte Polyurethane Fluting' },
+  { nameEn: 'Brushed Brass Metalwork', color: '#D4AF37', finishEn: 'Satin Electroplated PVD' },
+  { nameEn: 'Bouclé Cream Fabric', color: '#F4F0EA', finishEn: 'High-Density Acoustic Weave' },
+  { nameEn: 'Calacatta Paonazzo Marble', color: '#F8F8F6', finishEn: 'Bookmatched Polished Slab' },
+  { nameEn: 'Gunmetal Anodized Metal', color: '#1E1E20', finishEn: 'Sandblasted Architectural Trim' },
+  { nameEn: 'Grigio Ceppo Terrazzo', color: '#8C857B', finishEn: 'Micro-Grain Aggregated Tile' },
+  { nameEn: 'Cashmere Limewash', color: '#C8B9A6', finishEn: 'Hand-Troweled Mineral Plaster' },
 ]
 
 export default function ProjectForm({
@@ -50,7 +65,9 @@ export default function ProjectForm({
   const [activeTab, setActiveTab] = useState<'general' | 'media' | 'story' | 'specs' | 'materials' | 'angles'>('general')
   const [isSaving, setIsSaving] = useState(false)
   const [isUploading, setIsUploading] = useState(false)
+  const [uploadProgress, setUploadProgress] = useState<{ current: number; total: number } | null>(null)
   const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
+  const [isSlugManual, setIsSlugManual] = useState(!isNew && Boolean(initialProject?.id))
   
   // Interactive Slider Preview in Tab 2
   const [sliderPos, setSliderPos] = useState(50)
@@ -58,23 +75,23 @@ export default function ProjectForm({
   // Form State
   const [formData, setFormData] = useState<Project>({
     id: initialProject?.id || '',
-    title: initialProject?.title || '',
-    titleEn: initialProject?.titleEn || '',
+    title: initialProject?.title || initialProject?.titleEn || '',
+    titleEn: initialProject?.titleEn || initialProject?.title || '',
     category: (initialProject?.category as any) || 'living',
-    categoryLabel: initialProject?.categoryLabel || 'صالونات ومعيشة',
-    categoryLabelEn: initialProject?.categoryLabelEn || 'Living & Lounges',
+    categoryLabel: initialProject?.categoryLabel || initialProject?.categoryLabelEn || 'Living & Lounges',
+    categoryLabelEn: initialProject?.categoryLabelEn || initialProject?.categoryLabel || 'Living & Lounges',
     firmEn: initialProject?.firmEn || (initialProject?.specs as any)?.firmEn || 'Freelance Practice',
     coverImage: initialProject?.coverImage || '',
     gallery: initialProject?.gallery || [],
     beforeImage: initialProject?.beforeImage || '',
-    location: initialProject?.location || '',
-    locationEn: initialProject?.locationEn || '',
+    location: initialProject?.location || initialProject?.locationEn || '',
+    locationEn: initialProject?.locationEn || initialProject?.location || '',
     year: initialProject?.year || '2026',
     area: initialProject?.area || '',
-    style: initialProject?.style || '',
-    styleEn: initialProject?.styleEn || '',
-    description: initialProject?.description || '',
-    descriptionEn: initialProject?.descriptionEn || '',
+    style: initialProject?.style || initialProject?.styleEn || '',
+    styleEn: initialProject?.styleEn || initialProject?.style || '',
+    description: initialProject?.description || initialProject?.descriptionEn || '',
+    descriptionEn: initialProject?.descriptionEn || initialProject?.description || '',
     palette: initialProject?.palette || ['#E7E3DC', '#4A3A2C', '#A2907D'],
     features: initialProject?.features || [],
     featuresEn: initialProject?.featuresEn || [],
@@ -122,59 +139,148 @@ export default function ProjectForm({
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [formData])
 
+  // Navigation Guard: Warn user before leaving page with unsaved modifications
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (isDirty) {
+        e.preventDefault()
+        e.returnValue = ''
+      }
+    }
+    window.addEventListener('beforeunload', handleBeforeUnload)
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload)
+  }, [isDirty])
+
+  // Helper: Slug generator
+  const generateSlugFromTitle = (title: string) => {
+    return title
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/(^-|-$)/g, '')
+  }
+
+  // Handle Title English Change with Auto-Slug
+  const handleTitleEnChange = (titleVal: string) => {
+    setFormData((prev) => {
+      const updated = {
+        ...prev,
+        titleEn: titleVal,
+        title: titleVal,
+      }
+      if (isNew && !isSlugManual) {
+        updated.id = generateSlugFromTitle(titleVal)
+      }
+      return updated
+    })
+  }
+
+  // Handle Manual Slug Override
+  const handleManualSlugChange = (rawSlug: string) => {
+    setIsSlugManual(true)
+    const cleaned = rawSlug.toLowerCase().replace(/[^a-z0-9-]/g, '-')
+    setFormData((prev) => ({ ...prev, id: cleaned }))
+  }
+
+  // Reset Slug to Auto-Derivation
+  const resetSlugToAuto = () => {
+    setIsSlugManual(false)
+    const auto = generateSlugFromTitle(formData.titleEn)
+    setFormData((prev) => ({ ...prev, id: auto }))
+  }
+
   // Handle Category Change
   const handleCategoryChange = (catValue: string) => {
     const match = CATEGORY_OPTIONS.find((c) => c.value === catValue)
     setFormData((prev) => ({
       ...prev,
       category: catValue as any,
-      categoryLabel: match?.labelAr || '',
+      categoryLabel: match?.labelEn || '',
       categoryLabelEn: match?.labelEn || '',
     }))
   }
 
-  // Handle Supabase Storage Image Upload
+  // Handle Supabase Storage Image Upload (Supports Multi-File Batch for Gallery)
   const handleFileUpload = async (
     e: React.ChangeEvent<HTMLInputElement>,
     targetField: 'coverImage' | 'beforeImage' | 'gallery'
   ) => {
-    const file = e.target.files?.[0]
-    if (!file) return
+    const files = e.target.files
+    if (!files || files.length === 0) return
 
     try {
       setIsUploading(true)
       const supabase = createClient()
-      const ext = file.name.split('.').pop()
-      const fileName = `${formData.id || 'project'}-${Date.now()}.${ext}`
-      const filePath = `projects/${fileName}`
-
-      // Try dedicated project-media bucket, fallback to portfolio-media
-      let bucket = 'project-media'
-      let uploadRes = await supabase.storage
-        .from(bucket)
-        .upload(filePath, file, { upsert: true })
-
-      if (uploadRes.error) {
-        bucket = 'portfolio-media'
-        uploadRes = await supabase.storage
-          .from(bucket)
-          .upload(filePath, file, { upsert: true })
-      }
-
-      if (uploadRes.error) throw uploadRes.error
-
-      const {
-        data: { publicUrl },
-      } = supabase.storage.from(bucket).getPublicUrl(filePath)
 
       if (targetField === 'gallery') {
-        setFormData((prev) => ({ ...prev, gallery: [...prev.gallery, publicUrl] }))
-      } else {
-        setFormData((prev) => ({ ...prev, [targetField]: publicUrl }))
-      }
+        const fileList = Array.from(files)
+        const total = fileList.length
+        setUploadProgress({ current: 0, total })
+        const uploadedUrls: string[] = []
 
-      setFeedback({ type: 'success', text: 'Image uploaded to Supabase Storage successfully!' })
-      setTimeout(() => setFeedback(null), 3000)
+        for (let i = 0; i < total; i++) {
+          const rawFile = fileList[i]
+          setUploadProgress({ current: i + 1, total })
+          const file = await compressImage(rawFile)
+          const ext = file.name.split('.').pop() || 'webp'
+          const fileName = `${formData.id || 'project'}-${Date.now()}-${i + 1}.${ext}`
+          const filePath = `projects/${fileName}`
+
+          let bucket = 'project-media'
+          let uploadRes = await supabase.storage
+            .from(bucket)
+            .upload(filePath, file, { upsert: true })
+
+          if (uploadRes.error) {
+            bucket = 'portfolio-media'
+            uploadRes = await supabase.storage
+              .from(bucket)
+              .upload(filePath, file, { upsert: true })
+          }
+
+          if (uploadRes.error) throw uploadRes.error
+
+          const {
+            data: { publicUrl },
+          } = supabase.storage.from(bucket).getPublicUrl(filePath)
+          uploadedUrls.push(publicUrl)
+        }
+
+        setFormData((prev) => ({ ...prev, gallery: [...prev.gallery, ...uploadedUrls] }))
+        setFeedback({
+          type: 'success',
+          text: `Successfully uploaded ${uploadedUrls.length} ${uploadedUrls.length === 1 ? 'render' : 'renders'} to cloud!`,
+        })
+        setTimeout(() => setFeedback(null), 3500)
+      } else {
+        const rawFile = files[0]
+        const file = await compressImage(rawFile)
+        const ext = file.name.split('.').pop() || 'webp'
+        const fileName = `${formData.id || 'project'}-${Date.now()}.${ext}`
+        const filePath = `projects/${fileName}`
+
+        let bucket = 'project-media'
+        let uploadRes = await supabase.storage
+          .from(bucket)
+          .upload(filePath, file, { upsert: true })
+
+        if (uploadRes.error) {
+          bucket = 'portfolio-media'
+          uploadRes = await supabase.storage
+            .from(bucket)
+            .upload(filePath, file, { upsert: true })
+        }
+
+        if (uploadRes.error) throw uploadRes.error
+
+        const {
+          data: { publicUrl },
+        } = supabase.storage.from(bucket).getPublicUrl(filePath)
+
+        setFormData((prev) => ({ ...prev, [targetField]: publicUrl }))
+        setFeedback({ type: 'success', text: 'Image uploaded to Supabase Storage successfully!' })
+        setTimeout(() => setFeedback(null), 3000)
+      }
     } catch (err: any) {
       setFeedback({
         type: 'error',
@@ -182,6 +288,8 @@ export default function ProjectForm({
       })
     } finally {
       setIsUploading(false)
+      setUploadProgress(null)
+      e.target.value = ''
     }
   }
 
@@ -197,11 +305,22 @@ export default function ProjectForm({
     }
 
     setIsSaving(true)
-    const res = await saveProjectAction(formData)
+    const payloadToSave: Project = {
+      ...formData,
+      // Seamlessly populate database fallback fields with clean English values
+      title: formData.titleEn,
+      location: formData.locationEn || '',
+      description: formData.descriptionEn || '',
+      categoryLabel: formData.categoryLabelEn || formData.category,
+      style: formData.styleEn || '',
+    }
+
+    const res = await saveProjectAction(payloadToSave)
     setIsSaving(false)
 
     if (res.success) {
-      setInitialData(formData)
+      setInitialData(payloadToSave)
+      setFormData(payloadToSave)
       setFeedback({ type: 'success', text: `Project "${formData.titleEn}" saved successfully!` })
       if (isNew) {
         setTimeout(() => router.push(`/admin/projects/${formData.id}`), 1000)
@@ -216,38 +335,40 @@ export default function ProjectForm({
   return (
     <div className="space-y-8 animate-fade-in">
       {/* Top Sticky Header */}
-      <div className="sticky top-0 z-30 bg-[#090a0c]/90 backdrop-blur-xl -mx-6 sm:-mx-8 lg:-mx-10 px-6 sm:px-8 lg:px-10 py-4 border-b border-white/[0.08] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div className="flex items-center gap-4">
+      <div className="sticky top-[57px] lg:top-0 z-30 bg-[#090a0c]/95 backdrop-blur-xl -mx-4 sm:-mx-8 lg:-mx-10 px-4 sm:px-8 lg:px-10 py-3 sm:py-4 border-b border-white/[0.08] flex items-center justify-between gap-3">
+        <div className="flex items-center gap-2.5 sm:gap-4 min-w-0">
           <Link
             href="/admin/projects"
-            className="p-2.5 bg-white/[0.03] hover:bg-white/[0.08] text-neutral-400 hover:text-white rounded-xl border border-white/[0.08] transition-colors"
+            className="p-2 sm:p-2.5 bg-white/[0.03] hover:bg-white/[0.08] text-neutral-400 hover:text-white rounded-xl border border-white/[0.08] transition-colors shrink-0"
+            title="Back to Projects"
           >
             <ArrowLeft className="w-4 h-4" />
           </Link>
-          <div>
+          <div className="min-w-0">
             <div className="flex items-center gap-2">
-              <span className="text-[10px] tracking-[0.2em] font-mono text-amber-500 uppercase">
-                {isNew ? 'New Entry' : 'Editing Monograph Entry'}
+              <span className="text-[9px] sm:text-[10px] tracking-[0.2em] font-mono text-amber-500 uppercase">
+                {isNew ? 'New Entry' : 'Editing Monograph'}
               </span>
-              <span className="text-[10px] font-mono text-neutral-400 hidden sm:inline">
+              <span className="text-[10px] font-mono text-neutral-500 hidden sm:inline">
                 (Press Ctrl+S to save)
               </span>
             </div>
-            <h1 className="text-lg sm:text-xl font-serif text-white tracking-wide truncate max-w-md">
-              {formData.titleEn || 'Untitled Architectural Project'}
+            <h1 className="text-sm sm:text-lg lg:text-xl font-serif text-white tracking-wide truncate max-w-[180px] sm:max-w-md">
+              {formData.titleEn || 'Untitled Project'}
             </h1>
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
           {!isNew && (
             <Link
               href={`/projects/${formData.id}`}
               target="_blank"
-              className="inline-flex items-center gap-2 px-3 py-2 bg-white/[0.03] hover:bg-white/[0.08] text-neutral-300 hover:text-white rounded-xl text-xs font-mono border border-white/[0.08] transition-colors"
+              className="inline-flex items-center gap-1.5 p-2 sm:px-3 sm:py-2 bg-white/[0.03] hover:bg-white/[0.08] text-neutral-300 hover:text-white rounded-xl text-xs font-mono border border-white/[0.08] transition-colors"
+              title="Open Live Public View"
             >
               <ExternalLink className="w-3.5 h-3.5 text-amber-400" />
-              <span>Live View</span>
+              <span className="hidden sm:inline">Live View</span>
             </Link>
           )}
 
@@ -255,17 +376,17 @@ export default function ProjectForm({
             type="button"
             onClick={handleSaveProject}
             disabled={isSaving}
-            className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-200 via-white to-amber-100 hover:from-white hover:to-amber-50 text-neutral-950 font-semibold px-5 py-2.5 rounded-xl text-xs uppercase tracking-wider transition-all shadow-lg shadow-amber-950/20 active:scale-95 cursor-pointer disabled:opacity-50"
+            className="inline-flex items-center gap-1.5 sm:gap-2 bg-gradient-to-r from-amber-200 via-white to-amber-100 hover:from-white hover:to-amber-50 text-neutral-950 font-semibold px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-xl text-[11px] sm:text-xs uppercase tracking-wider transition-all shadow-lg shadow-amber-950/20 active:scale-95 cursor-pointer disabled:opacity-50"
           >
             {isSaving ? (
               <>
-                <Loader2 className="w-4 h-4 animate-spin text-neutral-900" />
-                <span>Saving...</span>
+                <Loader2 className="w-3.5 h-3.5 animate-spin text-neutral-900" />
+                <span className="hidden sm:inline">Saving...</span>
               </>
             ) : (
               <>
-                <Save className="w-4 h-4" />
-                <span>Save Project</span>
+                <Save className="w-3.5 h-3.5" />
+                <span>Save<span className="hidden sm:inline"> Project</span></span>
               </>
             )}
           </button>
@@ -295,35 +416,41 @@ export default function ProjectForm({
         </div>
       )}
 
-      {/* Tabs Navigation */}
-      <div className="flex items-center gap-2 border-b border-white/[0.08] overflow-x-auto pb-2 no-scrollbar">
-        {[
-          { id: 'general', label: '1. General Info', icon: FileText },
-          { id: 'media', label: '2. Media & Gallery', icon: ImageIcon },
-          { id: 'story', label: '3. Narrative & Story', icon: BookOpen },
-          { id: 'specs', label: '4. Technical Specs', icon: Sliders },
-          { id: 'materials', label: '5. Materials & Swatches', icon: Palette },
-          { id: 'angles', label: '6. Angles & CAD', icon: Layers },
-        ].map((tab) => {
-          const Icon = tab.icon
-          const isActive = activeTab === tab.id
+      {/* Tabs Navigation with Scroll Affordance */}
+      <div className="relative -mx-2 sm:mx-0">
+        {/* Subtle Edge Gradients indicating horizontal scrollability on small screens */}
+        <div className="pointer-events-none absolute left-0 top-0 bottom-2 w-4 bg-gradient-to-r from-[#0a0b0d] to-transparent z-10 lg:hidden" />
+        <div className="pointer-events-none absolute right-0 top-0 bottom-2 w-6 bg-gradient-to-l from-[#0a0b0d] to-transparent z-10 lg:hidden" />
 
-          return (
-            <button
-              type="button"
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id as any)}
-              className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-mono whitespace-nowrap transition-all cursor-pointer ${
-                isActive
-                  ? 'bg-white text-neutral-950 font-semibold shadow-md'
-                  : 'text-neutral-400 hover:text-white hover:bg-white/[0.04]'
-              }`}
-            >
-              <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-neutral-900' : 'text-neutral-500'}`} />
-              <span>{tab.label}</span>
-            </button>
-          )
-        })}
+        <div className="flex items-center gap-1.5 sm:gap-2 border-b border-white/[0.08] overflow-x-auto pb-2 scrollbar-none px-2 sm:px-0">
+          {[
+            { id: 'general', label: '1. General Info', icon: FileText },
+            { id: 'media', label: '2. Media & Gallery', icon: ImageIcon },
+            { id: 'story', label: '3. Narrative & Story', icon: BookOpen },
+            { id: 'specs', label: '4. Technical Specs', icon: Sliders },
+            { id: 'materials', label: '5. Materials & Swatches', icon: Palette },
+            { id: 'angles', label: '6. Angles & CAD', icon: Layers },
+          ].map((tab) => {
+            const Icon = tab.icon
+            const isActive = activeTab === tab.id
+
+            return (
+              <button
+                type="button"
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id as any)}
+                className={`inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl text-xs font-mono whitespace-nowrap transition-all cursor-pointer ${
+                  isActive
+                    ? 'bg-white text-neutral-950 font-semibold shadow-md'
+                    : 'text-neutral-400 hover:text-white hover:bg-white/[0.04]'
+                }`}
+              >
+                <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-neutral-900' : 'text-neutral-500'}`} />
+                <span>{tab.label}</span>
+              </button>
+            )
+          })}
+        </div>
       </div>
 
       {/* TAB 1: GENERAL & INFO */}
@@ -337,25 +464,75 @@ export default function ProjectForm({
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Slug ID */}
+            {/* English Title */}
             <div>
               <label className="block text-xs font-mono text-neutral-300 mb-2 uppercase">
-                Project Slug / URL Identifier *
+                Project Title (English) *
               </label>
               <input
                 type="text"
                 required
-                disabled={!isNew}
-                value={formData.id}
-                onChange={(e) =>
-                  setFormData((prev) => ({
-                    ...prev,
-                    id: e.target.value.toLowerCase().replace(/\s+/g, '-'),
-                  }))
-                }
-                placeholder="e.g. tagamoa-japandi-residence"
-                className="w-full bg-[#090a0c] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-4 py-3 text-xs text-white placeholder-neutral-600 focus:outline-none font-mono disabled:opacity-60"
+                value={formData.titleEn}
+                onChange={(e) => handleTitleEnChange(e.target.value)}
+                placeholder="e.g. Tagamoa Residence - Warm Japandi Living Suite"
+                className="w-full bg-[#090a0c] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-4 py-3 text-xs text-white focus:outline-none font-sans"
               />
+            </div>
+
+            {/* Slug ID with Intelligent Auto-Derivation & Manual Unlock */}
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <label className="text-xs font-mono text-neutral-300 uppercase">
+                  Project Slug / URL Identifier *
+                </label>
+                {isNew && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (isSlugManual) {
+                        resetSlugToAuto()
+                      } else {
+                        setIsSlugManual(true)
+                      }
+                    }}
+                    className="inline-flex items-center gap-1 text-[10px] font-mono text-amber-400 hover:text-amber-300 transition-colors cursor-pointer"
+                  >
+                    {isSlugManual ? (
+                      <>
+                        <RefreshCw className="w-2.5 h-2.5" />
+                        <span>Reset Auto</span>
+                      </>
+                    ) : (
+                      <>
+                        <Unlock className="w-2.5 h-2.5" />
+                        <span>Edit Slug</span>
+                      </>
+                    )}
+                  </button>
+                )}
+              </div>
+              <div className="relative">
+                <input
+                  type="text"
+                  required
+                  disabled={!isNew && Boolean(initialProject?.id)}
+                  value={formData.id}
+                  onChange={(e) => handleManualSlugChange(e.target.value)}
+                  placeholder="e.g. tagamoa-japandi-residence"
+                  className={`w-full bg-[#090a0c] border rounded-xl px-4 py-3 text-xs text-white placeholder-neutral-600 focus:outline-none font-mono ${
+                    !isNew
+                      ? 'border-white/[0.04] opacity-60 cursor-not-allowed'
+                      : isSlugManual
+                      ? 'border-amber-500/50 focus:border-amber-500'
+                      : 'border-white/[0.08] focus:border-amber-500/80'
+                  }`}
+                />
+                {isNew && !isSlugManual && (
+                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[9px] font-mono px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-300 border border-amber-500/20">
+                    Auto-derived
+                  </span>
+                )}
+              </div>
               <span className="text-[10px] text-neutral-400 font-mono mt-1.5 block">
                 Public URL: /projects/{formData.id || 'slug-key'}
               </span>
@@ -483,36 +660,6 @@ export default function ProjectForm({
               </div>
             </div>
 
-            {/* English Title */}
-            <div>
-              <label className="block text-xs font-mono text-neutral-300 mb-2 uppercase">
-                Title (English) *
-              </label>
-              <input
-                type="text"
-                required
-                value={formData.titleEn}
-                onChange={(e) => setFormData((prev) => ({ ...prev, titleEn: e.target.value }))}
-                placeholder="Tagamoa Residence - Warm Japandi Living Suite"
-                className="w-full bg-[#090a0c] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-4 py-3 text-xs text-white focus:outline-none font-sans"
-              />
-            </div>
-
-            {/* Arabic Title */}
-            <div>
-              <label className="block text-xs font-mono text-neutral-300 mb-2 uppercase">
-                Title (Arabic)
-              </label>
-              <input
-                type="text"
-                dir="rtl"
-                value={formData.title}
-                onChange={(e) => setFormData((prev) => ({ ...prev, title: e.target.value }))}
-                placeholder="ريزيدنس التجمع - صالون مودرن جاباندي دافئ"
-                className="w-full bg-[#090a0c] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-4 py-3 text-xs text-white focus:outline-none font-sans"
-              />
-            </div>
-
             {/* Location (EN) */}
             <div>
               <label className="block text-xs font-mono text-neutral-300 mb-2 uppercase">
@@ -521,23 +668,34 @@ export default function ProjectForm({
               <input
                 type="text"
                 value={formData.locationEn}
-                onChange={(e) => setFormData((prev) => ({ ...prev, locationEn: e.target.value }))}
-                placeholder="New Cairo, 5th Settlement"
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    locationEn: e.target.value,
+                    location: e.target.value,
+                  }))
+                }
+                placeholder="e.g. New Cairo, 5th Settlement, Egypt"
                 className="w-full bg-[#090a0c] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-4 py-3 text-xs text-white focus:outline-none"
               />
             </div>
 
-            {/* Location (AR) */}
+            {/* Architectural Style */}
             <div>
               <label className="block text-xs font-mono text-neutral-300 mb-2 uppercase">
-                Location (Arabic)
+                Architectural Style
               </label>
               <input
                 type="text"
-                dir="rtl"
-                value={formData.location}
-                onChange={(e) => setFormData((prev) => ({ ...prev, location: e.target.value }))}
-                placeholder="القاهرة الجديدة، التجمع الخامس"
+                value={formData.styleEn}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    styleEn: e.target.value,
+                    style: e.target.value,
+                  }))
+                }
+                placeholder="e.g. Japandi Warm Minimalist"
                 className="w-full bg-[#090a0c] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-4 py-3 text-xs text-white focus:outline-none"
               />
             </div>
@@ -568,26 +726,6 @@ export default function ProjectForm({
                   className="w-full bg-[#090a0c] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-4 py-3 text-xs text-white focus:outline-none font-mono"
                 />
               </div>
-            </div>
-
-            {/* Architectural Style */}
-            <div>
-              <label className="block text-xs font-mono text-neutral-300 mb-2 uppercase">
-                Architectural Style
-              </label>
-              <input
-                type="text"
-                value={formData.styleEn}
-                onChange={(e) =>
-                  setFormData((prev) => ({
-                    ...prev,
-                    styleEn: e.target.value,
-                    style: prev.style || e.target.value,
-                  }))
-                }
-                placeholder="Japandi Warm Minimalist"
-                className="w-full bg-[#090a0c] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-4 py-3 text-xs text-white focus:outline-none"
-              />
             </div>
           </div>
 
@@ -760,21 +898,32 @@ export default function ProjectForm({
 
           {/* Gallery Manager */}
           <div className="space-y-4 pt-6 border-t border-white/[0.08]">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div>
                 <label className="block text-xs font-mono text-neutral-300 uppercase">
                   Project Gallery Perspectives ({formData.gallery.length} Images)
                 </label>
                 <span className="text-[10px] text-neutral-400 font-mono">
-                  High-res views displayed in the lightbox modal
+                  High-res views displayed in lightbox • Multi-select supported (5–10 renders at once)
                 </span>
               </div>
-              <label className="inline-flex items-center gap-1.5 bg-white/[0.05] hover:bg-white/[0.1] text-amber-400 border border-white/[0.08] hover:border-amber-500/40 px-3.5 py-2 rounded-xl text-xs font-mono cursor-pointer transition-colors">
-                <Plus className="w-3.5 h-3.5" />
-                <span>Add Image</span>
+              <label className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500/15 to-amber-600/10 hover:from-amber-500/25 hover:to-amber-600/20 text-amber-300 border border-amber-500/30 px-4 py-2.5 rounded-xl text-xs font-mono cursor-pointer transition-all shadow-sm active:scale-95 shrink-0">
+                {isUploading && uploadProgress ? (
+                  <>
+                    <Loader2 className="w-3.5 h-3.5 animate-spin text-amber-300" />
+                    <span>Uploading {uploadProgress.current}/{uploadProgress.total}...</span>
+                  </>
+                ) : (
+                  <>
+                    <Upload className="w-3.5 h-3.5 text-amber-400" />
+                    <span>Upload Renders (Batch)</span>
+                  </>
+                )}
                 <input
                   type="file"
+                  multiple
                   accept="image/*"
+                  disabled={isUploading}
                   onChange={(e) => handleFileUpload(e, 'gallery')}
                   className="hidden"
                 />
@@ -806,14 +955,14 @@ export default function ProjectForm({
                         gallery: prev.gallery.filter((_, i) => i !== idx),
                       }))
                     }
-                    className="absolute top-2 right-2 p-1.5 bg-red-950/90 hover:bg-red-800 text-red-200 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer shadow-md"
+                    className="absolute top-2 right-2 p-1.5 bg-red-950/90 hover:bg-red-800 text-red-200 rounded-lg opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity cursor-pointer shadow-md"
                     title="Remove Image"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
                   </button>
 
-                  {/* Reorder Buttons */}
-                  <div className="absolute bottom-2 left-2 right-2 flex items-center justify-between opacity-0 group-hover:opacity-100 transition-opacity bg-black/80 backdrop-blur-sm rounded-lg p-1 text-white">
+                  {/* Reorder Buttons (Fully Touch-Accessible on Mobile) */}
+                  <div className="absolute bottom-2 left-2 right-2 flex items-center justify-between opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity bg-black/85 backdrop-blur-sm rounded-lg p-1 text-white border border-white/10">
                     <button
                       type="button"
                       disabled={idx === 0}
@@ -891,32 +1040,23 @@ export default function ProjectForm({
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-white/[0.08]">
-            <div>
-              <label className="block text-xs font-mono text-neutral-300 mb-2 uppercase">
-                Comprehensive Description (English)
-              </label>
-              <textarea
-                rows={5}
-                value={formData.descriptionEn}
-                onChange={(e) => setFormData((prev) => ({ ...prev, descriptionEn: e.target.value }))}
-                placeholder="Detailed English narrative..."
-                className="w-full bg-[#090a0c] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-4 py-3 text-xs text-white focus:outline-none leading-relaxed font-sans"
-              />
-            </div>
-            <div>
-              <label className="block text-xs font-mono text-neutral-300 mb-2 uppercase">
-                Comprehensive Description (Arabic)
-              </label>
-              <textarea
-                rows={5}
-                dir="rtl"
-                value={formData.description}
-                onChange={(e) => setFormData((prev) => ({ ...prev, description: e.target.value }))}
-                placeholder="الوصف الشامل باللغة العربية..."
-                className="w-full bg-[#090a0c] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-4 py-3 text-xs text-white focus:outline-none leading-relaxed font-sans"
-              />
-            </div>
+          <div className="pt-4 border-t border-white/[0.08]">
+            <label className="block text-xs font-mono text-neutral-300 mb-2 uppercase">
+              Comprehensive Architectural Description (English)
+            </label>
+            <textarea
+              rows={6}
+              value={formData.descriptionEn}
+              onChange={(e) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  descriptionEn: e.target.value,
+                  description: e.target.value,
+                }))
+              }
+              placeholder="Detailed English narrative for the project dossier, design philosophy, spatial hierarchy, and turnkey execution..."
+              className="w-full bg-[#090a0c] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-4 py-3 text-xs text-white focus:outline-none leading-relaxed font-sans"
+            />
           </div>
         </div>
       )}
@@ -1053,6 +1193,42 @@ export default function ProjectForm({
               <Plus className="w-3.5 h-3.5" />
               <span>Add Swatch</span>
             </button>
+          </div>
+
+          {/* 1-Tap Architectural Material Presets */}
+          <div className="p-4 bg-[#090a0c] border border-white/[0.08] rounded-2xl space-y-2.5">
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] font-mono text-neutral-400 uppercase tracking-wider flex items-center gap-1.5">
+                <Sparkles className="w-3 h-3 text-amber-400" />
+                <span>1-Tap Architectural Finish Presets:</span>
+              </span>
+              <span className="text-[9px] font-mono text-neutral-500 hidden sm:inline">Tap to instantly add swatch</span>
+            </div>
+            <div className="flex items-center gap-2 flex-wrap">
+              {ARCHITECTURAL_SWATCH_PRESETS.map((preset) => (
+                <button
+                  type="button"
+                  key={preset.nameEn}
+                  onClick={() =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      materialSwatches: [
+                        ...(prev.materialSwatches || []),
+                        { color: preset.color, nameEn: preset.nameEn, finishEn: preset.finishEn },
+                      ],
+                    }))
+                  }
+                  className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/[0.03] hover:bg-white/[0.07] border border-white/[0.06] hover:border-amber-500/40 text-[11px] font-mono text-neutral-300 hover:text-white transition-all cursor-pointer group"
+                >
+                  <span
+                    className="w-3 h-3 rounded-full border border-white/20 shrink-0 shadow-sm"
+                    style={{ backgroundColor: preset.color }}
+                  />
+                  <span>{preset.nameEn.split(' ')[0]}</span>
+                  <Plus className="w-3 h-3 text-neutral-500 group-hover:text-amber-400 transition-colors" />
+                </button>
+              ))}
+            </div>
           </div>
 
           <div className="space-y-3.5">

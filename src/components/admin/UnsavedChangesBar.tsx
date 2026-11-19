@@ -32,7 +32,7 @@ export default function UnsavedChangesBar({
   if (!isDirty) return null
 
   return (
-    <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 w-full max-w-xl px-4 animate-fade-in select-none">
+    <div className="fixed bottom-[80px] lg:bottom-6 left-1/2 -translate-x-1/2 z-50 w-full max-w-xl px-4 animate-fade-in select-none">
       <div className="bg-[#141519]/95 border border-amber-500/50 rounded-2xl p-4 shadow-2xl backdrop-blur-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs font-mono shadow-amber-950/30">
         <div className="flex items-center gap-2.5 text-amber-300">
           <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse shrink-0" />
