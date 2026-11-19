@@ -21,6 +21,8 @@ import {
   X,
   AlertTriangle,
   Copy,
+  FileText,
+  Code,
 } from 'lucide-react'
 import { Project } from '@/data/portfolioData'
 import { deleteProjectAction, saveProjectAction, duplicateProjectAction } from '../actions'
@@ -45,6 +47,7 @@ export default function ProjectsClient({ initialProjects }: { initialProjects: P
   const [projectToDelete, setProjectToDelete] = useState<Project | null>(null)
   const [isDeleting, setIsDeleting] = useState(false)
   const [togglingFeaturedId, setTogglingFeaturedId] = useState<string | null>(null)
+  const [togglingCvId, setTogglingCvId] = useState<string | null>(null)
   const [duplicatingId, setDuplicatingId] = useState<string | null>(null)
   const [statusMessage, setStatusMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
 
@@ -132,6 +135,37 @@ export default function ProjectsClient({ initialProjects }: { initialProjects: P
     }
   }
 
+  // Toggle CV Featured status (Enforcing user-requested max 4 limit)
+  async function handleToggleCv(project: Project) {
+    const isCurrentlyInCv = project.includeInCv !== false
+    const currentCvCount = projects.filter((p) => p.includeInCv !== false).length
+
+    if (!isCurrentlyInCv && currentCvCount >= 4) {
+      setStatusMessage({
+        type: 'error',
+        text: 'Maximum 4 projects can be featured in the CV. Please uncheck another project first.',
+      })
+      setTimeout(() => setStatusMessage(null), 4500)
+      return
+    }
+
+    setTogglingCvId(project.id)
+    const updated = { ...project, includeInCv: !isCurrentlyInCv }
+    const res = await saveProjectAction(updated)
+    setTogglingCvId(null)
+
+    if (res.success) {
+      setProjects((prev) => prev.map((p) => (p.id === project.id ? updated : p)))
+      setStatusMessage({
+        type: 'success',
+        text: `Updated CV status: "${project.titleEn}" ${!isCurrentlyInCv ? 'is now featured in the CV' : 'removed from CV'}.`,
+      })
+      setTimeout(() => setStatusMessage(null), 3000)
+    } else {
+      setStatusMessage({ type: 'error', text: res.error || 'Failed to update CV status' })
+    }
+  }
+
   // Confirm and Delete project
   async function confirmDelete() {
     if (!projectToDelete) return
@@ -193,7 +227,30 @@ export default function ProjectsClient({ initialProjects }: { initialProjects: P
         </div>
 
         {/* View Switcher, Featured Toggle & Add Button */}
-        <div className="flex items-center gap-3 self-end md:self-center flex-wrap">
+        <div className="flex items-center gap-2.5 self-end md:self-center flex-wrap">
+          {/* CV Direct Actions */}
+          <div className="flex items-center bg-[#111215] border border-white/[0.08] rounded-xl p-1 gap-1">
+            <a
+              href="/api/cv-pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-mono text-neutral-300 hover:text-white hover:bg-white/[0.08] transition-all"
+              title="Preview and download current LaTeX-rendered CV PDF"
+            >
+              <FileText className="w-3.5 h-3.5 text-[#7AD1B8]" />
+              <span className="hidden sm:inline">Preview CV</span>
+            </a>
+            <a
+              href="/api/cv-latex?download=1"
+              download="Alaa-Essa-CV.tex"
+              className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-mono text-neutral-400 hover:text-amber-400 hover:bg-white/[0.08] transition-all"
+              title="Download LaTeX source code (.tex)"
+            >
+              <Code className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">.tex</span>
+            </a>
+          </div>
+
           {/* Featured Filter Toggle */}
           <button
             onClick={() => setFeaturedOnly(!featuredOnly)}
@@ -328,22 +385,41 @@ export default function ProjectsClient({ initialProjects }: { initialProjects: P
                       )}
                     </div>
 
-                    <button
-                      onClick={() => handleToggleFeatured(project)}
-                      disabled={togglingFeaturedId === project.id}
-                      className={`p-1.5 rounded-lg backdrop-blur-md border transition-all cursor-pointer ${
-                        project.featured
-                          ? 'bg-amber-500/20 border-amber-500/60 text-amber-400'
-                          : 'bg-black/60 border-white/[0.1] text-neutral-400 hover:text-white'
-                      }`}
-                      title={project.featured ? 'Featured on hero' : 'Mark as featured'}
-                    >
-                      {togglingFeaturedId === project.id ? (
-                        <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                      ) : (
-                        <Star className={`w-3.5 h-3.5 ${project.featured ? 'fill-amber-400' : ''}`} />
-                      )}
-                    </button>
+                    <div className="flex items-center gap-1.5">
+                      <button
+                        onClick={() => handleToggleCv(project)}
+                        disabled={togglingCvId === project.id}
+                        className={`p-1.5 rounded-lg backdrop-blur-md border transition-all cursor-pointer ${
+                          project.includeInCv !== false
+                            ? 'bg-emerald-500/20 border-emerald-500/60 text-emerald-300'
+                            : 'bg-black/60 border-white/[0.1] text-neutral-500 hover:text-white'
+                        }`}
+                        title={project.includeInCv !== false ? 'Included in CV (Max 4)' : 'Include in CV (Max 4)'}
+                      >
+                        {togglingCvId === project.id ? (
+                          <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                        ) : (
+                          <FileText className={`w-3.5 h-3.5 ${project.includeInCv !== false ? 'text-[#7AD1B8]' : ''}`} />
+                        )}
+                      </button>
+
+                      <button
+                        onClick={() => handleToggleFeatured(project)}
+                        disabled={togglingFeaturedId === project.id}
+                        className={`p-1.5 rounded-lg backdrop-blur-md border transition-all cursor-pointer ${
+                          project.featured
+                            ? 'bg-amber-500/20 border-amber-500/60 text-amber-400'
+                            : 'bg-black/60 border-white/[0.1] text-neutral-400 hover:text-white'
+                        }`}
+                        title={project.featured ? 'Featured on hero' : 'Mark as featured'}
+                      >
+                        {togglingFeaturedId === project.id ? (
+                          <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                        ) : (
+                          <Star className={`w-3.5 h-3.5 ${project.featured ? 'fill-amber-400' : ''}`} />
+                        )}
+                      </button>
+                    </div>
                   </div>
 
                   {/* Bottom Image Info */}
@@ -477,6 +553,28 @@ export default function ProjectsClient({ initialProjects }: { initialProjects: P
 
                 {/* Right: Actions */}
                 <div className="flex items-center gap-2 self-end sm:self-center shrink-0">
+                  {/* CV Toggle */}
+                  <button
+                    onClick={() => handleToggleCv(project)}
+                    disabled={togglingCvId === project.id}
+                    title={project.includeInCv !== false ? 'Remove from CV' : 'Feature in CV (Max 4)'}
+                    className={`p-2 rounded-lg border transition-all cursor-pointer ${
+                      project.includeInCv !== false
+                        ? 'bg-emerald-500/10 border-emerald-500/40 text-emerald-400'
+                        : 'bg-white/[0.03] border-white/[0.08] text-neutral-500 hover:text-neutral-300'
+                    }`}
+                  >
+                    {togglingCvId === project.id ? (
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                    ) : (
+                      <FileText
+                        className={`w-4 h-4 ${
+                          project.includeInCv !== false ? 'text-[#7AD1B8]' : ''
+                        }`}
+                      />
+                    )}
+                  </button>
+
                   {/* Featured Toggle */}
                   <button
                     onClick={() => handleToggleFeatured(project)}

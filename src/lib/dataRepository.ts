@@ -100,6 +100,7 @@ export function rowToProject(row: any): Project {
     features: row.features || [],
     featuresEn: row.features_en || [],
     featured: Boolean(row.featured),
+    includeInCv: (specs && specs.includeInCv !== undefined) ? Boolean(specs.includeInCv) : (row.include_in_cv !== undefined ? Boolean(row.include_in_cv) : true),
     conceptEn: row.concept_en || undefined,
     materialsDescriptionEn: row.materials_description_en || undefined,
     angles: row.angles || [],
@@ -116,6 +117,7 @@ export function projectToRow(p: Project, displayOrder: number = 0) {
   const mergedSpecs = {
     ...rawSpecs,
     firmEn: p.firmEn || rawSpecs.firmEn || undefined,
+    includeInCv: p.includeInCv !== undefined ? Boolean(p.includeInCv) : (rawSpecs.includeInCv !== undefined ? Boolean(rawSpecs.includeInCv) : true),
   }
 
   return {

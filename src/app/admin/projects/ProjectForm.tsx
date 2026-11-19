@@ -79,6 +79,7 @@ export default function ProjectForm({
     features: initialProject?.features || [],
     featuresEn: initialProject?.featuresEn || [],
     featured: Boolean(initialProject?.featured),
+    includeInCv: initialProject?.includeInCv !== undefined ? Boolean(initialProject.includeInCv) : true,
     conceptEn: initialProject?.conceptEn || '',
     challengeEn: initialProject?.challengeEn || '',
     solutionEn: initialProject?.solutionEn || '',
@@ -581,8 +582,8 @@ export default function ProjectForm({
             </div>
           </div>
 
-          {/* Featured Toggle Card */}
-          <div className="pt-6 border-t border-white/[0.08]">
+          {/* Featured & CV Toggle Cards */}
+          <div className="pt-6 border-t border-white/[0.08] grid grid-cols-1 sm:grid-cols-2 gap-4">
             <label className="flex items-center gap-3.5 p-4 bg-[#090a0c] border border-white/[0.08] rounded-2xl cursor-pointer hover:border-amber-500/40 transition-colors">
               <input
                 type="checkbox"
@@ -592,10 +593,30 @@ export default function ProjectForm({
               />
               <div>
                 <span className="text-xs font-semibold text-white block">
-                  Promote on Homepage Hero & Selected Works
+                  Promote on Homepage Hero
                 </span>
                 <span className="text-[11px] text-neutral-400 font-mono block">
-                  Featured projects appear in the top monograph ribbon and featured case studies.
+                  Appears in the monograph ribbon & case studies.
+                </span>
+              </div>
+            </label>
+
+            <label className="flex items-center gap-3.5 p-4 bg-[#090a0c] border border-white/[0.08] rounded-2xl cursor-pointer hover:border-emerald-500/40 transition-colors">
+              <input
+                type="checkbox"
+                checked={formData.includeInCv}
+                onChange={(e) => setFormData((prev) => ({ ...prev, includeInCv: e.target.checked }))}
+                className="w-4 h-4 rounded bg-neutral-900 border-white/20 text-[#7AD1B8] focus:ring-0 cursor-pointer"
+              />
+              <div>
+                <span className="text-xs font-semibold text-white flex items-center gap-2">
+                  Include in Professional CV
+                  <span className="text-[9px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-mono font-bold">
+                    Max 4
+                  </span>
+                </span>
+                <span className="text-[11px] text-neutral-400 font-mono block">
+                  Featured in the LaTeX Architectural CV.
                 </span>
               </div>
             </label>

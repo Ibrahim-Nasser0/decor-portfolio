@@ -5,6 +5,7 @@ export interface ProjectSpecs {
   flooringEn?: string;
   joineryEn?: string;
   firmEn?: string;
+  includeInCv?: boolean;
 }
 
 export interface ProjectAngle {
@@ -41,6 +42,7 @@ export interface Project {
   features: string[];
   featuresEn: string[];
   featured?: boolean;
+  includeInCv?: boolean;
   conceptEn?: string;
   materialsDescriptionEn?: string;
   angles?: ProjectAngle[];
@@ -64,6 +66,8 @@ export const DESIGNER_INFO = {
   whatsappNumber: "201000000000",
   linkedin: "Alaa Issa",
   instagram: "@alaaissa.interiors",
+  behance: "https://behance.net/alaaessa",
+  website: "https://alaa-essa.vercel.app",
   avatarUrl: "/images/alaa.webp",
   builtWorksOffset: 80,
   cadFidelity: 100,

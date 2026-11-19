@@ -392,6 +392,27 @@ export default function AboutSection({ profile }: AboutSectionProps) {
                 </div>
               </a>
             </div>
+
+            {/* Architectural CV Link Strip */}
+            <div className="pt-3 flex items-center justify-between text-[11px] sm:text-xs font-technical text-neutral-500 border-t border-neutral-200/80 mt-2">
+              <span className="flex items-center gap-1.5 font-mono text-[10px] sm:text-[11px] uppercase tracking-wider text-neutral-400">
+                <span>Academic & Professional Vitae</span>
+                <span>•</span>
+                <span className="hidden sm:inline">LaTeX Typeset</span>
+              </span>
+              <div className="flex items-center gap-3">
+                <a
+                  href="/api/cv-pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group font-mono text-[11px] font-bold text-black hover:text-emerald-700 flex items-center gap-1 transition-colors underline underline-offset-4"
+                  title="Download Alaa Essa Professional Curriculum Vitae (PDF)"
+                >
+                  <span>Download CV (PDF)</span>
+                  <span className="text-[10px] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform">↗</span>
+                </a>
+              </div>
+            </div>
           </div>
         </div>
       </div>

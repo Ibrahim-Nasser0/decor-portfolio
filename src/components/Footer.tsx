@@ -13,6 +13,7 @@ import {
   Building2,
   Compass,
   FileDown,
+  FileText,
 } from "lucide-react";
 import SocialLinks from "@/components/SocialIcons";
 
@@ -196,17 +197,27 @@ export default function Footer({ profile }: FooterProps) {
               </div>
             </div>
 
-            {/* Architectural Monograph PDF Download Button */}
-            <div className="pt-2">
+            {/* Architectural Monograph & CV PDF Download Buttons */}
+            <div className="pt-2 flex flex-wrap gap-2.5">
               <a
                 href="/api/portfolio-pdf"
                 download="Alaa-Issa-Architectural-Portfolio-2026.pdf"
-                className="group inline-flex items-center gap-2.5 px-4 py-2.5 bg-neutral-900 hover:bg-black text-white rounded-sm border border-neutral-800 text-[11px] font-technical uppercase tracking-wider transition-all duration-300 hover:shadow-md active:scale-95"
+                className="group inline-flex items-center gap-2 px-3.5 py-2.5 bg-neutral-900 hover:bg-black text-white rounded-sm border border-neutral-800 text-[11px] font-technical uppercase tracking-wider transition-all duration-300 hover:shadow-md active:scale-95"
                 title="Download Architectural Monograph (PDF)"
               >
                 <FileDown className="w-4 h-4 text-[#7AD1B8] group-hover:scale-110 transition-transform" />
-                <span>Download Monograph (PDF)</span>
-                <span className="text-[9px] font-mono text-neutral-400">A4 • 2026</span>
+                <span>Monograph (PDF)</span>
+              </a>
+
+              <a
+                href="/api/cv-pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group inline-flex items-center gap-2 px-3.5 py-2.5 bg-neutral-100 hover:bg-neutral-200 text-neutral-800 hover:text-black rounded-sm border border-neutral-300 text-[11px] font-technical uppercase tracking-wider transition-all duration-300 hover:shadow-sm active:scale-95"
+                title="Download Alaa Essa Curriculum Vitae (PDF)"
+              >
+                <FileText className="w-3.5 h-3.5 text-neutral-600 group-hover:text-black transition-colors" />
+                <span>CV (PDF)</span>
               </a>
             </div>
           </div>
