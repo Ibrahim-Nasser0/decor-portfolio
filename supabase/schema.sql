@@ -257,6 +257,8 @@ CREATE TABLE public.software_skills (
   role TEXT DEFAULT '3D Modeling & Visualization',
   badge TEXT DEFAULT '3MAX',
   color TEXT DEFAULT 'bg-blue-600 text-white',
+  engine TEXT DEFAULT 'Autodesk',
+  deliverable TEXT DEFAULT 'High-Poly 3D Spatial Modeling',
   display_order INTEGER DEFAULT 0
 );
 
@@ -564,14 +566,14 @@ VALUES
   );
 
 -- 9.10 Seed Software Skills
-INSERT INTO public.software_skills (id, name, category, role, badge, color, display_order)
+INSERT INTO public.software_skills (id, name, category, role, badge, color, engine, deliverable, display_order)
 OVERRIDING SYSTEM VALUE
 VALUES
-  (1, '3ds Max', '3D & Modeling', '3D Modeling & Spatial Volume', '3MAX', 'bg-blue-600 text-white', 1),
-  (2, 'Corona Renderer', 'Rendering Engines', 'Photorealistic Lighting & Materials', 'CRN', 'bg-amber-600 text-white', 2),
-  (3, 'AutoCAD', 'Technical Drafting', '2D Plans & Working Drawings', 'CAD', 'bg-red-600 text-white', 3),
-  (4, 'Adobe Photoshop', 'Post-Production', 'Texture Mapping & Visual Grading', 'PS', 'bg-sky-700 text-white', 4),
-  (5, 'Revit BIM', 'Architectural BIM', 'Coordinated Documentation', 'BIM', 'bg-teal-700 text-white', 5);
+  (1, '3ds Max', '3D & Modeling', '3D Modeling & Spatial Volume', '3MAX', 'bg-blue-600 text-white', 'Autodesk', 'High-Poly Architectural Geometries', 1),
+  (2, 'Corona Renderer', 'Rendering Engines', 'Photorealistic Lighting & Materials', 'CRN', 'bg-amber-600 text-white', 'Chaos Group', 'Physically-Based PBR & LightMix CCT', 2),
+  (3, 'AutoCAD', 'Technical Drafting', '2D Plans & Working Drawings', 'CAD', 'bg-red-600 text-white', 'Autodesk', '1:10 Joinery Details & Blueprints', 3),
+  (4, 'Adobe Photoshop', 'Post-Production', 'Texture Mapping & Visual Grading', 'PS', 'bg-sky-700 text-white', 'Adobe CC', 'Atmospheric Balance & Swatch Boards', 4),
+  (5, 'Revit BIM', 'Architectural BIM', 'Coordinated Documentation', 'BIM', 'bg-teal-700 text-white', 'Autodesk', 'BIM Level 2 Coordination & Schedules', 5);
 
 -- 9.11 Seed Projects (Core Table with Cached Arrays & JSONB)
 INSERT INTO public.projects (

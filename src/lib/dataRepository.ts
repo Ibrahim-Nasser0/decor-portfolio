@@ -342,6 +342,9 @@ export const getDesignerProfile = cache(async function getDesignerProfile() {
                 role: s.role,
                 badge: s.badge,
                 color: s.color,
+                engine: s.engine || 'Autodesk',
+                deliverable: s.deliverable || s.role || 'High-Fidelity Production Deliverable',
+                category: s.category || '3D & Modeling',
               }))
             : STATIC_DESIGNER_INFO.software,
         }

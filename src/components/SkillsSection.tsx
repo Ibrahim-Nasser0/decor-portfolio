@@ -3,22 +3,17 @@
 import React, { useState, useEffect, useRef } from "react";
 import { DESIGNER_INFO } from "@/data/portfolioData";
 import {
-  Monitor,
-  Compass,
-  Palette,
-  CheckCircle2,
   Layers,
   Sparkles,
   SunMedium,
   Hammer,
   FileSpreadsheet,
   Ruler,
-  Eye,
   Paintbrush,
   Languages,
-  ArrowUpRight,
-  Sliders,
-  Cpu,
+  Box,
+  Check,
+  ShieldCheck,
 } from "lucide-react";
 
 interface SkillsSectionProps {
@@ -29,16 +24,25 @@ interface SkillsSectionProps {
       hobbiesEn?: string[];
       languages?: Array<{ nameEn: string; levelEn: string }>;
     };
+    education?: Array<{
+      titleEn?: string;
+      degree?: string;
+      institutionEn?: string;
+      institution?: string;
+      year?: string;
+      grade?: string;
+      descEn?: string;
+      description?: string;
+    }>;
   };
 }
 
 export default function SkillsSection({ profile }: SkillsSectionProps) {
-  const [activeTab, setActiveTab] = useState<"software" | "engineering" | "artistry">("software");
   const sectionRef = useRef<HTMLElement>(null);
   const [isVisible, setIsVisible] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
 
-  // Scroll Trigger Observer & Parallax Tracking
+  // Viewport Intersection & Parallax Scroll Tracking
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -46,7 +50,7 @@ export default function SkillsSection({ profile }: SkillsSectionProps) {
           setIsVisible(true);
         }
       },
-      { threshold: 0.12, rootMargin: "0px 0px -40px 0px" }
+      { threshold: 0.08, rootMargin: "0px 0px -40px 0px" }
     );
 
     const currentRef = sectionRef.current;
@@ -73,171 +77,94 @@ export default function SkillsSection({ profile }: SkillsSectionProps) {
     };
   }, []);
 
-  const parallaxOffset = (scrollProgress - 0.5) * 28;
+  const parallaxOffset = (scrollProgress - 0.5) * 32;
 
-  // Default Architectural Software Suite
-  const DEFAULT_SOFTWARE = [
-    {
-      name: "3ds Max",
-      engine: "Autodesk",
-      role: "High-Poly Spatial Modeling & Environment Setup",
-      badge: "3DS",
-      level: "96%",
-      deliverable: "Complex architectural geometries & interior volumes",
-    },
-    {
-      name: "Corona Renderer",
-      engine: "Chaos Group",
-      role: "Physically-Based Lighting & Photorealism",
-      badge: "CRN",
-      level: "98%",
-      deliverable: "Accurate light bouncing, micro-roughness & caustic realism",
-    },
-    {
-      name: "AutoCAD",
-      engine: "Autodesk",
-      role: "2D Executive Shop Drawings & Blueprints",
-      badge: "CAD",
-      level: "99%",
-      deliverable: "Dimensioned floor plans, elevations, sections & joinery details",
-    },
-    {
-      name: "Revit BIM",
-      engine: "Autodesk",
-      role: "Building Information Modeling & Documentation",
-      badge: "RVT",
-      level: "88%",
-      deliverable: "BIM coordination, schedules & multi-discipline alignment",
-    },
-    {
-      name: "SketchUp Pro",
-      engine: "Trimble",
-      role: "Rapid 3D Volumetric Concept Massing",
-      badge: "SKP",
-      level: "95%",
-      deliverable: "Initial schematic massing & spatial volumetric studies",
-    },
-    {
-      name: "Photoshop & InDesign",
-      engine: "Adobe Creative Cloud",
-      role: "Post-Production, Color Grading & Monograph Design",
-      badge: "CC",
-      level: "94%",
-      deliverable: "Architectural presentation sheets, boards & lighting balance",
-    },
-  ];
+  // ----------------------------------------------------------------------
+  // DYNAMIC SUPABASE DATA BINDINGS WITH ROCK-SOLID ARCHITECTURAL FALLBACKS
+  // ----------------------------------------------------------------------
 
-  // Dynamic Software Suite from Supabase
-  const softwareSuite =
+  // 1. Dynamic Software List from Supabase software_skills or designer_profile
+  const softwareList: any[] =
     profile?.software && profile.software.length > 0
-      ? profile.software.map((sw: any, idx: number) => {
-          const fallback = DEFAULT_SOFTWARE[idx] || DEFAULT_SOFTWARE[0];
-          return {
-            name: sw.name || fallback.name,
-            engine: sw.engine || fallback.engine,
-            role: sw.role || fallback.role,
-            badge: sw.badge || (sw.name ? sw.name.slice(0, 3).toUpperCase() : fallback.badge),
-            level: sw.level ? (sw.level.includes("%") ? sw.level : `${sw.level}%`) : fallback.level,
-            deliverable: sw.deliverable || fallback.deliverable,
-          };
-        })
-      : DEFAULT_SOFTWARE;
+      ? profile.software
+      : DESIGNER_INFO.software;
 
-  // Default Architectural Competencies
-  const DEFAULT_DISCIPLINES = [
-    {
-      num: "01",
-      icon: Ruler,
-      title: "Spatial Ergonomics & Circulation",
-      tagline: "Circulation Analysis • Flow Optimization",
-      desc: "Scientific space planning analyzing movement vectors, human proportion clearance, and furniture clearances to ensure effortless functional fluidity.",
-      specs: ["1:50 Zoning Diagrams", "Clearance Standards", "Ergonomic Sightlines"],
-    },
-    {
-      num: "02",
-      icon: SunMedium,
-      title: "Circadian Lighting Architecture",
-      tagline: "Lux Calculations • 2700K - 3000K Warmth",
-      desc: "Layered illumination engineering combining ambient coves, architectural task accents, and grazing wall washers calibrated for biological wellbeing.",
-      specs: ["Photometric Lux Standards", "Concealed LED Details", "Color Rendering Index (CRI 95+)"],
-    },
-    {
-      num: "03",
-      icon: Layers,
-      title: "Materiality & Tactile Curation",
-      tagline: "Physical Swatches • Natural Stone & Timber",
-      desc: "Harmonizing rich physical textures: open-pore travertines, bookmatched marbles, rift-sawn European oaks, fluted wall acoustics, and hand-finished lime wash.",
-      specs: ["Tactile Flatlays", "Texture Compatibility", "Durability Classification"],
-    },
-    {
-      num: "04",
-      icon: Hammer,
-      title: "Executive Shop Drawings & Joinery",
-      tagline: "1:10 Detailing • Millimeter Precision",
-      desc: "Exhaustive executive production packages detailing custom cabinetry, shadow reveals, concealed hinges, integrated lighting pockets, and acoustic paneling.",
-      specs: ["1:10 / 1:20 Detailing", "Shadow Gap Reveals", "Concealed Joinery Specs"],
-    },
-    {
-      num: "05",
-      icon: Eye,
-      title: "Turnkey Site Quality Supervision",
-      tagline: "Laser Verification • Zero-Tolerance Execution",
-      desc: "Rigorous on-site engineering oversight ensuring finishing contractors adhere strictly to design intent, laser alignments, and impeccable material transitions.",
-      specs: ["Laser Level Verification", "Contractor Alignment", "Snagging Inspections"],
-    },
-    {
-      num: "06",
-      icon: FileSpreadsheet,
-      title: "BOQ & Cost Integrity Oversight",
-      tagline: "Yield Maximization • Budget Governance",
-      desc: "Comprehensive Bill of Quantities (BOQ), material yield optimization, vendor procurement vetting, and transparent budget governance throughout delivery.",
-      specs: ["Accurate Item Quantities", "Vendor Benchmarking", "Budget Integrity"],
-    },
+  const findTool = (regex: RegExp) =>
+    softwareList.find((s: any) => s.name && regex.test(s.name));
+
+  // Bento 1: Primary 3D Photorealism Engine (3ds Max / Corona / V-Ray)
+  const primaryTool = findTool(/3ds|max|corona|v-ray|rendering/i) || softwareList[0] || {
+    name: "3ds Max & Corona Renderer",
+    role: "Physically-Based Lighting & Hyper-Realism",
+    badge: "3DS / CRN",
+    engine: "Autodesk & Chaos Group",
+    deliverable: "4K Photorealistic Renders & 360° VR Spherical Views",
+  };
+
+  // Bento 2: Technical Drafting (AutoCAD 2D)
+  const cadTool = findTool(/autocad|cad|drafting/i) || softwareList[2] || {
+    name: "AutoCAD 2D",
+    role: "Executive Shop Drawings",
+    badge: "CAD",
+    engine: "Autodesk",
+    deliverable: "1:10 Joinery Details & Dimensioned Floor Plans",
+  };
+
+  // Bento 3: BIM & Spatial Volumetrics (Revit BIM / SketchUp)
+  const bimTool = findTool(/revit|bim|sketchup/i) || softwareList[4] || {
+    name: "Revit BIM & SketchUp",
+    role: "Volumetric Massing & BIM",
+    badge: "BIM / SKP",
+    engine: "Autodesk & Trimble",
+    deliverable: "BIM Level 2 Coordination & Spatial Massing",
+  };
+
+  // Bento 5: Editorial & Post-Production (InDesign / Photoshop)
+  const editorialTool = findTool(/photoshop|indesign|adobe/i) || softwareList[3] || {
+    name: "InDesign & Photoshop CC",
+    role: "Client Monographs & Grading",
+    badge: "PS / ID",
+    engine: "Adobe Creative Cloud",
+    deliverable: "Publication-Grade Monographs & Material Boards",
+  };
+
+  // 2. Academic Foundation (Bento 4) from Supabase education table
+  const eduItem = profile?.education?.[0];
+  const institution =
+    eduItem?.institutionEn || eduItem?.institution || "Alexandria University";
+  const degree =
+    eduItem?.titleEn || eduItem?.degree || "Faculty of Fine Arts • Interior Architecture";
+  const grade = eduItem?.grade || "Grade: Very Good";
+  const eduDescription =
+    eduItem?.descEn ||
+    eduItem?.description ||
+    "Rooted in fine arts spatial composition. Merging freehand architectural sketching, biophilic organic forms, and natural tactile material curation.";
+
+  // 3. Technical Competencies & Execution Standards (Bento 6)
+  const techSkills = profile?.skills?.technicalEn || DESIGNER_INFO.skills.technicalEn || [];
+  const languages = profile?.skills?.languages || DESIGNER_INFO.skills.languages || [
+    { nameEn: "Arabic", levelEn: "Native" },
+    { nameEn: "English", levelEn: "Professional Working" },
   ];
-
-  // Dynamic Disciplines from Supabase
-  const customCompetencies = profile?.skills?.technicalEn;
-  const disciplines =
-    customCompetencies && customCompetencies.length > 0
-      ? customCompetencies.map((comp: string, idx: number) => {
-          const fallback = DEFAULT_DISCIPLINES[idx] || {
-            num: String(idx + 1).padStart(2, "0"),
-            icon: Ruler,
-            title: comp,
-            tagline: "Executive Spatial Detailing",
-            desc: "Rigorous architectural methodology and spatial detailing applied to bespoke interior environments.",
-            specs: ["Engineering Standards", "Executive Oversight", "Quality Control"],
-          };
-          return {
-            ...fallback,
-            title: comp || fallback.title,
-            num: String(idx + 1).padStart(2, "0"),
-          };
-        })
-      : DEFAULT_DISCIPLINES;
-
-  // Dynamic Artistry & Languages from Supabase
-  const hobbies = profile?.skills?.hobbiesEn || DESIGNER_INFO.skills.hobbiesEn;
-  const languages = profile?.skills?.languages || DESIGNER_INFO.skills.languages;
 
   return (
     <section
       ref={sectionRef}
       id="skills"
-      className="py-16 sm:py-24 2xl:py-32 bg-[#faf9f6] border-t border-neutral-200 relative overflow-hidden select-none"
+      className="py-16 sm:py-24 2xl:py-32 bg-[#FBFBFA] border-t border-neutral-200 relative overflow-hidden select-none"
     >
-      {/* Background Architectural Drafting Watermark */}
+      {/* Background Architectural Watermark with Parallax Drift */}
       <div
-        className="absolute top-1/4 -right-10 text-[20vw] font-editorial font-black text-black/[0.015] pointer-events-none select-none -z-10 leading-none tracking-tighter"
+        className="absolute top-1/4 -right-12 text-[18vw] font-editorial font-black text-black/[0.015] pointer-events-none select-none -z-10 leading-none tracking-tighter"
         style={{ transform: `translateY(${parallaxOffset * 0.7}px)` }}
       >
         TOOLSET
       </div>
 
       <div className="max-w-7xl 2xl:max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 2xl:px-12">
-        {/* Section Header with Scroll-Triggered Entrance */}
+        {/* Section Header with Scroll Entrance */}
         <div
-          className={`flex flex-col md:flex-row md:items-end justify-between mb-10 sm:mb-14 2xl:mb-16 pb-6 border-b border-black/10 gap-4 sm:gap-6 transition-all duration-700 ease-out ${
+          className={`flex flex-col md:flex-row md:items-end justify-between mb-12 sm:mb-16 2xl:mb-20 pb-6 border-b border-black/10 gap-4 sm:gap-6 transition-all duration-700 ease-out ${
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
@@ -247,298 +174,453 @@ export default function SkillsSection({ profile }: SkillsSectionProps) {
               <span>03 • TECHNICAL MASTERY & TOOLSET</span>
             </div>
             <h2 className="text-3xl sm:text-4xl md:text-5xl 2xl:text-6xl font-editorial font-bold text-black tracking-tight">
-              Capabilities & Proficiencies
+              Computational Precision & Spatial Artistry
             </h2>
           </div>
-          <p className="text-xs 2xl:text-sm text-neutral-600 max-w-sm 2xl:max-w-md font-sans leading-relaxed">
-            Bridging technical precision, computational modeling, and hands-on material artistry across every architectural phase.
-          </p>
+          <div className="text-[10px] sm:text-xs 2xl:text-sm font-technical text-neutral-500 text-start md:text-end uppercase tracking-widest">
+            <div className="font-semibold text-black">PRODUCTION-READY PIPELINE</div>
+            <div className="text-neutral-400 mt-1">ZERO CLICHÉ PERCENTAGES • 100% REAL DELIVERABLES</div>
+          </div>
         </div>
 
-        {/* Architectural Filter / Tab Navigators with Smooth Hover States */}
-        <div
-          className={`flex items-center gap-2 sm:gap-3 2xl:gap-4 overflow-x-auto no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0 mb-10 sm:mb-12 transition-all duration-700 ease-out delay-150 ${
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
-          }`}
-        >
-          <button
-            onClick={() => setActiveTab("software")}
-            className={`px-4 sm:px-5 py-2.5 text-xs 2xl:text-sm font-technical uppercase tracking-wider sm:tracking-widest transition-all duration-300 border shrink-0 flex items-center gap-2 cursor-pointer ${
-              activeTab === "software"
-                ? "bg-black text-white border-black shadow-md font-bold scale-[1.02]"
-                : "bg-white text-neutral-600 border-neutral-300 hover:border-black hover:text-black"
+        {/* ============================================================== */}
+        {/* MODULAR BENTO MATRIX (12-Column Architectural Grid)          */}
+        {/* ============================================================== */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 2xl:gap-8 items-stretch">
+          {/* ------------------------------------------------------------ */}
+          {/* BENTO 1: HERO VISUAL COMPUTING (8 Cols on Desktop)           */}
+          {/* Dynamic 3ds Max / Corona / Photorealism Engine               */}
+          {/* ------------------------------------------------------------ */}
+          <div
+            className={`lg:col-span-8 bg-neutral-950 text-white border border-neutral-900 p-6 sm:p-8 2xl:p-10 flex flex-col justify-between relative overflow-hidden group shadow-md hover:border-neutral-700 hover:shadow-2xl transition-all duration-500 ${
+              isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
             }`}
           >
-            <Monitor className="w-3.5 h-3.5 2xl:w-4 2xl:h-4 shrink-0" />
-            <span>3D Engines & Software Suite</span>
-            <span
-              className={`text-[10px] font-mono px-1.5 py-0.5 rounded transition-colors ${
-                activeTab === "software" ? "bg-white/20 text-white" : "bg-neutral-100 text-neutral-600"
-              }`}
-            >
-              {String(softwareSuite.length).padStart(2, "0")}
-            </span>
-          </button>
+            {/* Architectural Drafting Crosshairs */}
+            <span className="absolute top-2.5 left-2.5 font-mono text-[9px] text-neutral-600 select-none group-hover:text-neutral-400 transition-colors">+</span>
+            <span className="absolute top-2.5 right-2.5 font-mono text-[9px] text-neutral-600 select-none group-hover:text-neutral-400 transition-colors">+</span>
+            <span className="absolute bottom-2.5 left-2.5 font-mono text-[9px] text-neutral-600 select-none group-hover:text-neutral-400 transition-colors">+</span>
+            <span className="absolute bottom-2.5 right-2.5 font-mono text-[9px] text-neutral-600 select-none group-hover:text-neutral-400 transition-colors">+</span>
 
-          <button
-            onClick={() => setActiveTab("engineering")}
-            className={`px-4 sm:px-5 py-2.5 text-xs 2xl:text-sm font-technical uppercase tracking-wider sm:tracking-widest transition-all duration-300 border shrink-0 flex items-center gap-2 cursor-pointer ${
-              activeTab === "engineering"
-                ? "bg-black text-white border-black shadow-md font-bold scale-[1.02]"
-                : "bg-white text-neutral-600 border-neutral-300 hover:border-black hover:text-black"
-            }`}
-          >
-            <Compass className="w-3.5 h-3.5 2xl:w-4 2xl:h-4 shrink-0" />
-            <span>Architectural Disciplines</span>
-            <span
-              className={`text-[10px] font-mono px-1.5 py-0.5 rounded transition-colors ${
-                activeTab === "engineering" ? "bg-white/20 text-white" : "bg-neutral-100 text-neutral-600"
-              }`}
-            >
-              {String(disciplines.length).padStart(2, "0")}
-            </span>
-          </button>
+            {/* Subtle Sheen Highlight */}
+            <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/[0.04] to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out pointer-events-none" />
 
-          <button
-            onClick={() => setActiveTab("artistry")}
-            className={`px-4 sm:px-5 py-2.5 text-xs 2xl:text-sm font-technical uppercase tracking-wider sm:tracking-widest transition-all duration-300 border shrink-0 flex items-center gap-2 cursor-pointer ${
-              activeTab === "artistry"
-                ? "bg-black text-white border-black shadow-md font-bold scale-[1.02]"
-                : "bg-white text-neutral-600 border-neutral-300 hover:border-black hover:text-black"
-            }`}
-          >
-            <Palette className="w-3.5 h-3.5 2xl:w-4 2xl:h-4 shrink-0" />
-            <span>Artistry & Languages</span>
-            <span
-              className={`text-[10px] font-mono px-1.5 py-0.5 rounded transition-colors ${
-                activeTab === "artistry" ? "bg-white/20 text-white" : "bg-neutral-100 text-neutral-600"
-              }`}
-            >
-              {String(hobbies.length + languages.length).padStart(2, "0")}
-            </span>
-          </button>
-        </div>
-
-        {/* TAB 1: 3D Engines & Software Suite with Animated Progress Bars */}
-        {activeTab === "software" && (
-          <div className="space-y-8 animate-in fade-in duration-300">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 2xl:gap-8">
-              {softwareSuite.map((sw: any, idx: number) => (
-                <div
-                  key={idx}
-                  style={{ transitionDelay: `${idx * 80}ms` }}
-                  className={`bg-white border border-neutral-300 hover:border-black p-6 2xl:p-8 transition-all duration-500 shadow-xs hover:shadow-xl hover:-translate-y-1.5 flex flex-col justify-between group relative ${
-                    isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
-                  }`}
-                >
-                  {/* Subtle Drafting Crosshairs */}
-                  <span className="absolute top-2 left-2 font-mono text-[9px] text-neutral-300 group-hover:text-black transition-colors select-none">+</span>
-                  <span className="absolute top-2 right-2 font-mono text-[9px] text-neutral-300 group-hover:text-black transition-colors select-none">+</span>
-
-                  <div className="space-y-4 pt-1">
-                    {/* Header with Monogram Badge & Title */}
-                    <div className="flex items-start justify-between pb-3 border-b border-neutral-100">
-                      <div>
-                        <span className="text-[10px] 2xl:text-[11px] font-technical uppercase tracking-widest text-neutral-400 block font-semibold">
-                          {sw.engine}
-                        </span>
-                        <h3 className="text-lg 2xl:text-xl font-editorial font-bold text-black group-hover:tracking-wide transition-all">
-                          {sw.name}
-                        </h3>
-                      </div>
-                      <div className="w-10 h-10 2xl:w-11 2xl:h-11 border border-black flex items-center justify-center font-mono font-bold text-xs 2xl:text-sm text-black group-hover:bg-black group-hover:text-white transition-all duration-300 shadow-xs">
-                        {sw.badge}
-                      </div>
-                    </div>
-
-                    {/* Technical Role */}
-                    <div>
-                      <span className="text-[11px] 2xl:text-xs font-technical uppercase tracking-wider text-neutral-800 font-semibold block">
-                        {sw.role}
-                      </span>
-                      <p className="text-xs 2xl:text-sm text-neutral-600 mt-2 font-sans leading-relaxed">
-                        {sw.deliverable}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Animated Proficiency Bar with Percentage Counter */}
-                  <div className="pt-5 border-t border-neutral-100 space-y-2">
-                    <div className="flex items-center justify-between text-[10px] 2xl:text-[11px] font-technical uppercase tracking-widest text-neutral-500">
-                      <span>Pipeline Mastery</span>
-                      <span className="font-mono font-bold text-black">{sw.level}</span>
-                    </div>
-                    <div className="h-1.5 w-full bg-neutral-100 rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-black transition-all duration-1000 ease-out rounded-full"
-                        style={{
-                          width: isVisible ? sw.level : "0%",
-                          transitionDelay: `${300 + idx * 100}ms`,
-                        }}
-                      />
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Pipeline Workflow Banner with High-End Editorial Accents */}
-            <div className="p-5 sm:p-6 bg-white border border-neutral-300 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              <div className="flex items-center gap-3.5">
-                <div className="w-9 h-9 rounded-full bg-black text-white flex items-center justify-center font-technical font-bold text-sm shrink-0 shadow-sm">
-                  ⚡
-                </div>
-                <div>
-                  <span className="text-xs 2xl:text-sm font-bold text-black font-technical uppercase tracking-wider block">
-                    Integrated Production Pipeline
+            <div className="space-y-6 relative z-10">
+              {/* Header Spec Row */}
+              <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-white/10">
+                <div className="flex items-center gap-2">
+                  <span className="font-mono text-xs font-bold text-neutral-400">01 //</span>
+                  <span className="text-[10px] sm:text-xs font-technical uppercase tracking-[0.2em] text-neutral-400 font-semibold">
+                    Primary Visual Computing & Simulation
                   </span>
-                  <span className="text-[11px] 2xl:text-xs text-neutral-600 font-sans">
-                    AutoCAD (2D Blueprints) → 3ds Max / Corona (Photorealistic Lighting) → InDesign (Client Monograph)
+                </div>
+                <div className="flex items-center gap-1.5 flex-wrap">
+                  <span className="px-2 py-0.5 bg-white/10 border border-white/20 font-mono text-[9px] sm:text-[10px] text-white tracking-widest uppercase">
+                    {primaryTool.name?.toUpperCase() || "3DS MAX"}
+                  </span>
+                  <span className="px-2 py-0.5 bg-[#FF6A3D]/20 border border-[#FF6A3D]/40 font-mono text-[9px] sm:text-[10px] text-[#FFA07A] tracking-widest uppercase">
+                    {primaryTool.engine?.toUpperCase() || "CHAOS GROUP"}
+                  </span>
+                  <span className="px-2 py-0.5 bg-emerald-950/70 border border-emerald-500/30 font-mono text-[9px] sm:text-[10px] text-emerald-400 tracking-widest uppercase">
+                    PBR ENGINES
                   </span>
                 </div>
               </div>
-              <span className="text-[10px] 2xl:text-[11px] font-mono text-neutral-700 font-semibold uppercase tracking-widest shrink-0 bg-neutral-100 px-3 py-1.5 rounded border border-neutral-200">
-                100% CAD FIDELITY GUARANTEED
+
+              {/* Title & Dynamic Narrative */}
+              <div>
+                <h3 className="text-xl sm:text-2xl 2xl:text-3xl font-editorial font-bold text-white tracking-tight leading-snug">
+                  {primaryTool.role || "Physically-Based Lighting & Hyper-Realism"}
+                </h3>
+                <p className="text-xs sm:text-[13px] 2xl:text-sm text-neutral-300 mt-2.5 font-sans leading-relaxed max-w-2xl">
+                  Translating complex spatial design into photorealistic atmospheres. Engineered with physically correct light bounces, micro-roughness surface scattering, and calibrated 2700K–3000K warm circadian illumination.
+                </p>
+              </div>
+
+              {/* 4 Architectural Capabilities Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-2">
+                <div className="p-3 bg-white/[0.04] border border-white/10 hover:border-white/30 transition-colors space-y-1">
+                  <div className="flex items-center gap-1.5 text-xs font-technical uppercase tracking-wider text-white font-semibold">
+                    <SunMedium className="w-3.5 h-3.5 text-[#FFA07A]" />
+                    <span>LightMix CCT Control</span>
+                  </div>
+                  <p className="text-[11px] text-neutral-400 font-sans leading-normal">
+                    Real-time photometric lux distribution & biological warm balance without re-rendering.
+                  </p>
+                </div>
+
+                <div className="p-3 bg-white/[0.04] border border-white/10 hover:border-white/30 transition-colors space-y-1">
+                  <div className="flex items-center gap-1.5 text-xs font-technical uppercase tracking-wider text-white font-semibold">
+                    <Layers className="w-3.5 h-3.5 text-emerald-400" />
+                    <span>PBR Material Synthesis</span>
+                  </div>
+                  <p className="text-[11px] text-neutral-400 font-sans leading-normal">
+                    Complex tactile mapping for open-pore travertine, bookmatched marble, bouclés, and brushed brass.
+                  </p>
+                </div>
+
+                <div className="p-3 bg-white/[0.04] border border-white/10 hover:border-white/30 transition-colors space-y-1">
+                  <div className="flex items-center gap-1.5 text-xs font-technical uppercase tracking-wider text-white font-semibold">
+                    <Box className="w-3.5 h-3.5 text-sky-400" />
+                    <span>High-Poly Mesh Modeling</span>
+                  </div>
+                  <p className="text-[11px] text-neutral-400 font-sans leading-normal">
+                    Complex architectural geometries, organic soft curves, and bespoke parametric joinery volumes.
+                  </p>
+                </div>
+
+                <div className="p-3 bg-white/[0.04] border border-white/10 hover:border-white/30 transition-colors space-y-1">
+                  <div className="flex items-center gap-1.5 text-xs font-technical uppercase tracking-wider text-white font-semibold">
+                    <Sparkles className="w-3.5 h-3.5 text-purple-400" />
+                    <span>Caustics & Volumetrics</span>
+                  </div>
+                  <p className="text-[11px] text-neutral-400 font-sans leading-normal">
+                    Subtle volumetric dust motes, fluted glass refraction, and natural architectural light falloff.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Deliverable Footer Bar */}
+            <div className="pt-4 mt-6 border-t border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[10px] sm:text-[11px] font-mono text-neutral-400">
+              <span className="uppercase tracking-wider flex items-center gap-1.5 text-neutral-300">
+                <Check className="w-3.5 h-3.5 text-emerald-400" />
+                <span>Executive Deliverable:</span>
+                <span className="text-white font-semibold">{primaryTool.deliverable}</span>
+              </span>
+              <span className="text-[9px] uppercase tracking-widest text-neutral-500">
+                {primaryTool.engine?.toUpperCase() || "AUTODESK & CHAOS"}
               </span>
             </div>
           </div>
-        )}
 
-        {/* TAB 2: Architectural Disciplines with Staggered Entrance */}
-        {activeTab === "engineering" && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 2xl:gap-8 animate-in fade-in duration-300">
-            {disciplines.map((disc: any, idx: number) => {
-              const IconComp = disc.icon || Ruler;
-              return (
-                <div
-                  key={idx}
-                  style={{ transitionDelay: `${idx * 80}ms` }}
-                  className={`bg-white border border-neutral-300 hover:border-black p-6 2xl:p-8 transition-all duration-500 shadow-xs hover:shadow-xl hover:-translate-y-1.5 flex flex-col justify-between group ${
-                    isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
-                  }`}
-                >
-                  <div className="space-y-4">
-                    {/* Number and Icon Header */}
-                    <div className="flex items-center justify-between pb-3 border-b border-neutral-100">
-                      <span className="text-xs 2xl:text-sm font-mono font-bold text-neutral-400 group-hover:text-black transition-colors">
-                        {disc.num}
-                      </span>
-                      <div className="p-2 border border-neutral-200 group-hover:border-black text-black group-hover:bg-neutral-50 transition-all duration-300">
-                        <IconComp className="w-4 h-4 2xl:w-5 2xl:h-5" />
-                      </div>
-                    </div>
+          {/* ------------------------------------------------------------ */}
+          {/* BENTO 2: 2D EXECUTIVE BLUEPRINTS (4 Cols on Desktop)         */}
+          {/* Dynamic AutoCAD Shop Drawings & Detailing                    */}
+          {/* ------------------------------------------------------------ */}
+          <div
+            style={{ transitionDelay: "100ms" }}
+            className={`lg:col-span-4 bg-white border border-neutral-300 hover:border-black p-6 sm:p-7 2xl:p-8 flex flex-col justify-between shadow-xs hover:shadow-xl transition-all duration-500 group relative ${
+              isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+            }`}
+          >
+            {/* Drafting Crosshairs */}
+            <span className="absolute top-2.5 left-2.5 font-mono text-[9px] text-neutral-300 select-none group-hover:text-black transition-colors">+</span>
+            <span className="absolute top-2.5 right-2.5 font-mono text-[9px] text-neutral-300 select-none group-hover:text-black transition-colors">+</span>
 
-                    <div>
-                      <span className="text-[10px] 2xl:text-[11px] font-technical uppercase tracking-wider text-neutral-500 font-semibold block">
-                        {disc.tagline}
-                      </span>
-                      <h3 className="text-base sm:text-lg 2xl:text-xl font-editorial font-bold text-black mt-1 group-hover:tracking-wide transition-all">
-                        {disc.title}
-                      </h3>
-                      <p className="text-xs 2xl:text-sm text-neutral-600 mt-2.5 font-sans leading-relaxed text-justify">
-                        {disc.desc}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Bullet Specs Pills */}
-                  <div className="pt-4 border-t border-neutral-100 space-y-1.5">
-                    {disc.specs?.map((spec: string, sIdx: number) => (
-                      <div key={sIdx} className="flex items-center gap-2 text-[11px] 2xl:text-xs text-neutral-700">
-                        <div className="w-1.5 h-1.5 rounded-full bg-black shrink-0" />
-                        <span className="font-technical uppercase tracking-wider text-[10px] 2xl:text-[11px] text-neutral-600 truncate">
-                          {spec}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        )}
-
-        {/* TAB 3: Artistry & Languages */}
-        {activeTab === "artistry" && (
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 2xl:gap-10 animate-in fade-in duration-300 items-start">
-            {/* Left: Artistic Explorations (7 cols) */}
-            <div className="lg:col-span-7 bg-white border border-neutral-300 p-6 sm:p-8 2xl:p-10 shadow-xs space-y-6">
-              <div className="flex items-center gap-3 pb-4 border-b border-neutral-200">
-                <Paintbrush className="w-4 h-4 2xl:w-5 2xl:h-5 text-black" />
-                <div>
-                  <h3 className="text-base 2xl:text-lg font-technical font-bold uppercase tracking-widest text-black">
-                    Artistic Explorations & Hand Craftsmanship
-                  </h3>
-                  <span className="text-[10px] 2xl:text-xs text-neutral-500 font-technical">
-                    Tactile sensibilities that inform spatial architecture
+            <div className="space-y-4">
+              {/* Header Spec Row */}
+              <div className="flex items-center justify-between pb-3 border-b border-neutral-200">
+                <div className="flex items-center gap-2">
+                  <span className="font-mono text-xs font-bold text-neutral-400 group-hover:text-black transition-colors">02 //</span>
+                  <span className="text-[10px] font-technical uppercase tracking-[0.2em] text-neutral-500 font-semibold">
+                    Technical Drafting
                   </span>
                 </div>
+                <span className="px-2 py-0.5 bg-neutral-100 border border-neutral-300 font-mono text-[9px] text-black tracking-widest uppercase font-semibold">
+                  {cadTool.badge || "AUTOCAD 2D"}
+                </span>
               </div>
 
-              <div className="space-y-4">
-                {hobbies.map((hobby: string, idx: number) => (
-                  <div
-                    key={idx}
-                    className="p-4 bg-neutral-50 border border-neutral-200 hover:border-black transition-all hover:bg-white hover:shadow-xs group"
-                  >
-                    <div className="flex items-start gap-3">
-                      <span className="text-xs font-mono font-bold text-neutral-400 group-hover:text-black transition-colors mt-0.5">
-                        0{idx + 1}.
-                      </span>
-                      <p className="text-xs 2xl:text-sm text-neutral-700 font-sans leading-relaxed">
-                        {hobby}
-                      </p>
-                    </div>
-                  </div>
-                ))}
+              {/* Title & Dynamic Narrative */}
+              <div>
+                <h3 className="text-lg sm:text-xl font-editorial font-bold text-black tracking-tight">
+                  {cadTool.role || "Executive Shop Drawings"}
+                </h3>
+                <p className="text-xs text-neutral-600 mt-2 font-sans leading-relaxed">
+                  Millimeter-accurate working drawing packages ready for municipal permits and flawless on-site contractor execution.
+                </p>
               </div>
 
-              <div className="pt-2 text-[10px] 2xl:text-[11px] font-technical uppercase tracking-widest text-neutral-400">
-                SPATIAL SENSITIVITY • FREEHAND SKETCHING • LIGHT & SHADOW FRAMING
-              </div>
-            </div>
-
-            {/* Right: Multilingual Communication (5 cols) */}
-            <div className="lg:col-span-5 bg-white border border-neutral-300 p-6 sm:p-8 2xl:p-10 shadow-xs space-y-6">
-              <div className="flex items-center gap-3 pb-4 border-b border-neutral-200">
-                <Languages className="w-4 h-4 2xl:w-5 2xl:h-5 text-black" />
-                <div>
-                  <h3 className="text-base 2xl:text-lg font-technical font-bold uppercase tracking-widest text-black">
-                    Languages & Global Reach
-                  </h3>
-                  <span className="text-[10px] 2xl:text-xs text-neutral-500 font-technical">
-                    International clients and overseas supplier communication
-                  </span>
-                </div>
-              </div>
-
-              <div className="space-y-3.5">
-                {languages.map((item: any, idx: number) => (
-                  <div
-                    key={idx}
-                    className="p-4 bg-neutral-50 border border-neutral-200 flex items-center justify-between hover:border-black hover:bg-white transition-all shadow-2xs"
-                  >
-                    <div>
-                      <span className="font-bold text-sm 2xl:text-base text-black font-editorial tracking-wider block">
-                        {item.nameEn}
-                      </span>
-                      <span className="text-xs text-neutral-500 font-technical">
-                        {item.levelEn}
-                      </span>
-                    </div>
-                    <span className="text-[10px] 2xl:text-[11px] font-mono px-2 py-0.5 bg-white border border-neutral-300 text-black">
-                      {idx === 0 ? "NATIVE" : idx === 1 ? "FLUENT" : "WORKING"}
+              {/* Technical Drawing List */}
+              <div className="space-y-2 pt-1 font-technical text-xs">
+                <div className="flex items-start gap-2 p-2 bg-neutral-50 border border-neutral-200/80">
+                  <Ruler className="w-3.5 h-3.5 text-neutral-700 shrink-0 mt-0.5" />
+                  <div className="min-w-0">
+                    <span className="font-semibold text-black uppercase tracking-wider block text-[11px]">
+                      Dimensioned Floor Plans
+                    </span>
+                    <span className="text-[10px] text-neutral-500 font-sans">
+                      Clearance standards & movement vectors
                     </span>
                   </div>
-                ))}
+                </div>
+
+                <div className="flex items-start gap-2 p-2 bg-neutral-50 border border-neutral-200/80">
+                  <SunMedium className="w-3.5 h-3.5 text-neutral-700 shrink-0 mt-0.5" />
+                  <div className="min-w-0">
+                    <span className="font-semibold text-black uppercase tracking-wider block text-[11px]">
+                      Reflected Ceiling Plans (RCP)
+                    </span>
+                    <span className="text-[10px] text-neutral-500 font-sans">
+                      Concealed LED pockets & circuit zoning
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-2 p-2 bg-neutral-50 border border-neutral-200/80">
+                  <Hammer className="w-3.5 h-3.5 text-neutral-700 shrink-0 mt-0.5" />
+                  <div className="min-w-0">
+                    <span className="font-semibold text-black uppercase tracking-wider block text-[11px]">
+                      1:10 Joinery Detailing
+                    </span>
+                    <span className="text-[10px] text-neutral-500 font-sans">
+                      Shadow reveals & custom millwork sections
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Deliverable Footer */}
+            <div className="pt-3.5 mt-5 border-t border-neutral-200 flex items-center justify-between text-[10px] font-mono text-neutral-500">
+              <span className="uppercase tracking-wider text-black font-semibold">TOLERANCE: &lt; 2MM</span>
+              <span className="truncate">{cadTool.deliverable || "1:10 • 1:20 • 1:50"}</span>
+            </div>
+          </div>
+
+          {/* ------------------------------------------------------------ */}
+          {/* BENTO 3: SPATIAL MASSING & BIM (4 Cols on Desktop)           */}
+          {/* Dynamic Revit BIM & SketchUp Pro                             */}
+          {/* ------------------------------------------------------------ */}
+          <div
+            style={{ transitionDelay: "150ms" }}
+            className={`lg:col-span-4 bg-white border border-neutral-300 hover:border-black p-6 sm:p-7 2xl:p-8 flex flex-col justify-between shadow-xs hover:shadow-xl transition-all duration-500 group relative ${
+              isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+            }`}
+          >
+            <div className="space-y-4">
+              <div className="flex items-center justify-between pb-3 border-b border-neutral-200">
+                <div className="flex items-center gap-2">
+                  <span className="font-mono text-xs font-bold text-neutral-400 group-hover:text-black transition-colors">03 //</span>
+                  <span className="text-[10px] font-technical uppercase tracking-[0.2em] text-neutral-500 font-semibold">
+                    BIM & Volumetrics
+                  </span>
+                </div>
+                <span className="px-2 py-0.5 bg-neutral-100 border border-neutral-300 font-mono text-[9px] text-black tracking-widest uppercase font-semibold">
+                  {bimTool.badge || "REVIT / SKP"}
+                </span>
               </div>
 
-              <div className="p-4 bg-neutral-100/70 border border-neutral-200 text-xs text-neutral-600 font-sans leading-relaxed">
-                Comfortable presenting architectural pitches and executing shop drawings for clients across Egypt, the GCC, and European supplier houses.
+              <div>
+                <h3 className="text-lg sm:text-xl font-editorial font-bold text-black tracking-tight">
+                  {bimTool.role || "Volumetric Massing & BIM"}
+                </h3>
+                <p className="text-xs text-neutral-600 mt-2 font-sans leading-relaxed">
+                  Rapid 3D schematic massing, sightline evaluation, daylight angles, and BIM architectural documentation.
+                </p>
+              </div>
+
+              <div className="space-y-2 pt-1 text-[11px] font-sans text-neutral-700">
+                <div className="flex items-center gap-2">
+                  <div className="w-1.5 h-1.5 rounded-full bg-black shrink-0" />
+                  <span>Early-stage volumetric sightline & clearance studies</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-1.5 h-1.5 rounded-full bg-black shrink-0" />
+                  <span>MEP & structural coordination clash detection</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-1.5 h-1.5 rounded-full bg-black shrink-0" />
+                  <span>Multi-angle client walkthrough presentations</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="pt-3.5 mt-5 border-t border-neutral-200 flex items-center justify-between text-[10px] font-mono text-neutral-500 uppercase tracking-wider">
+              <span className="text-black font-semibold">COORDINATION</span>
+              <span className="truncate">{bimTool.deliverable || "BIM LEVEL 2"}</span>
+            </div>
+          </div>
+
+          {/* ------------------------------------------------------------ */}
+          {/* BENTO 4: FINE ARTS FOUNDATION (4 Cols on Desktop)            */}
+          {/* Dynamic Supabase Education Table (Alexandria Univ Fine Arts) */}
+          {/* ------------------------------------------------------------ */}
+          <div
+            style={{ transitionDelay: "200ms" }}
+            className={`lg:col-span-4 bg-[#F5F4F0] border border-neutral-300 hover:border-black p-6 sm:p-7 2xl:p-8 flex flex-col justify-between shadow-xs hover:shadow-xl transition-all duration-500 group relative ${
+              isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+            }`}
+          >
+            <div className="space-y-4">
+              <div className="flex items-center justify-between pb-3 border-b border-neutral-300/80">
+                <div className="flex items-center gap-2">
+                  <span className="font-mono text-xs font-bold text-neutral-500 group-hover:text-black transition-colors">04 //</span>
+                  <span className="text-[10px] font-technical uppercase tracking-[0.2em] text-neutral-600 font-semibold">
+                    Academic Heritage
+                  </span>
+                </div>
+                <span className="px-2 py-0.5 bg-black text-white font-mono text-[9px] tracking-widest uppercase">
+                  FINE ARTS
+                </span>
+              </div>
+
+              <div>
+                <h3 className="text-lg sm:text-xl font-editorial font-bold text-black tracking-tight">
+                  {degree}
+                </h3>
+                <p className="text-xs text-neutral-700 mt-2 font-sans leading-relaxed">
+                  {eduDescription}
+                </p>
+              </div>
+
+              <div className="space-y-2 pt-1 text-[11px] font-sans text-neutral-700">
+                <div className="flex items-center gap-2">
+                  <Paintbrush className="w-3.5 h-3.5 text-neutral-700 shrink-0" />
+                  <span>Freehand ideation sketches & proportion studies</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Ruler className="w-3.5 h-3.5 text-neutral-700 shrink-0" />
+                  <span>Tactile stone, wood & textile flatlays curation</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Sparkles className="w-3.5 h-3.5 text-neutral-700 shrink-0" />
+                  <span>Biophilic harmony & organic curved geometry</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="pt-3.5 mt-5 border-t border-neutral-300/80 flex items-center justify-between text-[10px] font-mono text-neutral-600 uppercase tracking-wider">
+              <span className="text-black font-semibold truncate">{institution.toUpperCase()}</span>
+              <span className="shrink-0">{grade.toUpperCase()}</span>
+            </div>
+          </div>
+
+          {/* ------------------------------------------------------------ */}
+          {/* BENTO 5: EDITORIAL & MONOGRAPH DESIGN (4 Cols on Desktop)    */}
+          {/* Dynamic InDesign & Photoshop CC                              */}
+          {/* ------------------------------------------------------------ */}
+          <div
+            style={{ transitionDelay: "250ms" }}
+            className={`lg:col-span-4 bg-white border border-neutral-300 hover:border-black p-6 sm:p-7 2xl:p-8 flex flex-col justify-between shadow-xs hover:shadow-xl transition-all duration-500 group relative ${
+              isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+            }`}
+          >
+            <div className="space-y-4">
+              <div className="flex items-center justify-between pb-3 border-b border-neutral-200">
+                <div className="flex items-center gap-2">
+                  <span className="font-mono text-xs font-bold text-neutral-400 group-hover:text-black transition-colors">05 //</span>
+                  <span className="text-[10px] font-technical uppercase tracking-[0.2em] text-neutral-500 font-semibold">
+                    Visual Storytelling
+                  </span>
+                </div>
+                <span className="px-2 py-0.5 bg-neutral-100 border border-neutral-300 font-mono text-[9px] text-black tracking-widest uppercase font-semibold">
+                  {editorialTool.badge || "INDESIGN / PS"}
+                </span>
+              </div>
+
+              <div>
+                <h3 className="text-lg sm:text-xl font-editorial font-bold text-black tracking-tight">
+                  {editorialTool.role || "Client Monographs & Grading"}
+                </h3>
+                <p className="text-xs text-neutral-600 mt-2 font-sans leading-relaxed">
+                  Editorial post-production color balance, bloom grading, sample swatch boards, and bespoke architectural pitch books.
+                </p>
+              </div>
+
+              <div className="space-y-2 pt-1 text-[11px] font-sans text-neutral-700">
+                <div className="flex items-center gap-2">
+                  <div className="w-1.5 h-1.5 rounded-full bg-black shrink-0" />
+                  <span>Cinematic depth-of-field & atmospheric light balancing</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-1.5 h-1.5 rounded-full bg-black shrink-0" />
+                  <span>Executive A4 architectural monographs & client dossiers</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-1.5 h-1.5 rounded-full bg-black shrink-0" />
+                  <span>Tactile material boards & swatch presentation</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="pt-3.5 mt-5 border-t border-neutral-200 flex items-center justify-between text-[10px] font-mono text-neutral-500 uppercase tracking-wider">
+              <span className="text-black font-semibold">OUTPUT</span>
+              <span className="truncate">{editorialTool.deliverable || "PUBLICATION GRADE"}</span>
+            </div>
+          </div>
+
+          {/* ------------------------------------------------------------ */}
+          {/* BENTO 6: FULL-WIDTH STUDIO EXECUTION STANDARDS (12 Cols)     */}
+          {/* Dynamic Technical Disciplines & Languages                    */}
+          {/* ------------------------------------------------------------ */}
+          <div
+            style={{ transitionDelay: "300ms" }}
+            className={`lg:col-span-12 bg-white border border-neutral-300 p-6 sm:p-7 2xl:p-9 shadow-xs hover:border-black transition-all duration-500 ${
+              isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+            }`}
+          >
+            {/* Header Strip */}
+            <div className="flex items-center justify-between pb-4 border-b border-neutral-200 mb-6 text-[10px] sm:text-xs font-mono uppercase tracking-[0.2em] text-neutral-400">
+              <span className="text-black font-bold">06 // STUDIO DELIVERY & EXECUTION STANDARDS</span>
+              <span>RIGOROUS SITE REALIZATION</span>
+            </div>
+
+            {/* 3 Pillars Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+              {/* Pillar 1: Turnkey Supervision */}
+              <div className="space-y-2">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-full bg-neutral-100 border border-neutral-200 flex items-center justify-center shrink-0">
+                    <ShieldCheck className="w-4 h-4 text-black" />
+                  </div>
+                  <div>
+                    <h4 className="text-xs sm:text-sm font-technical font-bold uppercase tracking-wider text-black">
+                      Turnkey Site Supervision
+                    </h4>
+                    <span className="text-[10px] font-mono text-neutral-400 uppercase tracking-wider">
+                      Zero-Tolerance Quality
+                    </span>
+                  </div>
+                </div>
+                <p className="text-xs text-neutral-600 font-sans leading-relaxed ps-10">
+                  {techSkills[4] || "Rigorous on-site engineering oversight, laser level verification, and direct alignment with finishing contractors to match 3D intent."}
+                </p>
+              </div>
+
+              {/* Pillar 2: BOQ & Cost Governance */}
+              <div className="space-y-2">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-full bg-neutral-100 border border-neutral-200 flex items-center justify-center shrink-0">
+                    <FileSpreadsheet className="w-4 h-4 text-black" />
+                  </div>
+                  <div>
+                    <h4 className="text-xs sm:text-sm font-technical font-bold uppercase tracking-wider text-black">
+                      BOQ & Cost Integrity
+                    </h4>
+                    <span className="text-[10px] font-mono text-neutral-400 uppercase tracking-wider">
+                      Budget Governance
+                    </span>
+                  </div>
+                </div>
+                <p className="text-xs text-neutral-600 font-sans leading-relaxed ps-10">
+                  {techSkills[5] || "Comprehensive Bill of Quantities, material yield optimization, vendor procurement vetting, and transparent budget management."}
+                </p>
+              </div>
+
+              {/* Pillar 3: Bilingual Global Reach */}
+              <div className="space-y-2">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-full bg-neutral-100 border border-neutral-200 flex items-center justify-center shrink-0">
+                    <Languages className="w-4 h-4 text-black" />
+                  </div>
+                  <div>
+                    <h4 className="text-xs sm:text-sm font-technical font-bold uppercase tracking-wider text-black">
+                      Global Client Pitching
+                    </h4>
+                    <span className="text-[10px] font-mono text-neutral-400 uppercase tracking-wider">
+                      {languages.map((l: any) => l.nameEn || l.name || "Language").join(" & ")}
+                    </span>
+                  </div>
+                </div>
+                <p className="text-xs text-neutral-600 font-sans leading-relaxed ps-10">
+                  Comfortable presenting design concepts, specifications, and contracts to private villa owners and commercial developers across Egypt and the GCC.
+                </p>
               </div>
             </div>
           </div>
-        )}
+        </div>
       </div>
     </section>
   );
