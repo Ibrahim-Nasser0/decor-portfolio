@@ -1,8 +1,9 @@
 import AdminSidebar from './Sidebar'
 import AdminTopNav from '@/components/admin/AdminTopNav'
+import MobileBottomNav from '@/components/admin/MobileBottomNav'
 
 export const metadata = {
-  title: 'Admin Console | Eng. Alaa Issa Interior Architecture',
+  title: 'Admin Console | Eng. Alaa Essa Interior Architecture',
 }
 
 export default function AdminLayout({
@@ -17,16 +18,19 @@ export default function AdminLayout({
       <div className="fixed -top-40 -right-40 w-96 h-96 bg-amber-500/[0.03] rounded-full blur-3xl pointer-events-none z-0" />
       <div className="fixed bottom-0 -left-40 w-96 h-96 bg-sky-500/[0.02] rounded-full blur-3xl pointer-events-none z-0" />
 
-      {/* Collapsible Fixed Sidebar */}
+      {/* Desktop Fixed Sidebar */}
       <AdminSidebar />
 
       {/* Main Content Area */}
-      <main className="flex-1 min-w-0 flex flex-col relative z-10 overflow-y-auto">
+      <main className="flex-1 min-w-0 flex flex-col relative z-10 overflow-y-auto pb-24 lg:pb-8">
         <AdminTopNav />
         <div className="flex-1">
           {children}
         </div>
       </main>
+
+      {/* Dedicated Mobile Bottom Bar Navigation */}
+      <MobileBottomNav />
     </div>
   )
 }

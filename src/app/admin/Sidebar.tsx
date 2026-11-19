@@ -52,7 +52,7 @@ export default function AdminSidebar() {
           <div className="relative w-8 h-8 rounded-full overflow-hidden border border-amber-500/40 p-0.5">
             <Image
               src="/images/alaa.webp"
-              alt="Eng. Alaa Issa"
+              alt="Eng. Alaa Essa"
               fill
               sizes="32px"
               className="object-cover rounded-full"
@@ -60,21 +60,33 @@ export default function AdminSidebar() {
           </div>
           <div>
             <div className="text-xs font-semibold tracking-wider text-white">
-              ENG. ALAA ISSA
+              ENG. ALAA ESSA
             </div>
             <div className="text-[9px] text-amber-500 font-mono tracking-wider">
-              SECTIONS CONSOLE
+              STUDIO CONSOLE
             </div>
           </div>
         </div>
 
-        <button
-          onClick={() => setMobileOpen(!mobileOpen)}
-          className="p-2 text-neutral-400 hover:text-white rounded-xl bg-white/[0.03] border border-white/[0.06] transition-colors"
-          aria-label="Toggle navigation"
-        >
-          {mobileOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
-        </button>
+        <div className="flex items-center gap-2">
+          <Link
+            href="/"
+            target="_blank"
+            className="p-2 text-neutral-300 hover:text-white rounded-xl bg-white/[0.03] border border-white/[0.06] text-xs font-mono flex items-center gap-1"
+            title="View Live Site"
+          >
+            <span className="text-[10px]">Site</span>
+            <ArrowUpRight className="w-3.5 h-3.5 text-amber-400" />
+          </Link>
+
+          <button
+            onClick={() => setMobileOpen(!mobileOpen)}
+            className="p-2 text-neutral-400 hover:text-white rounded-xl bg-white/[0.03] border border-white/[0.06] transition-colors"
+            aria-label="Toggle navigation"
+          >
+            {mobileOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
+          </button>
+        </div>
       </header>
 
       {/* Mobile Drawer Backdrop */}
