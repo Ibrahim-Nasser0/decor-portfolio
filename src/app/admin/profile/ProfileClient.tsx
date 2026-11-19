@@ -154,7 +154,7 @@ export default function ProfileClient({ initialProfile }: { initialProfile: any 
             <div className="flex items-center gap-4 pb-6 border-b border-white/[0.06]">
               <div className="relative w-16 h-16 rounded-2xl overflow-hidden border-2 border-amber-500/40 p-1 shadow-lg shrink-0">
                 <Image
-                  src="/images/alaa.jpeg"
+                  src={profile.heroImageUrl || profile.avatarUrl || '/images/alaa.webp'}
                   alt="Eng. Alaa Issa"
                   fill
                   className="object-cover rounded-xl"

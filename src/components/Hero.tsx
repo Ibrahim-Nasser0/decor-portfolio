@@ -14,6 +14,8 @@ interface HeroProps {
     aboutIntroEn?: string;
     locationEn?: string;
     avatarUrl?: string;
+    heroImageUrl?: string;
+    aboutImageUrl?: string;
     builtWorksOffset?: number;
     cadFidelity?: number;
     experience?: any[];
@@ -54,7 +56,7 @@ export default function Hero({ profile, projectsCount = 5 }: HeroProps) {
   const subtitle = profile?.subtitleEn || DESIGNER_INFO.subtitleEn || "Bespoke Residential Sanctuaries & Tactile Living Environments";
   const bio = profile?.aboutIntroEn || DESIGNER_INFO.aboutIntroEn;
   const location = profile?.locationEn || DESIGNER_INFO.locationEn || "Cairo, Egypt";
-  const avatarUrl = profile?.avatarUrl || "/images/alaa.webp";
+  const heroImageUrl = profile?.heroImageUrl || profile?.avatarUrl || "/images/alaa.webp";
 
   // Dynamic Metrics Calculation:
   // 1. Built Works: active projects in database + customizable archive offset (default 80)
@@ -211,7 +213,7 @@ export default function Hero({ profile, projectsCount = 5 }: HeroProps) {
               {/* Main Portrait Frame with Atmospheric Depth */}
               <div className="relative aspect-[3/4] w-full overflow-hidden bg-neutral-100 border border-neutral-300 shadow-xl group">
                 <Image
-                  src={avatarUrl}
+                  src={heroImageUrl}
                   alt={`${name} - Interior Architect & Spatial Designer`}
                   fill
                   priority

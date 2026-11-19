@@ -18,7 +18,10 @@ import {
   Briefcase,
   FileText,
   UserCheck,
+  Upload,
+  Camera,
 } from 'lucide-react'
+import { createClient } from '@/lib/supabase/client'
 import { saveProfileAction } from '../actions'
 import UnsavedChangesBar from '@/components/admin/UnsavedChangesBar'
 import { calculateYearsOfExperience, calculateBuiltWorks } from '@/lib/metrics'
@@ -36,12 +39,49 @@ export default function HeroClient({
     aboutIntroEn: initialProfile.aboutIntroEn || DESIGNER_INFO.aboutIntroEn,
     builtWorksOffset: initialProfile.builtWorksOffset !== undefined ? Number(initialProfile.builtWorksOffset) : 80,
     cadFidelity: initialProfile.cadFidelity !== undefined ? Number(initialProfile.cadFidelity) : 100,
-    avatarUrl: initialProfile.avatarUrl || '/images/alaa.webp',
+    avatarUrl: initialProfile.heroImageUrl || initialProfile.avatarUrl || '/images/alaa.webp',
+    heroImageUrl: initialProfile.heroImageUrl || initialProfile.avatarUrl || '/images/alaa.webp',
   })
   const [initialData, setInitialData] = useState(profile)
   const [isSaving, setIsSaving] = useState(false)
+  const [isUploadingHero, setIsUploadingHero] = useState(false)
   const [showLivePreview, setShowLivePreview] = useState(true)
   const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
+
+  // Handle Hero Portrait Upload to Supabase Storage (profile-media)
+  const handleHeroUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    try {
+      setIsUploadingHero(true)
+      const supabase = createClient()
+      const ext = file.name.split('.').pop()
+      const fileName = `hero-portrait-${Date.now()}.${ext}`
+
+      let bucket = 'profile-media'
+      let uploadRes = await supabase.storage.from(bucket).upload(fileName, file, { upsert: true })
+
+      if (uploadRes.error) {
+        bucket = 'portfolio-media'
+        uploadRes = await supabase.storage.from(bucket).upload(`hero/${fileName}`, file, { upsert: true })
+      }
+
+      if (uploadRes.error) throw uploadRes.error
+
+      const { data: { publicUrl } } = supabase.storage
+        .from(bucket)
+        .getPublicUrl(bucket === 'profile-media' ? fileName : `hero/${fileName}`)
+
+      setProfile((prev: any) => ({ ...prev, heroImageUrl: publicUrl, avatarUrl: publicUrl }))
+      setFeedback({ type: 'success', text: 'Hero portrait uploaded to Supabase Storage successfully!' })
+      setTimeout(() => setFeedback(null), 3000)
+    } catch (err: any) {
+      setFeedback({ type: 'error', text: err.message || 'Failed to upload hero photo' })
+    } finally {
+      setIsUploadingHero(false)
+    }
+  }
 
   // Calculations for Monograph Metrics
   const calculatedYears = calculateYearsOfExperience(profile.experience || initialProfile?.experience)
@@ -332,9 +372,31 @@ export default function HeroClient({
             <div className="space-y-4">
               {/* Avatar Selector */}
               <div>
-                <label className="text-xs font-mono text-neutral-300 uppercase block mb-2">
-                  Avatar Photo (Shown in Navbar Circle & Hero Frame)
-                </label>
+                <div className="flex items-center justify-between mb-2">
+                  <label className="text-xs font-mono text-neutral-300 uppercase">
+                    Hero Portrait Photo (Shown in Navbar & Hero Frame)
+                  </label>
+                  <label className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-white/[0.08] hover:bg-white/[0.15] text-white text-[11px] font-mono rounded-lg cursor-pointer transition-colors border border-white/10">
+                    {isUploadingHero ? (
+                      <>
+                        <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                        <span>Uploading...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Upload className="w-3.5 h-3.5 text-amber-400" />
+                        <span>Upload (profile-media)</span>
+                      </>
+                    )}
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleHeroUpload}
+                      disabled={isUploadingHero}
+                      className="hidden"
+                    />
+                  </label>
+                </div>
                 <div className="flex items-center gap-4 p-3 bg-[#090a0c] border border-white/[0.06] rounded-2xl">
                   {/* Live Avatar Preview matching Navbar Image 1 */}
                   <div className="relative w-11 h-11 rounded-full overflow-hidden border-2 border-white/80 shrink-0 shadow-md">

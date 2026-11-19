@@ -8,16 +8,14 @@ import {
   Mail,
   MessageCircle,
   ArrowUpRight,
-  CheckCircle2,
-  Award,
-  Sparkles,
+  ArrowDown,
   Quote,
-  Compass,
-  Sliders,
-  Layers,
   GraduationCap,
   FileDown,
+  FileText,
   Briefcase,
+  Layers,
+  Sparkles,
 } from "lucide-react";
 
 interface AboutSectionProps {
@@ -31,6 +29,7 @@ interface AboutSectionProps {
     aboutExperienceEn?: string;
     statementEn?: string;
     avatarUrl?: string;
+    aboutImageUrl?: string;
     education?: Array<{ titleEn?: string; institutionEn?: string; year?: string }>;
   };
 }
@@ -41,15 +40,15 @@ export default function AboutSection({ profile }: AboutSectionProps) {
   const [scrollProgress, setScrollProgress] = useState(0);
 
   // Dynamic Content from Supabase profile with elegant fallbacks
-  const name = profile?.nameEn || DESIGNER_INFO.nameEn || "Alaa Issa";
-  const title = profile?.titleEn || DESIGNER_INFO.titleEn || "Interior Architect & Spatial Designer";
-  const location = profile?.locationEn || DESIGNER_INFO.locationEn || "Cairo, Egypt";
-  const email = profile?.email || DESIGNER_INFO.email;
-  const whatsappNumber = profile?.whatsappNumber || DESIGNER_INFO.whatsappNumber;
+  const name = profile?.nameEn || DESIGNER_INFO.nameEn || "Alaa Essa";
+  const title = profile?.titleEn || DESIGNER_INFO.titleEn || "Interior Architecture & 3D Visualization";
+  const location = profile?.locationEn || DESIGNER_INFO.locationEn || "Alexandria, Egypt";
+  const email = profile?.email || DESIGNER_INFO.email || "alaaesssaa@gmail.com";
+  const whatsappNumber = profile?.whatsappNumber || DESIGNER_INFO.whatsappNumber || "201032494616";
   const experienceText = profile?.aboutExperienceEn || DESIGNER_INFO.aboutExperienceEn;
   const philosophyStatement = profile?.statementEn || DESIGNER_INFO.statementEn;
-  const photoUrl = profile?.avatarUrl || "/images/alaa2.webp";
-  const educationDegree = profile?.education?.[0]?.titleEn || "B.Sc. Architectural Engineering & Interior Architecture";
+  const photoUrl = profile?.aboutImageUrl || "/images/alaa2.webp";
+  const educationDegree = profile?.education?.[0]?.titleEn || "Faculty of Fine Arts • Alexandria University";
 
   // Viewport Intersection Observer & Scroll Parallax Tracking
   useEffect(() => {
@@ -151,13 +150,13 @@ export default function AboutSection({ profile }: AboutSectionProps) {
 
         {/* 2-Column Monograph Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 sm:gap-12 lg:gap-16 2xl:gap-24 items-start">
-          {/* Left Column (5 cols): Portrait Frame with Scroll Parallax & Quick Coordinates */}
+          {/* Left Column (5 cols): Portrait Frame with Scroll Parallax & Architectural Title Block */}
           <div
             className={`lg:col-span-5 space-y-6 2xl:space-y-8 transition-all duration-800 ease-out delay-150 ${
               isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
             }`}
           >
-            <div className="relative mx-auto max-w-[280px] xs:max-w-xs sm:max-w-sm lg:max-w-none">
+            <div className="relative mx-auto max-w-[300px] xs:max-w-xs sm:max-w-sm lg:max-w-none">
               {/* Outer decorative architectural outline with Drafting Crosshairs (+) */}
               <div
                 className="absolute -inset-2.5 sm:-inset-4 2xl:-inset-5 border border-neutral-300 -z-10 pointer-events-none transition-transform duration-700 ease-out"
@@ -180,68 +179,83 @@ export default function AboutSection({ profile }: AboutSectionProps) {
                   alt={`Eng. ${name} - ${title}`}
                   fill
                   loading="lazy"
-                  sizes="(max-width: 640px) 280px, (max-width: 1024px) 380px, (max-width: 1536px) 500px, 650px"
-                  className="object-cover object-top filter grayscale-15 group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105"
+                  sizes="(max-width: 640px) 300px, (max-width: 1024px) 380px, (max-width: 1536px) 500px, 650px"
+                  className="object-cover object-top filter grayscale-10 group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105"
                 />
 
                 {/* Subtle gradient vignette */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/15 to-transparent opacity-75 group-hover:opacity-60 transition-opacity" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-85 group-hover:opacity-70 transition-opacity" />
 
-                {/* Name Badge Overlay */}
-                <div className="absolute bottom-3 sm:bottom-4 2xl:bottom-5 start-3 sm:start-4 2xl:start-5 end-3 sm:end-4 2xl:end-5 text-white text-xs font-technical p-2.5 sm:p-3 2xl:p-4 backdrop-blur-md bg-black/50 border border-white/20 transition-all group-hover:border-white/40">
-                  <div className="font-bold text-xs sm:text-sm 2xl:text-base font-editorial tracking-wider">
-                    ENG. {name.toUpperCase()}
+                {/* Architectural Cartouche Overlay */}
+                <div className="absolute bottom-3 sm:bottom-4 2xl:bottom-5 start-3 sm:start-4 2xl:start-5 end-3 sm:end-4 2xl:end-5 text-white font-technical p-3 sm:p-3.5 2xl:p-4 backdrop-blur-md bg-black/60 border border-white/20 transition-all group-hover:border-white/40">
+                  <div className="flex items-center justify-between gap-2 mb-1">
+                    <span className="font-bold text-xs sm:text-sm 2xl:text-base font-editorial tracking-wider text-white">
+                      ENG. {name.toUpperCase()}
+                    </span>
+                    <span className="inline-flex items-center gap-1 text-[8px] sm:text-[9px] font-mono text-emerald-400 uppercase tracking-widest bg-emerald-950/60 px-1.5 py-0.5 border border-emerald-500/30">
+                      <span className="w-1 h-1 rounded-full bg-emerald-400 animate-pulse" />
+                      COMMISSIONS OPEN
+                    </span>
                   </div>
-                  <div className="text-[9px] sm:text-[10px] 2xl:text-xs uppercase text-neutral-300 tracking-widest mt-0.5 truncate">
+                  <div className="text-[9px] sm:text-[10px] 2xl:text-xs uppercase text-neutral-300 tracking-widest truncate">
                     {title}
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Studio Coordinates & Quick Connect Card */}
-            <div className="p-4 sm:p-5 2xl:p-6 bg-neutral-50 border border-neutral-300 space-y-3 2xl:space-y-4 text-xs 2xl:text-sm font-technical shadow-xs">
-              <div className="flex items-center justify-between pb-2 border-b border-neutral-200">
-                <span className="text-neutral-500 uppercase text-[10px] 2xl:text-xs">Studio Base:</span>
-                <span className="font-bold text-black flex items-center gap-1.5">
-                  <MapPin className="w-3.5 h-3.5 2xl:w-4 2xl:h-4 text-neutral-700 shrink-0" />
-                  <span className="truncate">{location} (Available Globally)</span>
-                </span>
+            {/* Studio Specifications & Inquiries Block (Architectural Cartouche) */}
+            <div className="p-4 sm:p-5 2xl:p-6 bg-neutral-50/90 border border-neutral-300 space-y-3.5 2xl:space-y-4 text-xs 2xl:text-sm font-technical shadow-xs">
+              <div className="flex items-center justify-between pb-2.5 border-b border-neutral-200 text-[10px] sm:text-[11px] font-mono uppercase tracking-wider text-neutral-400">
+                <span>STUDIO SPECIFICATIONS</span>
+                <span>ISSUE // 2026</span>
               </div>
 
-              <div className="flex items-center justify-between pb-2 border-b border-neutral-200">
-                <span className="text-neutral-500 uppercase text-[10px] 2xl:text-xs">Degree:</span>
-                <span className="font-medium text-black text-end truncate flex items-center gap-1.5">
-                  <GraduationCap className="w-3.5 h-3.5 text-neutral-600 shrink-0" />
-                  <span className="truncate">Architectural Engineering</span>
-                </span>
+              {/* Coordinates Grid */}
+              <div className="space-y-2 text-xs">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-neutral-500 uppercase text-[10px] 2xl:text-xs">Location:</span>
+                  <span className="font-semibold text-black flex items-center gap-1.5 truncate text-end">
+                    <MapPin className="w-3.5 h-3.5 text-neutral-700 shrink-0" />
+                    <span className="truncate">{location} (Global Practice)</span>
+                  </span>
+                </div>
+
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-neutral-500 uppercase text-[10px] 2xl:text-xs">Qualification:</span>
+                  <span className="font-medium text-black truncate text-end flex items-center gap-1.5">
+                    <GraduationCap className="w-3.5 h-3.5 text-neutral-600 shrink-0" />
+                    <span className="truncate">{educationDegree}</span>
+                  </span>
+                </div>
               </div>
 
-              <div className="flex items-center justify-between pt-1 flex-wrap gap-2">
+              {/* Professional Inquiry Buttons */}
+              <div className="pt-2 grid grid-cols-2 gap-2.5">
                 <a
                   href={`mailto:${email}`}
-                  className="text-neutral-700 hover:text-black font-mono text-[10px] sm:text-[11px] 2xl:text-xs flex items-center gap-1.5 transition-colors truncate"
-                  title="Send Email"
+                  className="p-2.5 bg-white hover:bg-neutral-900 hover:text-white text-neutral-800 border border-neutral-300 hover:border-black font-technical text-[10px] sm:text-[11px] uppercase tracking-wider flex items-center justify-center gap-1.5 transition-all duration-200 active:scale-95 shadow-2xs rounded-xs"
+                  title="Direct Email Inquiry"
                 >
-                  <Mail className="w-3.5 h-3.5 2xl:w-4 2xl:h-4 shrink-0" />
-                  <span className="truncate">{email}</span>
+                  <Mail className="w-3.5 h-3.5 shrink-0" />
+                  <span className="truncate">Email Inquiries</span>
                 </a>
 
                 <a
                   href={`https://wa.me/${whatsappNumber}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-emerald-700 hover:text-emerald-800 font-bold text-[10px] sm:text-[11px] 2xl:text-xs uppercase tracking-wider flex items-center gap-1 shrink-0 transition-transform active:scale-95"
-                  title="Direct WhatsApp"
+                  className="p-2.5 bg-neutral-900 hover:bg-black text-white border border-black font-technical text-[10px] sm:text-[11px] uppercase tracking-wider flex items-center justify-center gap-1.5 transition-all duration-200 active:scale-95 shadow-2xs rounded-xs group"
+                  title="Direct WhatsApp Consultation"
                 >
-                  <MessageCircle className="w-3.5 h-3.5 2xl:w-4 2xl:h-4 text-emerald-600" />
-                  <span>WhatsApp</span>
+                  <MessageCircle className="w-3.5 h-3.5 text-emerald-400 group-hover:scale-110 transition-transform shrink-0" />
+                  <span className="truncate">WhatsApp</span>
                 </a>
               </div>
             </div>
           </div>
 
-          {/* Right Column (7 cols): Biography, Philosophy & Pillars */}
+          {/* Right Column (7 cols): Biography, Philosophy, Pillars & Unified Action Hub */}
           <div className="lg:col-span-7 space-y-6 sm:space-y-8 2xl:space-y-10">
             {/* Architectural Philosophy & Narrative Head */}
             <div
@@ -274,7 +288,7 @@ export default function AboutSection({ profile }: AboutSectionProps) {
               </div>
             </div>
 
-            {/* Architectural Philosophy Manifesto */}
+            {/* Architectural Philosophy Manifesto Pull-Quote */}
             {philosophyStatement && (
               <div
                 className={`relative py-3.5 px-4 sm:px-5 bg-neutral-50/70 border-l-2 border-black border-y border-r border-neutral-200/80 rounded-xs transition-all duration-700 ease-out delay-300 group hover:border-black shadow-2xs ${
@@ -333,83 +347,123 @@ export default function AboutSection({ profile }: AboutSectionProps) {
               </div>
             </div>
 
-            {/* Architectural Dual-Action Grid (Perfect Alignment with 2-Col Grid Above) */}
+            {/* Architectural Documentation & Dossier Suite (Unified Action Grid) */}
             <div
-              className={`pt-2 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 2xl:gap-6 transition-all duration-700 ease-out delay-500 ${
+              className={`pt-3 space-y-3 transition-all duration-700 ease-out delay-500 ${
                 isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
               }`}
             >
-              {/* Left Button: Download Monograph PDF */}
-              <a
-                href="/api/portfolio-pdf"
-                download="Alaa-Issa-Architectural-Portfolio-2026.pdf"
-                className="group relative p-3.5 sm:p-4 bg-black hover:bg-neutral-900 text-white border border-black shadow-sm hover:shadow-lg transition-all duration-300 flex items-center justify-between active:scale-[0.98] overflow-hidden rounded-xs"
-                title="Download Architectural Monograph (PDF)"
-              >
-                {/* Subtle sheen highlight */}
-                <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out pointer-events-none" />
+              <div className="flex items-center justify-between text-[9px] sm:text-[10px] 2xl:text-xs font-mono uppercase tracking-[0.2em] text-neutral-400">
+                <span>Practice Dossier & Documentation</span>
+                <span>Issue // 2026-2027</span>
+              </div>
 
-                <div className="flex items-center gap-3 min-w-0">
-                  <div className="w-8 h-8 rounded-full bg-white/10 border border-white/20 flex items-center justify-center shrink-0 group-hover:bg-[#7AD1B8] transition-colors duration-300">
-                    <FileDown className="w-4 h-4 text-[#7AD1B8] group-hover:text-black transition-colors duration-300" />
+              {/* Tier 1: Two High-Fidelity Download Cards (Matched 2-Column Grid) */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 2xl:gap-6">
+                {/* Card 1: Architectural Monograph (PDF) */}
+                <a
+                  href="/api/portfolio-pdf"
+                  download="Alaa-Essa-Architectural-Portfolio-2026.pdf"
+                  className="group relative p-4 bg-neutral-950 hover:bg-black text-white border border-neutral-900 hover:border-neutral-700 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between active:scale-[0.98] overflow-hidden rounded-xs"
+                  title="Download Curated Architectural Monograph (PDF)"
+                >
+                  {/* Subtle Sheen Highlight */}
+                  <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out pointer-events-none" />
+
+                  {/* Top Spec Row */}
+                  <div className="flex items-center justify-between pb-3 border-b border-white/10 text-[9px] font-mono text-neutral-400 uppercase tracking-widest">
+                    <span className="text-neutral-300 font-semibold">DOC // 01</span>
+                    <span className="bg-white/10 px-1.5 py-0.5 rounded-2xs text-[8px] text-white">2026 EDITION • PDF</span>
                   </div>
-                  <div className="flex flex-col min-w-0">
-                    <span className="text-xs sm:text-[13px] font-technical uppercase tracking-[0.14em] font-bold text-white truncate">
-                      Download Portfolio
-                    </span>
-                    <span className="text-[9px] font-mono tracking-wider text-neutral-400 group-hover:text-neutral-300 transition-colors truncate">
-                      Monograph PDF • A4 2026
-                    </span>
+
+                  {/* Body Content */}
+                  <div className="py-3 flex items-start gap-3">
+                    <div className="w-9 h-9 rounded-full bg-white/10 border border-white/20 flex items-center justify-center shrink-0 group-hover:bg-[#7AD1B8] transition-colors duration-300">
+                      <FileDown className="w-4 h-4 text-[#7AD1B8] group-hover:text-black transition-colors duration-300" />
+                    </div>
+                    <div className="min-w-0">
+                      <h5 className="text-xs sm:text-[13px] font-technical uppercase tracking-wider font-bold text-white group-hover:text-[#7AD1B8] transition-colors truncate">
+                        Portfolio Monograph
+                      </h5>
+                      <p className="text-[10px] font-sans text-neutral-400 group-hover:text-neutral-300 transition-colors mt-0.5 line-clamp-1">
+                        High-resolution curated works & spatial studies
+                      </p>
+                    </div>
                   </div>
-                </div>
 
-                <div className="w-6 h-6 rounded-full border border-white/20 flex items-center justify-center shrink-0 group-hover:border-white transition-colors ms-2">
-                  <span className="text-xs text-neutral-300 group-hover:text-white transition-colors font-mono">↓</span>
-                </div>
-              </a>
-
-              {/* Right Button: Career & Practice */}
-              <a
-                href="#experience"
-                className="group relative p-3.5 sm:p-4 bg-white hover:bg-black text-black hover:text-white border border-neutral-300 hover:border-black shadow-2xs hover:shadow-lg transition-all duration-300 flex items-center justify-between active:scale-[0.98] rounded-xs"
-              >
-                <div className="flex items-center gap-3 min-w-0">
-                  <div className="w-8 h-8 rounded-full bg-neutral-100 border border-neutral-200 flex items-center justify-center shrink-0 group-hover:bg-white/10 group-hover:border-white/20 transition-colors duration-300">
-                    <Briefcase className="w-4 h-4 text-neutral-700 group-hover:text-[#7AD1B8] transition-colors duration-300" />
+                  {/* Action Indicator */}
+                  <div className="pt-2.5 border-t border-white/10 flex items-center justify-between text-[9px] font-mono uppercase tracking-wider text-neutral-400 group-hover:text-white transition-colors">
+                    <span>Download Monograph (A4)</span>
+                    <span className="group-hover:translate-y-0.5 transition-transform text-white">↓</span>
                   </div>
-                  <div className="flex flex-col min-w-0">
-                    <span className="text-xs sm:text-[13px] font-technical uppercase tracking-[0.14em] font-bold text-black group-hover:text-white transition-colors truncate">
-                      Career & Practice
-                    </span>
-                    <span className="text-[10px] font-mono tracking-wider text-neutral-500 group-hover:text-neutral-400 transition-colors truncate">
-                      Chronology & Skills
-                    </span>
-                  </div>
-                </div>
+                </a>
 
-                <div className="w-6 h-6 rounded-full border border-neutral-300 group-hover:border-white/40 flex items-center justify-center shrink-0 transition-colors ms-2">
-                  <ArrowUpRight className="w-3.5 h-3.5 text-neutral-500 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-200" />
-                </div>
-              </a>
-            </div>
-
-            {/* Architectural CV Link Strip */}
-            <div className="pt-3 flex items-center justify-between text-[11px] sm:text-xs font-technical text-neutral-500 border-t border-neutral-200/80 mt-2">
-              <span className="flex items-center gap-1.5 font-mono text-[10px] sm:text-[11px] uppercase tracking-wider text-neutral-400">
-                <span>Academic & Professional Vitae</span>
-                <span>•</span>
-                <span className="hidden sm:inline">LaTeX Typeset</span>
-              </span>
-              <div className="flex items-center gap-3">
+                {/* Card 2: Curriculum Vitae (PDF) - Typeset via LaTeX */}
                 <a
                   href="/api/cv-pdf"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group font-mono text-[11px] font-bold text-black hover:text-emerald-700 flex items-center gap-1 transition-colors underline underline-offset-4"
-                  title="Download Alaa Essa Professional Curriculum Vitae (PDF)"
+                  className="group relative p-4 bg-white hover:bg-neutral-50 text-neutral-900 border border-neutral-300 hover:border-black shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col justify-between active:scale-[0.98] overflow-hidden rounded-xs"
+                  title="Download / View Alaa Essa Official Curriculum Vitae (PDF)"
                 >
-                  <span>Download CV (PDF)</span>
-                  <span className="text-[10px] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform">↗</span>
+                  {/* Top Spec Row */}
+                  <div className="flex items-center justify-between pb-3 border-b border-neutral-200 text-[9px] font-mono text-neutral-500 uppercase tracking-widest">
+                    <span className="text-black font-semibold">DOC // 02</span>
+                    <span className="bg-neutral-100 border border-neutral-300 px-1.5 py-0.5 rounded-2xs text-[8px] text-neutral-700">LATEX TYPESET</span>
+                  </div>
+
+                  {/* Body Content */}
+                  <div className="py-3 flex items-start gap-3">
+                    <div className="w-9 h-9 rounded-full bg-neutral-100 border border-neutral-200 flex items-center justify-center shrink-0 group-hover:bg-black group-hover:border-black transition-colors duration-300">
+                      <FileText className="w-4 h-4 text-neutral-800 group-hover:text-white transition-colors duration-300" />
+                    </div>
+                    <div className="min-w-0">
+                      <h5 className="text-xs sm:text-[13px] font-technical uppercase tracking-wider font-bold text-black group-hover:text-neutral-900 transition-colors truncate">
+                        Curriculum Vitae (PDF)
+                      </h5>
+                      <p className="text-[10px] font-sans text-neutral-600 group-hover:text-neutral-800 transition-colors mt-0.5 line-clamp-1">
+                        Academic degrees, practice history & software tools
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Action Indicator */}
+                  <div className="pt-2.5 border-t border-neutral-200 flex items-center justify-between text-[9px] font-mono uppercase tracking-wider text-neutral-500 group-hover:text-black transition-colors">
+                    <span>View Official CV</span>
+                    <span className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform text-black">↗</span>
+                  </div>
+                </a>
+              </div>
+
+              {/* Tier 2: Unified Interactive Navigation Strip */}
+              <div className="p-2 sm:p-2.5 bg-neutral-50/80 border border-neutral-200/90 rounded-xs flex flex-col sm:flex-row items-center justify-between gap-2 text-[10px] sm:text-[11px] font-technical">
+                {/* Career Link */}
+                <a
+                  href="#experience"
+                  className="w-full sm:w-auto flex-1 flex items-center justify-between sm:justify-start gap-2 px-3 py-1.5 text-neutral-600 hover:text-black hover:bg-white border border-transparent hover:border-neutral-200 transition-all rounded-2xs group"
+                >
+                  <div className="flex items-center gap-2">
+                    <span className="font-mono text-neutral-400 font-bold group-hover:text-black">03 //</span>
+                    <Briefcase className="w-3.5 h-3.5 text-neutral-500 group-hover:text-black" />
+                    <span className="uppercase tracking-wider font-semibold">Career & Practice Chronology</span>
+                  </div>
+                  <span className="text-neutral-400 group-hover:text-black group-hover:translate-x-0.5 transition-transform">→</span>
+                </a>
+
+                {/* Vertical Divider on Desktop */}
+                <span className="hidden sm:block w-[1px] h-4 bg-neutral-300" />
+
+                {/* Skills Link */}
+                <a
+                  href="#skills"
+                  className="w-full sm:w-auto flex-1 flex items-center justify-between sm:justify-start gap-2 px-3 py-1.5 text-neutral-600 hover:text-black hover:bg-white border border-transparent hover:border-neutral-200 transition-all rounded-2xs group"
+                >
+                  <div className="flex items-center gap-2">
+                    <span className="font-mono text-neutral-400 font-bold group-hover:text-black">04 //</span>
+                    <Layers className="w-3.5 h-3.5 text-neutral-500 group-hover:text-black" />
+                    <span className="uppercase tracking-wider font-semibold">Technical Skills & Software Toolset</span>
+                  </div>
+                  <span className="text-neutral-400 group-hover:text-black group-hover:translate-y-0.5 transition-transform">↓</span>
                 </a>
               </div>
             </div>

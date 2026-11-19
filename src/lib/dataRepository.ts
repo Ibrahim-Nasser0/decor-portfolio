@@ -268,6 +268,92 @@ export const getDesignerProfile = cache(async function getDesignerProfile() {
     const supabase = getPublicClient()
     if (!supabase) return STATIC_DESIGNER_INFO
 
+    // 5.1 Check if new normalized basic_info table exists & has data
+    try {
+      const { data: basicRow, error: basicErr } = await supabase
+        .from('basic_info')
+        .select('*, contact:contact_id(*, links:links_id(*))')
+        .order('id', { ascending: true })
+        .limit(1)
+        .maybeSingle()
+
+      if (!basicErr && basicRow) {
+        const bRow = basicRow as any
+        const [expRes, eduRes, softRes] = await Promise.all([
+          supabase.from('experience').select('*').order('display_order', { ascending: true }),
+          supabase.from('education').select('*').order('display_order', { ascending: true }),
+          supabase.from('software_skills').select('*').order('display_order', { ascending: true }),
+        ])
+
+        const bContact = bRow.contact || {}
+        const bLinks = bContact.links || {}
+
+        const mapped = {
+          nameAr: bRow.name_ar || STATIC_DESIGNER_INFO.nameAr,
+          nameEn: bRow.name_en || STATIC_DESIGNER_INFO.nameEn,
+          titleAr: bRow.title_ar || STATIC_DESIGNER_INFO.titleAr,
+          titleEn: bRow.title_en || STATIC_DESIGNER_INFO.titleEn,
+          subtitleAr: bRow.subtitle_ar || STATIC_DESIGNER_INFO.subtitleAr,
+          subtitleEn: bRow.subtitle_en || STATIC_DESIGNER_INFO.subtitleEn,
+          locationAr: bRow.location_ar || STATIC_DESIGNER_INFO.locationAr,
+          locationEn: bRow.location_en || STATIC_DESIGNER_INFO.locationEn,
+          email: bContact.email || STATIC_DESIGNER_INFO.email,
+          phone: bContact.phone_number || STATIC_DESIGNER_INFO.phone,
+          whatsappNumber: bContact.whatsapp_number || STATIC_DESIGNER_INFO.whatsappNumber,
+          linkedin: bLinks.linkedin || STATIC_DESIGNER_INFO.linkedin,
+          instagram: bLinks.instagram || STATIC_DESIGNER_INFO.instagram,
+          behance: bLinks.behance || 'https://behance.net/alaaessa',
+          pinterest: bLinks.pinterest || 'https://pinterest.com/alaaessa',
+          website: bLinks.website || 'https://alaa-essa.vercel.app/',
+          heroImageUrl: bRow.hero_image_url || '/images/alaa.webp',
+          aboutImageUrl: bRow.about_image_url || '/images/alaa2.webp',
+          avatarUrl: bRow.hero_image_url || '/images/alaa.webp',
+          aboutIntroAr: bRow.about_intro_ar || STATIC_DESIGNER_INFO.aboutIntroAr,
+          aboutIntroEn: bRow.about_intro_en || STATIC_DESIGNER_INFO.aboutIntroEn,
+          aboutExperienceAr: bRow.about_experience_ar || STATIC_DESIGNER_INFO.aboutExperienceAr,
+          aboutExperienceEn: bRow.about_experience_en || STATIC_DESIGNER_INFO.aboutExperienceEn,
+          statementAr: bRow.statement_ar || STATIC_DESIGNER_INFO.statementAr,
+          statementEn: bRow.statement_en || STATIC_DESIGNER_INFO.statementEn,
+          builtWorksOffset: bRow.built_works_offset !== undefined ? Number(bRow.built_works_offset) : 80,
+          cadFidelity: bRow.cad_fidelity !== undefined ? Number(bRow.cad_fidelity) : 100,
+          experience: expRes.data && expRes.data.length > 0
+            ? expRes.data.map((e: any) => ({
+                role: e.job_title,
+                company: e.organization,
+                location: e.location,
+                period: e.period,
+                description: e.description,
+                skills: e.skills || [],
+              }))
+            : STATIC_DESIGNER_INFO.experience,
+          education: eduRes.data && eduRes.data.length > 0
+            ? eduRes.data.map((ed: any) => ({
+                degree: ed.degree,
+                titleEn: ed.degree,
+                institutionEn: ed.institution,
+                year: ed.year,
+                grade: ed.grade,
+                descEn: ed.description,
+              }))
+            : STATIC_DESIGNER_INFO.education,
+          software: softRes.data && softRes.data.length > 0
+            ? softRes.data.map((s: any) => ({
+                name: s.name,
+                role: s.role,
+                badge: s.badge,
+                color: s.color,
+              }))
+            : STATIC_DESIGNER_INFO.software,
+        }
+
+        profileCache = { data: mapped, timestamp: now }
+        return mapped
+      }
+    } catch {
+      // Proceed to designer_profile fallback
+    }
+
+    // 5.2 Legacy designer_profile table fallback
     const { data, error } = await supabase
       .from('designer_profile')
       .select('*')
@@ -304,10 +390,11 @@ export const getDesignerProfile = cache(async function getDesignerProfile() {
       skills: row.skills || STATIC_DESIGNER_INFO.skills,
       experience: row.experience || STATIC_DESIGNER_INFO.experience,
       education: row.education || STATIC_DESIGNER_INFO.education,
-      // Dynamic Monograph Metadata stored safely in skills JSONB
       builtWorksOffset: skillsObj.builtWorksOffset !== undefined ? Number(skillsObj.builtWorksOffset) : 80,
       cadFidelity: skillsObj.cadFidelity !== undefined ? Number(skillsObj.cadFidelity) : 100,
-      avatarUrl: skillsObj.avatarUrl || '/images/alaa.webp',
+      avatarUrl: skillsObj.avatarUrl || row.hero_image_url || '/images/alaa.webp',
+      heroImageUrl: row.hero_image_url || skillsObj.heroImageUrl || skillsObj.avatarUrl || '/images/alaa.webp',
+      aboutImageUrl: row.about_image_url || skillsObj.aboutImageUrl || '/images/alaa2.webp',
     }
 
     profileCache = { data: mapped, timestamp: now }
@@ -322,27 +409,77 @@ export const getDesignerProfile = cache(async function getDesignerProfile() {
 export async function updateDesignerProfile(profile: any) {
   const supabase = await createClient()
   const rawSkills = (typeof profile.skills === 'object' && profile.skills !== null) ? profile.skills : {}
+  const heroImageUrl = profile.heroImageUrl || profile.avatarUrl || rawSkills.heroImageUrl || rawSkills.avatarUrl || '/images/alaa.webp'
+  const aboutImageUrl = profile.aboutImageUrl || rawSkills.aboutImageUrl || '/images/alaa2.webp'
+
   const skillsWithMeta = {
     ...rawSkills,
     builtWorksOffset: profile.builtWorksOffset !== undefined ? Number(profile.builtWorksOffset) : (rawSkills.builtWorksOffset ?? 80),
     cadFidelity: profile.cadFidelity !== undefined ? Number(profile.cadFidelity) : (rawSkills.cadFidelity ?? 100),
-    avatarUrl: profile.avatarUrl || rawSkills.avatarUrl || '/images/alaa.webp',
+    avatarUrl: heroImageUrl,
+    heroImageUrl,
+    aboutImageUrl,
   }
 
-  const row = {
+  // 6.1 Try updating normalized tables (basic_info, contact, links)
+  try {
+    await Promise.all([
+      supabase.from('basic_info').update({
+        name_ar: profile.nameAr || 'م. آلاء عيسى',
+        name_en: profile.nameEn || 'Alaa Essa',
+        title_ar: profile.titleAr || 'مهندسة تصميم داخلي وديكور معماري',
+        title_en: profile.titleEn || 'Interior Architecture & Spatial Design',
+        subtitle_ar: profile.subtitleAr,
+        subtitle_en: profile.subtitleEn,
+        location_ar: profile.locationAr,
+        location_en: profile.locationEn,
+        hero_image_url: heroImageUrl,
+        about_image_url: aboutImageUrl,
+        about_intro_ar: profile.aboutIntroAr,
+        about_intro_en: profile.aboutIntroEn,
+        about_experience_ar: profile.aboutExperienceAr,
+        about_experience_en: profile.aboutExperienceEn,
+        statement_ar: profile.statementAr,
+        statement_en: profile.statementEn,
+        built_works_offset: skillsWithMeta.builtWorksOffset,
+        cad_fidelity: skillsWithMeta.cadFidelity,
+        updated_at: new Date().toISOString(),
+      }).eq('id', 1),
+
+      supabase.from('contact').update({
+        email: profile.email || 'alaaesssaa@gmail.com',
+        phone_number: profile.phone || '+20 1032494616',
+        whatsapp_number: profile.whatsappNumber || '201032494616',
+        updated_at: new Date().toISOString(),
+      }).eq('id', 1),
+
+      supabase.from('links').update({
+        linkedin: profile.linkedin || 'Alaa Essa',
+        instagram: profile.instagram || '@alaaissa.interiors',
+        behance: profile.behance || 'https://behance.net/alaaessa',
+        website: profile.website || 'https://alaa-essa.vercel.app/',
+        updated_at: new Date().toISOString(),
+      }).eq('id', 1),
+    ])
+  } catch {
+    // Non-blocking if normalized tables not yet created
+  }
+
+  // 6.2 Update designer_profile table
+  const row: Record<string, any> = {
     id: 'main',
     name_ar: profile.nameAr || profile.nameEn || 'م. آلاء عيسى',
-    name_en: profile.nameEn || 'ALAA ISSA',
+    name_en: profile.nameEn || 'Alaa Essa',
     title_ar: profile.titleAr || profile.titleEn || 'مهندسة تصميم داخلي وديكور معماري',
-    title_en: profile.titleEn || 'INTERIOR ARCHITECTURE & DESIGN',
+    title_en: profile.titleEn || 'Interior Architecture & Spatial Design',
     subtitle_ar: profile.subtitleAr || profile.subtitleEn || 'أعمال مختارة | 2026-2027',
-    subtitle_en: profile.subtitleEn || 'SELECTED WORKS | 2026-2027',
-    location_ar: profile.locationAr || profile.locationEn || 'القاهرة | مصر',
-    location_en: profile.locationEn || 'CAIRO | EGYPT',
-    email: profile.email || 'alaa.issa.design@gmail.com',
-    phone: profile.phone || '+20 100 000 0000',
-    whatsapp_number: profile.whatsappNumber || '201000000000',
-    linkedin: profile.linkedin || 'Alaa Issa',
+    subtitle_en: profile.subtitleEn || 'Selected Works | 2026-2027',
+    location_ar: profile.locationAr || profile.locationEn || 'الإسكندرية | مصر',
+    location_en: profile.locationEn || 'Alexandria, Egypt',
+    email: profile.email || 'alaaesssaa@gmail.com',
+    phone: profile.phone || '+20 1032494616',
+    whatsapp_number: profile.whatsappNumber || '201032494616',
+    linkedin: profile.linkedin || 'Alaa Essa',
     instagram: profile.instagram || '@alaaissa.interiors',
     about_intro_ar: profile.aboutIntroAr || profile.aboutIntroEn || '',
     about_intro_en: profile.aboutIntroEn || '',
@@ -357,12 +494,24 @@ export async function updateDesignerProfile(profile: any) {
     updated_at: new Date().toISOString(),
   }
 
+  const rowWithColumns = {
+    ...row,
+    hero_image_url: heroImageUrl,
+    about_image_url: aboutImageUrl,
+  }
+
   const { error } = await supabase
     .from('designer_profile')
-    .upsert(row, { onConflict: 'id' })
+    .upsert(rowWithColumns, { onConflict: 'id' })
 
   if (error) {
-    throw new Error(`Failed to update profile: ${error.message}`)
+    const { error: fallbackError } = await supabase
+      .from('designer_profile')
+      .upsert(row, { onConflict: 'id' })
+
+    if (fallbackError) {
+      throw new Error(`Failed to update profile: ${fallbackError.message}`)
+    }
   }
 
   invalidateProfileCache()

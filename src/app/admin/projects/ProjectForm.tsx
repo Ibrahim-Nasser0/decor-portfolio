@@ -148,15 +148,24 @@ export default function ProjectForm({
       const fileName = `${formData.id || 'project'}-${Date.now()}.${ext}`
       const filePath = `projects/${fileName}`
 
-      const { error } = await supabase.storage
-        .from('portfolio-media')
+      // Try dedicated project-media bucket, fallback to portfolio-media
+      let bucket = 'project-media'
+      let uploadRes = await supabase.storage
+        .from(bucket)
         .upload(filePath, file, { upsert: true })
 
-      if (error) throw error
+      if (uploadRes.error) {
+        bucket = 'portfolio-media'
+        uploadRes = await supabase.storage
+          .from(bucket)
+          .upload(filePath, file, { upsert: true })
+      }
+
+      if (uploadRes.error) throw uploadRes.error
 
       const {
         data: { publicUrl },
-      } = supabase.storage.from('portfolio-media').getPublicUrl(filePath)
+      } = supabase.storage.from(bucket).getPublicUrl(filePath)
 
       if (targetField === 'gallery') {
         setFormData((prev) => ({ ...prev, gallery: [...prev.gallery, publicUrl] }))

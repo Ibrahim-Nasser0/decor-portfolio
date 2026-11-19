@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import {
   Save,
   Loader2,
@@ -11,7 +12,10 @@ import {
   ExternalLink,
   Eye,
   EyeOff,
+  Camera,
+  Upload,
 } from 'lucide-react'
+import { createClient } from '@/lib/supabase/client'
 import { saveProfileAction } from '../actions'
 import UnsavedChangesBar from '@/components/admin/UnsavedChangesBar'
 
@@ -19,8 +23,44 @@ export default function AboutClient({ initialProfile }: { initialProfile: any })
   const [profile, setProfile] = useState(initialProfile)
   const [initialData, setInitialData] = useState(initialProfile)
   const [isSaving, setIsSaving] = useState(false)
+  const [isUploading, setIsUploading] = useState(false)
   const [showLivePreview, setShowLivePreview] = useState(true)
   const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
+
+  // Handle Photo Upload to Supabase Storage (profile-media)
+  const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    try {
+      setIsUploading(true)
+      const supabase = createClient()
+      const ext = file.name.split('.').pop()
+      const fileName = `about-portrait-${Date.now()}.${ext}`
+
+      let bucket = 'profile-media'
+      let uploadRes = await supabase.storage.from(bucket).upload(fileName, file, { upsert: true })
+
+      if (uploadRes.error) {
+        bucket = 'portfolio-media'
+        uploadRes = await supabase.storage.from(bucket).upload(`about/${fileName}`, file, { upsert: true })
+      }
+
+      if (uploadRes.error) throw uploadRes.error
+
+      const { data: { publicUrl } } = supabase.storage
+        .from(bucket)
+        .getPublicUrl(bucket === 'profile-media' ? fileName : `about/${fileName}`)
+
+      setProfile((prev: any) => ({ ...prev, aboutImageUrl: publicUrl }))
+      setFeedback({ type: 'success', text: 'About section portrait uploaded to Supabase Storage successfully!' })
+      setTimeout(() => setFeedback(null), 3000)
+    } catch (err: any) {
+      setFeedback({ type: 'error', text: err.message || 'Failed to upload photo' })
+    } finally {
+      setIsUploading(false)
+    }
+  }
 
   // Dirty state calculation
   const isDirty = JSON.stringify(profile) !== JSON.stringify(initialData)
@@ -144,6 +184,94 @@ export default function AboutClient({ initialProfile }: { initialProfile: any })
         {/* Editor Form Column */}
         <div className={`${showLivePreview ? 'lg:col-span-7' : 'max-w-4xl'} space-y-6`}>
           <div className="bg-[#111215]/80 border border-white/[0.08] rounded-3xl p-6 sm:p-7 space-y-8">
+            {/* Block 0: Dedicated About Section Portrait Photo */}
+            <div className="space-y-4 pb-6 border-b border-white/[0.06]">
+              <div className="flex items-center justify-between pb-2 border-b border-white/[0.06]">
+                <div className="flex items-center gap-2">
+                  <Camera className="w-4 h-4 text-emerald-400" />
+                  <h2 className="text-xs font-mono uppercase tracking-wider text-white">
+                    00 • About Section Portrait Photo
+                  </h2>
+                </div>
+                <span className="text-[10px] font-mono text-emerald-400">Independent from Hero</span>
+              </div>
+
+              <div className="flex items-start gap-4 p-4 bg-[#090a0c] border border-white/[0.08] rounded-2xl">
+                {/* Image Preview */}
+                <div className="relative w-20 h-24 rounded-xl overflow-hidden border border-white/20 bg-neutral-900 shrink-0 shadow-md">
+                  <Image
+                    src={profile.aboutImageUrl || '/images/alaa2.webp'}
+                    alt="About Portrait"
+                    fill
+                    className="object-cover object-top"
+                  />
+                </div>
+
+                <div className="flex-1 space-y-2.5">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-semibold text-white">
+                      Profile Frame Photo
+                    </span>
+                    <label className="inline-flex items-center gap-1.5 px-3 py-1 bg-white/[0.08] hover:bg-white/[0.15] text-white text-[11px] font-mono rounded-lg cursor-pointer transition-colors border border-white/10">
+                      {isUploading ? (
+                        <>
+                          <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                          <span>Uploading...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Upload className="w-3.5 h-3.5 text-emerald-400" />
+                          <span>Upload (Supabase)</span>
+                        </>
+                      )}
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handlePhotoUpload}
+                        disabled={isUploading}
+                        className="hidden"
+                      />
+                    </label>
+                  </div>
+
+                  <input
+                    type="text"
+                    value={profile.aboutImageUrl || '/images/alaa2.webp'}
+                    onChange={(e) => setProfile({ ...profile, aboutImageUrl: e.target.value })}
+                    placeholder="/images/alaa2.webp or https://..."
+                    className="w-full bg-[#121316] border border-white/[0.08] rounded-lg px-3 py-1.5 text-xs text-white font-mono focus:outline-none focus:border-emerald-500/80"
+                  />
+
+                  {/* Presets */}
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="text-[9px] font-mono text-neutral-500">Presets:</span>
+                    <button
+                      type="button"
+                      onClick={() => setProfile({ ...profile, aboutImageUrl: '/images/alaa2.webp' })}
+                      className={`text-[9px] font-mono px-2 py-0.5 rounded border transition-colors ${
+                        (profile.aboutImageUrl || '/images/alaa2.webp') === '/images/alaa2.webp'
+                          ? 'bg-emerald-500/20 border-emerald-500/50 text-emerald-300'
+                          : 'bg-white/[0.03] border-white/[0.06] text-neutral-400 hover:text-white'
+                      }`}
+                    >
+                      Graduation White Gown (.webp)
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setProfile({ ...profile, aboutImageUrl: '/images/alaa.webp' })}
+                      className={`text-[9px] font-mono px-2 py-0.5 rounded border transition-colors ${
+                        profile.aboutImageUrl === '/images/alaa.webp'
+                          ? 'bg-emerald-500/20 border-emerald-500/50 text-emerald-300'
+                          : 'bg-white/[0.03] border-white/[0.06] text-neutral-400 hover:text-white'
+                      }`}
+                    >
+                      Hero Portrait 1 (.webp)
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             {/* Block 1: Introduction Narrative */}
             <div className="space-y-4">
               <div className="flex items-center justify-between pb-2 border-b border-white/[0.06]">
