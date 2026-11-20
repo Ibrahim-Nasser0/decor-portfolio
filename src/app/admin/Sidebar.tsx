@@ -20,6 +20,7 @@ import {
   ChevronLeft,
   ChevronRight,
   ArrowUpRight,
+  Settings,
 } from 'lucide-react'
 import { logoutAction } from './actions'
 
@@ -31,7 +32,7 @@ const SECTION_TABS = [
   { num: '04', label: 'Experience', href: '/admin/experience', icon: Briefcase },
   { num: '05', label: 'Projects Gallery', href: '/admin/projects', icon: FolderKanban },
   { num: '06', label: 'Profile (Contact)', href: '/admin/profile', icon: UserCheck },
-  { num: '07', label: 'Inquiries Inbox', href: '/admin/inquiries', icon: MessageSquareText, badge: 'Inbox' },
+  { num: '07', label: 'Settings', href: '/admin/settings', icon: Settings },
 ]
 
 export default function AdminSidebar() {

@@ -593,3 +593,109 @@ export async function submitClientInquiry(inquiry: Omit<ClientInquiry, 'id' | 's
 }
 
 export const createInquiry = submitClientInquiry
+
+// -------------------------------------------------------------
+// ADMIN ACCOUNTS REPOSITORY
+// -------------------------------------------------------------
+export interface AdminAccount {
+  id: string
+  email: string
+  role: string
+  created_at: string
+}
+
+let adminAccountsCache: CacheEntry<AdminAccount[]> | null = null
+
+export function invalidateAdminAccountsCache() {
+  adminAccountsCache = null
+}
+
+export async function getAdminAccounts(): Promise<AdminAccount[]> {
+  const now = Date.now()
+  if (adminAccountsCache && now - adminAccountsCache.timestamp < CACHE_TTL_MS) {
+    return adminAccountsCache.data
+  }
+
+  const defaultAccounts: AdminAccount[] = [
+    {
+      id: 'default-owner',
+      email: 'alaa.issa.design@gmail.com',
+      role: 'Owner / Principal Architect',
+      created_at: '2026-01-01T00:00:00Z',
+    },
+  ]
+
+  const supabase = getPublicClient()
+  if (!supabase) return defaultAccounts
+
+  try {
+    const { data, error } = await supabase
+      .from('admin_accounts')
+      .select('*')
+      .order('created_at', { ascending: true })
+
+    if (error || !data || data.length === 0) {
+      return defaultAccounts
+    }
+
+    const accounts: AdminAccount[] = data.map((row: any) => ({
+      id: row.id,
+      email: row.email,
+      role: row.role || 'Admin',
+      created_at: row.created_at || new Date().toISOString(),
+    }))
+
+    adminAccountsCache = { data: accounts, timestamp: now }
+    return accounts
+  } catch {
+    return defaultAccounts
+  }
+}
+
+export async function saveAdminAccount(account: { email: string; role?: string }): Promise<AdminAccount> {
+  invalidateAdminAccountsCache()
+  const supabase = await createClient()
+
+  const payload = {
+    email: account.email.trim().toLowerCase(),
+    role: account.role || 'Admin',
+    created_at: new Date().toISOString(),
+  }
+
+  const { data, error } = await supabase
+    .from('admin_accounts')
+    .insert([payload])
+    .select()
+    .single()
+
+  if (error) {
+    return {
+      id: `local-${Date.now()}`,
+      email: payload.email,
+      role: payload.role,
+      created_at: payload.created_at,
+    }
+  }
+
+  return {
+    id: data.id,
+    email: data.email,
+    role: data.role,
+    created_at: data.created_at,
+  }
+}
+
+export async function deleteAdminAccount(idOrEmail: string): Promise<boolean> {
+  invalidateAdminAccountsCache()
+  const supabase = await createClient()
+
+  const { error } = await supabase
+    .from('admin_accounts')
+    .delete()
+    .or(`id.eq.${idOrEmail},email.eq.${idOrEmail}`)
+
+  if (error) {
+    console.warn('Note on deleting admin account:', error.message)
+  }
+  return true
+}

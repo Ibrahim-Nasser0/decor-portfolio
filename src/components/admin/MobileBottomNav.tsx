@@ -7,9 +7,10 @@ import {
   LayoutDashboard,
   FolderKanban,
   Plus,
-  MessageSquareText,
+  UserCheck,
   Menu,
   Layers,
+  Sliders,
 } from 'lucide-react'
 import MobileSectionsDrawer from './MobileSectionsDrawer'
 
@@ -25,7 +26,8 @@ export default function MobileBottomNav() {
   const isOverview = pathname === '/admin'
   const isProjects = pathname.startsWith('/admin/projects') && pathname !== '/admin/projects/new'
   const isNewProject = pathname === '/admin/projects/new'
-  const isInquiries = pathname === '/admin/inquiries'
+  const isProfile = pathname === '/admin/profile'
+  const isSettings = pathname === '/admin/settings'
 
   return (
     <>
@@ -80,33 +82,37 @@ export default function MobileBottomNav() {
             <Plus className="w-6 h-6 stroke-[2.5]" />
           </Link>
 
-          {/* Tab 4: Inquiries Inbox */}
+          {/* Tab 4: Profile / Contact Coordinates */}
           <Link
-            href="/admin/inquiries"
+            href="/admin/profile"
             className={`flex flex-col items-center justify-center gap-1 py-1 px-3 rounded-2xl transition-all active:scale-90 ${
-              isInquiries ? 'text-amber-400 font-semibold' : 'text-neutral-400 hover:text-white'
+              isProfile ? 'text-amber-400 font-semibold' : 'text-neutral-400 hover:text-white'
             }`}
           >
             <div className="relative">
-              <MessageSquareText className={`w-5 h-5 ${isInquiries ? 'stroke-[2.5]' : 'stroke-[1.8]'}`} />
-              {isInquiries && (
+              <UserCheck className={`w-5 h-5 ${isProfile ? 'stroke-[2.5]' : 'stroke-[1.8]'}`} />
+              {isProfile && (
                 <span className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-amber-400" />
               )}
             </div>
-            <span className="text-[10px] font-mono tracking-wider">Inbox</span>
+            <span className="text-[10px] font-mono tracking-wider">Profile</span>
           </Link>
 
-          {/* Tab 5: Sections / More Drawer */}
-          <button
-            type="button"
-            onClick={() => setDrawerOpen(true)}
-            className="flex flex-col items-center justify-center gap-1 py-1 px-3 rounded-2xl transition-all text-neutral-400 hover:text-white active:scale-90 cursor-pointer"
+          {/* Tab 5: More / Settings */}
+          <Link
+            href="/admin/settings"
+            className={`flex flex-col items-center justify-center gap-1 py-1 px-3 rounded-2xl transition-all active:scale-90 ${
+              isSettings ? 'text-amber-400 font-semibold' : 'text-neutral-400 hover:text-white'
+            }`}
           >
             <div className="relative">
-              <Menu className="w-5 h-5 stroke-[1.8]" />
+              <Sliders className={`w-5 h-5 ${isSettings ? 'stroke-[2.5]' : 'stroke-[1.8]'}`} />
+              {isSettings && (
+                <span className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-amber-400" />
+              )}
             </div>
-            <span className="text-[10px] font-mono tracking-wider">Sections</span>
-          </button>
+            <span className="text-[10px] font-mono tracking-wider">More</span>
+          </Link>
         </div>
       </nav>
 

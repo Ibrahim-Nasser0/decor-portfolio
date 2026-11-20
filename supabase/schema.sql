@@ -277,6 +277,18 @@ CREATE TABLE public.client_inquiries (
   status TEXT DEFAULT 'new' CHECK (status IN ('new', 'contacted', 'quoted', 'archived'))
 );
 
+-- 5.5 Admin Accounts & Access Control
+CREATE TABLE IF NOT EXISTS public.admin_accounts (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  created_at TIMESTAMPTZ DEFAULT now(),
+  email TEXT UNIQUE NOT NULL,
+  role TEXT NOT NULL DEFAULT 'Admin'
+);
+
+INSERT INTO public.admin_accounts (email, role)
+VALUES ('alaa.issa.design@gmail.com', 'Owner / Principal Architect')
+ON CONFLICT (email) DO NOTHING;
+
 -- ==============================================================================
 -- 6. VIEWS FOR SEAMLESS 1-QUERY APPLICATION CONSUMPTION
 -- ==============================================================================

@@ -14,7 +14,7 @@ const PATH_TITLES: Record<string, { num: string; title: string }> = {
   '/admin/projects': { num: '05', title: 'Architectural Portfolio Works' },
   '/admin/projects/new': { num: '05', title: 'Draft New Project Case Study' },
   '/admin/profile': { num: '06', title: 'Studio Coordinates & Contact' },
-  '/admin/inquiries': { num: '07', title: 'Client Consultations Inbox' },
+  '/admin/settings': { num: '07', title: 'Studio Settings & Access Control' },
 }
 
 export default function AdminTopNav() {

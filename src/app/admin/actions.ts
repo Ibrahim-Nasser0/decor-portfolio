@@ -8,10 +8,9 @@ import {
   deleteProject,
   getProjectById,
   updateDesignerProfile,
-  updateInquiryStatus,
-  updateInquiryNotes,
   createInquiry,
-  ClientInquiry,
+  saveAdminAccount,
+  deleteAdminAccount,
 } from '@/lib/dataRepository'
 import { Project } from '@/data/portfolioData'
 
@@ -112,29 +111,7 @@ export async function saveProfileAction(profileData: any) {
   }
 }
 
-// 6. INQUIRY: UPDATE STATUS & NOTES
-export async function updateInquiryStatusAction(id: string, status: ClientInquiry['status']) {
-  try {
-    await updateInquiryStatus(id, status)
-    revalidatePath('/admin/inquiries')
-    revalidatePath('/admin')
-    return { success: true }
-  } catch (err: any) {
-    return { success: false, error: err.message || 'Failed to update status' }
-  }
-}
-
-export async function updateInquiryNotesAction(id: string, notes: string) {
-  try {
-    await updateInquiryNotes(id, notes)
-    revalidatePath('/admin/inquiries')
-    return { success: true }
-  } catch (err: any) {
-    return { success: false, error: err.message || 'Failed to update private notes' }
-  }
-}
-
-// 7. INQUIRY: SUBMIT INQUIRY FROM PUBLIC CONTACT FORM
+// 6. INQUIRY: SUBMIT INQUIRY FROM PUBLIC CONTACT FORM
 export async function submitInquiryAction(formData: {
   name: string
   phone: string
@@ -155,11 +132,99 @@ export async function submitInquiryAction(formData: {
       budget_range: formData.budgetRange,
       message: formData.message || '',
     })
-    revalidatePath('/admin/inquiries')
-    revalidatePath('/admin')
     return { success: true }
   } catch (err: any) {
     console.error('Failed to submit client inquiry:', err)
     return { success: false, error: err.message || 'Failed to submit inquiry' }
+  }
+}
+
+// 8. ADMIN ACCOUNTS & ACCESS CREDENTIALS
+export async function addAdminAccountAction(formData: {
+  email: string
+  password?: string
+  role?: string
+}) {
+  try {
+    const email = (formData.email || '').trim().toLowerCase()
+    if (!email || !email.includes('@')) {
+      return { success: false, error: 'Please enter a valid email address.' }
+    }
+
+    const supabase = await createClient()
+
+    // If password provided, register them in Supabase Auth
+    if (formData.password) {
+      if (formData.password.length < 6) {
+        return { success: false, error: 'Password must be at least 6 characters long.' }
+      }
+
+      const { error: signUpErr } = await supabase.auth.signUp({
+        email,
+        password: formData.password,
+        options: {
+          data: { role: formData.role || 'Admin' },
+        },
+      })
+
+      if (signUpErr && !signUpErr.message.toLowerCase().includes('already')) {
+        return { success: false, error: signUpErr.message }
+      }
+    }
+
+    const account = await saveAdminAccount({
+      email,
+      role: formData.role || 'Admin',
+    })
+
+    revalidatePath('/admin/settings')
+    return { success: true, account }
+  } catch (err: any) {
+    return { success: false, error: err.message || 'Failed to add admin account' }
+  }
+}
+
+export async function deleteAdminAccountAction(idOrEmail: string) {
+  try {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+
+    if (user?.email && (idOrEmail.toLowerCase() === user.email.toLowerCase() || idOrEmail === user.id)) {
+      return { success: false, error: 'Security restriction: You cannot delete your currently active session account.' }
+    }
+
+    await deleteAdminAccount(idOrEmail)
+    revalidatePath('/admin/settings')
+    return { success: true }
+  } catch (err: any) {
+    return { success: false, error: err.message || 'Failed to delete account' }
+  }
+}
+
+export async function updatePasswordAction(formData: {
+  newPassword: string
+  confirmPassword: string
+}) {
+  try {
+    if (!formData.newPassword || formData.newPassword.length < 6) {
+      return { success: false, error: 'New password must be at least 6 characters long.' }
+    }
+
+    if (formData.newPassword !== formData.confirmPassword) {
+      return { success: false, error: 'Passwords do not match. Please verify and re-enter.' }
+    }
+
+    const supabase = await createClient()
+    const { error } = await supabase.auth.updateUser({
+      password: formData.newPassword,
+    })
+
+    if (error) {
+      return { success: false, error: error.message || 'Failed to update password' }
+    }
+
+    return { success: true, message: 'Password updated successfully!' }
+  } catch (err: any) {
+    return { success: false, error: err.message || 'Failed to update password' }
   }
 }

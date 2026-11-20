@@ -24,6 +24,7 @@ import {
   ArrowUpRight,
   Radio,
   Download,
+  Settings,
 } from 'lucide-react'
 import { getProjects, getClientInquiries, getDesignerProfile } from '@/lib/dataRepository'
 
@@ -376,7 +377,7 @@ export default async function AdminOverviewPage() {
           DIRECT SECTION EDITORS
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 sm:gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2.5 sm:gap-3">
           {[
             { num: '01', title: 'Hero Section', href: '/admin/hero', icon: Sparkles },
             { num: '02', title: 'About Philosophy', href: '/admin/about', icon: BookOpen },
@@ -384,6 +385,8 @@ export default async function AdminOverviewPage() {
             { num: '04', title: 'Experience', href: '/admin/experience', icon: Briefcase },
             { num: '05', title: 'Projects Gallery', href: '/admin/projects', icon: FolderKanban },
             { num: '06', title: 'Profile & Contact', href: '/admin/profile', icon: UserCheck },
+            { num: '07', title: 'Client Inquiries', href: '/admin/inquiries', icon: MessageSquareText },
+            { num: '08', title: 'Studio Settings', href: '/admin/settings', icon: Settings },
           ].map((item) => {
             const Icon = item.icon
             return (

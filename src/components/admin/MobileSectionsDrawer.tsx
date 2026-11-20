@@ -18,6 +18,7 @@ import {
   X,
   ArrowUpRight,
   ShieldCheck,
+  Settings,
 } from 'lucide-react'
 import { logoutAction } from '@/app/admin/actions'
 
@@ -34,7 +35,7 @@ const SECTIONS = [
   { num: '04', label: 'Career & Credentials', href: '/admin/experience', icon: Briefcase },
   { num: '05', label: 'Projects Gallery', href: '/admin/projects', icon: FolderKanban },
   { num: '06', label: 'Profile & Contact', href: '/admin/profile', icon: UserCheck },
-  { num: '07', label: 'Client Inquiries', href: '/admin/inquiries', icon: MessageSquareText },
+  { num: '07', label: 'Settings & Security', href: '/admin/settings', icon: Settings },
 ]
 
 export default function MobileSectionsDrawer({ isOpen, onClose }: MobileSectionsDrawerProps) {
