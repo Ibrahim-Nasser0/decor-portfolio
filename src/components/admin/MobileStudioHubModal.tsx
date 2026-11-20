@@ -12,6 +12,7 @@ import {
   ShieldCheck,
   ChevronRight,
 } from 'lucide-react'
+import { useAdminTranslation } from '@/context/AdminLanguageContext'
 
 interface MobileStudioHubModalProps {
   isOpen: boolean
@@ -19,6 +20,8 @@ interface MobileStudioHubModalProps {
 }
 
 export default function MobileStudioHubModal({ isOpen, onClose }: MobileStudioHubModalProps) {
+  const { t, isRtl } = useAdminTranslation()
+
   if (!isOpen) return null
 
   return (
@@ -42,18 +45,18 @@ export default function MobileStudioHubModal({ isOpen, onClose }: MobileStudioHu
             </div>
             <div>
               <h2 className="text-xs font-mono font-bold tracking-wider uppercase text-white">
-                STUDIO QUICK ACTIONS
+                {t.home.quickActionsTitle}
               </h2>
-              <p className="text-[10px] text-neutral-400 font-mono">
-                Eng. Alaa Essa Atelier Command
+              <p className="text-[10px] text-neutral-400 font-sans">
+                {t.home.architectName} • {t.home.studioSubtitle}
               </p>
             </div>
           </div>
 
           <button
             onClick={onClose}
-            className="p-2 text-neutral-400 hover:text-white rounded-xl bg-white/[0.04] border border-white/[0.08] active:scale-95 transition-transform"
-            aria-label="Close Action Sheet"
+            className="p-2 text-neutral-400 hover:text-white rounded-xl bg-white/[0.04] border border-white/[0.08] active:scale-95 transition-transform cursor-pointer"
+            aria-label={t.common.close}
           >
             <X className="w-4 h-4" />
           </button>
@@ -73,18 +76,18 @@ export default function MobileStudioHubModal({ isOpen, onClose }: MobileStudioHu
               </div>
               <div className="min-w-0">
                 <div className="text-sm font-semibold text-white group-hover:text-amber-200 transition-colors flex items-center gap-1.5">
-                  <span>New Case Study</span>
+                  <span>{t.home.addProjectAction}</span>
                   <span className="text-[8px] font-mono uppercase bg-amber-400/20 text-amber-300 border border-amber-400/40 px-1.5 py-0.2 rounded-full font-bold">
                     Primary
                   </span>
                 </div>
                 <p className="text-[11px] text-neutral-400 font-sans truncate">
-                  Publish a new interior architectural project
+                  {t.projects.subtitle}
                 </p>
               </div>
             </div>
 
-            <ChevronRight className="w-4 h-4 text-amber-400 group-hover:translate-x-1 transition-transform shrink-0" />
+            <ChevronRight className={`w-4 h-4 text-amber-400 group-hover:translate-x-1 transition-transform shrink-0 ${isRtl ? 'rotate-180' : ''}`} />
           </Link>
 
           {/* Action 2: Live Portfolio Preview */}
@@ -100,18 +103,18 @@ export default function MobileStudioHubModal({ isOpen, onClose }: MobileStudioHu
               </div>
               <div className="min-w-0">
                 <div className="text-sm font-semibold text-white group-hover:text-emerald-300 transition-colors flex items-center gap-1.5">
-                  <span>Live Portfolio</span>
+                  <span>{t.nav.liveSite}</span>
                   <span className="text-[8px] font-mono uppercase bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-1.5 py-0.2 rounded-full font-medium">
-                    Online
+                    {t.common.active}
                   </span>
                 </div>
                 <p className="text-[11px] text-neutral-400 font-sans truncate">
-                  Open client-facing website in new tab
+                  {t.topNav.liveSite}
                 </p>
               </div>
             </div>
 
-            <ChevronRight className="w-4 h-4 text-neutral-400 group-hover:translate-x-1 transition-transform shrink-0" />
+            <ChevronRight className={`w-4 h-4 text-neutral-400 group-hover:translate-x-1 transition-transform shrink-0 ${isRtl ? 'rotate-180' : ''}`} />
           </Link>
 
           {/* Action 3: LaTeX Curriculum Vitae (PDF) */}
@@ -128,18 +131,18 @@ export default function MobileStudioHubModal({ isOpen, onClose }: MobileStudioHu
               </div>
               <div className="min-w-0">
                 <div className="text-sm font-semibold text-white group-hover:text-[#7AD1B8] transition-colors flex items-center gap-1.5">
-                  <span>Architectural CV (PDF)</span>
+                  <span>{t.home.downloadCv}</span>
                   <span className="text-[8px] font-mono uppercase bg-[#7AD1B8]/20 text-[#7AD1B8] border border-[#7AD1B8]/30 px-1.5 py-0.2 rounded-full font-medium">
                     LaTeX
                   </span>
                 </div>
                 <p className="text-[11px] text-neutral-400 font-sans truncate">
-                  View and export generated 1-page monograph PDF
+                  {t.home.top4ShowcaseSubtitle}
                 </p>
               </div>
             </div>
 
-            <ChevronRight className="w-4 h-4 text-neutral-400 group-hover:translate-x-1 transition-transform shrink-0" />
+            <ChevronRight className={`w-4 h-4 text-neutral-400 group-hover:translate-x-1 transition-transform shrink-0 ${isRtl ? 'rotate-180' : ''}`} />
           </a>
         </div>
 
@@ -151,7 +154,7 @@ export default function MobileStudioHubModal({ isOpen, onClose }: MobileStudioHu
             className="flex-1 py-2.5 px-3 rounded-xl bg-white/[0.03] hover:bg-white/[0.07] border border-white/[0.06] text-neutral-300 flex items-center justify-center gap-1.5 transition-colors text-[11px]"
           >
             <FolderKanban className="w-3.5 h-3.5 text-amber-400" />
-            <span>Manage Works</span>
+            <span>{t.nav.projects}</span>
           </Link>
 
           <Link
@@ -160,7 +163,7 @@ export default function MobileStudioHubModal({ isOpen, onClose }: MobileStudioHu
             className="flex-1 py-2.5 px-3 rounded-xl bg-white/[0.03] hover:bg-white/[0.07] border border-white/[0.06] text-neutral-300 flex items-center justify-center gap-1.5 transition-colors text-[11px]"
           >
             <ShieldCheck className="w-3.5 h-3.5 text-sky-400" />
-            <span>Studio Access</span>
+            <span>{t.nav.settings}</span>
           </Link>
         </div>
       </div>

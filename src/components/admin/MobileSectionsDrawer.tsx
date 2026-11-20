@@ -6,9 +6,6 @@ import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import {
   LayoutDashboard,
-  Sparkles,
-  BookOpen,
-  Cpu,
   Briefcase,
   FolderKanban,
   UserCheck,
@@ -21,27 +18,26 @@ import {
   FileText,
 } from 'lucide-react'
 import { logoutAction } from '@/app/admin/actions'
+import { useAdminTranslation } from '@/context/AdminLanguageContext'
 
 interface MobileSectionsDrawerProps {
   isOpen: boolean
   onClose: () => void
 }
 
-const SECTIONS = [
-  { num: '00', label: 'Studio Overview', href: '/admin', icon: LayoutDashboard },
-  { num: '01', label: 'Monograph Hero', href: '/admin/hero', icon: Sparkles },
-  { num: '02', label: 'About Philosophy', href: '/admin/about', icon: BookOpen },
-  { num: '03', label: 'Skills & Toolset', href: '/admin/skills', icon: Cpu },
-  { num: '04', label: 'Career & Credentials', href: '/admin/experience', icon: Briefcase },
-  { num: '05', label: 'Projects Gallery', href: '/admin/projects', icon: FolderKanban },
-  { num: '06', label: 'Profile & Contact', href: '/admin/profile', icon: UserCheck },
-  { num: '07', label: 'Settings & Security', href: '/admin/settings', icon: Settings },
-]
-
 export default function MobileSectionsDrawer({ isOpen, onClose }: MobileSectionsDrawerProps) {
   const pathname = usePathname()
+  const { t } = useAdminTranslation()
 
   if (!isOpen) return null
+
+  const sections = [
+    { num: '01', label: t.nav.home, href: '/admin', icon: LayoutDashboard },
+    { num: '02', label: t.nav.projects, href: '/admin/projects', icon: FolderKanban },
+    { num: '03', label: t.nav.experience, href: '/admin/experience', icon: Briefcase },
+    { num: '04', label: t.nav.profile, href: '/admin/profile', icon: UserCheck },
+    { num: '05', label: t.nav.settings, href: '/admin/settings', icon: Settings },
+  ]
 
   return (
     <div className="fixed inset-0 z-50 lg:hidden flex flex-col justify-end">
@@ -70,18 +66,19 @@ export default function MobileSectionsDrawer({ isOpen, onClose }: MobileSections
             </div>
             <div>
               <div className="text-xs font-bold tracking-wider text-white">
-                ENG. ALAA ESSA
+                {t.home.architectName}
               </div>
               <div className="text-[10px] text-amber-400 font-mono tracking-wider flex items-center gap-1">
                 <ShieldCheck className="w-3 h-3" />
-                <span>STUDIO CONSOLE</span>
+                <span>{t.nav.studioConsole}</span>
               </div>
             </div>
           </div>
 
           <button
             onClick={onClose}
-            className="p-2 text-neutral-400 hover:text-white rounded-xl bg-white/[0.04] border border-white/[0.08] active:scale-95 transition-transform"
+            className="p-2 text-neutral-400 hover:text-white rounded-xl bg-white/[0.04] border border-white/[0.08] active:scale-95 transition-transform cursor-pointer"
+            aria-label={t.common.close}
           >
             <X className="w-4 h-4" />
           </button>
@@ -95,7 +92,7 @@ export default function MobileSectionsDrawer({ isOpen, onClose }: MobileSections
             className="py-2.5 px-3 rounded-xl bg-gradient-to-r from-amber-300 via-amber-200 to-amber-100 hover:from-white hover:to-amber-100 text-neutral-950 font-semibold text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-md active:scale-95 transition-all font-mono"
           >
             <Plus className="w-4 h-4 text-neutral-950 stroke-[2.5]" />
-            <span>New Project</span>
+            <span>{t.projects.newProject}</span>
           </Link>
 
           <Link
@@ -104,14 +101,14 @@ export default function MobileSectionsDrawer({ isOpen, onClose }: MobileSections
             onClick={onClose}
             className="py-2.5 px-3 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] border border-white/[0.08] text-neutral-200 text-xs font-mono flex items-center justify-center gap-1.5 active:scale-95 transition-all"
           >
-            <span>Live Portfolio</span>
+            <span>{t.nav.liveSite}</span>
             <ArrowUpRight className="w-3.5 h-3.5 text-amber-400" />
           </Link>
         </div>
 
-        {/* Navigation Grid (Touch-Friendly Cards for all 8 Studio Sections) */}
+        {/* Navigation Grid (Touch-Friendly Cards for all 5 Studio Sections) */}
         <div className="grid grid-cols-2 gap-2.5">
-          {SECTIONS.map((sec) => {
+          {sections.map((sec) => {
             const Icon = sec.icon
             const isActive = pathname === sec.href
 
@@ -145,7 +142,7 @@ export default function MobileSectionsDrawer({ isOpen, onClose }: MobileSections
                     {sec.label}
                   </div>
                   <div className="text-[9px] font-mono text-neutral-500 mt-0.5">
-                    {isActive ? 'Current Section' : 'Manage Section'}
+                    {isActive ? t.common.active : t.common.view}
                   </div>
                 </div>
               </Link>
@@ -164,7 +161,7 @@ export default function MobileSectionsDrawer({ isOpen, onClose }: MobileSections
             title="Download / View LaTeX PDF"
           >
             <FileText className="w-3.5 h-3.5 text-[#7AD1B8]" />
-            <span>LaTeX CV</span>
+            <span>{t.home.downloadCv}</span>
           </a>
 
           <button
@@ -172,10 +169,10 @@ export default function MobileSectionsDrawer({ isOpen, onClose }: MobileSections
               onClose()
               await logoutAction()
             }}
-            className="p-3 rounded-xl bg-red-950/30 hover:bg-red-950/50 border border-red-800/40 text-red-300 flex items-center justify-center gap-2 active:scale-95 transition-all"
+            className="p-3 rounded-xl bg-red-950/30 hover:bg-red-950/50 border border-red-800/40 text-red-300 flex items-center justify-center gap-2 active:scale-95 transition-all cursor-pointer"
           >
             <LogOut className="w-3.5 h-3.5" />
-            <span>Logout</span>
+            <span>{t.nav.logout}</span>
           </button>
         </div>
       </div>

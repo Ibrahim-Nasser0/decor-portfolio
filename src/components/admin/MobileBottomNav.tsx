@@ -12,9 +12,11 @@ import {
 } from 'lucide-react'
 import MobileSectionsDrawer from './MobileSectionsDrawer'
 import MobileStudioHubModal from './MobileStudioHubModal'
+import { useAdminTranslation } from '@/context/AdminLanguageContext'
 
 export default function MobileBottomNav() {
   const pathname = usePathname()
+  const { t } = useAdminTranslation()
   const [hubOpen, setHubOpen] = useState(false)
   const [drawerOpen, setDrawerOpen] = useState(false)
 
@@ -27,11 +29,11 @@ export default function MobileBottomNav() {
   const isProjects = pathname.startsWith('/admin/projects')
   const isSettings = pathname === '/admin/settings'
   const isSubSection = [
+    '/admin/experience',
+    '/admin/skills',
+    '/admin/profile',
     '/admin/hero',
     '/admin/about',
-    '/admin/skills',
-    '/admin/experience',
-    '/admin/profile',
   ].some((path) => pathname.startsWith(path))
 
   return (
@@ -44,7 +46,7 @@ export default function MobileBottomNav() {
         className="lg:hidden fixed bottom-3 inset-x-3 sm:bottom-4 max-w-md mx-auto z-40 bg-[#0d0e12]/92 backdrop-blur-2xl border border-white/[0.12] rounded-[26px] py-1 px-1.5 shadow-[0_12px_40px_rgba(0,0,0,0.85)] ring-1 ring-white/[0.04] select-none"
       >
         <div className="flex items-center justify-around relative">
-          {/* Tab 1: Overview */}
+          {/* Tab 1: Home */}
           <Link
             href="/admin"
             className={`flex-1 flex flex-col items-center justify-center gap-1 py-1.5 rounded-2xl transition-all active:scale-90 ${
@@ -57,7 +59,7 @@ export default function MobileBottomNav() {
                 <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-amber-400 shadow-[0_0_6px_#f59e0b]" />
               )}
             </div>
-            <span className="text-[10px] font-mono tracking-wider">Overview</span>
+            <span className="text-[10px] font-mono tracking-wider">{t.nav.home}</span>
           </Link>
 
           {/* Tab 2: Projects Gallery */}
@@ -73,7 +75,7 @@ export default function MobileBottomNav() {
                 <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-amber-400 shadow-[0_0_6px_#f59e0b]" />
               )}
             </div>
-            <span className="text-[10px] font-mono tracking-wider">Projects</span>
+            <span className="text-[10px] font-mono tracking-wider">{t.nav.projects}</span>
           </Link>
 
           {/* Tab 3: Center Elevated Studio Hub Button (Action Sheet Trigger) */}
@@ -97,7 +99,7 @@ export default function MobileBottomNav() {
                 <Sparkles className="w-5 h-5 stroke-[2.4] fill-neutral-950/20" />
               </div>
               <span className="text-[9px] font-mono font-bold tracking-wider text-amber-300 mt-1">
-                Hub
+                {t.nav.hub}
               </span>
             </button>
           </div>
@@ -122,7 +124,7 @@ export default function MobileBottomNav() {
                 <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-amber-400 shadow-[0_0_6px_#f59e0b]" />
               )}
             </div>
-            <span className="text-[10px] font-mono tracking-wider">Sections</span>
+            <span className="text-[10px] font-mono tracking-wider">{t.nav.sections}</span>
           </button>
 
           {/* Tab 5: Settings & Security */}
@@ -138,7 +140,7 @@ export default function MobileBottomNav() {
                 <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-amber-400 shadow-[0_0_6px_#f59e0b]" />
               )}
             </div>
-            <span className="text-[10px] font-mono tracking-wider">Settings</span>
+            <span className="text-[10px] font-mono tracking-wider">{t.nav.settings}</span>
           </Link>
         </div>
       </nav>
@@ -149,7 +151,7 @@ export default function MobileBottomNav() {
         onClose={() => setHubOpen(false)}
       />
 
-      {/* Slide-Up Bottom Drawer for All 7 Monograph Sections */}
+      {/* Slide-Up Bottom Drawer for All 5 Monograph Sections */}
       <MobileSectionsDrawer
         isOpen={drawerOpen}
         onClose={() => setDrawerOpen(false)}
