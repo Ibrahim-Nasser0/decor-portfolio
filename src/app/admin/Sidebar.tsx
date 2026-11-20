@@ -24,7 +24,15 @@ import {
 } from 'lucide-react'
 import { logoutAction } from './actions'
 
-const SECTION_TABS = [
+interface NavTab {
+  num: string
+  label: string
+  href: string
+  icon: any
+  badge?: string
+}
+
+const SECTION_TABS: NavTab[] = [
   { num: '00', label: 'Overview', href: '/admin', icon: LayoutDashboard },
   { num: '01', label: 'Hero Section', href: '/admin/hero', icon: Sparkles },
   { num: '02', label: 'About Section', href: '/admin/about', icon: BookOpen },

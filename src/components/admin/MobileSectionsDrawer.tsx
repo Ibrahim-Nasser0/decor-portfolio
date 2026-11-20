@@ -12,13 +12,13 @@ import {
   Briefcase,
   FolderKanban,
   UserCheck,
-  MessageSquareText,
-  ExternalLink,
   LogOut,
   X,
   ArrowUpRight,
   ShieldCheck,
   Settings,
+  Plus,
+  FileText,
 } from 'lucide-react'
 import { logoutAction } from '@/app/admin/actions'
 
@@ -52,9 +52,9 @@ export default function MobileSectionsDrawer({ isOpen, onClose }: MobileSections
       />
 
       {/* Drawer Panel */}
-      <div className="relative z-10 bg-[#0e1013] border-t border-white/[0.12] rounded-t-3xl max-h-[85vh] overflow-y-auto no-scrollbar p-5 pb-8 space-y-5 shadow-2xl animate-in slide-in-from-bottom duration-300">
+      <div className="relative z-10 bg-[#0e1013] border-t border-white/[0.12] rounded-t-3xl max-h-[85vh] overflow-y-auto no-scrollbar p-5 pb-8 space-y-4 shadow-2xl animate-in slide-in-from-bottom duration-300">
         {/* Drag Handle Bar */}
-        <div className="w-12 h-1.5 bg-white/20 rounded-full mx-auto -mt-1 mb-2" />
+        <div className="w-12 h-1.5 bg-white/20 rounded-full mx-auto -mt-1 mb-1" />
 
         {/* Drawer Header */}
         <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
@@ -87,7 +87,29 @@ export default function MobileSectionsDrawer({ isOpen, onClose }: MobileSections
           </button>
         </div>
 
-        {/* Navigation Grid (Touch-Friendly Cards) */}
+        {/* Quick Fast Actions: New Project & Live Site */}
+        <div className="grid grid-cols-2 gap-2">
+          <Link
+            href="/admin/projects/new"
+            onClick={onClose}
+            className="py-2.5 px-3 rounded-xl bg-gradient-to-r from-amber-300 via-amber-200 to-amber-100 hover:from-white hover:to-amber-100 text-neutral-950 font-semibold text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-md active:scale-95 transition-all font-mono"
+          >
+            <Plus className="w-4 h-4 text-neutral-950 stroke-[2.5]" />
+            <span>New Project</span>
+          </Link>
+
+          <Link
+            href="/"
+            target="_blank"
+            onClick={onClose}
+            className="py-2.5 px-3 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] border border-white/[0.08] text-neutral-200 text-xs font-mono flex items-center justify-center gap-1.5 active:scale-95 transition-all"
+          >
+            <span>Live Portfolio</span>
+            <ArrowUpRight className="w-3.5 h-3.5 text-amber-400" />
+          </Link>
+        </div>
+
+        {/* Navigation Grid (Touch-Friendly Cards for all 8 Studio Sections) */}
         <div className="grid grid-cols-2 gap-2.5">
           {SECTIONS.map((sec) => {
             const Icon = sec.icon
@@ -133,15 +155,17 @@ export default function MobileSectionsDrawer({ isOpen, onClose }: MobileSections
 
         {/* Quick Links & Sign Out Bar */}
         <div className="pt-2 border-t border-white/[0.08] flex items-center justify-between gap-3 text-xs font-mono">
-          <Link
-            href="/"
+          <a
+            href="/api/cv-pdf"
             target="_blank"
+            rel="noopener noreferrer"
             onClick={onClose}
-            className="flex-1 p-3 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-neutral-200 flex items-center justify-center gap-2 active:scale-95 transition-all"
+            className="flex-1 p-3 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-neutral-200 flex items-center justify-center gap-1.5 active:scale-95 transition-all"
+            title="Download / View LaTeX PDF"
           >
-            <span>Live Monograph</span>
-            <ArrowUpRight className="w-3.5 h-3.5 text-amber-400" />
-          </Link>
+            <FileText className="w-3.5 h-3.5 text-[#7AD1B8]" />
+            <span>LaTeX CV</span>
+          </a>
 
           <button
             onClick={async () => {
