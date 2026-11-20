@@ -12,14 +12,28 @@ import {
   Plus,
   Trash2,
   ExternalLink,
+  Cpu,
+  Layers,
+  Sparkles,
+  Sliders,
 } from 'lucide-react'
 import { saveProfileAction } from '../actions'
 import UnsavedChangesBar from '@/components/admin/UnsavedChangesBar'
+import { useAdminTranslation } from '@/context/AdminLanguageContext'
 
 export default function ExperienceClient({ initialProfile }: { initialProfile: any }) {
+  const { t, isRtl } = useAdminTranslation()
   const [profile, setProfile] = useState(initialProfile)
+  const [activeTab, setActiveTab] = useState<'career' | 'software'>('career')
+
+  // Career state
   const [experience, setExperience] = useState<any[]>(initialProfile.experience || [])
   const [education, setEducation] = useState<any[]>(initialProfile.education || [])
+
+  // Software & Skills state
+  const [software, setSoftware] = useState<any[]>(initialProfile.software || [])
+  const [skills, setSkills] = useState<any>(initialProfile.skills || { technicalEn: [], technicalAr: [] })
+
   const [isSaving, setIsSaving] = useState(false)
   const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
 
@@ -27,10 +41,13 @@ export default function ExperienceClient({ initialProfile }: { initialProfile: a
   const [initialData, setInitialData] = useState({
     experience: initialProfile.experience || [],
     education: initialProfile.education || [],
+    software: initialProfile.software || [],
+    skills: initialProfile.skills || { technicalEn: [], technicalAr: [] },
   })
 
   const isDirty =
-    JSON.stringify({ experience, education }) !== JSON.stringify(initialData)
+    JSON.stringify({ experience, education, software, skills }) !==
+    JSON.stringify(initialData)
 
   // Ctrl+S / Cmd+S shortcut
   useEffect(() => {
@@ -42,11 +59,13 @@ export default function ExperienceClient({ initialProfile }: { initialProfile: a
     }
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [experience, education])
+  }, [experience, education, software, skills])
 
   const handleDiscard = () => {
     setExperience(initialData.experience)
     setEducation(initialData.education)
+    setSoftware(initialData.software)
+    setSkills(initialData.skills)
   }
 
   const handleSave = async (e?: React.FormEvent) => {
@@ -56,21 +75,23 @@ export default function ExperienceClient({ initialProfile }: { initialProfile: a
       ...profile,
       experience,
       education,
+      software,
+      skills,
     }
     const res = await saveProfileAction(updated)
     setIsSaving(false)
 
     if (res.success) {
-      setInitialData({ experience, education })
-      setFeedback({ type: 'success', text: 'Career milestones & education credentials saved!' })
+      setInitialData({ experience, education, software, skills })
+      setFeedback({ type: 'success', text: t.common.success })
       setTimeout(() => setFeedback(null), 3500)
     } else {
-      setFeedback({ type: 'error', text: res.error || 'Failed to update experience' })
+      setFeedback({ type: 'error', text: res.error || t.common.error })
     }
   }
 
   return (
-    <form onSubmit={handleSave} className="space-y-8 animate-fade-in relative pb-28">
+    <form onSubmit={handleSave} className="space-y-6 sm:space-y-8 animate-fade-in relative pb-28 select-none">
       {/* Toast Feedback */}
       {feedback && (
         <div
@@ -88,7 +109,11 @@ export default function ExperienceClient({ initialProfile }: { initialProfile: a
             )}
             <span>{feedback.text}</span>
           </div>
-          <button onClick={() => setFeedback(null)} className="text-neutral-400 hover:text-white p-1">
+          <button
+            type="button"
+            onClick={() => setFeedback(null)}
+            className="text-neutral-400 hover:text-white p-1 cursor-pointer"
+          >
             ✕
           </button>
         </div>
@@ -97,14 +122,14 @@ export default function ExperienceClient({ initialProfile }: { initialProfile: a
       {/* Top Header & Save Button */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-white/[0.08]">
         <div>
-          <span className="text-[10px] tracking-[0.25em] font-mono text-amber-500 uppercase">
-            Section 04 Management
+          <span className="text-[10px] tracking-[0.25em] font-mono text-amber-500 uppercase font-semibold">
+            Section 03 Management
           </span>
-          <h1 className="text-2xl font-serif text-white tracking-wide mt-1">
-            Experience & Education Chronology
+          <h1 className="text-2xl sm:text-3xl font-serif text-white tracking-wide mt-1">
+            {t.experience.title}
           </h1>
           <p className="text-xs text-neutral-400 mt-1 font-mono">
-            Manage professional studio leadership roles, firm appointments, and academic degrees.
+            {t.experience.subtitle}
           </p>
         </div>
 
@@ -115,7 +140,7 @@ export default function ExperienceClient({ initialProfile }: { initialProfile: a
             className="inline-flex items-center gap-2 px-3 py-2 bg-white/[0.03] hover:bg-white/[0.08] text-neutral-300 hover:text-white rounded-xl text-xs font-mono border border-white/[0.08] transition-colors"
           >
             <ExternalLink className="w-3.5 h-3.5 text-amber-400" />
-            <span>Preview Section</span>
+            <span>{t.common.preview}</span>
           </Link>
 
           <button
@@ -126,280 +151,433 @@ export default function ExperienceClient({ initialProfile }: { initialProfile: a
             {isSaving ? (
               <>
                 <Loader2 className="w-4 h-4 animate-spin text-neutral-900" />
-                <span>Saving...</span>
+                <span>{t.common.saving}</span>
               </>
             ) : (
               <>
                 <Save className="w-4 h-4" />
-                <span>Save Experience</span>
+                <span>{t.common.save}</span>
               </>
             )}
           </button>
         </div>
       </div>
 
-      {/* Section 1: Professional Experience Milestones */}
-      <div className="bg-[#111215]/80 border border-white/[0.08] rounded-3xl p-6 sm:p-8 space-y-6">
-        <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
-          <div className="flex items-center gap-2.5">
-            <Briefcase className="w-4 h-4 text-amber-500" />
-            <h2 className="text-xs font-mono uppercase tracking-wider text-white">
-              Professional Practice Appointments ({experience.length})
-            </h2>
-          </div>
+      {/* View Switcher Tabs (Career Milestones vs Software Toolset) */}
+      <div className="flex items-center bg-[#111215] border border-white/[0.08] rounded-2xl p-1.5 gap-2 max-w-md">
+        <button
+          type="button"
+          onClick={() => setActiveTab('career')}
+          className={`flex-1 py-2 px-3 rounded-xl text-xs font-mono font-semibold transition-all flex items-center justify-center gap-2 cursor-pointer ${
+            activeTab === 'career'
+              ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40 shadow-sm'
+              : 'text-neutral-400 hover:text-white'
+          }`}
+        >
+          <Briefcase className="w-4 h-4" />
+          <span>{t.experience.tabCareer}</span>
+        </button>
 
-          <button
-            type="button"
-            onClick={() =>
-              setExperience([
-                {
-                  period: '2026 – PRESENT',
-                  role: 'Interior Architect & Consultant',
-                  company: 'Alaa Issa Studio',
-                  location: 'Cairo, Egypt',
-                  description: 'Directing bespoke architectural schemes and turnkey execution.',
-                  skills: ['Space Planning', 'Turnkey Execution'],
-                },
-                ...experience,
-              ])
-            }
-            className="inline-flex items-center gap-1.5 bg-white/[0.05] hover:bg-white/[0.1] text-amber-400 border border-white/[0.08] hover:border-amber-500/40 px-3.5 py-2 rounded-xl text-xs font-mono transition-colors cursor-pointer"
-          >
-            <Plus className="w-3.5 h-3.5" />
-            <span>Add Role</span>
-          </button>
-        </div>
-
-        <div className="space-y-4">
-          {experience.map((exp, idx) => (
-            <div
-              key={idx}
-              className="p-5 bg-[#090a0c] border border-white/[0.08] rounded-2xl space-y-4 shadow-sm"
-            >
-              <div className="flex items-center justify-between pb-2 border-b border-white/[0.04]">
-                <span className="text-[10px] font-mono uppercase text-amber-400 font-semibold">
-                  Milestone #{idx + 1}
-                </span>
-                <button
-                  type="button"
-                  onClick={() => setExperience(experience.filter((_, i) => i !== idx))}
-                  className="p-1.5 text-neutral-500 hover:text-red-400 transition-colors"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </button>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-[10px] font-mono text-neutral-400 uppercase mb-1">
-                    Period
-                  </label>
-                  <input
-                    type="text"
-                    value={exp.period}
-                    onChange={(e) => {
-                      const updated = [...experience]
-                      updated[idx].period = e.target.value
-                      setExperience(updated)
-                    }}
-                    placeholder="2024 – PRESENT"
-                    className="w-full bg-white/[0.03] border border-white/[0.08] rounded-xl px-3.5 py-2 text-xs text-white font-mono"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-[10px] font-mono text-neutral-400 uppercase mb-1">
-                    Role Title
-                  </label>
-                  <input
-                    type="text"
-                    value={exp.role}
-                    onChange={(e) => {
-                      const updated = [...experience]
-                      updated[idx].role = e.target.value
-                      setExperience(updated)
-                    }}
-                    placeholder="Lead Interior Architect"
-                    className="w-full bg-white/[0.03] border border-white/[0.08] rounded-xl px-3.5 py-2 text-xs text-white"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-[10px] font-mono text-neutral-400 uppercase mb-1">
-                    Company / Studio Firm
-                  </label>
-                  <input
-                    type="text"
-                    value={exp.company}
-                    onChange={(e) => {
-                      const updated = [...experience]
-                      updated[idx].company = e.target.value
-                      setExperience(updated)
-                    }}
-                    placeholder="Alaa Issa Studio"
-                    className="w-full bg-white/[0.03] border border-white/[0.08] rounded-xl px-3.5 py-2 text-xs text-white"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-[10px] font-mono text-neutral-400 uppercase mb-1">
-                    Location
-                  </label>
-                  <input
-                    type="text"
-                    value={exp.location}
-                    onChange={(e) => {
-                      const updated = [...experience]
-                      updated[idx].location = e.target.value
-                      setExperience(updated)
-                    }}
-                    placeholder="Cairo, Egypt"
-                    className="w-full bg-white/[0.03] border border-white/[0.08] rounded-xl px-3.5 py-2 text-xs text-white font-mono"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-[10px] font-mono text-neutral-400 uppercase mb-1">
-                  Scope & Responsibilities Description
-                </label>
-                <textarea
-                  rows={3}
-                  value={exp.description}
-                  onChange={(e) => {
-                    const updated = [...experience]
-                    updated[idx].description = e.target.value
-                    setExperience(updated)
-                  }}
-                  className="w-full bg-white/[0.03] border border-white/[0.08] rounded-xl px-3.5 py-2 text-xs text-white leading-relaxed"
-                />
-              </div>
-            </div>
-          ))}
-        </div>
+        <button
+          type="button"
+          onClick={() => setActiveTab('software')}
+          className={`flex-1 py-2 px-3 rounded-xl text-xs font-mono font-semibold transition-all flex items-center justify-center gap-2 cursor-pointer ${
+            activeTab === 'software'
+              ? 'bg-sky-500/20 text-sky-300 border border-sky-500/40 shadow-sm'
+              : 'text-neutral-400 hover:text-white'
+          }`}
+        >
+          <Cpu className="w-4 h-4" />
+          <span>{t.experience.tabSoftware}</span>
+        </button>
       </div>
 
-      {/* Section 2: Education & Academic Honors */}
-      <div className="bg-[#111215]/80 border border-white/[0.08] rounded-3xl p-6 sm:p-8 space-y-6">
-        <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
-          <div className="flex items-center gap-2.5">
-            <GraduationCap className="w-4 h-4 text-amber-500" />
-            <h2 className="text-xs font-mono uppercase tracking-wider text-white">
-              Academic Degrees & Diplomas ({education.length})
-            </h2>
+      {/* ============================================================== */}
+      {/* TAB 1: CAREER MILESTONES & EDUCATION                           */}
+      {/* ============================================================== */}
+      {activeTab === 'career' && (
+        <div className="space-y-6 sm:space-y-8 animate-in fade-in duration-200">
+          {/* Section 1: Professional Experience Milestones */}
+          <div className="bg-[#111215]/80 border border-white/[0.08] rounded-3xl p-5 sm:p-7 space-y-6 shadow-xl">
+            <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
+              <div className="flex items-center gap-2.5">
+                <Briefcase className="w-4 h-4 text-amber-500" />
+                <h2 className="text-xs font-mono uppercase tracking-wider text-white font-semibold">
+                  {t.experience.tabCareer} ({experience.length})
+                </h2>
+              </div>
+
+              <button
+                type="button"
+                onClick={() =>
+                  setExperience([
+                    {
+                      period: '2026 – PRESENT',
+                      role: 'Senior Interior Architect',
+                      company: 'Alaa Essa Studio',
+                      location: 'Cairo & Alexandria',
+                      description: 'Directing bespoke architectural schemes and turnkey execution.',
+                      skills: ['Space Planning', 'Turnkey Execution'],
+                    },
+                    ...experience,
+                  ])
+                }
+                className="inline-flex items-center gap-1.5 bg-white/[0.05] hover:bg-white/[0.1] text-amber-400 border border-white/[0.08] hover:border-amber-500/40 px-3.5 py-2 rounded-xl text-xs font-mono transition-colors cursor-pointer"
+              >
+                <Plus className="w-3.5 h-3.5" />
+                <span>{t.experience.addMilestone}</span>
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              {experience.map((exp, idx) => (
+                <div
+                  key={idx}
+                  className="p-5 bg-[#090a0c] border border-white/[0.08] rounded-2xl space-y-4 shadow-sm"
+                >
+                  <div className="flex items-center justify-between pb-2 border-b border-white/[0.04]">
+                    <span className="text-[10px] font-mono uppercase text-amber-400 font-semibold">
+                      Milestone #{idx + 1}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setExperience(experience.filter((_, i) => i !== idx))}
+                      className="p-1.5 text-neutral-500 hover:text-red-400 transition-colors cursor-pointer"
+                      title={t.common.delete}
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-[10px] font-mono text-neutral-400 uppercase mb-1">
+                        {t.experience.periodDates}
+                      </label>
+                      <input
+                        type="text"
+                        value={exp.period || ''}
+                        onChange={(e) => {
+                          const updated = [...experience]
+                          updated[idx].period = e.target.value
+                          setExperience(updated)
+                        }}
+                        className="w-full bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none font-mono"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-[10px] font-mono text-neutral-400 uppercase mb-1">
+                        {t.experience.roleTitleEn}
+                      </label>
+                      <input
+                        type="text"
+                        value={exp.role || ''}
+                        onChange={(e) => {
+                          const updated = [...experience]
+                          updated[idx].role = e.target.value
+                          setExperience(updated)
+                        }}
+                        className="w-full bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-[10px] font-mono text-neutral-400 uppercase mb-1">
+                        {t.experience.officeCompanyEn}
+                      </label>
+                      <input
+                        type="text"
+                        value={exp.company || ''}
+                        onChange={(e) => {
+                          const updated = [...experience]
+                          updated[idx].company = e.target.value
+                          setExperience(updated)
+                        }}
+                        className="w-full bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-[10px] font-mono text-neutral-400 uppercase mb-1">
+                        {t.experience.locationEn}
+                      </label>
+                      <input
+                        type="text"
+                        value={exp.location || ''}
+                        onChange={(e) => {
+                          const updated = [...experience]
+                          updated[idx].location = e.target.value
+                          setExperience(updated)
+                        }}
+                        className="w-full bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none"
+                      />
+                    </div>
+
+                    <div className="md:col-span-2">
+                      <label className="block text-[10px] font-mono text-neutral-400 uppercase mb-1">
+                        {t.experience.responsibilitiesEn}
+                      </label>
+                      <textarea
+                        rows={3}
+                        value={exp.description || ''}
+                        onChange={(e) => {
+                          const updated = [...experience]
+                          updated[idx].description = e.target.value
+                          setExperience(updated)
+                        }}
+                        className="w-full bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl p-3 text-xs text-white focus:outline-none"
+                      />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
 
-          <button
-            type="button"
-            onClick={() =>
-              setEducation([
-                ...education,
-                {
-                  year: '2024 – 2025',
-                  titleEn: 'Advanced Diploma in Lighting & Millwork',
-                  institutionEn: 'Institute of Architecture',
-                  descEn: 'Focusing on circadian lighting and joinery.',
-                },
-              ])
-            }
-            className="inline-flex items-center gap-1.5 bg-white/[0.05] hover:bg-white/[0.1] text-amber-400 border border-white/[0.08] hover:border-amber-500/40 px-3.5 py-2 rounded-xl text-xs font-mono transition-colors cursor-pointer"
-          >
-            <Plus className="w-3.5 h-3.5" />
-            <span>Add Degree</span>
-          </button>
-        </div>
-
-        <div className="space-y-4">
-          {education.map((edu, idx) => (
-            <div
-              key={idx}
-              className="p-5 bg-[#090a0c] border border-white/[0.08] rounded-2xl space-y-4 shadow-sm"
-            >
-              <div className="flex items-center justify-between pb-2 border-b border-white/[0.04]">
-                <span className="text-[10px] font-mono uppercase text-amber-400 font-semibold">
-                  Degree #{idx + 1}
-                </span>
-                <button
-                  type="button"
-                  onClick={() => setEducation(education.filter((_, i) => i !== idx))}
-                  className="p-1.5 text-neutral-500 hover:text-red-400 transition-colors"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </button>
+          {/* Section 2: Education & Degrees */}
+          <div className="bg-[#111215]/80 border border-white/[0.08] rounded-3xl p-5 sm:p-7 space-y-6 shadow-xl">
+            <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
+              <div className="flex items-center gap-2.5">
+                <GraduationCap className="w-4 h-4 text-emerald-400" />
+                <h2 className="text-xs font-mono uppercase tracking-wider text-white font-semibold">
+                  Academic Degrees & Diplomas ({education.length})
+                </h2>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-[10px] font-mono text-neutral-400 uppercase mb-1">
-                    Years
-                  </label>
-                  <input
-                    type="text"
-                    value={edu.year}
-                    onChange={(e) => {
-                      const updated = [...education]
-                      updated[idx].year = e.target.value
-                      setEducation(updated)
-                    }}
-                    placeholder="2020 – 2024"
-                    className="w-full bg-white/[0.03] border border-white/[0.08] rounded-xl px-3.5 py-2 text-xs text-white font-mono"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-[10px] font-mono text-neutral-400 uppercase mb-1">
-                    Degree Title (English)
-                  </label>
-                  <input
-                    type="text"
-                    value={edu.titleEn}
-                    onChange={(e) => {
-                      const updated = [...education]
-                      updated[idx].titleEn = e.target.value
-                      setEducation(updated)
-                    }}
-                    className="w-full bg-white/[0.03] border border-white/[0.08] rounded-xl px-3.5 py-2 text-xs text-white"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-[10px] font-mono text-neutral-400 uppercase mb-1">
-                    Institution (English)
-                  </label>
-                  <input
-                    type="text"
-                    value={edu.institutionEn}
-                    onChange={(e) => {
-                      const updated = [...education]
-                      updated[idx].institutionEn = e.target.value
-                      setEducation(updated)
-                    }}
-                    className="w-full bg-white/[0.03] border border-white/[0.08] rounded-xl px-3.5 py-2 text-xs text-white"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-[10px] font-mono text-neutral-400 uppercase mb-1">
-                    Honors & Description
-                  </label>
-                  <input
-                    type="text"
-                    value={edu.descEn}
-                    onChange={(e) => {
-                      const updated = [...education]
-                      updated[idx].descEn = e.target.value
-                      setEducation(updated)
-                    }}
-                    className="w-full bg-white/[0.03] border border-white/[0.08] rounded-xl px-3.5 py-2 text-xs text-white"
-                  />
-                </div>
-              </div>
+              <button
+                type="button"
+                onClick={() =>
+                  setEducation([
+                    {
+                      degree: 'B.Sc. in Interior Architecture',
+                      institution: 'Faculty of Fine Arts, Alexandria University',
+                      year: '2021',
+                      grade: 'Excellent with Honors',
+                    },
+                    ...education,
+                  ])
+                }
+                className="inline-flex items-center gap-1.5 bg-white/[0.05] hover:bg-white/[0.1] text-emerald-400 border border-white/[0.08] hover:border-emerald-500/40 px-3.5 py-2 rounded-xl text-xs font-mono transition-colors cursor-pointer"
+              >
+                <Plus className="w-3.5 h-3.5" />
+                <span>Add Degree</span>
+              </button>
             </div>
-          ))}
-        </div>
-      </div>
 
-      {/* Floating Unsaved Changes Guard */}
+            <div className="space-y-4">
+              {education.map((edu, idx) => (
+                <div
+                  key={idx}
+                  className="p-5 bg-[#090a0c] border border-white/[0.08] rounded-2xl space-y-4 shadow-sm"
+                >
+                  <div className="flex items-center justify-between pb-2 border-b border-white/[0.04]">
+                    <span className="text-[10px] font-mono uppercase text-emerald-400 font-semibold">
+                      Degree #{idx + 1}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setEducation(education.filter((_, i) => i !== idx))}
+                      className="p-1.5 text-neutral-500 hover:text-red-400 transition-colors cursor-pointer"
+                      title={t.common.delete}
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-[10px] font-mono text-neutral-400 uppercase mb-1">
+                        Degree Title
+                      </label>
+                      <input
+                        type="text"
+                        value={edu.degree || ''}
+                        onChange={(e) => {
+                          const updated = [...education]
+                          updated[idx].degree = e.target.value
+                          setEducation(updated)
+                        }}
+                        className="w-full bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-[10px] font-mono text-neutral-400 uppercase mb-1">
+                        Institution / University
+                      </label>
+                      <input
+                        type="text"
+                        value={edu.institution || ''}
+                        onChange={(e) => {
+                          const updated = [...education]
+                          updated[idx].institution = e.target.value
+                          setEducation(updated)
+                        }}
+                        className="w-full bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-[10px] font-mono text-neutral-400 uppercase mb-1">
+                        Year of Graduation
+                      </label>
+                      <input
+                        type="text"
+                        value={edu.year || ''}
+                        onChange={(e) => {
+                          const updated = [...education]
+                          updated[idx].year = e.target.value
+                          setEducation(updated)
+                        }}
+                        className="w-full bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none font-mono"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-[10px] font-mono text-neutral-400 uppercase mb-1">
+                        Grade / Honors
+                      </label>
+                      <input
+                        type="text"
+                        value={edu.grade || ''}
+                        onChange={(e) => {
+                          const updated = [...education]
+                          updated[idx].grade = e.target.value
+                          setEducation(updated)
+                        }}
+                        className="w-full bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none font-mono"
+                      />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ============================================================== */}
+      {/* TAB 2: SOFTWARE & PRODUCTION TOOLSET                           */}
+      {/* ============================================================== */}
+      {activeTab === 'software' && (
+        <div className="space-y-6 sm:space-y-8 animate-in fade-in duration-200">
+          <div className="bg-[#111215]/80 border border-white/[0.08] rounded-3xl p-5 sm:p-7 space-y-6 shadow-xl">
+            <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
+              <div className="flex items-center gap-2.5">
+                <Cpu className="w-4 h-4 text-sky-400" />
+                <h2 className="text-xs font-mono uppercase tracking-wider text-white font-semibold">
+                  {t.experience.tabSoftware} ({software.length})
+                </h2>
+              </div>
+
+              <button
+                type="button"
+                onClick={() =>
+                  setSoftware([
+                    ...software,
+                    {
+                      name: 'Rhino 3D',
+                      role: 'Parametric Surfaces & Computational Modeling',
+                      engine: 'McNeel',
+                      badge: 'NURBS',
+                      color: 'from-sky-500 to-indigo-600',
+                      deliverable: 'Parametric Form Generation',
+                      category: '3D & Modeling',
+                      proficiency: 90,
+                    },
+                  ])
+                }
+                className="inline-flex items-center gap-1.5 bg-white/[0.05] hover:bg-white/[0.1] text-sky-400 border border-white/[0.08] hover:border-sky-500/40 px-3.5 py-2 rounded-xl text-xs font-mono transition-colors cursor-pointer"
+              >
+                <Plus className="w-3.5 h-3.5" />
+                <span>{t.experience.addTool}</span>
+              </button>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {software.map((tool, idx) => (
+                <div
+                  key={idx}
+                  className="p-5 bg-[#090a0c] border border-white/[0.08] rounded-2xl space-y-4 shadow-sm flex flex-col justify-between"
+                >
+                  <div className="flex items-center justify-between pb-2 border-b border-white/[0.04]">
+                    <div className="flex items-center gap-2">
+                      <span className="text-[10px] font-mono uppercase text-sky-400 font-semibold">
+                        #{idx + 1}
+                      </span>
+                      <span className="text-xs font-bold text-white font-mono">
+                        {tool.name}
+                      </span>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => setSoftware(software.filter((_, i) => i !== idx))}
+                      className="p-1.5 text-neutral-500 hover:text-red-400 transition-colors cursor-pointer"
+                      title={t.common.delete}
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+
+                  <div className="space-y-3">
+                    <div>
+                      <label className="block text-[10px] font-mono text-neutral-400 uppercase mb-1">
+                        {t.experience.toolName}
+                      </label>
+                      <input
+                        type="text"
+                        value={tool.name || ''}
+                        onChange={(e) => {
+                          const updated = [...software]
+                          updated[idx].name = e.target.value
+                          setSoftware(updated)
+                        }}
+                        className="w-full bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none font-mono"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-[10px] font-mono text-neutral-400 uppercase mb-1">
+                        Engine / Publisher
+                      </label>
+                      <input
+                        type="text"
+                        value={tool.engine || ''}
+                        onChange={(e) => {
+                          const updated = [...software]
+                          updated[idx].engine = e.target.value
+                          setSoftware(updated)
+                        }}
+                        className="w-full bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-[10px] font-mono text-neutral-400 uppercase mb-1">
+                        Production Role / Specialization
+                      </label>
+                      <input
+                        type="text"
+                        value={tool.role || ''}
+                        onChange={(e) => {
+                          const updated = [...software]
+                          updated[idx].role = e.target.value
+                          setSoftware(updated)
+                        }}
+                        className="w-full bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none"
+                      />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Floating Unsaved Changes Bar */}
       <UnsavedChangesBar
         isDirty={isDirty}
         isSaving={isSaving}

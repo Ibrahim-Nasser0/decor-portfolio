@@ -19,34 +19,23 @@ import {
   Lock,
   Layers,
   Sparkles,
-  BookOpen,
-  Cpu,
   Briefcase,
   FolderKanban,
   UserCheck,
-  MessageSquareText,
   Sliders,
   X,
   AlertTriangle,
   ArrowRight,
+  Languages,
 } from 'lucide-react'
-import { AdminAccount } from '@/lib/dataRepository'
+import { AdminAccount } from '@/data/portfolioData'
 import {
   addAdminAccountAction,
   deleteAdminAccountAction,
   updatePasswordAction,
   logoutAction,
 } from '../actions'
-
-const SECTIONS_DIRECTORY = [
-  { num: '00', label: 'Studio Overview', href: '/admin', icon: Layers, desc: 'Real-time telemetry and overview' },
-  { num: '01', label: 'Monograph Hero', href: '/admin/hero', icon: Sparkles, desc: 'Cover, statement & metrics ribbon' },
-  { num: '02', label: 'About Philosophy', href: '/admin/about', icon: BookOpen, desc: 'Biography, ethos & dossier links' },
-  { num: '03', label: 'Skills & Software', href: '/admin/skills', icon: Cpu, desc: 'Bento grid & software stack' },
-  { num: '04', label: 'Career & Degrees', href: '/admin/experience', icon: Briefcase, desc: 'Firm roles & academic diplomas' },
-  { num: '05', label: 'Projects Gallery', href: '/admin/projects', icon: FolderKanban, desc: 'Portfolio case studies & CV slots' },
-  { num: '06', label: 'Profile & Contact', href: '/admin/profile', icon: UserCheck, desc: 'WhatsApp, email & studio coordinates' },
-]
+import { useAdminTranslation } from '@/context/AdminLanguageContext'
 
 export default function SettingsClient({
   initialAccounts,
@@ -55,8 +44,9 @@ export default function SettingsClient({
   initialAccounts: AdminAccount[]
   currentUserEmail: string
 }) {
+  const { t, isRtl, lang, setLang } = useAdminTranslation()
+
   const [accounts, setAccounts] = useState<AdminAccount[]>(() => {
-    // Ensure the current authenticated user is included in the list
     const hasCurrent = initialAccounts.some(
       (a) => a.email.toLowerCase() === currentUserEmail.toLowerCase()
     )
@@ -169,7 +159,7 @@ export default function SettingsClient({
     setIsUpdatingPass(false)
 
     if (res.success) {
-      setFeedback({ type: 'success', text: 'Password updated successfully! Next login will require this new password.' })
+      setFeedback({ type: 'success', text: t.settings.passwordUpdatedSuccess })
       setNewPass('')
       setConfirmPass('')
       setTimeout(() => setFeedback(null), 5000)
@@ -178,8 +168,16 @@ export default function SettingsClient({
     }
   }
 
+  const sectionsDirectory = [
+    { num: '01', label: t.nav.home, href: '/admin', icon: Layers },
+    { num: '02', label: t.nav.projects, href: '/admin/projects', icon: FolderKanban },
+    { num: '03', label: t.nav.experience, href: '/admin/experience', icon: Briefcase },
+    { num: '04', label: t.nav.profile, href: '/admin/profile', icon: UserCheck },
+    { num: '05', label: t.nav.settings, href: '/admin/settings', icon: Sliders },
+  ]
+
   return (
-    <div className="space-y-8 animate-fade-in pb-16">
+    <div className="p-4 sm:p-6 lg:p-8 2xl:p-10 max-w-7xl mx-auto space-y-6 sm:space-y-8 animate-fade-in relative z-10 pb-28 select-none">
       {/* Toast Feedback */}
       {feedback && (
         <div
@@ -197,209 +195,166 @@ export default function SettingsClient({
             )}
             <span>{feedback.text}</span>
           </div>
-          <button onClick={() => setFeedback(null)} className="text-neutral-400 hover:text-white p-1">
+          <button
+            type="button"
+            onClick={() => setFeedback(null)}
+            className="text-neutral-400 hover:text-white p-1 cursor-pointer"
+          >
             ✕
           </button>
         </div>
       )}
 
-      {/* Top Header Card */}
-      <div className="bg-[#111215]/90 border border-white/[0.08] rounded-3xl p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-xl">
-        <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 shrink-0 shadow-inner">
-            <Sliders className="w-6 h-6" />
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="text-[10px] font-mono tracking-widest text-amber-500 uppercase font-semibold">
-                Section 08 • Studio Access
-              </span>
-              <span className="text-[9px] px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 font-mono font-bold">
-                {accounts.length} Registered Accounts
-              </span>
-            </div>
-            <h1 className="text-xl sm:text-2xl font-serif text-white tracking-wide mt-0.5">
-              Settings & Studio Security
-            </h1>
-            <p className="text-xs text-neutral-400 font-mono mt-1">
-              Authorized admin emails, password management, and studio console configurations.
-            </p>
-          </div>
+      {/* Top Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-white/[0.08]">
+        <div>
+          <span className="text-[10px] tracking-[0.25em] font-mono text-amber-500 uppercase font-semibold">
+            Section 05 Management
+          </span>
+          <h1 className="text-2xl sm:text-3xl font-serif text-white tracking-wide mt-1">
+            {t.settings.title}
+          </h1>
+          <p className="text-xs text-neutral-400 mt-1 font-mono">
+            {t.settings.subtitle}
+          </p>
         </div>
 
-        <button
-          type="button"
-          onClick={() => setShowAddModal(true)}
-          className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-200 via-white to-amber-100 hover:from-white hover:to-amber-50 text-neutral-950 font-semibold px-4 py-2.5 rounded-xl text-xs uppercase tracking-wider transition-all shadow-lg shadow-amber-950/20 active:scale-95 cursor-pointer self-start sm:self-center shrink-0"
-        >
-          <UserPlus className="w-4 h-4 text-neutral-900" />
-          <span>Add Admin Email</span>
-        </button>
+        <div className="flex items-center gap-3">
+          <Link
+            href="/"
+            target="_blank"
+            className="inline-flex items-center gap-2 px-3 py-2 bg-white/[0.03] hover:bg-white/[0.08] text-neutral-300 hover:text-white rounded-xl text-xs font-mono border border-white/[0.08] transition-colors"
+          >
+            <ExternalLink className="w-3.5 h-3.5 text-amber-400" />
+            <span>{t.common.preview}</span>
+          </Link>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Left Column (2 Cols): Registered Emails List */}
-        <div className="lg:col-span-2 space-y-6">
-          <div className="bg-[#111215]/80 border border-white/[0.08] rounded-3xl p-6 sm:p-7 space-y-5 shadow-sm">
-            <div className="flex items-center justify-between pb-3 border-b border-white/[0.06]">
+      {/* Main Grid: Accounts (7 cols) + Security (5 cols) */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-start">
+        {/* ============================================================== */}
+        {/* Left Column: Registered Admin Emails (7 Cols)                  */}
+        {/* ============================================================== */}
+        <div className="lg:col-span-7 bg-[#111215]/90 border border-white/[0.08] rounded-3xl p-5 sm:p-6 space-y-5 shadow-xl">
+          <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
+            <div className="flex items-center gap-2.5">
+              <Mail className="w-4 h-4 text-amber-400" />
               <div>
-                <h2 className="text-xs font-mono uppercase tracking-wider text-amber-500 font-medium flex items-center gap-2">
-                  <Mail className="w-3.5 h-3.5 text-amber-400" />
-                  <span>Authorized Admin Emails ({accounts.length})</span>
+                <h2 className="text-xs font-mono uppercase tracking-wider text-white font-semibold">
+                  {t.settings.adminAccountsTitle} ({accounts.length})
                 </h2>
-                <span className="text-[10px] text-neutral-400 font-mono">
-                  Team members with authenticated administrative rights
-                </span>
+                <p className="text-[10px] text-neutral-400 font-sans mt-0.5">
+                  {t.settings.adminAccountsSubtitle}
+                </p>
               </div>
-
-              <span className="text-[10px] font-mono text-neutral-500 hidden sm:inline">
-                Supabase Auth Protected
-              </span>
             </div>
 
-            {/* Accounts Cards List */}
-            <div className="space-y-3">
-              {accounts.map((acc, idx) => {
-                const isCurrent = acc.email.toLowerCase() === currentUserEmail.toLowerCase()
-                const initials = acc.email.slice(0, 2).toUpperCase()
-
-                return (
-                  <div
-                    key={acc.id || idx}
-                    className={`p-4 rounded-2xl border transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3.5 ${
-                      isCurrent
-                        ? 'bg-amber-500/[0.03] border-amber-500/40 shadow-sm'
-                        : 'bg-[#090a0c] border-white/[0.08] hover:border-white/20'
-                    }`}
-                  >
-                    <div className="flex items-center gap-3.5 min-w-0">
-                      <div
-                        className={`w-10 h-10 rounded-xl flex items-center justify-center font-mono font-bold text-xs shrink-0 border ${
-                          isCurrent
-                            ? 'bg-amber-500/20 text-amber-300 border-amber-500/40 shadow-inner'
-                            : 'bg-white/[0.03] text-neutral-300 border-white/[0.08]'
-                        }`}
-                      >
-                        {initials}
-                      </div>
-
-                      <div className="min-w-0">
-                        <div className="flex items-center gap-2 flex-wrap">
-                          <span className="text-xs sm:text-sm font-semibold text-white truncate font-sans">
-                            {acc.email}
-                          </span>
-                          {isCurrent && (
-                            <span className="text-[9px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-bold flex items-center gap-1">
-                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                              <span>Current Session (You)</span>
-                            </span>
-                          )}
-                        </div>
-                        <div className="text-[10px] text-neutral-400 font-mono flex items-center gap-2 mt-0.5">
-                          <span className="text-amber-400/90 font-medium">{acc.role || 'Administrator'}</span>
-                          <span>•</span>
-                          <span>Active Access</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-2 self-end sm:self-center shrink-0">
-                      {isCurrent ? (
-                        <span className="text-[10px] font-mono text-neutral-500 px-3 py-1 rounded-lg bg-white/[0.02] border border-white/[0.04]">
-                          Primary Session
-                        </span>
-                      ) : (
-                        <button
-                          type="button"
-                          onClick={() => setAccountToDelete(acc)}
-                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-red-950/30 hover:bg-red-900/50 text-red-300 border border-red-800/40 hover:border-red-600 text-xs font-mono transition-all cursor-pointer active:scale-95"
-                          title="Revoke Admin Access"
-                        >
-                          <Trash2 className="w-3.5 h-3.5 text-red-400" />
-                          <span>Delete</span>
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                )
-              })}
-            </div>
+            <button
+              type="button"
+              onClick={() => setShowAddModal(true)}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-400 to-amber-200 text-neutral-950 font-bold text-xs uppercase tracking-wider transition-all active:scale-95 shadow-md font-mono cursor-pointer"
+            >
+              <UserPlus className="w-3.5 h-3.5 text-neutral-950 stroke-[2.5]" />
+              <span>{t.settings.addAdminEmail}</span>
+            </button>
           </div>
 
-          {/* Quick Monograph Directory (Especially handy for mobile "More" tab) */}
-          <div className="bg-[#111215]/80 border border-white/[0.08] rounded-3xl p-6 sm:p-7 space-y-4 shadow-sm">
-            <div className="pb-3 border-b border-white/[0.06]">
-              <h2 className="text-xs font-mono uppercase tracking-wider text-amber-500 font-medium flex items-center gap-2">
-                <Layers className="w-3.5 h-3.5 text-amber-400" />
-                <span>Quick Navigation Directory</span>
-              </h2>
-              <span className="text-[10px] text-neutral-400 font-mono">
-                Jump directly to any section of the monograph editor
-              </span>
-            </div>
+          {/* Accounts List */}
+          <div className="divide-y divide-white/[0.06]">
+            {accounts.map((acc) => {
+              const isCurrentUser =
+                acc.email.toLowerCase() === currentUserEmail.toLowerCase()
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {SECTIONS_DIRECTORY.map((sec) => {
-                const Icon = sec.icon
-                return (
-                  <Link
-                    key={sec.href}
-                    href={sec.href}
-                    className="p-3.5 rounded-2xl bg-[#090a0c] border border-white/[0.06] hover:border-amber-500/40 transition-all flex items-center justify-between gap-3 group"
-                  >
-                    <div className="flex items-center gap-3 min-w-0">
-                      <div className="w-8 h-8 rounded-xl bg-white/[0.03] border border-white/[0.08] flex items-center justify-center text-amber-400 shrink-0 group-hover:scale-105 transition-transform">
-                        <Icon className="w-4 h-4" />
+              return (
+                <div
+                  key={acc.id || acc.email}
+                  className="py-3.5 flex items-center justify-between gap-3 group"
+                >
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className="w-9 h-9 rounded-xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center shrink-0 text-amber-400">
+                      <Mail className="w-4 h-4" />
+                    </div>
+
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="text-xs font-semibold text-white font-mono truncate">
+                          {acc.email}
+                        </span>
+                        {isCurrentUser && (
+                          <span className="text-[8px] font-mono uppercase bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 px-2 py-0.5 rounded-full font-bold">
+                            {t.settings.currentSessionYou}
+                          </span>
+                        )}
                       </div>
-                      <div className="min-w-0">
-                        <div className="text-xs font-semibold text-white truncate group-hover:text-amber-300 transition-colors">
-                          {sec.label}
-                        </div>
-                        <div className="text-[10px] text-neutral-500 font-mono truncate">
-                          {sec.desc}
-                        </div>
+                      <div className="text-[10px] text-neutral-400 font-mono mt-0.5">
+                        {acc.role || 'Studio Administrator'}
                       </div>
                     </div>
-                    <ArrowRight className="w-3.5 h-3.5 text-neutral-500 group-hover:text-amber-400 group-hover:translate-x-0.5 transition-all shrink-0" />
-                  </Link>
-                )
-              })}
-            </div>
+                  </div>
+
+                  <div className="shrink-0">
+                    {isCurrentUser ? (
+                      <span
+                        className="text-[10px] font-mono text-neutral-500 cursor-not-allowed px-2.5 py-1 rounded-lg bg-white/[0.02]"
+                        title={t.settings.selfDeleteBlocked}
+                      >
+                        Protected
+                      </span>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => setAccountToDelete(acc)}
+                        className="p-2 text-neutral-500 hover:text-red-400 hover:bg-red-950/20 rounded-xl transition-colors cursor-pointer"
+                        title={t.settings.deleteAdminEmail}
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    )}
+                  </div>
+                </div>
+              )
+            })}
           </div>
         </div>
 
-        {/* Right Column (1 Col): Password Management & Security */}
-        <div className="space-y-6">
-          {/* Change Password Card */}
-          <div className="bg-[#111215]/80 border border-white/[0.08] rounded-3xl p-6 sm:p-7 space-y-5 shadow-sm">
-            <div className="pb-3 border-b border-white/[0.06]">
-              <h2 className="text-xs font-mono uppercase tracking-wider text-amber-500 font-medium flex items-center gap-2">
-                <KeyRound className="w-3.5 h-3.5 text-amber-400" />
-                <span>Security & Password</span>
-              </h2>
-              <p className="text-[10px] text-neutral-400 font-mono mt-0.5">
-                Update credentials for active session ({currentUserEmail})
-              </p>
+        {/* ============================================================== */}
+        {/* Right Column: Password Manager & Preferences (5 Cols)          */}
+        {/* ============================================================== */}
+        <div className="lg:col-span-5 space-y-6">
+          {/* Card: Master Password Manager */}
+          <div className="bg-[#111215]/90 border border-white/[0.08] rounded-3xl p-5 sm:p-6 space-y-4 shadow-xl">
+            <div className="flex items-center gap-2.5 pb-3 border-b border-white/[0.08]">
+              <KeyRound className="w-4 h-4 text-sky-400" />
+              <div>
+                <h3 className="text-xs font-mono uppercase tracking-wider text-white font-semibold">
+                  {t.settings.passwordManagerTitle}
+                </h3>
+                <p className="text-[10px] text-neutral-400 font-sans mt-0.5">
+                  {t.settings.passwordManagerSubtitle}
+                </p>
+              </div>
             </div>
 
-            <form onSubmit={handleUpdatePassword} className="space-y-4">
+            <form onSubmit={handleUpdatePassword} className="space-y-3.5">
               <div>
-                <label className="block text-[11px] font-mono uppercase text-neutral-300 mb-1.5">
-                  New Password *
+                <label className="block text-[10px] font-mono text-neutral-400 uppercase mb-1">
+                  {t.settings.newPasswordLabel}
                 </label>
                 <div className="relative">
                   <input
                     type={showUpdatePass ? 'text' : 'password'}
-                    required
                     value={newPass}
                     onChange={(e) => setNewPass(e.target.value)}
-                    placeholder="Min. 6 characters"
-                    className="w-full bg-[#090a0c] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-neutral-600 focus:outline-none font-mono pr-10"
+                    placeholder="••••••••••••"
+                    required
+                    minLength={6}
+                    className="w-full bg-[#090a0c] border border-white/[0.08] focus:border-amber-500/80 rounded-xl pl-3 pr-10 py-2.5 text-xs text-white focus:outline-none font-mono"
                   />
                   <button
                     type="button"
                     onClick={() => setShowUpdatePass(!showUpdatePass)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-white"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-500 hover:text-neutral-300 p-1 cursor-pointer"
                   >
                     {showUpdatePass ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
                   </button>
@@ -407,107 +362,129 @@ export default function SettingsClient({
               </div>
 
               <div>
-                <label className="block text-[11px] font-mono uppercase text-neutral-300 mb-1.5">
-                  Confirm New Password *
+                <label className="block text-[10px] font-mono text-neutral-400 uppercase mb-1">
+                  {t.settings.confirmPasswordLabel}
                 </label>
                 <input
                   type={showUpdatePass ? 'text' : 'password'}
-                  required
                   value={confirmPass}
                   onChange={(e) => setConfirmPass(e.target.value)}
-                  placeholder="Re-type new password"
-                  className="w-full bg-[#090a0c] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-neutral-600 focus:outline-none font-mono"
+                  placeholder="••••••••••••"
+                  required
+                  minLength={6}
+                  className="w-full bg-[#090a0c] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none font-mono"
                 />
               </div>
 
               <button
                 type="submit"
-                disabled={isUpdatingPass}
-                className="w-full inline-flex items-center justify-center gap-2 bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-neutral-950 font-semibold px-4 py-2.5 rounded-xl text-xs uppercase tracking-wider transition-all shadow-md active:scale-95 cursor-pointer disabled:opacity-50"
+                disabled={isUpdatingPass || !newPass || !confirmPass}
+                className="w-full py-2.5 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] text-neutral-200 hover:text-white border border-white/[0.1] hover:border-amber-400/50 text-xs font-mono font-semibold transition-all disabled:opacity-50 cursor-pointer active:scale-98"
               >
-                {isUpdatingPass ? (
-                  <>
-                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                    <span>Updating Password...</span>
-                  </>
-                ) : (
-                  <>
-                    <Lock className="w-3.5 h-3.5" />
-                    <span>Update Password</span>
-                  </>
-                )}
+                {isUpdatingPass ? t.common.saving : t.settings.updatePasswordButton}
               </button>
             </form>
           </div>
 
-          {/* Studio Profile & Brand Coordinates */}
-          <div className="bg-[#111215]/80 border border-white/[0.08] rounded-3xl p-6 sm:p-7 space-y-4 shadow-sm">
-            <div className="pb-3 border-b border-white/[0.06]">
-              <h2 className="text-xs font-mono uppercase tracking-wider text-amber-500 font-medium">
-                Studio Identity Stamp
-              </h2>
-            </div>
-
-            <div className="space-y-2.5 text-xs font-mono">
-              <div className="flex items-center justify-between p-2.5 bg-[#090a0c] rounded-xl border border-white/[0.04]">
-                <span className="text-neutral-400">Principal:</span>
-                <span className="text-white font-semibold">Eng. Alaa Essa</span>
-              </div>
-              <div className="flex items-center justify-between p-2.5 bg-[#090a0c] rounded-xl border border-white/[0.04]">
-                <span className="text-neutral-400">Practice:</span>
-                <span className="text-white font-semibold">Interior Architecture</span>
-              </div>
-              <div className="flex items-center justify-between p-2.5 bg-[#090a0c] rounded-xl border border-white/[0.04]">
-                <span className="text-neutral-400">Headquarters:</span>
-                <span className="text-white">Alexandria, Egypt</span>
-              </div>
-              <div className="flex items-center justify-between p-2.5 bg-[#090a0c] rounded-xl border border-white/[0.04]">
-                <span className="text-neutral-400">Live URL:</span>
-                <a
-                  href="https://alaa-essa.vercel.app/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-amber-400 hover:underline flex items-center gap-1"
-                >
-                  <span>alaa-essa.vercel.app</span>
-                  <ExternalLink className="w-3 h-3" />
-                </a>
+          {/* Card: Studio Language Preference */}
+          <div className="bg-[#111215]/90 border border-white/[0.08] rounded-3xl p-5 sm:p-6 space-y-4 shadow-xl">
+            <div className="flex items-center gap-2.5 pb-3 border-b border-white/[0.08]">
+              <Languages className="w-4 h-4 text-amber-400" />
+              <div>
+                <h3 className="text-xs font-mono uppercase tracking-wider text-white font-semibold">
+                  {t.settings.preferencesTitle}
+                </h3>
+                <p className="text-[10px] text-neutral-400 font-sans mt-0.5">
+                  {t.settings.languagePreference}
+                </p>
               </div>
             </div>
 
-            <div className="pt-2">
-              <form action={logoutAction}>
-                <button
-                  type="submit"
-                  className="w-full inline-flex items-center justify-center gap-2 bg-red-950/20 hover:bg-red-900/40 text-red-300 border border-red-800/40 hover:border-red-600 px-4 py-2.5 rounded-xl text-xs font-mono transition-all active:scale-95 cursor-pointer"
-                >
-                  <LogOut className="w-3.5 h-3.5 text-red-400" />
-                  <span>Log Out of Console</span>
-                </button>
-              </form>
+            <div className="grid grid-cols-2 gap-2.5">
+              <button
+                type="button"
+                onClick={() => setLang('ar')}
+                className={`py-2.5 px-3 rounded-xl border text-xs font-mono flex items-center justify-center gap-2 transition-all cursor-pointer ${
+                  lang === 'ar'
+                    ? 'bg-amber-500/20 border-amber-500/50 text-amber-300 font-bold shadow-md'
+                    : 'bg-white/[0.03] border-white/[0.06] text-neutral-400 hover:text-white'
+                }`}
+              >
+                <span>العربية (RTL)</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setLang('en')}
+                className={`py-2.5 px-3 rounded-xl border text-xs font-mono flex items-center justify-center gap-2 transition-all cursor-pointer ${
+                  lang === 'en'
+                    ? 'bg-amber-500/20 border-amber-500/50 text-amber-300 font-bold shadow-md'
+                    : 'bg-white/[0.03] border-white/[0.06] text-neutral-400 hover:text-white'
+                }`}
+              >
+                <span>English (LTR)</span>
+              </button>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Modal: Add New Admin Account */}
-      {showAddModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fade-in">
-          <div className="w-full max-w-md bg-[#131417] border border-white/[0.1] rounded-3xl p-6 sm:p-7 shadow-2xl space-y-5">
-            <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400">
-                  <UserPlus className="w-4 h-4" />
+      {/* ============================================================== */}
+      {/* 5 MONOGRAPH SCREENS DIRECTORY                                  */}
+      {/* ============================================================== */}
+      <div className="space-y-3">
+        <div className="text-[10px] font-mono uppercase tracking-[0.2em] text-neutral-400 font-semibold">
+          {t.nav.monographSections} (5 Screens)
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+          {sectionsDirectory.map((item) => {
+            const Icon = item.icon
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="p-3.5 bg-[#111215]/80 hover:bg-white/[0.06] border border-white/[0.08] hover:border-amber-500/40 rounded-2xl transition-all flex flex-col justify-between gap-3 group active:scale-95 shadow-sm"
+              >
+                <div className="flex items-center justify-between">
+                  <div className="w-8 h-8 rounded-xl bg-white/[0.04] text-neutral-400 group-hover:text-amber-400 group-hover:bg-amber-500/10 flex items-center justify-center transition-colors">
+                    <Icon className="w-4 h-4" />
+                  </div>
+                  <span className="font-mono text-[9px] text-neutral-500 font-bold">
+                    {item.num}
+                  </span>
                 </div>
                 <div>
-                  <h3 className="text-sm font-semibold text-white">Add New Admin Email</h3>
-                  <span className="text-[10px] text-neutral-400 font-mono">Register new studio access</span>
+                  <div className="text-xs font-semibold text-white group-hover:text-amber-200 transition-colors truncate">
+                    {item.label}
+                  </div>
+                  <div className="text-[9px] font-mono text-neutral-500 mt-0.5">
+                    Configure →
+                  </div>
                 </div>
+              </Link>
+            )
+          })}
+        </div>
+      </div>
+
+      {/* ============================================================== */}
+      {/* MODAL: ADD ADMIN EMAIL                                         */}
+      {/* ============================================================== */}
+      {showAddModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
+          <div className="bg-[#0e1014] border border-white/[0.12] rounded-3xl w-full max-w-md p-5 sm:p-6 space-y-4 shadow-2xl animate-in zoom-in-95 duration-200">
+            <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
+              <div className="flex items-center gap-2">
+                <UserPlus className="w-4 h-4 text-amber-400" />
+                <h3 className="text-sm font-mono uppercase tracking-wider text-white font-semibold">
+                  {t.settings.addAdminEmail}
+                </h3>
               </div>
               <button
                 type="button"
                 onClick={() => setShowAddModal(false)}
-                className="p-1.5 text-neutral-400 hover:text-white rounded-lg bg-white/[0.03]"
+                className="p-1.5 text-neutral-400 hover:text-white rounded-lg bg-white/[0.04] cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -515,36 +492,37 @@ export default function SettingsClient({
 
             <form onSubmit={handleAddAccount} className="space-y-4">
               <div>
-                <label className="block text-[11px] font-mono uppercase text-neutral-300 mb-1.5">
-                  Email Address *
+                <label className="block text-[10px] font-mono text-neutral-400 uppercase mb-1">
+                  {t.settings.emailAddress}
                 </label>
                 <input
                   type="email"
-                  required
                   value={newEmail}
                   onChange={(e) => setNewEmail(e.target.value)}
-                  placeholder="e.g. partner@atelier.com"
-                  className="w-full bg-[#090a0c] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-neutral-600 focus:outline-none font-mono"
+                  placeholder="architect@domain.com"
+                  required
+                  className="w-full bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none font-mono"
                 />
               </div>
 
               <div>
-                <label className="block text-[11px] font-mono uppercase text-neutral-300 mb-1.5">
-                  Initial Password *
+                <label className="block text-[10px] font-mono text-neutral-400 uppercase mb-1">
+                  {t.settings.initialPassword}
                 </label>
                 <div className="relative">
                   <input
                     type={showNewPassword ? 'text' : 'password'}
-                    required
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
-                    placeholder="Min. 6 characters"
-                    className="w-full bg-[#090a0c] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-neutral-600 focus:outline-none font-mono pr-10"
+                    placeholder="••••••••••••"
+                    required
+                    minLength={6}
+                    className="w-full bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl pl-3 pr-10 py-2.5 text-xs text-white focus:outline-none font-mono"
                   />
                   <button
                     type="button"
                     onClick={() => setShowNewPassword(!showNewPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-white"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-500 hover:text-neutral-300 p-1 cursor-pointer"
                   >
                     {showNewPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
                   </button>
@@ -552,41 +530,34 @@ export default function SettingsClient({
               </div>
 
               <div>
-                <label className="block text-[11px] font-mono uppercase text-neutral-300 mb-1.5">
-                  Role & Permissions
+                <label className="block text-[10px] font-mono text-neutral-400 uppercase mb-1">
+                  {t.settings.roleLabel}
                 </label>
                 <select
                   value={newRole}
                   onChange={(e) => setNewRole(e.target.value)}
-                  className="w-full bg-[#090a0c] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none font-mono cursor-pointer"
+                  className="w-full bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none font-mono"
                 >
-                  <option value="Administrator">Administrator (Full Console Access)</option>
-                  <option value="Associate Architect">Associate Architect</option>
-                  <option value="Editor">Editor (Portfolio Content)</option>
+                  <option value="Studio Principal">Studio Principal</option>
+                  <option value="Administrator">Administrator</option>
+                  <option value="Editor / Architect">Editor / Architect</option>
                 </select>
               </div>
 
-              <div className="flex items-center justify-end gap-3 pt-3 border-t border-white/[0.08]">
+              <div className="flex items-center justify-end gap-2.5 pt-2">
                 <button
                   type="button"
                   onClick={() => setShowAddModal(false)}
-                  className="px-4 py-2 rounded-xl text-xs font-mono text-neutral-300 hover:bg-white/[0.05] border border-white/[0.08] transition-colors"
+                  className="px-4 py-2 rounded-xl text-xs font-mono text-neutral-400 hover:text-white bg-white/[0.04] cursor-pointer"
                 >
-                  Cancel
+                  {t.common.cancel}
                 </button>
                 <button
                   type="submit"
-                  disabled={isAdding}
-                  className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-400 to-amber-300 hover:from-amber-300 hover:to-amber-200 text-neutral-950 font-semibold px-4 py-2 rounded-xl text-xs font-mono transition-all shadow-md active:scale-95 cursor-pointer disabled:opacity-50"
+                  disabled={isAdding || !newEmail || !newPassword}
+                  className="px-5 py-2 rounded-xl bg-gradient-to-r from-amber-400 to-amber-200 text-neutral-950 font-bold text-xs uppercase tracking-wider transition-all disabled:opacity-50 cursor-pointer shadow-md"
                 >
-                  {isAdding ? (
-                    <>
-                      <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                      <span>Creating...</span>
-                    </>
-                  ) : (
-                    <span>Create Account</span>
-                  )}
+                  {isAdding ? t.common.saving : t.common.create}
                 </button>
               </div>
             </form>
@@ -594,49 +565,40 @@ export default function SettingsClient({
         </div>
       )}
 
-      {/* Modal: Confirm Delete Account */}
+      {/* ============================================================== */}
+      {/* MODAL: DELETE CONFIRMATION                                     */}
+      {/* ============================================================== */}
       {accountToDelete && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
-          <div className="w-full max-w-md bg-[#131417] border border-white/[0.1] rounded-3xl p-6 sm:p-7 shadow-2xl space-y-5">
-            <div className="flex items-start gap-4">
-              <div className="p-3 bg-red-950/40 text-red-400 border border-red-800/60 rounded-2xl shrink-0">
-                <AlertTriangle className="w-5 h-5" />
-              </div>
-              <div>
-                <h3 className="text-base font-semibold text-white">Revoke Studio Access</h3>
-                <p className="text-xs text-neutral-400 mt-1 leading-relaxed">
-                  Are you sure you want to remove{' '}
-                  <span className="text-white font-semibold font-mono">
-                    "{accountToDelete.email}"
-                  </span>
-                  ? This account will no longer be able to log in to the Studio Console.
-                </p>
-              </div>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
+          <div className="bg-[#0e1014] border border-red-900/30 rounded-3xl w-full max-w-sm p-5 sm:p-6 space-y-4 shadow-2xl animate-in zoom-in-95 duration-200">
+            <div className="w-10 h-10 rounded-2xl bg-red-950/40 border border-red-800/40 flex items-center justify-center text-red-400">
+              <AlertTriangle className="w-5 h-5" />
             </div>
 
-            <div className="flex items-center justify-end gap-3 pt-3 border-t border-white/[0.06]">
+            <div className="space-y-1">
+              <h3 className="text-sm font-semibold text-white">
+                {t.settings.deleteAdminEmail}
+              </h3>
+              <p className="text-xs text-neutral-400 font-sans leading-relaxed">
+                {t.settings.confirmDeleteAdmin} <strong className="text-white font-mono">{accountToDelete.email}</strong>?
+              </p>
+            </div>
+
+            <div className="flex items-center justify-end gap-2.5 pt-2">
               <button
                 type="button"
                 onClick={() => setAccountToDelete(null)}
-                disabled={isDeleting}
-                className="px-4 py-2 rounded-xl text-xs font-mono text-neutral-300 hover:bg-white/[0.05] border border-white/[0.08] transition-colors cursor-pointer"
+                className="px-4 py-2 rounded-xl text-xs font-mono text-neutral-400 hover:text-white bg-white/[0.04] cursor-pointer"
               >
-                Cancel
+                {t.common.cancel}
               </button>
               <button
                 type="button"
                 onClick={confirmDeleteAccount}
                 disabled={isDeleting}
-                className="inline-flex items-center gap-2 bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded-xl text-xs font-mono transition-colors shadow-md cursor-pointer disabled:opacity-50"
+                className="px-4 py-2 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold text-xs uppercase tracking-wider transition-all cursor-pointer shadow-md"
               >
-                {isDeleting ? (
-                  <>
-                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                    <span>Removing...</span>
-                  </>
-                ) : (
-                  <span>Revoke Access</span>
-                )}
+                {isDeleting ? t.common.saving : t.common.delete}
               </button>
             </div>
           </div>

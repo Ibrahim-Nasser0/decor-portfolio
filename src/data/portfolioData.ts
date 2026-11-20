@@ -6,6 +6,29 @@ export interface ProjectSpecs {
   joineryEn?: string;
   firmEn?: string;
   includeInCv?: boolean;
+  cvOrder?: number;
+}
+
+export interface ProjectCategory {
+  id: string;
+  labelEn: string;
+  labelAr: string;
+}
+
+export const DEFAULT_PROJECT_CATEGORIES: ProjectCategory[] = [
+  { id: 'living', labelEn: 'Living & Lounges', labelAr: 'غرف المعيشة والصالونات' },
+  { id: 'bedroom', labelEn: 'Master Bedrooms', labelAr: 'غرف النوم الرئيسية' },
+  { id: 'kitchen', labelEn: 'Kitchens & Baths', labelAr: 'المطابخ والحمامات' },
+  { id: 'commercial', labelEn: 'Commercial & Retail', labelAr: 'المشاريع التجارية والمحلات' },
+  { id: 'villas', labelEn: 'Luxury Villas', labelAr: 'الفلل والقصور السكنية' },
+  { id: 'hospitality', labelEn: 'Hospitality & Cafes', labelAr: 'الضيافة والمطاعم والكافيهات' },
+];
+
+export interface AdminAccount {
+  id: string;
+  email: string;
+  role: string;
+  created_at: string;
 }
 
 export interface ProjectAngle {

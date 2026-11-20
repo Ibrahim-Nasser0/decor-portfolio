@@ -28,19 +28,28 @@ import {
   ArrowLeftRight,
 } from 'lucide-react'
 import { Project } from '@/data/portfolioData'
-import { deleteProjectAction, saveProjectAction, duplicateProjectAction } from '../actions'
+import {
+  deleteProjectAction,
+  saveProjectAction,
+  duplicateProjectAction,
+  saveProjectCategoryAction,
+  deleteProjectCategoryAction,
+} from '../actions'
+import { ProjectCategory, DEFAULT_PROJECT_CATEGORIES } from '@/data/portfolioData'
+import { useAdminTranslation } from '@/context/AdminLanguageContext'
 
-const CATEGORIES = [
-  { id: 'all', label: 'All Works' },
-  { id: 'living', label: 'Living & Lounges' },
-  { id: 'bedroom', label: 'Master Bedrooms' },
-  { id: 'kitchen', label: 'Kitchens & Baths' },
-  { id: 'commercial', label: 'Commercial & Retail' },
-  { id: 'villas', label: 'Luxury Villas' },
-]
-
-export default function ProjectsClient({ initialProjects }: { initialProjects: Project[] }) {
+export default function ProjectsClient({
+  initialProjects,
+  initialCategories = [],
+}: {
+  initialProjects: Project[]
+  initialCategories?: ProjectCategory[]
+}) {
+  const { t, isRtl } = useAdminTranslation()
   const [projects, setProjects] = useState<Project[]>(initialProjects)
+  const [categories, setCategories] = useState<ProjectCategory[]>(
+    initialCategories.length > 0 ? initialCategories : DEFAULT_PROJECT_CATEGORIES
+  )
   const [search, setSearch] = useState('')
   const [activeCategory, setActiveCategory] = useState('all')
   const [featuredOnly, setFeaturedOnly] = useState(false)
@@ -51,6 +60,11 @@ export default function ProjectsClient({ initialProjects }: { initialProjects: P
   const [projectToDelete, setProjectToDelete] = useState<Project | null>(null)
   const [isDeleting, setIsDeleting] = useState(false)
   const [showCvModal, setShowCvModal] = useState(false)
+  const [showCategoryModal, setShowCategoryModal] = useState(false)
+  const [newCatId, setNewCatId] = useState('')
+  const [newCatLabelEn, setNewCatLabelEn] = useState('')
+  const [newCatLabelAr, setNewCatLabelAr] = useState('')
+  const [isSavingCategory, setIsSavingCategory] = useState(false)
   const [swappingProjectId, setSwappingProjectId] = useState<string | null>(null)
   const [togglingFeaturedId, setTogglingFeaturedId] = useState<string | null>(null)
   const [togglingCvId, setTogglingCvId] = useState<string | null>(null)
@@ -132,30 +146,79 @@ export default function ProjectsClient({ initialProjects }: { initialProjects: P
 
   // Dynamic categories including custom ones
   const dynamicCategories = useMemo(() => {
-    const list = [{ id: 'all', label: 'All Works' }]
+    const allOption = { id: 'all', label: isRtl ? 'كافة المشاريع' : t.projects.allCategories }
     const seen = new Set<string>()
+    const list = [allOption]
 
-    const defaultLabels: Record<string, string> = {
-      living: 'Living & Lounges',
-      bedroom: 'Master Bedrooms',
-      kitchen: 'Kitchens & Baths',
-      commercial: 'Commercial & Retail',
-      villas: 'Luxury Villas',
-    }
+    categories.forEach((cat) => {
+      seen.add(cat.id)
+      list.push({
+        id: cat.id,
+        label: isRtl ? (cat.labelAr || cat.labelEn) : (cat.labelEn || cat.id),
+      })
+    })
 
+    // Also include any legacy categories found in projects not yet registered
     projects.forEach((p) => {
       const cat = p.category
       if (cat && !seen.has(cat)) {
         seen.add(cat)
         list.push({
           id: cat,
-          label: p.categoryLabelEn || defaultLabels[cat] || cat.replace(/-/g, ' ').toUpperCase(),
+          label: p.categoryLabelEn || cat.replace(/-/g, ' ').toUpperCase(),
         })
       }
     })
 
     return list
-  }, [projects])
+  }, [categories, projects, isRtl, t.projects.allCategories])
+
+  // Save new or updated category
+  async function handleSaveCategory(e: React.FormEvent) {
+    e.preventDefault()
+    if (!newCatLabelEn && !newCatLabelAr) return
+
+    const slug = (newCatId || newCatLabelEn.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''))
+    if (!slug) return
+
+    setIsSavingCategory(true)
+    const res = await saveProjectCategoryAction({
+      id: slug,
+      labelEn: newCatLabelEn || newCatLabelAr,
+      labelAr: newCatLabelAr || newCatLabelEn,
+    })
+    setIsSavingCategory(false)
+
+    if (res.success && res.categories) {
+      setCategories(res.categories)
+      setNewCatId('')
+      setNewCatLabelEn('')
+      setNewCatLabelAr('')
+      setStatusMessage({ type: 'success', text: `Saved category "${newCatLabelEn || newCatLabelAr}"` })
+      setTimeout(() => setStatusMessage(null), 3500)
+    } else {
+      setStatusMessage({ type: 'error', text: res.error || 'Failed to save category' })
+    }
+  }
+
+  // Delete category
+  async function handleDeleteCategory(catId: string) {
+    const assignedCount = getCategoryCount(catId)
+    if (assignedCount > 0) {
+      alert(`Cannot delete this category because it is currently assigned to ${assignedCount} project(s). Please reassign them first.`)
+      return
+    }
+
+    const res = await deleteProjectCategoryAction(catId)
+    if (res.success && res.categories) {
+      setCategories(res.categories)
+      if (activeCategory === catId) setActiveCategory('all')
+      setStatusMessage({ type: 'success', text: `Deleted category "${catId}"` })
+      setTimeout(() => setStatusMessage(null), 3000)
+    } else {
+      setStatusMessage({ type: 'error', text: res.error || 'Failed to delete category' })
+    }
+  }
 
   // Toggle Featured status
   async function handleToggleFeatured(project: Project) {
@@ -423,6 +486,17 @@ export default function ProjectsClient({ initialProjects }: { initialProjects: P
 
         {/* Category Swipeable Pills */}
         <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar">
+          {/* Manage Categories Trigger */}
+          <button
+            type="button"
+            onClick={() => setShowCategoryModal(true)}
+            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl text-xs font-mono whitespace-nowrap bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 transition-all cursor-pointer active:scale-95 shrink-0"
+            title={t.projects.manageCategories}
+          >
+            <Sliders className="w-3.5 h-3.5" />
+            <span>{t.projects.manageCategories}</span>
+          </button>
+
           {dynamicCategories.map((cat) => {
             const count = getCategoryCount(cat.id)
             const isActive = activeCategory === cat.id
@@ -1147,6 +1221,106 @@ export default function ProjectsClient({ initialProjects }: { initialProjects: P
               >
                 Done
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Category Management Modal */}
+      {showCategoryModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
+          <div className="bg-[#0e1014] border border-white/[0.12] rounded-3xl w-full max-w-lg p-5 sm:p-6 space-y-5 shadow-2xl animate-in zoom-in-95 duration-200 max-h-[85vh] flex flex-col select-none">
+            <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
+              <div className="flex items-center gap-2">
+                <Sliders className="w-4 h-4 text-amber-400" />
+                <h3 className="text-sm font-mono uppercase tracking-wider text-white font-semibold">
+                  {t.projects.manageCategories}
+                </h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowCategoryModal(false)}
+                className="p-1.5 text-neutral-400 hover:text-white rounded-lg bg-white/[0.04] cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Form: Add New Category */}
+            <form onSubmit={handleSaveCategory} className="p-3.5 bg-white/[0.03] border border-white/[0.06] rounded-2xl space-y-3">
+              <div className="text-xs font-mono uppercase text-amber-300 font-semibold tracking-wider">
+                {t.projects.addCategory}
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                <input
+                  type="text"
+                  placeholder={t.projects.categoryNameEn}
+                  value={newCatLabelEn}
+                  onChange={(e) => setNewCatLabelEn(e.target.value)}
+                  className="bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3 py-2 text-xs text-white placeholder-neutral-500 focus:outline-none font-mono"
+                  required
+                />
+                <input
+                  type="text"
+                  placeholder={t.projects.categoryNameAr}
+                  value={newCatLabelAr}
+                  onChange={(e) => setNewCatLabelAr(e.target.value)}
+                  className="bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3 py-2 text-xs text-white placeholder-neutral-500 focus:outline-none font-sans"
+                  required
+                />
+              </div>
+
+              <button
+                type="submit"
+                disabled={isSavingCategory || (!newCatLabelEn && !newCatLabelAr)}
+                className="w-full py-2 rounded-xl bg-gradient-to-r from-amber-400 to-amber-200 text-neutral-950 font-bold text-xs uppercase tracking-wider transition-all disabled:opacity-50 cursor-pointer"
+              >
+                {isSavingCategory ? t.common.saving : t.projects.addCategory}
+              </button>
+            </form>
+
+            {/* List of Registered Categories */}
+            <div className="overflow-y-auto no-scrollbar space-y-2 flex-1 pr-1">
+              <div className="text-[10px] font-mono uppercase text-neutral-400 tracking-wider">
+                Active Categories ({categories.length})
+              </div>
+
+              {categories.map((cat) => {
+                const count = getCategoryCount(cat.id)
+                return (
+                  <div
+                    key={cat.id}
+                    className="p-3 rounded-xl bg-white/[0.02] border border-white/[0.06] flex items-center justify-between gap-3"
+                  >
+                    <div className="min-w-0">
+                      <div className="text-xs font-semibold text-white truncate flex items-center gap-2">
+                        <span>{isRtl ? (cat.labelAr || cat.labelEn) : (cat.labelEn || cat.id)}</span>
+                        <span className="text-[10px] font-mono text-neutral-500">({cat.id})</span>
+                      </div>
+                      <div className="text-[10px] text-neutral-400 font-sans mt-0.5">
+                        {isRtl ? cat.labelEn : cat.labelAr}
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-2 shrink-0">
+                      <span className="text-[9px] font-mono px-2 py-0.5 rounded-full bg-white/[0.06] text-neutral-300">
+                        {count} works
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => handleDeleteCategory(cat.id)}
+                        className={`p-1.5 rounded-lg text-red-400 hover:bg-red-950/30 transition-colors cursor-pointer ${
+                          count > 0 ? 'opacity-40 cursor-not-allowed' : ''
+                        }`}
+                        title={count > 0 ? 'Cannot delete category with active projects' : 'Delete category'}
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </div>
+                )
+              })}
             </div>
           </div>
         </div>

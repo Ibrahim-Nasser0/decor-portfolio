@@ -11,6 +11,9 @@ import {
   createInquiry,
   saveAdminAccount,
   deleteAdminAccount,
+  updateTop4Projects,
+  saveProjectCategory,
+  deleteProjectCategory,
 } from '@/lib/dataRepository'
 import { Project } from '@/data/portfolioData'
 
@@ -226,5 +229,36 @@ export async function updatePasswordAction(formData: {
     return { success: true, message: 'Password updated successfully!' }
   } catch (err: any) {
     return { success: false, error: err.message || 'Failed to update password' }
+  }
+}
+
+export async function updateTop4ProjectsAction(top4Ids: string[]) {
+  try {
+    await updateTop4Projects(top4Ids)
+    revalidatePath('/admin')
+    revalidatePath('/api/cv-pdf')
+    return { success: true }
+  } catch (err: any) {
+    return { success: false, error: err.message || 'Failed to update flagship projects' }
+  }
+}
+
+export async function saveProjectCategoryAction(category: { id: string; labelEn: string; labelAr: string }) {
+  try {
+    const updated = await saveProjectCategory(category)
+    revalidatePath('/admin/projects')
+    return { success: true, categories: updated }
+  } catch (err: any) {
+    return { success: false, error: err.message || 'Failed to save project category' }
+  }
+}
+
+export async function deleteProjectCategoryAction(id: string) {
+  try {
+    const updated = await deleteProjectCategory(id)
+    revalidatePath('/admin/projects')
+    return { success: true, categories: updated }
+  } catch (err: any) {
+    return { success: false, error: err.message || 'Failed to delete project category' }
   }
 }

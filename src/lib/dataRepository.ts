@@ -5,7 +5,13 @@ import {
   Project,
   PROJECTS as STATIC_PROJECTS,
   DESIGNER_INFO as STATIC_DESIGNER_INFO,
+  ProjectCategory,
+  DEFAULT_PROJECT_CATEGORIES,
+  AdminAccount,
 } from '@/data/portfolioData'
+
+export type { ProjectCategory, AdminAccount }
+export { DEFAULT_PROJECT_CATEGORIES }
 
 // Public Supabase client for reads without cookie overhead (Singleton connection pool)
 let _publicClient: ReturnType<typeof createSupabaseClient> | null = null
@@ -254,7 +260,105 @@ export async function deleteProject(id: string) {
   return true
 }
 
-// 4.1 ARCHITECTURAL STATS CALCULATION HELPERS
+// 4.1 UPDATE TOP 4 FLAGSHIP PROJECTS (CV / SHOWCASE)
+export async function updateTop4Projects(top4Ids: string[]) {
+  const all = await getProjects()
+  const promises = all.map(async (p) => {
+    const isSelected = top4Ids.includes(p.id)
+    const slotIndex = top4Ids.indexOf(p.id)
+    const currentSpecs = (typeof p.specs === 'object' && p.specs) ? p.specs : {}
+    if (p.includeInCv !== isSelected || (isSelected && (currentSpecs as any).cvOrder !== slotIndex)) {
+      return saveProject({
+        ...p,
+        includeInCv: isSelected,
+        specs: {
+          ...currentSpecs,
+          cvOrder: isSelected ? slotIndex : 99,
+          includeInCv: isSelected,
+        },
+      })
+    }
+    return p
+  })
+  await Promise.all(promises)
+  invalidateProjectsCache()
+  return true
+}
+
+// 4.2 PROJECT CATEGORIES DATA ACCESS & RESILIENT FALLBACK
+let categoriesCache: ProjectCategory[] | null = null
+
+export async function getProjectCategories(): Promise<ProjectCategory[]> {
+  if (categoriesCache) return categoriesCache
+  try {
+    const supabase = getPublicClient()
+    if (!supabase) return DEFAULT_PROJECT_CATEGORIES
+    const { data, error } = await supabase
+      .from('project_categories')
+      .select('*')
+      .order('display_order', { ascending: true })
+
+    if (error || !data || data.length === 0) {
+      categoriesCache = DEFAULT_PROJECT_CATEGORIES
+      return DEFAULT_PROJECT_CATEGORIES
+    }
+
+    const mapped = data.map((row: any) => ({
+      id: row.slug || String(row.id),
+      labelEn: row.name || row.slug,
+      labelAr: row.description || row.name || row.slug,
+    }))
+    categoriesCache = mapped
+    return mapped
+  } catch {
+    return DEFAULT_PROJECT_CATEGORIES
+  }
+}
+
+export async function saveProjectCategory(category: ProjectCategory): Promise<ProjectCategory[]> {
+  const current = await getProjectCategories()
+  const existingIdx = current.findIndex((c) => c.id === category.id)
+  let updated: ProjectCategory[]
+  if (existingIdx !== -1) {
+    updated = current.map((c, i) => (i === existingIdx ? category : c))
+  } else {
+    updated = [...current, category]
+  }
+
+  try {
+    const supabase = await createClient()
+    await supabase.from('project_categories').upsert(
+      {
+        slug: category.id,
+        name: category.labelEn,
+        description: category.labelAr,
+      },
+      { onConflict: 'slug' }
+    )
+  } catch (err) {
+    console.warn('Fallback to local categories storage:', err)
+  }
+
+  categoriesCache = updated
+  return updated
+}
+
+export async function deleteProjectCategory(id: string): Promise<ProjectCategory[]> {
+  const current = await getProjectCategories()
+  const updated = current.filter((c) => c.id !== id)
+
+  try {
+    const supabase = await createClient()
+    await supabase.from('project_categories').delete().eq('slug', id)
+  } catch (err) {
+    console.warn('Fallback to local categories storage:', err)
+  }
+
+  categoriesCache = updated
+  return updated
+}
+
+// 4.3 ARCHITECTURAL STATS CALCULATION HELPERS
 export { calculateYearsOfExperience, calculateBuiltWorks } from './metrics'
 
 // 5. GET DESIGNER PROFILE (In-memory cached with 60s TTL)
@@ -597,13 +701,6 @@ export const createInquiry = submitClientInquiry
 // -------------------------------------------------------------
 // ADMIN ACCOUNTS REPOSITORY
 // -------------------------------------------------------------
-export interface AdminAccount {
-  id: string
-  email: string
-  role: string
-  created_at: string
-}
-
 let adminAccountsCache: CacheEntry<AdminAccount[]> | null = null
 
 export function invalidateAdminAccountsCache() {
