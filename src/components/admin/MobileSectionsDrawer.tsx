@@ -11,11 +11,10 @@ import {
   UserCheck,
   LogOut,
   X,
-  ArrowUpRight,
+  ExternalLink,
   ShieldCheck,
   Settings,
-  Plus,
-  FileText,
+  ArrowUpRight,
 } from 'lucide-react'
 import { logoutAction } from '@/app/admin/actions'
 import { useAdminTranslation } from '@/context/AdminLanguageContext'
@@ -27,11 +26,12 @@ interface MobileSectionsDrawerProps {
 
 export default function MobileSectionsDrawer({ isOpen, onClose }: MobileSectionsDrawerProps) {
   const pathname = usePathname()
-  const { t } = useAdminTranslation()
+  const { t, isRtl } = useAdminTranslation()
 
   if (!isOpen) return null
 
-  const sections = [
+  // 1-to-1 parity with Desktop Sidebar navigation
+  const navItems = [
     { num: '01', label: t.nav.home, href: '/admin', icon: LayoutDashboard },
     { num: '02', label: t.nav.projects, href: '/admin/projects', icon: FolderKanban },
     { num: '03', label: t.nav.experience, href: '/admin/experience', icon: Briefcase },
@@ -48,30 +48,33 @@ export default function MobileSectionsDrawer({ isOpen, onClose }: MobileSections
       />
 
       {/* Drawer Panel */}
-      <div className="relative z-10 bg-[#0e1013] border-t border-white/[0.12] rounded-t-3xl max-h-[85vh] overflow-y-auto no-scrollbar p-5 pb-8 space-y-4 shadow-2xl animate-in slide-in-from-bottom duration-300">
+      <div className="relative z-10 bg-[#0d0e12] border-t border-white/[0.12] rounded-t-3xl max-h-[88vh] overflow-y-auto no-scrollbar p-5 pb-8 space-y-4 shadow-2xl animate-in slide-in-from-bottom duration-300">
         {/* Drag Handle Bar */}
-        <div className="w-12 h-1.5 bg-white/20 rounded-full mx-auto -mt-1 mb-1" />
+        <div className="w-12 h-1.5 bg-white/20 rounded-full mx-auto -mt-1 mb-2" />
 
-        {/* Drawer Header */}
+        {/* Drawer Header (Exact same as Sidebar Identity) */}
         <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
           <div className="flex items-center gap-3">
-            <div className="relative w-9 h-9 rounded-full overflow-hidden border border-amber-500/40 p-0.5">
+            <div className="relative w-11 h-11 rounded-full overflow-hidden border-2 border-amber-500/40 p-0.5 shadow-md shrink-0">
               <Image
                 src="/images/alaa.webp"
                 alt="Eng. Alaa Essa"
                 fill
-                sizes="36px"
+                sizes="44px"
                 className="object-cover rounded-full"
               />
+              <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 border-2 border-[#0d0e12] rounded-full" />
             </div>
             <div>
-              <div className="text-xs font-bold tracking-wider text-white">
+              <span className="text-[9px] uppercase tracking-[0.25em] font-mono text-amber-500 block font-medium">
+                {t.nav.studioConsole}
+              </span>
+              <h3 className="text-sm font-semibold tracking-wide text-white">
                 {t.home.architectName}
-              </div>
-              <div className="text-[10px] text-amber-400 font-mono tracking-wider flex items-center gap-1">
-                <ShieldCheck className="w-3 h-3" />
-                <span>{t.nav.studioConsole}</span>
-              </div>
+              </h3>
+              <span className="text-[10px] text-neutral-400 font-sans block">
+                {t.home.architectTitle}
+              </span>
             </div>
           </div>
 
@@ -84,96 +87,95 @@ export default function MobileSectionsDrawer({ isOpen, onClose }: MobileSections
           </button>
         </div>
 
-        {/* Quick Fast Actions: New Project & Live Site */}
-        <div className="grid grid-cols-2 gap-2">
-          <Link
-            href="/admin/projects/new"
-            onClick={onClose}
-            className="py-2.5 px-3 rounded-xl bg-gradient-to-r from-amber-300 via-amber-200 to-amber-100 hover:from-white hover:to-amber-100 text-neutral-950 font-semibold text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-md active:scale-95 transition-all font-mono"
-          >
-            <Plus className="w-4 h-4 text-neutral-950 stroke-[2.5]" />
-            <span>{t.projects.newProject}</span>
-          </Link>
+        {/* Cloud Status Ribbon */}
+        <div className="px-3 py-2 rounded-xl bg-white/[0.02] border border-white/[0.06] flex items-center justify-between text-[10px] font-mono">
+          <span className="flex items-center gap-1.5 text-emerald-400">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <span>{t.topNav.cloudSync}</span>
+          </span>
+          <span className="text-neutral-400">5 Screens</span>
+        </div>
 
+        {/* Monograph Sections Header */}
+        <div className="px-1 text-[10px] uppercase font-mono tracking-widest text-neutral-400">
+          {t.nav.monographSections}
+        </div>
+
+        {/* Navigation Items (Matching Desktop Sidebar List) */}
+        <nav className="space-y-1.5">
+          {navItems.map((item) => {
+            const Icon = item.icon
+            const isActive =
+              item.href === '/admin'
+                ? pathname === '/admin'
+                : pathname === item.href ||
+                  (item.href !== '/admin' && pathname.startsWith(item.href)) ||
+                  (item.href === '/admin/profile' &&
+                    (pathname.startsWith('/admin/hero') || pathname.startsWith('/admin/about')))
+
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={onClose}
+                className={`group flex items-center justify-between px-3.5 py-3 rounded-xl text-xs font-medium tracking-wide transition-all duration-200 ${
+                  isActive
+                    ? 'bg-gradient-to-r from-amber-500/15 via-amber-500/5 to-transparent text-white font-semibold border-amber-500 shadow-sm ' +
+                      (isRtl ? 'border-r-2' : 'border-l-2')
+                    : 'text-neutral-300 hover:text-white bg-white/[0.02] hover:bg-white/[0.06] border border-white/[0.04]'
+                }`}
+              >
+                <div className="flex items-center gap-3">
+                  <Icon
+                    className={`w-4 h-4 shrink-0 transition-colors ${
+                      isActive ? 'text-amber-400' : 'text-neutral-400 group-hover:text-neutral-200'
+                    }`}
+                  />
+                  <span>
+                    <span className="text-[10px] font-mono text-neutral-400 mx-1.5">
+                      {item.num}
+                    </span>
+                    {item.label}
+                  </span>
+                </div>
+                <span className="text-[9px] font-mono text-neutral-500">
+                  {isActive ? t.common.active : '→'}
+                </span>
+              </Link>
+            )
+          })}
+        </nav>
+
+        {/* Bottom Actions: Public Site & Logout (Exact same as Sidebar bottom) */}
+        <div className="pt-3 border-t border-white/[0.08] space-y-2">
           <Link
             href="/"
             target="_blank"
             onClick={onClose}
-            className="py-2.5 px-3 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] border border-white/[0.08] text-neutral-200 text-xs font-mono flex items-center justify-center gap-1.5 active:scale-95 transition-all"
+            className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs text-neutral-300 bg-white/[0.03] hover:bg-white/[0.07] border border-white/[0.06] hover:border-amber-500/30 transition-all group"
           >
-            <span>{t.nav.liveSite}</span>
-            <ArrowUpRight className="w-3.5 h-3.5 text-amber-400" />
+            <span className="flex items-center gap-2">
+              <ExternalLink className="w-3.5 h-3.5 text-amber-400 group-hover:translate-x-0.5 transition-transform" />
+              <span>{t.nav.publicSite}</span>
+            </span>
+            <span className="text-[9px] font-mono text-neutral-400 flex items-center gap-1">
+              <span>{t.common.view}</span>
+              <ArrowUpRight className="w-3 h-3 text-neutral-500" />
+            </span>
           </Link>
-        </div>
 
-        {/* Navigation Grid (Touch-Friendly Cards for all 5 Studio Sections) */}
-        <div className="grid grid-cols-2 gap-2.5">
-          {sections.map((sec) => {
-            const Icon = sec.icon
-            const isActive = pathname === sec.href
-
-            return (
-              <Link
-                key={sec.href}
-                href={sec.href}
-                onClick={onClose}
-                className={`p-3 rounded-2xl border transition-all flex flex-col justify-between gap-3 active:scale-[0.98] ${
-                  isActive
-                    ? 'bg-amber-500/15 border-amber-500/50 text-white shadow-lg'
-                    : 'bg-white/[0.03] border-white/[0.06] text-neutral-300 hover:bg-white/[0.06]'
-                }`}
-              >
-                <div className="flex items-center justify-between">
-                  <div
-                    className={`w-8 h-8 rounded-xl flex items-center justify-center ${
-                      isActive
-                        ? 'bg-amber-500 text-neutral-950 font-bold'
-                        : 'bg-white/[0.06] text-neutral-400'
-                    }`}
-                  >
-                    <Icon className="w-4 h-4" />
-                  </div>
-                  <span className="font-mono text-[10px] text-neutral-500 font-bold">
-                    {sec.num}
-                  </span>
-                </div>
-                <div>
-                  <div className="text-xs font-semibold tracking-wide">
-                    {sec.label}
-                  </div>
-                  <div className="text-[9px] font-mono text-neutral-500 mt-0.5">
-                    {isActive ? t.common.active : t.common.view}
-                  </div>
-                </div>
-              </Link>
-            )
-          })}
-        </div>
-
-        {/* Quick Links & Sign Out Bar */}
-        <div className="pt-2 border-t border-white/[0.08] flex items-center justify-between gap-3 text-xs font-mono">
-          <a
-            href="/api/cv-pdf"
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={onClose}
-            className="flex-1 p-3 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-neutral-200 flex items-center justify-center gap-1.5 active:scale-95 transition-all"
-            title="Download / View LaTeX PDF"
-          >
-            <FileText className="w-3.5 h-3.5 text-[#7AD1B8]" />
-            <span>{t.home.downloadCv}</span>
-          </a>
-
-          <button
-            onClick={async () => {
-              onClose()
-              await logoutAction()
-            }}
-            className="p-3 rounded-xl bg-red-950/30 hover:bg-red-950/50 border border-red-800/40 text-red-300 flex items-center justify-center gap-2 active:scale-95 transition-all cursor-pointer"
-          >
-            <LogOut className="w-3.5 h-3.5" />
-            <span>{t.nav.logout}</span>
-          </button>
+          <form action={logoutAction}>
+            <button
+              type="submit"
+              className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs text-red-400/90 hover:text-red-300 hover:bg-red-950/20 border border-transparent hover:border-red-900/30 transition-all cursor-pointer"
+            >
+              <span className="flex items-center gap-2">
+                <LogOut className="w-3.5 h-3.5" />
+                <span>{t.nav.logout}</span>
+              </span>
+              <span className="text-[9px] font-mono text-neutral-400">{t.nav.exit}</span>
+            </button>
+          </form>
         </div>
       </div>
     </div>
