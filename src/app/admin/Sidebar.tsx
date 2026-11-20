@@ -6,17 +6,14 @@ import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import {
   LayoutDashboard,
+  FolderKanban,
+  UserCheck,
   Sparkles,
   BookOpen,
   Cpu,
   Briefcase,
-  FolderKanban,
-  UserCheck,
-  MessageSquareText,
   ExternalLink,
   LogOut,
-  Menu,
-  X,
   ChevronLeft,
   ChevronRight,
   ArrowUpRight,
@@ -45,7 +42,6 @@ const SECTION_TABS: NavTab[] = [
 
 export default function AdminSidebar() {
   const pathname = usePathname()
-  const [mobileOpen, setMobileOpen] = useState(false)
   const [isCollapsed, setIsCollapsed] = useState(false)
 
   // Don't render sidebar on login page
@@ -55,57 +51,6 @@ export default function AdminSidebar() {
 
   return (
     <>
-      {/* Mobile Top Header */}
-      <header className="lg:hidden sticky top-0 z-40 bg-[#0d0e11]/90 backdrop-blur-xl border-b border-white/[0.08] px-4 py-3 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="relative w-8 h-8 rounded-full overflow-hidden border border-amber-500/40 p-0.5">
-            <Image
-              src="/images/alaa.webp"
-              alt="Eng. Alaa Essa"
-              fill
-              sizes="32px"
-              className="object-cover rounded-full"
-            />
-          </div>
-          <div>
-            <div className="text-xs font-semibold tracking-wider text-white">
-              ENG. ALAA ESSA
-            </div>
-            <div className="text-[9px] text-amber-500 font-mono tracking-wider">
-              STUDIO CONSOLE
-            </div>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <Link
-            href="/"
-            target="_blank"
-            className="p-2 text-neutral-300 hover:text-white rounded-xl bg-white/[0.03] border border-white/[0.06] text-xs font-mono flex items-center gap-1"
-            title="View Live Site"
-          >
-            <span className="text-[10px]">Site</span>
-            <ArrowUpRight className="w-3.5 h-3.5 text-amber-400" />
-          </Link>
-
-          <button
-            onClick={() => setMobileOpen(!mobileOpen)}
-            className="p-2 text-neutral-400 hover:text-white rounded-xl bg-white/[0.03] border border-white/[0.06] transition-colors"
-            aria-label="Toggle navigation"
-          >
-            {mobileOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
-          </button>
-        </div>
-      </header>
-
-      {/* Mobile Drawer Backdrop */}
-      {mobileOpen && (
-        <div
-          onClick={() => setMobileOpen(false)}
-          className="lg:hidden fixed inset-0 z-40 bg-black/80 backdrop-blur-sm"
-        />
-      )}
-
       {/* Spacer for desktop fixed layout to prevent content overlapping */}
       <div
         className={`hidden lg:block shrink-0 transition-all duration-300 ${
@@ -113,11 +58,11 @@ export default function AdminSidebar() {
         }`}
       />
 
-      {/* Sidebar Container (Fixed & Collapsible - DOES NOT SCROLL AWAY WITH PAGE) */}
+      {/* Desktop Fixed & Collapsible Sidebar */}
       <aside
-        className={`fixed top-0 left-0 z-50 h-screen bg-[#0d0e11] border-r border-white/[0.08] flex flex-col justify-between transition-all duration-300 ease-in-out select-none ${
-          mobileOpen ? 'translate-x-0 w-72' : '-translate-x-full lg:translate-x-0'
-        } ${isCollapsed ? 'lg:w-20' : 'lg:w-72'}`}
+        className={`hidden lg:flex fixed top-0 left-0 z-40 h-screen bg-[#0d0e11] border-r border-white/[0.08] flex-col justify-between transition-all duration-300 ease-in-out select-none ${
+          isCollapsed ? 'w-20' : 'w-72'
+        }`}
       >
         {/* Top: Identity Header & Collapse Button */}
         <div className={`border-b border-white/[0.08] relative ${isCollapsed ? 'p-3 py-5' : 'p-5'}`}>
@@ -125,12 +70,11 @@ export default function AdminSidebar() {
             <Link
               href="/admin"
               className="flex items-center gap-3 group min-w-0"
-              onClick={() => setMobileOpen(false)}
             >
               <div className="relative w-11 h-11 rounded-full overflow-hidden border-2 border-amber-500/40 p-0.5 shadow-lg group-hover:border-amber-400 transition-colors shrink-0">
                 <Image
                   src="/images/alaa.webp"
-                  alt="Eng. Alaa Issa"
+                  alt="Eng. Alaa Essa"
                   fill
                   sizes="48px"
                   className="object-cover rounded-full"
@@ -144,7 +88,7 @@ export default function AdminSidebar() {
                     SECTIONS CONTROL
                   </span>
                   <h2 className="text-sm font-semibold tracking-wide text-white group-hover:text-amber-200 transition-colors truncate">
-                    Eng. Alaa Issa
+                    Eng. Alaa Essa
                   </h2>
                   <span className="text-[10px] text-neutral-400 font-mono block truncate">
                     Interior Architecture
@@ -153,10 +97,10 @@ export default function AdminSidebar() {
               )}
             </Link>
 
-            {/* Desktop Collapse / Expand Toggle Button ("ينفع أصغرها") */}
+            {/* Desktop Collapse / Expand Toggle Button */}
             <button
               onClick={() => setIsCollapsed(!isCollapsed)}
-              className="hidden lg:flex p-1.5 rounded-lg text-neutral-400 hover:text-white bg-white/[0.03] hover:bg-white/[0.08] border border-white/[0.06] transition-colors"
+              className="p-1.5 rounded-lg text-neutral-400 hover:text-white bg-white/[0.03] hover:bg-white/[0.08] border border-white/[0.06] transition-colors cursor-pointer"
               title={isCollapsed ? 'Expand Sidebar' : 'Collapse Sidebar to Mini'}
             >
               {isCollapsed ? <ChevronRight className="w-3.5 h-3.5" /> : <ChevronLeft className="w-3.5 h-3.5" />}
@@ -196,7 +140,6 @@ export default function AdminSidebar() {
               <Link
                 key={item.href}
                 href={item.href}
-                onClick={() => setMobileOpen(false)}
                 className={`group flex items-center ${
                   isCollapsed ? 'justify-center p-3' : 'justify-between px-3.5 py-2.5'
                 } rounded-xl text-xs font-medium tracking-wide transition-all duration-200 relative ${
