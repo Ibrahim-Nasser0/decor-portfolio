@@ -119,7 +119,7 @@ export default function AudioNavButton({ className = "", showVolumeSlider = true
 
       {/* Floating Monograph Settings Dropdown Popover */}
       {popoverOpen && (
-        <div className="absolute top-full right-0 mt-2.5 z-50 bg-white/98 backdrop-blur-xl border border-neutral-300 p-4 rounded-md shadow-2xl w-64 sm:w-72 space-y-3.5 animate-in fade-in slide-in-from-top-2 duration-150 text-[#111111]">
+        <div className="absolute top-full right-0 mt-2.5 z-50 bg-white/98 backdrop-blur-xl border border-neutral-300 p-4 rounded-xl shadow-2xl w-64 sm:w-72 space-y-3.5 animate-in fade-in slide-in-from-top-2 duration-150 text-[#111111]">
           {/* Popover Header */}
           <div className="flex items-center justify-between pb-2 border-b border-neutral-200">
             <div className="flex items-center gap-2">
@@ -139,7 +139,7 @@ export default function AudioNavButton({ className = "", showVolumeSlider = true
           </div>
 
           {/* Track Monograph Information */}
-          <div className="space-y-1 bg-neutral-50 p-2.5 border border-neutral-200/80 rounded-xs">
+          <div className="space-y-1 bg-neutral-50 p-2.5 border border-neutral-200/80 rounded-lg">
             <span className="text-[9px] font-technical uppercase tracking-widest text-neutral-400 block">
               Composition
             </span>
@@ -155,7 +155,7 @@ export default function AudioNavButton({ className = "", showVolumeSlider = true
           <div className="space-y-2">
             <div className="flex items-center justify-between text-[10px] font-technical uppercase tracking-wider text-neutral-600">
               <span>Ambiance Volume</span>
-              <span className="font-mono font-bold text-black bg-neutral-100 px-1.5 py-0.5 border border-neutral-200 rounded-xs">
+              <span className="font-mono font-bold text-black bg-neutral-100 px-1.5 py-0.5 border border-neutral-200 rounded-md">
                 {Math.round(volume * 100)}%
               </span>
             </div>
@@ -192,7 +192,7 @@ export default function AudioNavButton({ className = "", showVolumeSlider = true
             <button
               type="button"
               onClick={() => setVolume(0.15)}
-              className={`py-1 text-[9px] font-technical uppercase tracking-wider border rounded-xs transition-colors cursor-pointer ${
+              className={`py-1 text-[9px] font-technical uppercase tracking-wider border rounded-md transition-colors cursor-pointer ${
                 volume === 0.15 && !isMuted
                   ? "bg-black text-white border-black font-bold"
                   : "bg-neutral-50 hover:bg-neutral-100 border-neutral-200 text-neutral-700"
@@ -203,7 +203,7 @@ export default function AudioNavButton({ className = "", showVolumeSlider = true
             <button
               type="button"
               onClick={() => setVolume(0.35)}
-              className={`py-1 text-[9px] font-technical uppercase tracking-wider border rounded-xs transition-colors cursor-pointer ${
+              className={`py-1 text-[9px] font-technical uppercase tracking-wider border rounded-md transition-colors cursor-pointer ${
                 volume === 0.35 && !isMuted
                   ? "bg-black text-white border-black font-bold"
                   : "bg-neutral-50 hover:bg-neutral-100 border-neutral-200 text-neutral-700"
@@ -214,7 +214,7 @@ export default function AudioNavButton({ className = "", showVolumeSlider = true
             <button
               type="button"
               onClick={() => setVolume(0.65)}
-              className={`py-1 text-[9px] font-technical uppercase tracking-wider border rounded-xs transition-colors cursor-pointer ${
+              className={`py-1 text-[9px] font-technical uppercase tracking-wider border rounded-md transition-colors cursor-pointer ${
                 volume === 0.65 && !isMuted
                   ? "bg-black text-white border-black font-bold"
                   : "bg-neutral-50 hover:bg-neutral-100 border-neutral-200 text-neutral-700"

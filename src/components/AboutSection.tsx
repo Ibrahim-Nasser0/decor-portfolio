@@ -285,10 +285,10 @@ export default function AboutSection({ profile }: AboutSectionProps) {
               <div className="pt-2 grid grid-cols-2 gap-2.5">
                 <a
                   href={`mailto:${email}`}
-                  className="p-2.5 bg-white hover:bg-neutral-900 hover:text-white text-neutral-800 border border-neutral-300 hover:border-black font-technical text-[10px] sm:text-[11px] uppercase tracking-wider flex items-center justify-center gap-1.5 transition-all duration-200 active:scale-95 shadow-2xs rounded-xs"
+                  className="p-2.5 bg-white hover:bg-neutral-900 hover:text-white text-neutral-800 border border-neutral-300 hover:border-black font-technical text-[10px] sm:text-[11px] uppercase tracking-wider flex items-center justify-center gap-1.5 transition-all duration-200 active:scale-95 shadow-2xs rounded-xs focus-visible:ring-2 focus-visible:ring-black focus-visible:outline-none min-h-[44px]"
                   title="Direct Email Inquiry"
                 >
-                  <Mail className="w-3.5 h-3.5 shrink-0" />
+                  <Mail className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
                   <span className="truncate">Email Inquiries</span>
                 </a>
 
@@ -296,10 +296,10 @@ export default function AboutSection({ profile }: AboutSectionProps) {
                   href={`https://wa.me/${whatsappNumber}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-2.5 bg-neutral-900 hover:bg-black text-white border border-black font-technical text-[10px] sm:text-[11px] uppercase tracking-wider flex items-center justify-center gap-1.5 transition-all duration-200 active:scale-95 shadow-2xs rounded-xs group"
+                  className="p-2.5 bg-neutral-900 hover:bg-black text-white border border-black font-technical text-[10px] sm:text-[11px] uppercase tracking-wider flex items-center justify-center gap-1.5 transition-all duration-200 active:scale-95 shadow-2xs rounded-xs group focus-visible:ring-2 focus-visible:ring-black focus-visible:outline-none min-h-[44px]"
                   title="Direct WhatsApp Consultation"
                 >
-                  <MessageCircle className="w-3.5 h-3.5 text-emerald-400 group-hover:scale-110 transition-transform shrink-0" />
+                  <MessageCircle className="w-3.5 h-3.5 text-emerald-400 group-hover:scale-110 transition-transform shrink-0" aria-hidden="true" />
                   <span className="truncate">WhatsApp</span>
                 </a>
               </div>
@@ -424,11 +424,11 @@ export default function AboutSection({ profile }: AboutSectionProps) {
                 <a
                   href="/api/portfolio-pdf"
                   download="Alaa-Essa-Architectural-Portfolio-2026.pdf"
-                  className="group relative p-4 bg-neutral-950 hover:bg-black text-white border border-neutral-900 hover:border-neutral-700 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between active:scale-[0.98] overflow-hidden rounded-xs"
+                  className="group relative p-4 bg-neutral-950 hover:bg-black text-white border border-neutral-900 hover:border-neutral-700 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between active:scale-[0.98] overflow-hidden rounded-xs focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 focus-visible:outline-none min-h-[44px]"
                   title="Download Curated Architectural Monograph (PDF)"
                 >
                   {/* Subtle Sheen Highlight */}
-                  <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out pointer-events-none" />
+                  <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out pointer-events-none" aria-hidden="true" />
 
                   {/* Top Spec Row */}
                   <div className="flex items-center justify-between pb-3 border-b border-white/10 text-[9px] font-mono text-neutral-400 uppercase tracking-widest">
@@ -438,15 +438,15 @@ export default function AboutSection({ profile }: AboutSectionProps) {
 
                   {/* Body Content */}
                   <div className="py-3 flex items-start gap-3">
-                    <div className="w-9 h-9 rounded-full bg-white/10 border border-white/20 flex items-center justify-center shrink-0 group-hover:bg-[#7AD1B8] transition-colors duration-300">
-                      <FileDown className="w-4 h-4 text-[#7AD1B8] group-hover:text-black transition-colors duration-300" />
+                    <div className="w-9 h-9 rounded-full bg-white/10 border border-white/20 flex items-center justify-center shrink-0 group-hover:bg-[#7AD1B8] transition-colors duration-300" aria-hidden="true">
+                      <FileDown className="w-4 h-4 text-[#7AD1B8] group-hover:text-black transition-colors duration-300" aria-hidden="true" />
                     </div>
                     <div className="min-w-0">
                       <h5 className="text-xs sm:text-[13px] font-technical uppercase tracking-wider font-bold text-white group-hover:text-[#7AD1B8] transition-colors truncate">
                         Portfolio Monograph
                       </h5>
                       <p className="text-[10px] font-sans text-neutral-400 group-hover:text-neutral-300 transition-colors mt-0.5 line-clamp-1">
-                        High-resolution curated works & spatial studies
+                        High-resolution curated works &amp; spatial studies
                       </p>
                     </div>
                   </div>
@@ -454,7 +454,7 @@ export default function AboutSection({ profile }: AboutSectionProps) {
                   {/* Action Indicator */}
                   <div className="pt-2.5 border-t border-white/10 flex items-center justify-between text-[9px] font-mono uppercase tracking-wider text-neutral-400 group-hover:text-white transition-colors">
                     <span>Download Monograph (A4)</span>
-                    <span className="group-hover:translate-y-0.5 transition-transform text-white">↓</span>
+                    <span className="group-hover:translate-y-0.5 transition-transform text-white" aria-hidden="true">↓</span>
                   </div>
                 </a>
 
@@ -463,7 +463,7 @@ export default function AboutSection({ profile }: AboutSectionProps) {
                   href="/api/cv-pdf"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group relative p-4 bg-white hover:bg-neutral-50 text-neutral-900 border border-neutral-300 hover:border-black shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col justify-between active:scale-[0.98] overflow-hidden rounded-xs"
+                  className="group relative p-4 bg-white hover:bg-neutral-50 text-neutral-900 border border-neutral-300 hover:border-black shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col justify-between active:scale-[0.98] overflow-hidden rounded-xs focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 focus-visible:outline-none min-h-[44px]"
                   title="Download / View Alaa Essa Official Curriculum Vitae (PDF)"
                 >
                   {/* Top Spec Row */}

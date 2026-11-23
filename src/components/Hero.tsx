@@ -145,7 +145,7 @@ export default function Hero({ profile, projectsCount = 5 }: HeroProps) {
       ref={heroRef}
       onMouseMove={handleHeroMouseMove}
       id="hero"
-      className="relative min-h-[90vh] bg-white pt-6 sm:pt-8 lg:pt-10 pb-12 sm:pb-16 flex flex-col justify-between overflow-hidden select-none"
+      className="relative min-h-[90vh] bg-white pt-20 sm:pt-24 lg:pt-28 pb-12 sm:pb-16 flex flex-col justify-between overflow-hidden select-none"
     >
       {/* Interactive Cursor Spotlight Glow */}
       <div
@@ -399,20 +399,20 @@ export default function Hero({ profile, projectsCount = 5 }: HeroProps) {
             <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 animate-hero-entrance [animation-delay:900ms]">
               <a
                 href="#projects"
-                className="group relative overflow-hidden w-full sm:w-auto px-6 sm:px-8 py-3.5 sm:py-4 bg-black hover:bg-neutral-900 text-white text-xs uppercase tracking-widest font-technical font-medium transition-all duration-300 flex items-center justify-center gap-2.5 shadow-md active:scale-[0.98] rounded-xs"
+                className="group relative overflow-hidden w-full sm:w-auto px-6 sm:px-8 py-3.5 sm:py-4 bg-black hover:bg-neutral-900 text-white text-xs uppercase tracking-widest font-technical font-medium transition-all duration-300 flex items-center justify-center gap-2.5 shadow-md active:scale-[0.98] rounded-xs focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 focus-visible:outline-none min-h-[44px]"
               >
                 {/* Subtle Luxury Glass Shimmer Sweep */}
-                <span className="absolute inset-0 w-1/2 h-full bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none animate-shimmer-sweep" />
+                <span className="absolute inset-0 w-1/2 h-full bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none animate-shimmer-sweep" aria-hidden="true" />
 
                 <span className="relative z-10">Explore Selected Works</span>
-                <ArrowUpRight className="relative z-10 w-3.5 h-3.5 text-neutral-400 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300" />
+                <ArrowUpRight className="relative z-10 w-3.5 h-3.5 text-neutral-400 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300" aria-hidden="true" />
               </a>
 
               <a
                 href="#about"
-                className="w-full sm:w-auto px-6 sm:px-8 py-3.5 sm:py-4 border border-neutral-300 hover:border-black text-black hover:bg-black hover:text-white text-xs uppercase tracking-widest font-technical font-medium transition-all duration-300 text-center justify-center flex items-center active:scale-[0.98] rounded-xs shadow-2xs"
+                className="w-full sm:w-auto px-6 sm:px-8 py-3.5 sm:py-4 border border-neutral-300 hover:border-black text-black hover:bg-black hover:text-white text-xs uppercase tracking-widest font-technical font-medium transition-all duration-300 text-center justify-center flex items-center active:scale-[0.98] rounded-xs shadow-2xs focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 focus-visible:outline-none min-h-[44px]"
               >
-                About & Philosophy
+                About &amp; Philosophy
               </a>
             </div>
           </div>
@@ -423,10 +423,10 @@ export default function Hero({ profile, projectsCount = 5 }: HeroProps) {
       <div className="max-w-7xl 2xl:max-w-[1536px] w-full mx-auto px-4 sm:px-6 lg:px-8 2xl:px-12 flex justify-center pt-2 animate-hero-entrance [animation-delay:1000ms]">
         <a
           href="#about"
-          className="group inline-flex items-center gap-2 text-[9px] sm:text-[10px] font-technical uppercase tracking-[0.25em] text-neutral-400 hover:text-black transition-colors py-2"
+          className="group inline-flex items-center gap-2 text-[9px] sm:text-[10px] font-technical uppercase tracking-[0.25em] text-neutral-400 hover:text-black transition-colors py-2 focus-visible:ring-2 focus-visible:ring-black focus-visible:outline-none rounded-xs"
         >
           <span>Scroll to explore</span>
-          <ArrowDown className="w-3.5 h-3.5 group-hover:translate-y-1 transition-transform duration-300 text-neutral-500 group-hover:text-black" />
+          <ArrowDown className="w-3.5 h-3.5 group-hover:translate-y-1 transition-transform duration-300 text-neutral-500 group-hover:text-black" aria-hidden="true" />
         </a>
       </div>
     </section>

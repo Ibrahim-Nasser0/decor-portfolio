@@ -364,27 +364,28 @@ export default function Footer({ profile }: FooterProps) {
             href="https://ibrahim-nasser.vercel.app/"
             target="_blank"
             rel="noopener noreferrer"
-            className="group inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-neutral-300 hover:border-black bg-white hover:bg-black transition-all duration-300 shadow-2xs hover:shadow-xs cursor-pointer active:scale-95"
+            className="group inline-flex items-center gap-2 px-4 py-2 rounded-full border border-neutral-300 hover:border-black bg-white hover:bg-black transition-all duration-300 shadow-2xs hover:shadow-xs cursor-pointer active:scale-95 focus-visible:ring-2 focus-visible:ring-black focus-visible:outline-none min-h-[44px]"
             title="Crafted & Engineered by Ibrahim Nasser"
           >
-            <span className="w-1.5 h-1.5 rounded-full bg-[#7AD1B8] group-hover:bg-emerald-400 transition-colors animate-pulse" />
+            <span className="w-1.5 h-1.5 rounded-full bg-[#7AD1B8] group-hover:bg-emerald-400 transition-colors animate-pulse" aria-hidden="true" />
             <span className="text-[10px] sm:text-[11px] font-technical uppercase tracking-[0.14em] text-neutral-500 group-hover:text-neutral-300 transition-colors">
-              Crafted & Engineered by
+              Crafted &amp; Engineered by
             </span>
             <span className="text-[10px] sm:text-[11px] font-technical uppercase tracking-[0.16em] font-bold text-black group-hover:text-white transition-colors">
               Ibrahim Nasser
             </span>
-            <ArrowUpRight className="w-3.5 h-3.5 text-neutral-400 group-hover:text-white transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            <ArrowUpRight className="w-3.5 h-3.5 text-neutral-400 group-hover:text-white transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true" />
           </a>
 
           {/* Back to Top */}
           <button
             type="button"
             onClick={scrollToTop}
-            className="group flex items-center gap-2 hover:text-black transition-colors cursor-pointer active:scale-95 px-3.5 py-1.5 border border-neutral-200 hover:border-black rounded-full bg-white hover:bg-neutral-50 text-[10px] sm:text-[11px] font-technical uppercase tracking-widest text-neutral-600 hover:text-black shadow-2xs"
+            className="group flex items-center gap-2 hover:text-black transition-colors cursor-pointer active:scale-95 px-4 py-2 border border-neutral-200 hover:border-black rounded-full bg-white hover:bg-neutral-50 text-[10px] sm:text-[11px] font-technical uppercase tracking-widest text-neutral-600 hover:text-black shadow-2xs focus-visible:ring-2 focus-visible:ring-black focus-visible:outline-none min-h-[44px]"
+            aria-label="Back to top of monograph"
           >
             <span className="font-medium">BACK TO TOP</span>
-            <ArrowUp className="w-3.5 h-3.5 transition-transform duration-200 group-hover:-translate-y-0.5" />
+            <ArrowUp className="w-3.5 h-3.5 transition-transform duration-200 group-hover:-translate-y-0.5" aria-hidden="true" />
           </button>
         </div>
       </div>

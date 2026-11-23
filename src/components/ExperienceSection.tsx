@@ -437,9 +437,9 @@ export default function ExperienceSection({ profile }: ExperienceSectionProps) {
                   )}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="px-4 py-2.5 bg-black hover:bg-neutral-800 text-white text-xs font-technical uppercase tracking-widest flex items-center justify-center gap-2 transition-all active:scale-98 shadow-xs"
+                  className="px-4 py-3 bg-black hover:bg-neutral-800 text-white text-xs font-technical uppercase tracking-widest flex items-center justify-center gap-2 transition-all active:scale-98 shadow-xs rounded-xs focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 focus-visible:outline-none min-h-[44px]"
                 >
-                  <MessageCircle className="w-3.5 h-3.5 text-emerald-400" />
+                  <MessageCircle className="w-3.5 h-3.5 text-emerald-400" aria-hidden="true" />
                   <span>Book Consultation</span>
                 </a>
 
@@ -447,11 +447,11 @@ export default function ExperienceSection({ profile }: ExperienceSectionProps) {
                   href="/api/cv-pdf"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-1.5 text-black hover:text-neutral-600 uppercase tracking-wider font-technical font-semibold text-[11px] sm:text-xs py-2 transition-colors"
+                  className="inline-flex items-center justify-center gap-1.5 text-black hover:text-neutral-600 uppercase tracking-wider font-technical font-semibold text-[11px] sm:text-xs py-2.5 px-3 transition-colors focus-visible:ring-2 focus-visible:ring-black focus-visible:outline-none rounded-xs min-h-[44px]"
                 >
-                  <FileDown className="w-3.5 h-3.5 text-neutral-600" />
+                  <FileDown className="w-3.5 h-3.5 text-neutral-600" aria-hidden="true" />
                   <span>Curriculum Vitae (PDF)</span>
-                  <ArrowUpRight className="w-3.5 h-3.5 text-neutral-400" />
+                  <ArrowUpRight className="w-3.5 h-3.5 text-neutral-400" aria-hidden="true" />
                 </a>
               </div>
             </div>
