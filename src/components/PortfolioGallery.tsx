@@ -124,7 +124,7 @@ export default function PortfolioGallery({ initialProjects = PROJECTS }: Portfol
                   role="tab"
                   aria-selected={isActive}
                   onClick={() => setActiveCategory(cat.id)}
-                  className={`group inline-flex items-center gap-2 text-[10px] sm:text-xs 2xl:text-sm font-technical uppercase tracking-wider py-2.5 px-4 sm:px-5 border transition-all duration-300 shrink-0 cursor-pointer min-h-[44px] active:scale-95 focus-visible:ring-2 focus-visible:ring-black focus-visible:outline-none ${
+                  className={`group inline-flex items-center gap-2 text-[10px] sm:text-xs 2xl:text-sm font-technical uppercase tracking-wider py-2 sm:py-2.5 px-4 sm:px-6 border transition-all duration-300 shrink-0 cursor-pointer min-h-[44px] active:scale-95 rounded-full focus-visible:ring-2 focus-visible:ring-black focus-visible:outline-none ${
                     isActive
                       ? "bg-black text-white border-black shadow-xs font-semibold translate-y-[-1px]"
                       : "bg-white text-neutral-600 border-neutral-300 hover:border-black hover:text-black"
@@ -132,7 +132,7 @@ export default function PortfolioGallery({ initialProjects = PROJECTS }: Portfol
                 >
                   <span>{cat.label}</span>
                   <span
-                    className={`font-mono text-[9px] sm:text-[10px] px-1.5 py-0.5 rounded transition-colors ${
+                    className={`font-mono text-[9px] sm:text-[10px] px-2 py-0.5 rounded-full transition-colors ${
                       isActive ? "bg-white/20 text-white" : "bg-neutral-100 text-neutral-500 group-hover:text-black"
                     }`}
                   >
@@ -171,13 +171,13 @@ export default function PortfolioGallery({ initialProjects = PROJECTS }: Portfol
                 <article
                   key={project.id}
                   style={{ animationDelay: `${delayMs}ms` }}
-                  className={`group relative bg-white border border-neutral-300 hover:border-black transition-all duration-500 flex flex-col justify-between shadow-xs hover:shadow-2xl hover:-translate-y-2 overflow-hidden ${
+                  className={`group relative bg-white border border-neutral-300 hover:border-black transition-all duration-500 flex flex-col justify-between shadow-xs hover:shadow-2xl hover:-translate-y-2 overflow-hidden rounded-2xl ${
                     isVisible ? "animate-card-entrance" : "opacity-0"
                   }`}
                 >
                   {/* Drafting Crosshairs in Card Corners */}
-                  <span className="absolute top-2 start-2 font-mono text-[9px] text-neutral-300 group-hover:text-black transition-colors select-none z-20 pointer-events-none" aria-hidden="true">+</span>
-                  <span className="absolute top-2 end-2 font-mono text-[9px] text-neutral-300 group-hover:text-black transition-colors select-none z-20 pointer-events-none" aria-hidden="true">+</span>
+                  <span className="absolute top-2.5 start-2.5 font-mono text-[9px] text-neutral-300 group-hover:text-black transition-colors select-none z-20 pointer-events-none" aria-hidden="true">+</span>
+                  <span className="absolute top-2.5 end-2.5 font-mono text-[9px] text-neutral-300 group-hover:text-black transition-colors select-none z-20 pointer-events-none" aria-hidden="true">+</span>
 
                   {/* Top Cover Image Box with Architectural Aspect Ratio */}
                   <Link
@@ -196,20 +196,20 @@ export default function PortfolioGallery({ initialProjects = PROJECTS }: Portfol
                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors duration-500 pointer-events-none" />
 
                     {/* Category Label Badge (Top Left) */}
-                    <div className="absolute top-3 start-5 px-2.5 py-1 bg-white/95 backdrop-blur-xs text-[9px] sm:text-[10px] font-technical uppercase tracking-[0.14em] text-black font-bold border border-black/15 shadow-xs transition-transform duration-300 group-hover:translate-x-0.5">
+                    <div className="absolute top-3.5 start-4 px-3 py-1 bg-white/95 backdrop-blur-xs text-[9px] sm:text-[10px] font-technical uppercase tracking-[0.14em] text-black font-bold border border-black/15 shadow-xs transition-transform duration-300 group-hover:translate-x-0.5 rounded-full">
                       {project.categoryLabelEn || project.category}
                     </div>
 
                     {/* Practice Attribution & Index Badges (Top Right) */}
-                    <div className="absolute top-3 end-5 flex items-center gap-1.5">
-                      <span className="px-2 py-0.5 bg-black/85 backdrop-blur-xs text-[9px] font-mono text-white tracking-widest uppercase shadow-xs">
+                    <div className="absolute top-3.5 end-4 flex items-center gap-1.5">
+                      <span className="px-2.5 py-0.5 bg-black/85 backdrop-blur-xs text-[9px] font-mono text-white tracking-widest uppercase shadow-xs rounded-full">
                         NO. {displayIndex}
                       </span>
                     </div>
 
                     {/* Hover Interactive Tag (Center Hover Pill with smooth float up) */}
                     <div className="absolute inset-0 flex items-center justify-center opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 pointer-events-none">
-                      <span className="px-4 py-2 bg-white/95 text-black font-technical uppercase tracking-widest text-[11px] font-bold shadow-xl border border-black flex items-center gap-2">
+                      <span className="px-5 py-2.5 bg-white/95 text-black font-technical uppercase tracking-widest text-[11px] font-bold shadow-xl border border-black flex items-center gap-2 rounded-full">
                         <span>Explore Case Study</span>
                         <ArrowUpRight className="w-3.5 h-3.5" aria-hidden="true" />
                       </span>
@@ -233,7 +233,7 @@ export default function PortfolioGallery({ initialProjects = PROJECTS }: Portfol
                         </div>
 
                         {/* Firm / Freelance Attribution Label */}
-                        <span className="px-2 py-0.5 bg-neutral-100 text-neutral-800 border border-neutral-300/80 text-[9px] font-mono uppercase tracking-wider font-semibold shrink-0 group-hover:bg-black group-hover:text-white group-hover:border-black transition-colors duration-300">
+                        <span className="px-2.5 py-0.5 bg-neutral-100 text-neutral-800 border border-neutral-300/80 text-[9px] font-mono uppercase tracking-wider font-semibold shrink-0 group-hover:bg-black group-hover:text-white group-hover:border-black transition-colors duration-300 rounded-full">
                           {project.firmEn || "Alaa Essa Studio"}
                         </span>
                       </div>
@@ -282,10 +282,10 @@ export default function PortfolioGallery({ initialProjects = PROJECTS }: Portfol
 
                         <Link
                           href={`/projects/${project.id}`}
-                          className="text-xs font-technical uppercase tracking-wider text-black font-bold inline-flex items-center gap-1 group/link hover:translate-x-1 transition-all duration-300 focus-visible:ring-2 focus-visible:ring-black focus-visible:outline-none rounded-xs py-1 px-1.5"
+                          className="text-xs font-technical uppercase tracking-wider text-black font-bold inline-flex items-center gap-1 group/link hover:translate-x-1 transition-all duration-300 focus-visible:ring-2 focus-visible:ring-black focus-visible:outline-none rounded-full py-1 px-3 bg-neutral-100/70 hover:bg-black hover:text-white"
                         >
                           <span>Case Study</span>
-                          <ArrowUpRight className="w-3.5 h-3.5 text-neutral-500 group-hover/link:text-black group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 transition-transform duration-300" aria-hidden="true" />
+                          <ArrowUpRight className="w-3.5 h-3.5 text-neutral-500 group-hover/link:text-white group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 transition-transform duration-300" aria-hidden="true" />
                         </Link>
                       </div>
                     </div>

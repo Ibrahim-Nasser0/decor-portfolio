@@ -178,7 +178,7 @@ export default function ContactSection({ profile }: ContactSectionProps) {
                   )}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-base sm:text-lg text-black font-mono font-medium hover:text-neutral-600 transition-colors inline-flex items-center gap-1.5 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black rounded-xs"
+                  className="text-base sm:text-lg text-black font-mono font-medium hover:text-neutral-600 transition-colors inline-flex items-center gap-1.5 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black rounded-full"
                   dir="ltr"
                 >
                   <Phone className="w-3.5 h-3.5 text-neutral-700" aria-hidden="true" />
@@ -194,7 +194,7 @@ export default function ContactSection({ profile }: ContactSectionProps) {
                 </span>
                 <a
                   href={`mailto:${email}`}
-                  className="text-base sm:text-lg text-black font-mono hover:text-neutral-600 transition-colors inline-flex items-center gap-1.5 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black rounded-xs"
+                  className="text-base sm:text-lg text-black font-mono hover:text-neutral-600 transition-colors inline-flex items-center gap-1.5 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black rounded-full"
                 >
                   <Mail className="w-3.5 h-3.5 text-neutral-700" aria-hidden="true" />
                   <span>{email}</span>
@@ -215,7 +215,7 @@ export default function ContactSection({ profile }: ContactSectionProps) {
             </div>
 
             {/* Direct WhatsApp Fast Channel */}
-            <div className="p-4 bg-white border border-neutral-300 rounded-sm shadow-2xs space-y-2">
+            <div className="p-5 sm:p-6 bg-white border border-neutral-300 rounded-2xl shadow-2xs space-y-3">
               <span className="text-[9px] font-mono uppercase tracking-[0.2em] text-neutral-400 block font-semibold">
                 PREFER DIRECT MESSAGING?
               </span>
@@ -228,7 +228,7 @@ export default function ContactSection({ profile }: ContactSectionProps) {
                 )}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-1 inline-flex items-center gap-2 px-4 py-2.5 bg-black hover:bg-neutral-800 text-white text-xs font-technical uppercase tracking-widest rounded-xs transition-all active:scale-98 shadow-xs focus-visible:ring-2 focus-visible:ring-black focus-visible:outline-none"
+                className="mt-1 inline-flex items-center gap-2 px-5 py-2.5 bg-black hover:bg-neutral-800 text-white text-xs font-technical uppercase tracking-widest rounded-full transition-all active:scale-98 shadow-xs focus-visible:ring-2 focus-visible:ring-black focus-visible:outline-none"
               >
                 <MessageCircle className="w-4 h-4 text-emerald-400" aria-hidden="true" />
                 <span>Launch WhatsApp Chat</span>
@@ -247,14 +247,14 @@ export default function ContactSection({ profile }: ContactSectionProps) {
                 behance={profile?.behance || "https://behance.net"}
                 className="flex items-center gap-2.5"
                 iconClassName="w-4 h-4"
-                itemClassName="w-9 h-9 rounded border border-neutral-300 hover:border-black flex items-center justify-center text-neutral-700 hover:text-black hover:bg-neutral-100 transition-all hover:scale-105 active:scale-95 focus-visible:ring-2 focus-visible:ring-black focus-visible:outline-none"
+                itemClassName="w-10 h-10 rounded-full border border-neutral-300 hover:border-black flex items-center justify-center text-neutral-700 hover:text-black hover:bg-neutral-100 transition-all hover:scale-105 active:scale-95 focus-visible:ring-2 focus-visible:ring-black focus-visible:outline-none"
               />
             </div>
           </div>
 
           {/* Right Column (7 cols): Formal Architectural Monograph Form */}
           <div
-            className={`lg:col-span-7 relative bg-white border border-neutral-300 p-6 sm:p-10 shadow-xs transition-all duration-700 delay-300 ease-out ${
+            className={`lg:col-span-7 relative bg-white border border-neutral-300 p-6 sm:p-10 rounded-2xl shadow-xs transition-all duration-700 delay-300 ease-out ${
               isVisible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-6"
             }`}
           >
@@ -289,7 +289,7 @@ export default function ContactSection({ profile }: ContactSectionProps) {
                       setSelectedTypology("");
                       setFormData({ name: "", phone: "", email: "", message: "" });
                     }}
-                    className="px-6 py-3 border border-neutral-300 hover:border-black text-black text-xs uppercase tracking-widest font-technical font-medium transition-all active:scale-95 inline-flex items-center gap-2 focus-visible:ring-2 focus-visible:ring-black focus-visible:outline-none"
+                    className="px-6 py-3 border border-neutral-300 hover:border-black rounded-full text-black text-xs uppercase tracking-widest font-technical font-medium transition-all active:scale-95 inline-flex items-center gap-2 focus-visible:ring-2 focus-visible:ring-black focus-visible:outline-none"
                   >
                     <RotateCcw className="w-3.5 h-3.5" aria-hidden="true" />
                     <span>Send Another Inquiry</span>
@@ -311,7 +311,7 @@ export default function ContactSection({ profile }: ContactSectionProps) {
                           key={typ}
                           type="button"
                           onClick={() => handleSelectTypology(typ)}
-                          className={`px-3 py-1.5 text-[10px] sm:text-[11px] font-technical uppercase tracking-wider border transition-all duration-200 cursor-pointer active:scale-95 focus-visible:ring-2 focus-visible:ring-black focus-visible:outline-none ${
+                          className={`px-3 py-1.5 text-[10px] sm:text-[11px] font-technical uppercase tracking-wider border rounded-full transition-all duration-200 cursor-pointer active:scale-95 focus-visible:ring-2 focus-visible:ring-black focus-visible:outline-none ${
                             isSelected
                               ? "bg-black text-white border-black font-semibold shadow-2xs"
                               : "bg-[#faf9f6] text-neutral-700 border-neutral-300 hover:border-black hover:text-black"
@@ -340,7 +340,7 @@ export default function ContactSection({ profile }: ContactSectionProps) {
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     placeholder="e.g. Eng. Karim El-Sayed"
-                    className="w-full px-4 py-3 bg-[#faf9f6] border border-neutral-300 focus:border-black focus:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-black text-black text-sm font-sans placeholder-neutral-400 transition-colors"
+                    className="w-full px-4 py-3 bg-[#faf9f6] border border-neutral-300 rounded-xl focus:border-black focus:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-black text-black text-sm font-sans placeholder-neutral-400 transition-colors"
                   />
                 </div>
 
@@ -362,7 +362,7 @@ export default function ContactSection({ profile }: ContactSectionProps) {
                       value={formData.phone}
                       onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                       placeholder="010XXXXXXXX"
-                      className="w-full px-4 py-3 bg-[#faf9f6] border border-neutral-300 focus:border-black focus:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-black text-black text-sm font-sans placeholder-neutral-400 transition-colors"
+                      className="w-full px-4 py-3 bg-[#faf9f6] border border-neutral-300 rounded-xl focus:border-black focus:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-black text-black text-sm font-sans placeholder-neutral-400 transition-colors"
                       dir="ltr"
                     />
                   </div>
@@ -383,7 +383,7 @@ export default function ContactSection({ profile }: ContactSectionProps) {
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                       placeholder="name@example.com"
-                      className="w-full px-4 py-3 bg-[#faf9f6] border border-neutral-300 focus:border-black focus:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-black text-black text-sm font-sans placeholder-neutral-400 transition-colors"
+                      className="w-full px-4 py-3 bg-[#faf9f6] border border-neutral-300 rounded-xl focus:border-black focus:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-black text-black text-sm font-sans placeholder-neutral-400 transition-colors"
                     />
                   </div>
                 </div>
@@ -403,7 +403,7 @@ export default function ContactSection({ profile }: ContactSectionProps) {
                     value={formData.message}
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                     placeholder="Describe your space typology, location (e.g. New Cairo, Sheikh Zayed, North Coast), area, and desired services..."
-                    className="w-full px-4 py-3 bg-[#faf9f6] border border-neutral-300 focus:border-black focus:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-black text-black text-sm font-sans placeholder-neutral-400 resize-none transition-colors leading-relaxed"
+                    className="w-full px-4 py-3 bg-[#faf9f6] border border-neutral-300 rounded-xl focus:border-black focus:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-black text-black text-sm font-sans placeholder-neutral-400 resize-none transition-colors leading-relaxed"
                   />
                 </div>
 
@@ -411,7 +411,7 @@ export default function ContactSection({ profile }: ContactSectionProps) {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full py-4 bg-black hover:bg-neutral-800 text-white text-xs uppercase tracking-widest font-technical font-medium transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60 active:scale-[0.99] focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 focus-visible:outline-none shadow-sm min-h-[44px]"
+                  className="w-full py-4 bg-black hover:bg-neutral-800 text-white text-xs uppercase tracking-widest font-technical font-medium transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60 active:scale-[0.99] focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 focus-visible:outline-none shadow-sm min-h-[44px] rounded-full"
                 >
                   {isSubmitting ? (
                     <>

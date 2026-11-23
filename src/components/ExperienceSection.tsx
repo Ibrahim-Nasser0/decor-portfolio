@@ -186,7 +186,7 @@ export default function ExperienceSection({ profile }: ExperienceSectionProps) {
                   04.1 • Professional Appointments
                 </h3>
               </div>
-              <span className="text-[10px] sm:text-xs font-mono bg-neutral-200/80 text-black px-2.5 py-0.5 font-semibold">
+              <span className="text-[10px] sm:text-xs font-mono bg-neutral-200/80 text-black px-3 py-0.5 font-semibold rounded-full">
                 {String(experience.length).padStart(2, "0")} APPOINTMENTS
               </span>
             </div>
@@ -240,12 +240,12 @@ export default function ExperienceSection({ profile }: ExperienceSectionProps) {
                       )}
 
                       {/* Main Milestone Card with Drafting Monograph Styling */}
-                      <div className="relative p-5 sm:p-6 lg:p-7 bg-white border border-neutral-300 group-hover:border-black group-hover:shadow-md group-hover:-translate-y-0.5 transition-all duration-300 space-y-3.5">
+                      <div className="relative p-5 sm:p-6 lg:p-7 bg-white border border-neutral-300 group-hover:border-black group-hover:shadow-md group-hover:-translate-y-0.5 transition-all duration-300 space-y-3.5 rounded-2xl">
                         {/* Drafting Crosshairs in Card Corners */}
-                        <span className="absolute top-2 start-2 font-mono text-[9px] text-neutral-300 group-hover:text-black transition-colors select-none">+</span>
-                        <span className="absolute top-2 end-2 font-mono text-[9px] text-neutral-300 group-hover:text-black transition-colors select-none">+</span>
-                        <span className="absolute bottom-2 start-2 font-mono text-[9px] text-neutral-300 group-hover:text-black transition-colors select-none">+</span>
-                        <span className="absolute bottom-2 end-2 font-mono text-[9px] text-neutral-300 group-hover:text-black transition-colors select-none">+</span>
+                        <span className="absolute top-2.5 start-2.5 font-mono text-[9px] text-neutral-300 group-hover:text-black transition-colors select-none">+</span>
+                        <span className="absolute top-2.5 end-2.5 font-mono text-[9px] text-neutral-300 group-hover:text-black transition-colors select-none">+</span>
+                        <span className="absolute bottom-2.5 start-2.5 font-mono text-[9px] text-neutral-300 group-hover:text-black transition-colors select-none">+</span>
+                        <span className="absolute bottom-2.5 end-2.5 font-mono text-[9px] text-neutral-300 group-hover:text-black transition-colors select-none">+</span>
 
                         {/* Period, Docket Ref & Location Row */}
                         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-neutral-150 pb-3">
@@ -261,7 +261,7 @@ export default function ExperienceSection({ profile }: ExperienceSectionProps) {
 
                             {/* Active Practice Status Badge */}
                             {current && (
-                              <span className="inline-flex items-center gap-1.5 px-2 py-0.5 bg-emerald-50 border border-emerald-300/80 text-emerald-800 text-[9px] font-mono font-bold uppercase tracking-wider">
+                              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-emerald-50 border border-emerald-300/80 text-emerald-800 text-[9px] font-mono font-bold uppercase tracking-wider rounded-full">
                                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
                                 <span>Active Appointment</span>
                               </span>
@@ -302,7 +302,7 @@ export default function ExperienceSection({ profile }: ExperienceSectionProps) {
                             {skillsList.map((skill: string, sIdx: number) => (
                               <span
                                 key={sIdx}
-                                className="text-[10px] sm:text-[11px] font-technical uppercase tracking-wider px-2.5 py-1 bg-[#faf9f6] border border-neutral-200 text-neutral-800 hover:border-black transition-colors"
+                                className="text-[10px] sm:text-[11px] font-technical uppercase tracking-wider px-3 py-1 bg-[#faf9f6] border border-neutral-200 text-neutral-800 hover:border-black transition-colors rounded-full"
                               >
                                 {skill}
                               </span>
@@ -324,12 +324,12 @@ export default function ExperienceSection({ profile }: ExperienceSectionProps) {
             }`}
           >
             {/* Academic Credentials Box */}
-            <div className="relative bg-white border border-neutral-300 p-6 sm:p-8 2xl:p-10 space-y-6 shadow-2xs hover:border-black transition-all duration-300">
+            <div className="relative bg-white border border-neutral-300 p-6 sm:p-8 2xl:p-10 space-y-6 shadow-2xs hover:border-black transition-all duration-300 rounded-2xl">
               {/* Corner crosshairs */}
-              <span className="absolute top-2 start-2 font-mono text-[9px] text-neutral-300 select-none">+</span>
-              <span className="absolute top-2 end-2 font-mono text-[9px] text-neutral-300 select-none">+</span>
-              <span className="absolute bottom-2 start-2 font-mono text-[9px] text-neutral-300 select-none">+</span>
-              <span className="absolute bottom-2 end-2 font-mono text-[9px] text-neutral-300 select-none">+</span>
+              <span className="absolute top-2.5 start-2.5 font-mono text-[9px] text-neutral-300 select-none">+</span>
+              <span className="absolute top-2.5 end-2.5 font-mono text-[9px] text-neutral-300 select-none">+</span>
+              <span className="absolute bottom-2.5 start-2.5 font-mono text-[9px] text-neutral-300 select-none">+</span>
+              <span className="absolute bottom-2.5 end-2.5 font-mono text-[9px] text-neutral-300 select-none">+</span>
 
               <div className="flex items-center justify-between pb-3.5 border-b border-black">
                 <div className="flex items-center gap-2.5">
@@ -338,14 +338,14 @@ export default function ExperienceSection({ profile }: ExperienceSectionProps) {
                     04.2 • Academic Credentials
                   </h3>
                 </div>
-                <span className="text-[10px] font-mono text-neutral-700 bg-neutral-100 px-2.5 py-0.5 border border-neutral-200 font-semibold">
+                <span className="text-[10px] font-mono text-neutral-700 bg-neutral-100 px-3 py-0.5 border border-neutral-200 font-semibold rounded-full">
                   {education.length} ACCREDITED
                 </span>
               </div>
 
               {/* Case: Empty State for Education */}
               {education.length === 0 ? (
-                <div className="p-6 bg-neutral-50 border border-dashed border-neutral-200 text-center space-y-2">
+                <div className="p-6 bg-neutral-50 border border-dashed border-neutral-200 text-center space-y-2 rounded-xl">
                   <GraduationCap className="w-6 h-6 text-neutral-400 mx-auto" />
                   <p className="text-xs text-neutral-600 font-sans">
                     Academic degrees are archived in the studio registry. Faculty of Fine Arts &amp; Architectural Engineering.
@@ -366,7 +366,7 @@ export default function ExperienceSection({ profile }: ExperienceSectionProps) {
                       >
                         <div className="flex items-center justify-between text-[10px] sm:text-[11px] 2xl:text-xs font-technical text-neutral-500">
                           <span className="font-mono font-bold text-black flex items-center gap-1.5">
-                            <span className="w-1.5 h-1.5 bg-neutral-700 inline-block" />
+                            <span className="w-1.5 h-1.5 bg-neutral-700 inline-block rounded-full" />
                             <span>{year}</span>
                           </span>
                           <Award className="w-3.5 h-3.5 text-neutral-700 shrink-0" />
@@ -395,30 +395,30 @@ export default function ExperienceSection({ profile }: ExperienceSectionProps) {
               )}
 
               {/* Verified Credentials Seal */}
-              <div className="p-3.5 bg-[#faf9f6] border border-neutral-200 flex items-center justify-between gap-3 text-[10px] sm:text-[11px] font-mono text-neutral-700">
+              <div className="p-3.5 bg-[#faf9f6] border border-neutral-200 flex items-center justify-between gap-3 text-[10px] sm:text-[11px] font-mono text-neutral-700 rounded-xl">
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
                   <span>ACCREDITED ARCHITECTURAL DEGREE</span>
                 </div>
-                <span className="text-[9px] uppercase tracking-widest text-neutral-500 font-bold shrink-0">
+                <span className="text-[9px] uppercase tracking-widest text-neutral-500 font-bold shrink-0 px-2 py-0.5 rounded-full bg-neutral-200/60">
                   HONORS
                 </span>
               </div>
             </div>
 
             {/* Design Ethos & Direct Inbound Consultation Card */}
-            <div className="relative bg-white border border-neutral-300 p-6 sm:p-8 2xl:p-10 space-y-4 shadow-2xs hover:border-black transition-all duration-300">
+            <div className="relative bg-white border border-neutral-300 p-6 sm:p-8 2xl:p-10 space-y-4 shadow-2xs hover:border-black transition-all duration-300 rounded-2xl">
               {/* Corner crosshairs */}
-              <span className="absolute top-2 start-2 font-mono text-[9px] text-neutral-300 select-none">+</span>
-              <span className="absolute top-2 end-2 font-mono text-[9px] text-neutral-300 select-none">+</span>
-              <span className="absolute bottom-2 start-2 font-mono text-[9px] text-neutral-300 select-none">+</span>
-              <span className="absolute bottom-2 end-2 font-mono text-[9px] text-neutral-300 select-none">+</span>
+              <span className="absolute top-2.5 start-2.5 font-mono text-[9px] text-neutral-300 select-none">+</span>
+              <span className="absolute top-2.5 end-2.5 font-mono text-[9px] text-neutral-300 select-none">+</span>
+              <span className="absolute bottom-2.5 start-2.5 font-mono text-[9px] text-neutral-300 select-none">+</span>
+              <span className="absolute bottom-2.5 end-2.5 font-mono text-[9px] text-neutral-300 select-none">+</span>
 
               <div className="flex items-center justify-between pb-3 border-b border-neutral-150">
                 <span className="text-[9px] sm:text-[10px] 2xl:text-xs font-technical uppercase tracking-[0.2em] text-neutral-500 font-semibold">
                   04.3 • Architectural Ethos
                 </span>
-                <span className="text-[9px] font-mono text-emerald-800 bg-emerald-50 px-2 py-0.5 border border-emerald-300 font-semibold uppercase">
+                <span className="text-[9px] font-mono text-emerald-800 bg-emerald-50 px-2.5 py-0.5 border border-emerald-300 font-semibold uppercase rounded-full">
                   ENG. {name.toUpperCase()}
                 </span>
               </div>
@@ -437,7 +437,7 @@ export default function ExperienceSection({ profile }: ExperienceSectionProps) {
                   )}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="px-4 py-3 bg-black hover:bg-neutral-800 text-white text-xs font-technical uppercase tracking-widest flex items-center justify-center gap-2 transition-all active:scale-98 shadow-xs rounded-xs focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 focus-visible:outline-none min-h-[44px]"
+                  className="px-5 py-3 bg-black hover:bg-neutral-800 text-white text-xs font-technical uppercase tracking-widest flex items-center justify-center gap-2 transition-all active:scale-98 shadow-xs rounded-full focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 focus-visible:outline-none min-h-[44px]"
                 >
                   <MessageCircle className="w-3.5 h-3.5 text-emerald-400" aria-hidden="true" />
                   <span>Book Consultation</span>
@@ -447,7 +447,7 @@ export default function ExperienceSection({ profile }: ExperienceSectionProps) {
                   href="/api/cv-pdf"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-1.5 text-black hover:text-neutral-600 uppercase tracking-wider font-technical font-semibold text-[11px] sm:text-xs py-2.5 px-3 transition-colors focus-visible:ring-2 focus-visible:ring-black focus-visible:outline-none rounded-xs min-h-[44px]"
+                  className="inline-flex items-center justify-center gap-1.5 text-black hover:text-neutral-600 uppercase tracking-wider font-technical font-semibold text-[11px] sm:text-xs py-2.5 px-4 transition-colors focus-visible:ring-2 focus-visible:ring-black focus-visible:outline-none rounded-full min-h-[44px] border border-neutral-200 hover:border-black"
                 >
                   <FileDown className="w-3.5 h-3.5 text-neutral-600" aria-hidden="true" />
                   <span>Curriculum Vitae (PDF)</span>

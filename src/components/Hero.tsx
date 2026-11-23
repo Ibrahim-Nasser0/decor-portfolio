@@ -227,7 +227,7 @@ export default function Hero({ profile, projectsCount = 5 }: HeroProps) {
               <div className="absolute -inset-6 bg-gradient-to-tr from-amber-500/10 via-neutral-900/5 to-transparent rounded-3xl blur-2xl pointer-events-none -z-20 animate-aura-breathe" />
 
               {/* Outer architectural guide frame with Drafting Corner Marks (+) */}
-              <div className="absolute -inset-2.5 sm:-inset-4 2xl:-inset-5 border border-neutral-300 -z-10 pointer-events-none transition-all duration-700">
+              <div className="absolute -inset-2.5 sm:-inset-4 2xl:-inset-5 border border-neutral-300 rounded-2xl -z-10 pointer-events-none transition-all duration-700">
                 <span className="absolute -top-1.5 -left-1.5 font-mono text-[9px] text-neutral-400 leading-none select-none transition-transform group-hover:rotate-90">+</span>
                 <span className="absolute -top-1.5 -right-1.5 font-mono text-[9px] text-neutral-400 leading-none select-none transition-transform group-hover:rotate-90">+</span>
                 <span className="absolute -bottom-1.5 -left-1.5 font-mono text-[9px] text-neutral-400 leading-none select-none transition-transform group-hover:rotate-90">+</span>
@@ -235,7 +235,7 @@ export default function Hero({ profile, projectsCount = 5 }: HeroProps) {
               </div>
 
               {/* Main Portrait Frame with Atmospheric Depth */}
-              <div className="relative aspect-[3/4] w-full overflow-hidden bg-neutral-100 border border-neutral-300 shadow-xl group">
+              <div className="relative aspect-[3/4] w-full overflow-hidden bg-neutral-100 border border-neutral-300 shadow-xl group rounded-2xl">
                 <Image
                   src={heroImageUrl}
                   alt={`Eng. ${name} - ${title}`}
@@ -249,7 +249,7 @@ export default function Hero({ profile, projectsCount = 5 }: HeroProps) {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/15 to-transparent opacity-80 pointer-events-none transition-opacity duration-500 group-hover:opacity-65" />
 
                 {/* Bottom Architectural Caption Strip */}
-                <div className="absolute bottom-3 sm:bottom-4 2xl:bottom-5 start-3 sm:start-4 2xl:start-5 end-3 sm:end-4 2xl:end-5 flex items-center justify-between text-white text-[9px] sm:text-[10px] 2xl:text-xs font-technical uppercase tracking-wider backdrop-blur-md bg-black/60 px-3 sm:px-3.5 py-2 border border-white/20 transition-all duration-300 group-hover:border-white/40">
+                <div className="absolute bottom-3 sm:bottom-4 2xl:bottom-5 start-3 sm:start-4 2xl:start-5 end-3 sm:end-4 2xl:end-5 flex items-center justify-between text-white text-[9px] sm:text-[10px] 2xl:text-xs font-technical uppercase tracking-wider backdrop-blur-md bg-black/60 px-3.5 sm:px-4 py-2 border border-white/20 transition-all duration-300 group-hover:border-white/40 rounded-xl">
                   <span className="font-bold tracking-[0.16em] truncate">
                     ENG. {name.toUpperCase()}
                   </span>
@@ -261,8 +261,8 @@ export default function Hero({ profile, projectsCount = 5 }: HeroProps) {
               </div>
 
               {/* Refined Architectural Studio Seal (Minimalist Floating Seal with Dynamic Initials) */}
-              <div className="absolute -bottom-3 -start-2 sm:-bottom-4 sm:-start-3 2xl:-bottom-5 2xl:-start-4 bg-white border border-neutral-300 px-3 py-2 sm:px-3.5 sm:py-2.5 shadow-lg flex items-center gap-2.5 sm:gap-3 animate-float-muted z-10 rounded-xs">
-                <div className="w-7 h-7 sm:w-8 sm:h-8 bg-black text-white flex items-center justify-center font-technical font-bold text-[10px] sm:text-xs tracking-tight shrink-0 shadow-inner">
+              <div className="absolute -bottom-3 -start-2 sm:-bottom-4 sm:-start-3 2xl:-bottom-5 2xl:-start-4 bg-white border border-neutral-300 px-3.5 py-2.5 sm:px-4 sm:py-3 shadow-lg flex items-center gap-2.5 sm:gap-3 animate-float-muted z-10 rounded-xl">
+                <div className="w-7 h-7 sm:w-8 sm:h-8 bg-black text-white flex items-center justify-center font-technical font-bold text-[10px] sm:text-xs tracking-tight shrink-0 shadow-inner rounded-lg">
                   {initials}
                 </div>
                 <div className="text-[9px] sm:text-[10px] 2xl:text-xs font-technical uppercase leading-tight tracking-[0.12em]">
@@ -274,7 +274,7 @@ export default function Hero({ profile, projectsCount = 5 }: HeroProps) {
               </div>
 
               {/* Tactile Architectural Material Palette Chips */}
-              <div className="mt-4 p-2 sm:p-2.5 bg-white/95 backdrop-blur-md border border-neutral-300 shadow-xs flex items-center justify-between gap-2 text-[9px] font-technical uppercase">
+              <div className="mt-4 p-2.5 sm:p-3 bg-white/95 backdrop-blur-md border border-neutral-300 shadow-xs flex items-center justify-between gap-2 text-[9px] font-technical uppercase rounded-xl">
                 <span className="font-mono text-[8px] text-neutral-400 tracking-wider">PALETTE //</span>
                 <div className="flex items-center gap-2">
                   <div className="group/chip relative flex items-center gap-1.5 cursor-pointer">
@@ -399,7 +399,7 @@ export default function Hero({ profile, projectsCount = 5 }: HeroProps) {
             <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 animate-hero-entrance [animation-delay:900ms]">
               <a
                 href="#projects"
-                className="group relative overflow-hidden w-full sm:w-auto px-6 sm:px-8 py-3.5 sm:py-4 bg-black hover:bg-neutral-900 text-white text-xs uppercase tracking-widest font-technical font-medium transition-all duration-300 flex items-center justify-center gap-2.5 shadow-md active:scale-[0.98] rounded-xs focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 focus-visible:outline-none min-h-[44px]"
+                className="group relative overflow-hidden w-full sm:w-auto px-7 sm:px-9 py-3.5 sm:py-4 bg-black hover:bg-neutral-900 text-white text-xs uppercase tracking-widest font-technical font-medium transition-all duration-300 flex items-center justify-center gap-2.5 shadow-md active:scale-[0.98] rounded-full focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 focus-visible:outline-none min-h-[44px]"
               >
                 {/* Subtle Luxury Glass Shimmer Sweep */}
                 <span className="absolute inset-0 w-1/2 h-full bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none animate-shimmer-sweep" aria-hidden="true" />
@@ -410,7 +410,7 @@ export default function Hero({ profile, projectsCount = 5 }: HeroProps) {
 
               <a
                 href="#about"
-                className="w-full sm:w-auto px-6 sm:px-8 py-3.5 sm:py-4 border border-neutral-300 hover:border-black text-black hover:bg-black hover:text-white text-xs uppercase tracking-widest font-technical font-medium transition-all duration-300 text-center justify-center flex items-center active:scale-[0.98] rounded-xs shadow-2xs focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 focus-visible:outline-none min-h-[44px]"
+                className="w-full sm:w-auto px-7 sm:px-9 py-3.5 sm:py-4 border border-neutral-300 hover:border-black text-black hover:bg-black hover:text-white text-xs uppercase tracking-widest font-technical font-medium transition-all duration-300 text-center justify-center flex items-center active:scale-[0.98] rounded-full shadow-2xs focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 focus-visible:outline-none min-h-[44px]"
               >
                 About &amp; Philosophy
               </a>
@@ -423,7 +423,7 @@ export default function Hero({ profile, projectsCount = 5 }: HeroProps) {
       <div className="max-w-7xl 2xl:max-w-[1536px] w-full mx-auto px-4 sm:px-6 lg:px-8 2xl:px-12 flex justify-center pt-2 animate-hero-entrance [animation-delay:1000ms]">
         <a
           href="#about"
-          className="group inline-flex items-center gap-2 text-[9px] sm:text-[10px] font-technical uppercase tracking-[0.25em] text-neutral-400 hover:text-black transition-colors py-2 focus-visible:ring-2 focus-visible:ring-black focus-visible:outline-none rounded-xs"
+          className="group inline-flex items-center gap-2 text-[9px] sm:text-[10px] font-technical uppercase tracking-[0.25em] text-neutral-400 hover:text-black transition-colors py-2 px-4 focus-visible:ring-2 focus-visible:ring-black focus-visible:outline-none rounded-full"
         >
           <span>Scroll to explore</span>
           <ArrowDown className="w-3.5 h-3.5 group-hover:translate-y-1 transition-transform duration-300 text-neutral-500 group-hover:text-black" aria-hidden="true" />

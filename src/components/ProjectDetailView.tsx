@@ -254,7 +254,7 @@ export default function ProjectDetailView({
             <div className="flex items-center gap-1.5 sm:gap-3 shrink-0 min-w-0">
               <Link
                 href="/#projects"
-                className="group inline-flex items-center gap-1 px-2 sm:px-3 py-1.5 border border-neutral-200 hover:border-black bg-neutral-50/80 hover:bg-black hover:text-white text-[10px] sm:text-xs font-technical uppercase tracking-wider text-neutral-700 transition-all duration-200 shrink-0 active:scale-95 shadow-2xs rounded-xs"
+                className="group inline-flex items-center gap-1 px-3 py-1.5 border border-neutral-200 hover:border-black bg-neutral-50/80 hover:bg-black hover:text-white text-[10px] sm:text-xs font-technical uppercase tracking-wider text-neutral-700 transition-all duration-200 shrink-0 active:scale-95 shadow-2xs rounded-full"
                 title="Return to Works Index"
               >
                 <ArrowLeft className="w-3.5 h-3.5 transition-transform duration-200 group-hover:-translate-x-1" />
@@ -346,7 +346,7 @@ export default function ProjectDetailView({
               <button
                 type="button"
                 onClick={handleCopyLink}
-                className="px-2 sm:px-3 py-1.5 sm:py-2 border border-neutral-300 hover:border-black rounded-sm text-neutral-700 hover:text-black text-[10px] sm:text-[11px] font-technical uppercase tracking-wider transition-all duration-200 flex items-center gap-1.5 active:scale-95 cursor-pointer bg-neutral-50 hover:bg-white shadow-2xs"
+                className="px-3 py-1.5 sm:py-2 border border-neutral-300 hover:border-black rounded-full text-neutral-700 hover:text-black text-[10px] sm:text-[11px] font-technical uppercase tracking-wider transition-all duration-200 flex items-center gap-1.5 active:scale-95 cursor-pointer bg-neutral-50 hover:bg-white shadow-2xs"
                 title="Share Monograph Link"
               >
                 {copiedLink ? (
@@ -370,7 +370,7 @@ export default function ProjectDetailView({
                 <button
                   type="button"
                   onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                  className="p-1.5 sm:p-2 border border-black/10 hover:border-black text-black transition-colors rounded-xs active:scale-95"
+                  className="p-2 border border-black/10 hover:border-black text-black transition-colors rounded-full active:scale-95"
                   aria-label={mobileMenuOpen ? "Close section navigation" : "Open section navigation"}
                 >
                   {mobileMenuOpen ? <X className="w-4 h-4 sm:w-5 sm:h-5" /> : <Menu className="w-4 h-4 sm:w-5 sm:h-5" />}
@@ -425,7 +425,7 @@ export default function ProjectDetailView({
             </div>
 
             {/* Atmosphere Audio Sound Controller in Mobile Drawer */}
-            <div className="p-3 bg-neutral-50 border border-neutral-200/90 rounded-sm flex items-center justify-between">
+            <div className="p-4 bg-neutral-50 border border-neutral-200/90 rounded-2xl flex items-center justify-between">
               <div className="flex items-center gap-2.5">
                 <div className="w-7 h-7 rounded-full bg-black text-white flex items-center justify-center shrink-0">
                   <Music className="w-3.5 h-3.5" />
@@ -482,10 +482,10 @@ export default function ProjectDetailView({
           {/* Top Breadcrumb & Attribution Pill Row */}
           <div className="flex flex-wrap items-center justify-between gap-3 text-[10px] sm:text-xs font-technical uppercase tracking-wider text-neutral-500">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="font-bold text-black bg-neutral-100 px-2.5 py-1 border border-neutral-300 tracking-[0.2em]">
+              <span className="font-bold text-black bg-neutral-100 px-3 py-1 border border-neutral-300 tracking-[0.2em] rounded-full">
                 ARCHITECTURAL CASE STUDY
               </span>
-              <span className="px-2.5 py-1 border border-neutral-300 text-neutral-700 font-semibold tracking-wider">
+              <span className="px-3 py-1 border border-neutral-300 text-neutral-700 font-semibold tracking-wider rounded-full">
                 {project.categoryLabelEn || project.category}
               </span>
               <span className="text-neutral-400 font-mono hidden sm:inline">
@@ -494,7 +494,7 @@ export default function ProjectDetailView({
             </div>
 
             {/* Practice / Firm Badge */}
-            <div className="flex items-center gap-1.5 px-2.5 py-1 bg-black text-white font-mono text-[9px] sm:text-[10px] uppercase tracking-wider shadow-xs">
+            <div className="flex items-center gap-1.5 px-3 py-1 bg-black text-white font-mono text-[9px] sm:text-[10px] uppercase tracking-wider shadow-xs rounded-full">
               <Building2 className="w-3 h-3 text-[#7AD1B8]" />
               <span>{project.firmEn || project.specs?.firmEn || "Alaa Essa Studio"}</span>
             </div>
@@ -511,7 +511,7 @@ export default function ProjectDetailView({
                 href={`https://wa.me/${whatsappNumber}?text=${whatsappMessage}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group px-5 py-3 bg-black hover:bg-neutral-800 text-white text-xs font-technical uppercase tracking-widest font-medium transition-all duration-200 flex items-center justify-center gap-2 shadow-xs active:scale-98"
+                className="group px-6 py-3.5 bg-black hover:bg-neutral-800 text-white text-xs font-technical uppercase tracking-widest font-medium transition-all duration-200 flex items-center justify-center gap-2 shadow-xs active:scale-98 rounded-full min-h-[44px]"
               >
                 <MessageCircle className="w-3.5 h-3.5 text-[#7AD1B8]" />
                 <span>Discuss Similar Space</span>
@@ -521,7 +521,7 @@ export default function ProjectDetailView({
           </div>
 
           {/* 6-Metric Responsive Drafting Grid Strip */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4 p-4 sm:p-5 bg-neutral-50 border border-neutral-300 text-xs font-technical shadow-xs">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4 p-4 sm:p-5 bg-neutral-50 border border-neutral-300 text-xs font-technical shadow-xs rounded-2xl">
             {/* 1. Location */}
             <div className="space-y-1">
               <span className="text-[9px] sm:text-[10px] text-neutral-400 uppercase tracking-widest block truncate">Location</span>
@@ -636,13 +636,13 @@ export default function ProjectDetailView({
                     />
 
                     {/* Top-Right Fullscreen Zoom Pill */}
-                    <div className="absolute top-3 end-3 px-2.5 py-1.5 bg-black/70 hover:bg-black text-white text-[10px] font-technical uppercase tracking-wider flex items-center gap-1.5 backdrop-blur-xs transition-colors shadow-xs">
+                    <div className="absolute top-3 end-3 px-3 py-1.5 bg-black/70 hover:bg-black text-white text-[10px] font-technical uppercase tracking-wider flex items-center gap-1.5 backdrop-blur-xs transition-colors shadow-xs rounded-full">
                       <Maximize2 className="w-3 h-3 text-[#7AD1B8]" />
                       <span>Zoom Perspective</span>
                     </div>
 
                     {/* Bottom Caption Overlay */}
-                    <div className="absolute bottom-3 sm:bottom-4 start-3 sm:start-4 px-2.5 sm:px-3 py-1 sm:py-1.5 bg-white/95 text-[10px] sm:text-[11px] font-editorial uppercase tracking-wider sm:tracking-widest text-black shadow-xs border border-black/10">
+                    <div className="absolute bottom-3 sm:bottom-4 start-3 sm:start-4 px-3 sm:px-3.5 py-1.5 bg-white/95 text-[10px] sm:text-[11px] font-editorial uppercase tracking-wider sm:tracking-widest text-black shadow-xs border border-black/10 rounded-xl">
                       {angles[selectedAngleIdx]?.titleEn || "PERSPECTIVE VIEW"}
                     </div>
                   </div>
@@ -654,7 +654,7 @@ export default function ProjectDetailView({
                         <button
                           key={idx}
                           onClick={() => setSelectedAngleIdx(idx)}
-                          className={`relative aspect-[4/3] border overflow-hidden transition-all cursor-pointer ${
+                          className={`relative aspect-[4/3] border overflow-hidden transition-all cursor-pointer rounded-xl ${
                             selectedAngleIdx === idx
                               ? "border-black ring-2 ring-black"
                               : "border-neutral-200 opacity-60 hover:opacity-100"
@@ -679,7 +679,7 @@ export default function ProjectDetailView({
                     onMouseMove={handleSliderMove}
                     onTouchMove={handleTouchMove}
                     onTouchStart={handleTouchMove}
-                    className="relative aspect-[16/11] sm:aspect-[4/3] w-full overflow-hidden border border-neutral-300 select-none cursor-ew-resize bg-neutral-100 shadow-sm touch-none"
+                    className="relative aspect-[16/11] sm:aspect-[4/3] w-full overflow-hidden border border-neutral-300 select-none cursor-ew-resize bg-neutral-100 shadow-sm touch-none rounded-2xl"
                   >
                     {/* After Image (Background) */}
                     <Image
@@ -689,7 +689,7 @@ export default function ProjectDetailView({
                       sizes="(max-width: 768px) 100vw, 55vw"
                       className="object-cover pointer-events-none"
                     />
-                    <div className="absolute top-3 end-3 px-2 py-0.5 sm:py-1 bg-black text-white text-[9px] sm:text-[10px] font-technical uppercase tracking-wider">
+                    <div className="absolute top-3 end-3 px-3 py-1 bg-black text-white text-[9px] sm:text-[10px] font-technical uppercase tracking-wider rounded-full shadow-xs">
                       After: Photorealistic Execution
                     </div>
 
@@ -705,7 +705,7 @@ export default function ProjectDetailView({
                         sizes="(max-width: 768px) 100vw, 55vw"
                         className="object-cover pointer-events-none"
                       />
-                      <div className="absolute top-3 start-3 px-2 py-0.5 sm:py-1 bg-white text-black text-[9px] sm:text-[10px] font-technical uppercase tracking-wider border border-black/20">
+                      <div className="absolute top-3 start-3 px-3 py-1 bg-white text-black text-[9px] sm:text-[10px] font-technical uppercase tracking-wider border border-black/20 rounded-full shadow-xs">
                         Before: Spatial Conception
                       </div>
                     </div>
@@ -927,9 +927,9 @@ export default function ProjectDetailView({
             {/* Previous Project Card */}
             <Link
               href={`/projects/${prevProject.id}`}
-              className="p-4 sm:p-5 border border-neutral-200 hover:border-black transition-all flex items-center gap-4 group bg-neutral-50/50 hover:bg-white shadow-2xs hover:shadow-xs active:scale-98"
+              className="p-4 sm:p-5 border border-neutral-200 hover:border-black transition-all flex items-center gap-4 group bg-neutral-50/50 hover:bg-white shadow-2xs hover:shadow-xs active:scale-98 rounded-2xl"
             >
-              <div className="relative w-16 h-12 sm:w-20 sm:h-14 rounded-xs overflow-hidden border border-neutral-300 shrink-0">
+              <div className="relative w-16 h-12 sm:w-20 sm:h-14 rounded-xl overflow-hidden border border-neutral-300 shrink-0">
                 <Image
                   src={prevProject.coverImage || "/images/alaa.webp"}
                   alt={prevProject.titleEn || prevProject.title || "Previous Architectural Project"}
@@ -955,7 +955,7 @@ export default function ProjectDetailView({
             {/* Next Project Card */}
             <Link
               href={`/projects/${nextProject.id}`}
-              className="p-4 sm:p-5 border border-neutral-200 hover:border-black transition-all flex items-center justify-between gap-4 group bg-neutral-50/50 hover:bg-white text-right shadow-2xs hover:shadow-xs active:scale-98"
+              className="p-4 sm:p-5 border border-neutral-200 hover:border-black transition-all flex items-center justify-between gap-4 group bg-neutral-50/50 hover:bg-white text-right shadow-2xs hover:shadow-xs active:scale-98 rounded-2xl"
             >
               <div className="min-w-0 flex-1">
                 <div className="flex items-center justify-end gap-1.5 text-[9px] sm:text-[10px] font-technical uppercase tracking-widest text-neutral-400 mb-0.5">
@@ -969,7 +969,7 @@ export default function ProjectDetailView({
                   {nextProject.categoryLabelEn || nextProject.category} {nextProject.area ? `• ${nextProject.area}` : ""}
                 </span>
               </div>
-              <div className="relative w-16 h-12 sm:w-20 sm:h-14 rounded-xs overflow-hidden border border-neutral-300 shrink-0">
+              <div className="relative w-16 h-12 sm:w-20 sm:h-14 rounded-xl overflow-hidden border border-neutral-300 shrink-0">
                 <Image
                   src={nextProject.coverImage || "/images/alaa.webp"}
                   alt={nextProject.titleEn || nextProject.title || "Next Architectural Project"}
@@ -983,7 +983,7 @@ export default function ProjectDetailView({
         )}
 
         {/* Consultation Callout Banner */}
-        <div className="p-6 sm:p-10 md:p-12 bg-neutral-900 text-white flex flex-col md:flex-row md:items-center justify-between gap-6 sm:gap-8">
+        <div className="p-6 sm:p-10 md:p-12 bg-neutral-900 text-white flex flex-col md:flex-row md:items-center justify-between gap-6 sm:gap-8 rounded-3xl">
           <div className="space-y-2 max-w-xl">
             <span className="text-[9px] sm:text-[10px] font-technical uppercase tracking-widest text-neutral-400">
               COMMISSION AN ARCHITECTURAL SPACE
@@ -1001,7 +1001,7 @@ export default function ProjectDetailView({
               href={`https://wa.me/${whatsappNumber}?text=${whatsappMessage}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full sm:w-auto px-6 py-3.5 bg-white text-black hover:bg-neutral-100 text-xs font-technical uppercase tracking-widest font-bold transition-all active:scale-95 flex items-center justify-center gap-2"
+              className="w-full sm:w-auto px-6 py-3.5 bg-white text-black hover:bg-neutral-100 text-xs font-technical uppercase tracking-widest font-bold transition-all active:scale-95 flex items-center justify-center gap-2 rounded-full min-h-[44px]"
             >
               <MessageCircle className="w-4 h-4 text-emerald-600" />
               <span>WhatsApp Direct</span>
@@ -1009,7 +1009,7 @@ export default function ProjectDetailView({
 
             <Link
               href="/#contact"
-              className="w-full sm:w-auto px-6 py-3.5 border border-white/30 hover:border-white text-white text-xs font-technical uppercase tracking-widest font-medium transition-all active:scale-95 text-center justify-center flex items-center"
+              className="w-full sm:w-auto px-6 py-3.5 border border-white/30 hover:border-white text-white text-xs font-technical uppercase tracking-widest font-medium transition-all active:scale-95 text-center justify-center flex items-center rounded-full min-h-[44px]"
             >
               Inquiry Form
             </Link>

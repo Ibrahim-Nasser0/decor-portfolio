@@ -96,15 +96,23 @@ Uniform chapter tracking throughout the entire document:
 * `06 • DIRECT INQUIRIES & COMMISSIONS`
 
 ### 4. Floating Luxury Capsule Navbar
-A floating frosted glass dock (`rounded-full bg-white/90 backdrop-blur-xl border border-neutral-300/80`) with:
+A floating frosted glass dock (`rounded-full bg-white/80 backdrop-blur-2xl border border-black/[0.08] shadow-[0_8px_30px_rgb(0,0,0,0.06)]`) with:
 * Real-time Cairo studio clock (`CAIRO CLT • UTC+2`).
 * Live pulsing availability beacon (`#7AD1B8`).
 * Integrated ambient atmosphere audio controller with 4-bar equalizer.
 * Direct consultation CTA button (`Inquire ↗`).
 
+### 5. Unified Rounded Luxury Geometry
+To ensure visual harmony and tactile cohesion across all components (avoiding rigid 90° boxiness):
+* **Primary Cards & Bento Dockets:** `rounded-2xl` (smooth, modern curvature).
+* **Architectural Frames & Project Cards:** `rounded-2xl overflow-hidden`.
+* **Action Buttons, Filter Pills & Badges:** `rounded-full` (ergonomic pill design).
+* **Form Inputs, Textareas & Dropdown Panels:** `rounded-xl` (clean, rounded field ergonomics).
+* **Avatars & Material Palette Swatches:** `rounded-full` with micro-borders.
+
 ---
 
-## 5. Web Interface Guidelines & Accessibility Standards
+## 6. Web Interface Guidelines & Accessibility Standards
 
 The interface strictly complies with modern **Web Interface Guidelines** (Vercel Core A11y Standards):
 

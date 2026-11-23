@@ -192,7 +192,7 @@ export default function SkillsSection({ profile }: SkillsSectionProps) {
           {/* Dynamic 3ds Max / Corona / Photorealism Engine               */}
           {/* ------------------------------------------------------------ */}
           <div
-            className={`lg:col-span-8 bg-neutral-950 text-white border border-neutral-900 p-6 sm:p-8 2xl:p-10 flex flex-col justify-between relative overflow-hidden group shadow-md hover:border-neutral-700 hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-500 ${
+            className={`lg:col-span-8 bg-neutral-950 text-white border border-neutral-900 p-6 sm:p-8 2xl:p-10 flex flex-col justify-between relative overflow-hidden group shadow-md hover:border-neutral-700 hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-500 rounded-3xl ${
               isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
             }`}
           >
@@ -305,7 +305,7 @@ export default function SkillsSection({ profile }: SkillsSectionProps) {
           {/* ------------------------------------------------------------ */}
           <div
             style={{ transitionDelay: "100ms" }}
-            className={`lg:col-span-4 bg-white border border-neutral-300 hover:border-black p-6 sm:p-7 2xl:p-8 flex flex-col justify-between shadow-xs hover:shadow-xl hover:-translate-y-1.5 transition-all duration-500 group relative overflow-hidden ${
+            className={`lg:col-span-4 bg-white border border-neutral-300 hover:border-black p-6 sm:p-7 2xl:p-8 flex flex-col justify-between shadow-xs hover:shadow-xl hover:-translate-y-1.5 transition-all duration-500 group relative overflow-hidden rounded-3xl ${
               isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
             }`}
           >
@@ -395,7 +395,7 @@ export default function SkillsSection({ profile }: SkillsSectionProps) {
           {/* ------------------------------------------------------------ */}
           <div
             style={{ transitionDelay: "150ms" }}
-            className={`lg:col-span-4 bg-white border border-neutral-300 hover:border-black p-6 sm:p-7 2xl:p-8 flex flex-col justify-between shadow-xs hover:shadow-xl hover:-translate-y-1.5 transition-all duration-500 group relative overflow-hidden ${
+            className={`lg:col-span-4 bg-white border border-neutral-300 hover:border-black p-6 sm:p-7 2xl:p-8 flex flex-col justify-between shadow-xs hover:shadow-xl hover:-translate-y-1.5 transition-all duration-500 group relative overflow-hidden rounded-3xl ${
               isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
             }`}
           >
@@ -454,7 +454,7 @@ export default function SkillsSection({ profile }: SkillsSectionProps) {
           {/* ------------------------------------------------------------ */}
           <div
             style={{ transitionDelay: "200ms" }}
-            className={`lg:col-span-4 bg-[#F5F4F0] border border-neutral-300 hover:border-black p-6 sm:p-7 2xl:p-8 flex flex-col justify-between shadow-xs hover:shadow-xl hover:-translate-y-1.5 transition-all duration-500 group relative overflow-hidden ${
+            className={`lg:col-span-4 bg-[#F5F4F0] border border-neutral-300 hover:border-black p-6 sm:p-7 2xl:p-8 flex flex-col justify-between shadow-xs hover:shadow-xl hover:-translate-y-1.5 transition-all duration-500 group relative overflow-hidden rounded-3xl ${
               isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
             }`}
           >
@@ -466,7 +466,7 @@ export default function SkillsSection({ profile }: SkillsSectionProps) {
                     Academic Heritage
                   </span>
                 </div>
-                <span className="px-2 py-0.5 bg-black text-white font-mono text-[9px] tracking-widest uppercase">
+                <span className="px-2.5 py-0.5 bg-black text-white font-mono text-[9px] tracking-widest uppercase rounded-full">
                   FINE ARTS
                 </span>
               </div>
@@ -513,7 +513,7 @@ export default function SkillsSection({ profile }: SkillsSectionProps) {
           {/* ------------------------------------------------------------ */}
           <div
             style={{ transitionDelay: "250ms" }}
-            className={`lg:col-span-4 bg-white border border-neutral-300 hover:border-black p-6 sm:p-7 2xl:p-8 flex flex-col justify-between shadow-xs hover:shadow-xl hover:-translate-y-1.5 transition-all duration-500 group relative overflow-hidden ${
+            className={`lg:col-span-4 bg-white border border-neutral-300 hover:border-black p-6 sm:p-7 2xl:p-8 flex flex-col justify-between shadow-xs hover:shadow-xl hover:-translate-y-1.5 transition-all duration-500 group relative overflow-hidden rounded-3xl ${
               isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
             }`}
           >
@@ -525,7 +525,7 @@ export default function SkillsSection({ profile }: SkillsSectionProps) {
                     Visual Storytelling
                   </span>
                 </div>
-                <span className="px-2 py-0.5 bg-neutral-100 border border-neutral-300 font-mono text-[9px] text-black tracking-widest uppercase font-semibold">
+                <span className="px-2.5 py-0.5 bg-neutral-100 border border-neutral-300 font-mono text-[9px] text-black tracking-widest uppercase font-semibold rounded-full">
                   {editorialTool.badge || "INDESIGN / PS"}
                 </span>
               </div>
@@ -572,7 +572,7 @@ export default function SkillsSection({ profile }: SkillsSectionProps) {
           {/* ------------------------------------------------------------ */}
           <div
             style={{ transitionDelay: "300ms" }}
-            className={`lg:col-span-12 bg-white border border-neutral-300 p-6 sm:p-7 2xl:p-9 shadow-xs hover:border-black transition-all duration-500 ${
+            className={`lg:col-span-12 bg-white border border-neutral-300 p-6 sm:p-7 2xl:p-9 shadow-xs hover:border-black transition-all duration-500 rounded-3xl ${
               isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
             }`}
           >

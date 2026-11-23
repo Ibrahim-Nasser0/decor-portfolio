@@ -168,7 +168,7 @@ export default function AboutSection({ profile }: AboutSectionProps) {
 
               {/* Outer decorative architectural outline with Drafting Crosshairs (+) */}
               <div
-                className="absolute -inset-2.5 sm:-inset-4 2xl:-inset-5 border border-neutral-300 -z-10 pointer-events-none transition-transform duration-700 ease-out"
+                className="absolute -inset-2.5 sm:-inset-4 2xl:-inset-5 border border-neutral-300 rounded-2xl -z-10 pointer-events-none transition-transform duration-700 ease-out"
                 style={{ transform: `translateY(${parallaxOffset * 0.4}px)` }}
               >
                 {/* Crosshairs */}
@@ -180,7 +180,7 @@ export default function AboutSection({ profile }: AboutSectionProps) {
 
               {/* Portrait Image Frame with Subtle Scroll Parallax */}
               <div
-                className="relative aspect-[3/4] w-full overflow-hidden bg-neutral-100 border border-neutral-300 shadow-xl group"
+                className="relative aspect-[3/4] w-full overflow-hidden bg-neutral-100 border border-neutral-300 shadow-xl group rounded-2xl"
                 style={{ transform: `translateY(${parallaxOffset * 0.25}px)` }}
               >
                 <Image
@@ -196,12 +196,12 @@ export default function AboutSection({ profile }: AboutSectionProps) {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-85 group-hover:opacity-70 transition-opacity" />
 
                 {/* Architectural Cartouche Overlay */}
-                <div className="absolute bottom-3 sm:bottom-4 2xl:bottom-5 start-3 sm:start-4 2xl:start-5 end-3 sm:end-4 2xl:end-5 text-white font-technical p-3 sm:p-3.5 2xl:p-4 backdrop-blur-md bg-black/60 border border-white/20 transition-all group-hover:border-white/40">
+                <div className="absolute bottom-3 sm:bottom-4 2xl:bottom-5 start-3 sm:start-4 2xl:start-5 end-3 sm:end-4 2xl:end-5 text-white font-technical p-3 sm:p-3.5 2xl:p-4 backdrop-blur-md bg-black/60 border border-white/20 transition-all group-hover:border-white/40 rounded-xl">
                   <div className="flex items-center justify-between gap-2 mb-1">
                     <span className="font-bold text-xs sm:text-sm 2xl:text-base font-editorial tracking-wider text-white">
                       ENG. {name.toUpperCase()}
                     </span>
-                    <span className="inline-flex items-center gap-1 text-[8px] sm:text-[9px] font-mono text-emerald-400 uppercase tracking-widest bg-emerald-950/60 px-1.5 py-0.5 border border-emerald-500/30">
+                    <span className="inline-flex items-center gap-1 text-[8px] sm:text-[9px] font-mono text-emerald-400 uppercase tracking-widest bg-emerald-950/60 px-1.5 py-0.5 border border-emerald-500/30 rounded-full">
                       <span className="w-1 h-1 rounded-full bg-emerald-400 animate-pulse" />
                       COMMISSIONS OPEN
                     </span>
@@ -214,39 +214,39 @@ export default function AboutSection({ profile }: AboutSectionProps) {
             </div>
 
             {/* Studio Materiality Library (Physical tactile specimens) */}
-            <div className="p-4 sm:p-5 bg-neutral-50/90 border border-neutral-300 space-y-3 shadow-xs">
+            <div className="p-4 sm:p-5 bg-neutral-50/90 border border-neutral-300 space-y-3 shadow-xs rounded-2xl">
               <div className="flex items-center justify-between pb-2 border-b border-neutral-200 text-[10px] sm:text-[11px] font-mono uppercase tracking-wider text-neutral-400">
                 <span className="text-black font-semibold">TACTILE MATERIALITY</span>
                 <span>SAMPLE KIT // 2026</span>
               </div>
 
               <div className="grid grid-cols-2 gap-2 text-[10px] font-technical uppercase">
-                <div className="p-2 bg-white border border-neutral-200/90 flex items-center gap-2.5 hover:border-black transition-colors group/mat">
-                  <span className="w-4 h-4 rounded-xs bg-[#E8E3D9] border border-black/15 shrink-0 shadow-2xs group-hover/mat:scale-115 transition-transform" />
+                <div className="p-2 bg-white border border-neutral-200/90 rounded-xl flex items-center gap-2.5 hover:border-black transition-colors group/mat">
+                  <span className="w-4 h-4 rounded-full bg-[#E8E3D9] border border-black/15 shrink-0 shadow-2xs group-hover/mat:scale-115 transition-transform" />
                   <div className="min-w-0">
                     <span className="font-bold text-black block truncate text-[9px] sm:text-[10px]">Travertine</span>
                     <span className="text-[8px] font-mono text-neutral-400 block">Navona • Honed</span>
                   </div>
                 </div>
 
-                <div className="p-2 bg-white border border-neutral-200/90 flex items-center gap-2.5 hover:border-black transition-colors group/mat">
-                  <span className="w-4 h-4 rounded-xs bg-[#7D6242] border border-black/15 shrink-0 shadow-2xs group-hover/mat:scale-115 transition-transform" />
+                <div className="p-2 bg-white border border-neutral-200/90 rounded-xl flex items-center gap-2.5 hover:border-black transition-colors group/mat">
+                  <span className="w-4 h-4 rounded-full bg-[#7D6242] border border-black/15 shrink-0 shadow-2xs group-hover/mat:scale-115 transition-transform" />
                   <div className="min-w-0">
                     <span className="font-bold text-black block truncate text-[9px] sm:text-[10px]">Fluted Oak</span>
                     <span className="text-[8px] font-mono text-neutral-400 block">American • 5%</span>
                   </div>
                 </div>
 
-                <div className="p-2 bg-white border border-neutral-200/90 flex items-center gap-2.5 hover:border-black transition-colors group/mat">
-                  <span className="w-4 h-4 rounded-xs bg-[#C5A059] border border-black/15 shrink-0 shadow-2xs group-hover/mat:scale-115 transition-transform" />
+                <div className="p-2 bg-white border border-neutral-200/90 rounded-xl flex items-center gap-2.5 hover:border-black transition-colors group/mat">
+                  <span className="w-4 h-4 rounded-full bg-[#C5A059] border border-black/15 shrink-0 shadow-2xs group-hover/mat:scale-115 transition-transform" />
                   <div className="min-w-0">
                     <span className="font-bold text-black block truncate text-[9px] sm:text-[10px]">Brushed Brass</span>
                     <span className="text-[8px] font-mono text-neutral-400 block">PVD • 240 Grit</span>
                   </div>
                 </div>
 
-                <div className="p-2 bg-white border border-neutral-200/90 flex items-center gap-2.5 hover:border-black transition-colors group/mat">
-                  <span className="w-4 h-4 rounded-xs bg-[#F0EDE6] border border-black/15 shrink-0 shadow-2xs group-hover/mat:scale-115 transition-transform" />
+                <div className="p-2 bg-white border border-neutral-200/90 rounded-xl flex items-center gap-2.5 hover:border-black transition-colors group/mat">
+                  <span className="w-4 h-4 rounded-full bg-[#F0EDE6] border border-black/15 shrink-0 shadow-2xs group-hover/mat:scale-115 transition-transform" />
                   <div className="min-w-0">
                     <span className="font-bold text-black block truncate text-[9px] sm:text-[10px]">Tactile Bouclé</span>
                     <span className="text-[8px] font-mono text-neutral-400 block">High-Pile • Ecru</span>
@@ -256,7 +256,7 @@ export default function AboutSection({ profile }: AboutSectionProps) {
             </div>
 
             {/* Studio Specifications & Inquiries Block (Architectural Cartouche) */}
-            <div className="p-4 sm:p-5 2xl:p-6 bg-neutral-50/90 border border-neutral-300 space-y-3.5 2xl:space-y-4 text-xs 2xl:text-sm font-technical shadow-xs">
+            <div className="p-4 sm:p-5 2xl:p-6 bg-neutral-50/90 border border-neutral-300 space-y-3.5 2xl:space-y-4 text-xs 2xl:text-sm font-technical shadow-xs rounded-2xl">
               <div className="flex items-center justify-between pb-2.5 border-b border-neutral-200 text-[10px] sm:text-[11px] font-mono uppercase tracking-wider text-neutral-400">
                 <span>STUDIO SPECIFICATIONS</span>
                 <span>ISSUE // 2026</span>
@@ -285,7 +285,7 @@ export default function AboutSection({ profile }: AboutSectionProps) {
               <div className="pt-2 grid grid-cols-2 gap-2.5">
                 <a
                   href={`mailto:${email}`}
-                  className="p-2.5 bg-white hover:bg-neutral-900 hover:text-white text-neutral-800 border border-neutral-300 hover:border-black font-technical text-[10px] sm:text-[11px] uppercase tracking-wider flex items-center justify-center gap-1.5 transition-all duration-200 active:scale-95 shadow-2xs rounded-xs focus-visible:ring-2 focus-visible:ring-black focus-visible:outline-none min-h-[44px]"
+                  className="p-2.5 bg-white hover:bg-neutral-900 hover:text-white text-neutral-800 border border-neutral-300 hover:border-black font-technical text-[10px] sm:text-[11px] uppercase tracking-wider flex items-center justify-center gap-1.5 transition-all duration-200 active:scale-95 shadow-2xs rounded-full focus-visible:ring-2 focus-visible:ring-black focus-visible:outline-none min-h-[44px]"
                   title="Direct Email Inquiry"
                 >
                   <Mail className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
@@ -296,7 +296,7 @@ export default function AboutSection({ profile }: AboutSectionProps) {
                   href={`https://wa.me/${whatsappNumber}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-2.5 bg-neutral-900 hover:bg-black text-white border border-black font-technical text-[10px] sm:text-[11px] uppercase tracking-wider flex items-center justify-center gap-1.5 transition-all duration-200 active:scale-95 shadow-2xs rounded-xs group focus-visible:ring-2 focus-visible:ring-black focus-visible:outline-none min-h-[44px]"
+                  className="p-2.5 bg-neutral-900 hover:bg-black text-white border border-black font-technical text-[10px] sm:text-[11px] uppercase tracking-wider flex items-center justify-center gap-1.5 transition-all duration-200 active:scale-95 shadow-2xs rounded-full group focus-visible:ring-2 focus-visible:ring-black focus-visible:outline-none min-h-[44px]"
                   title="Direct WhatsApp Consultation"
                 >
                   <MessageCircle className="w-3.5 h-3.5 text-emerald-400 group-hover:scale-110 transition-transform shrink-0" aria-hidden="true" />
@@ -342,7 +342,7 @@ export default function AboutSection({ profile }: AboutSectionProps) {
             {/* Architectural Philosophy Manifesto Pull-Quote */}
             {philosophyStatement && (
               <div
-                className={`relative py-3.5 px-4 sm:px-5 bg-neutral-50/70 border-l-2 border-black border-y border-r border-neutral-200/80 rounded-xs transition-all duration-700 ease-out delay-300 group hover:border-black shadow-2xs ${
+                className={`relative py-4 px-5 sm:px-6 bg-neutral-50/70 border-l-2 border-black border-y border-r border-neutral-200/80 rounded-2xl transition-all duration-700 ease-out delay-300 group hover:border-black shadow-2xs ${
                   isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
                 }`}
               >
@@ -372,25 +372,25 @@ export default function AboutSection({ profile }: AboutSectionProps) {
                   <div
                     key={pillar.title}
                     style={{ transitionDelay: `${350 + idx * 70}ms` }}
-                    className={`relative p-3.5 sm:p-4 2xl:p-5 bg-neutral-50/70 border border-neutral-200/90 rounded-xs space-y-1.5 transition-all duration-500 ease-out hover:border-black hover:bg-white hover:shadow-lg hover:-translate-y-1.5 group overflow-hidden ${
+                    className={`relative p-4 sm:p-5 2xl:p-6 bg-neutral-50/70 border border-neutral-200/90 rounded-2xl space-y-2 transition-all duration-500 ease-out hover:border-black hover:bg-white hover:shadow-lg hover:-translate-y-1.5 group overflow-hidden ${
                       isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
                     }`}
                   >
                     {/* Top Architectural Drafting Pip */}
-                    <span className="absolute top-1.5 end-2 font-mono text-[8px] text-neutral-300 group-hover:text-black transition-colors select-none">
+                    <span className="absolute top-2.5 end-3 font-mono text-[8px] text-neutral-300 group-hover:text-black transition-colors select-none">
                       +
                     </span>
 
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <span className="p-1 rounded-2xs bg-neutral-100 group-hover:bg-black text-neutral-600 group-hover:text-white transition-colors shrink-0">
+                        <span className="p-1.5 rounded-lg bg-neutral-100 group-hover:bg-black text-neutral-600 group-hover:text-white transition-colors shrink-0">
                           <pillar.icon className="w-3.5 h-3.5" />
                         </span>
                         <h4 className="text-xs 2xl:text-sm font-technical font-bold uppercase tracking-wider text-black">
                           {pillar.title}
                         </h4>
                       </div>
-                      <span className="text-[8px] font-mono uppercase tracking-widest text-neutral-400 group-hover:text-neutral-600">
+                      <span className="text-[8px] font-mono uppercase tracking-widest text-neutral-400 group-hover:text-neutral-600 px-2 py-0.5 rounded-full bg-neutral-100/80">
                         {pillar.tag}
                       </span>
                     </div>
@@ -424,7 +424,7 @@ export default function AboutSection({ profile }: AboutSectionProps) {
                 <a
                   href="/api/portfolio-pdf"
                   download="Alaa-Essa-Architectural-Portfolio-2026.pdf"
-                  className="group relative p-4 bg-neutral-950 hover:bg-black text-white border border-neutral-900 hover:border-neutral-700 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between active:scale-[0.98] overflow-hidden rounded-xs focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 focus-visible:outline-none min-h-[44px]"
+                  className="group relative p-4 sm:p-5 bg-neutral-950 hover:bg-black text-white border border-neutral-900 hover:border-neutral-700 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between active:scale-[0.98] overflow-hidden rounded-2xl focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 focus-visible:outline-none min-h-[44px]"
                   title="Download Curated Architectural Monograph (PDF)"
                 >
                   {/* Subtle Sheen Highlight */}
@@ -433,7 +433,7 @@ export default function AboutSection({ profile }: AboutSectionProps) {
                   {/* Top Spec Row */}
                   <div className="flex items-center justify-between pb-3 border-b border-white/10 text-[9px] font-mono text-neutral-400 uppercase tracking-widest">
                     <span className="text-neutral-300 font-semibold">DOC // 01</span>
-                    <span className="bg-white/10 px-1.5 py-0.5 rounded-2xs text-[8px] text-white">2026 EDITION • PDF</span>
+                    <span className="bg-white/10 px-2 py-0.5 rounded-full text-[8px] text-white">2026 EDITION • PDF</span>
                   </div>
 
                   {/* Body Content */}
@@ -463,13 +463,13 @@ export default function AboutSection({ profile }: AboutSectionProps) {
                   href="/api/cv-pdf"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group relative p-4 bg-white hover:bg-neutral-50 text-neutral-900 border border-neutral-300 hover:border-black shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col justify-between active:scale-[0.98] overflow-hidden rounded-xs focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 focus-visible:outline-none min-h-[44px]"
+                  className="group relative p-4 sm:p-5 bg-white hover:bg-neutral-50 text-neutral-900 border border-neutral-300 hover:border-black shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col justify-between active:scale-[0.98] overflow-hidden rounded-2xl focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 focus-visible:outline-none min-h-[44px]"
                   title="Download / View Alaa Essa Official Curriculum Vitae (PDF)"
                 >
                   {/* Top Spec Row */}
                   <div className="flex items-center justify-between pb-3 border-b border-neutral-200 text-[9px] font-mono text-neutral-500 uppercase tracking-widest">
                     <span className="text-black font-semibold">DOC // 02</span>
-                    <span className="bg-neutral-100 border border-neutral-300 px-1.5 py-0.5 rounded-2xs text-[8px] text-neutral-700">LATEX TYPESET</span>
+                    <span className="bg-neutral-100 border border-neutral-300 px-2 py-0.5 rounded-full text-[8px] text-neutral-700">LATEX TYPESET</span>
                   </div>
 
                   {/* Body Content */}
@@ -496,11 +496,11 @@ export default function AboutSection({ profile }: AboutSectionProps) {
               </div>
 
               {/* Tier 2: Unified Interactive Navigation Strip */}
-              <div className="p-2 sm:p-2.5 bg-neutral-50/80 border border-neutral-200/90 rounded-xs flex flex-col sm:flex-row items-center justify-between gap-2 text-[10px] sm:text-[11px] font-technical">
+              <div className="p-2 sm:p-2.5 bg-neutral-50/80 border border-neutral-200/90 rounded-full flex flex-col sm:flex-row items-center justify-between gap-2 text-[10px] sm:text-[11px] font-technical">
                 {/* Career Link */}
                 <a
                   href="#experience"
-                  className="w-full sm:w-auto flex-1 flex items-center justify-between sm:justify-start gap-2 px-3 py-1.5 text-neutral-600 hover:text-black hover:bg-white border border-transparent hover:border-neutral-200 transition-all rounded-2xs group"
+                  className="w-full sm:w-auto flex-1 flex items-center justify-between sm:justify-start gap-2 px-4 py-2 text-neutral-600 hover:text-black hover:bg-white border border-transparent hover:border-neutral-200 transition-all rounded-full group"
                 >
                   <div className="flex items-center gap-2">
                     <span className="font-mono text-neutral-400 font-bold group-hover:text-black">03 //</span>
@@ -516,7 +516,7 @@ export default function AboutSection({ profile }: AboutSectionProps) {
                 {/* Skills Link */}
                 <a
                   href="#skills"
-                  className="w-full sm:w-auto flex-1 flex items-center justify-between sm:justify-start gap-2 px-3 py-1.5 text-neutral-600 hover:text-black hover:bg-white border border-transparent hover:border-neutral-200 transition-all rounded-2xs group"
+                  className="w-full sm:w-auto flex-1 flex items-center justify-between sm:justify-start gap-2 px-4 py-2 text-neutral-600 hover:text-black hover:bg-white border border-transparent hover:border-neutral-200 transition-all rounded-full group"
                 >
                   <div className="flex items-center gap-2">
                     <span className="font-mono text-neutral-400 font-bold group-hover:text-black">04 //</span>
