@@ -24,26 +24,47 @@ import {
   X,
   Layers,
   CheckCircle2,
+  MessageSquare,
+  MessageCircle,
+  Phone,
+  Clock,
+  Trash2,
+  Calendar,
+  AlertTriangle,
+  Send,
 } from 'lucide-react'
 import { Project } from '@/data/portfolioData'
-import { updateTop4ProjectsAction } from '@/app/admin/actions'
+import { ClientInquiry } from '@/lib/dataRepository'
+import {
+  updateTop4ProjectsAction,
+  updateInquiryStatusAction,
+  deleteInquiryAction,
+} from '@/app/admin/actions'
 import { useAdminTranslation } from '@/context/AdminLanguageContext'
 import { triggerHaptic } from '@/lib/haptics'
 import AdminToast from '@/components/admin/AdminToast'
+import AdminConfirmModal from '@/components/admin/AdminConfirmModal'
 
 interface HomeClientProps {
   initialProjects: Project[]
   profile: any
   adminAccounts: any[]
+  initialInquiries?: ClientInquiry[]
 }
 
 export default function HomeClient({
   initialProjects,
   profile,
   adminAccounts,
+  initialInquiries = [],
 }: HomeClientProps) {
   const { t, isRtl } = useAdminTranslation()
   const [projects, setProjects] = useState<Project[]>(initialProjects)
+  const [inquiries, setInquiries] = useState<ClientInquiry[]>(initialInquiries)
+  const [inquiryFilter, setInquiryFilter] = useState<'all' | 'new' | 'contacted' | 'quoted' | 'archived'>('all')
+  const [inquiryToDelete, setInquiryToDelete] = useState<ClientInquiry | null>(null)
+  const [isDeletingInquiry, setIsDeletingInquiry] = useState(false)
+  const [updatingInquiryId, setUpdatingInquiryId] = useState<string | null>(null)
   const [copied, setCopied] = useState(false)
   const [selectedSlotIndex, setSelectedSlotIndex] = useState<number | null>(null)
   const [savingTop4, setSavingTop4] = useState(false)
@@ -138,6 +159,58 @@ export default function HomeClient({
     }
     setSavingTop4(false)
   }
+
+  // Handle inquiry status update
+  const handleUpdateInquiryStatus = async (id: string, status: ClientInquiry['status']) => {
+    setUpdatingInquiryId(id)
+    const res = await updateInquiryStatusAction(id, status)
+    setUpdatingInquiryId(null)
+    if (res.success) {
+      setInquiries((prev) =>
+        prev.map((inq) => (inq.id === id ? { ...inq, status } : inq))
+      )
+      setFeedback({
+        type: 'success',
+        text: isRtl ? 'تم تحديث حالة طلب العميل بنجاح' : 'Inquiry status updated successfully',
+      })
+      setTimeout(() => setFeedback(null), 3000)
+    } else {
+      setFeedback({
+        type: 'error',
+        text: res.error || (isRtl ? 'فشل تحديث حالة الطلب' : 'Failed to update inquiry status'),
+      })
+    }
+  }
+
+  // Handle inquiry deletion
+  const handleDeleteInquiryConfirm = async () => {
+    if (!inquiryToDelete) return
+    setIsDeletingInquiry(true)
+    const res = await deleteInquiryAction(inquiryToDelete.id)
+    setIsDeletingInquiry(false)
+    if (res.success) {
+      setInquiries((prev) => prev.filter((inq) => inq.id !== inquiryToDelete.id))
+      setInquiryToDelete(null)
+      setFeedback({
+        type: 'success',
+        text: isRtl ? 'تم حذف طلب العميل بنجاح' : 'Inquiry deleted successfully',
+      })
+      setTimeout(() => setFeedback(null), 3000)
+    } else {
+      setFeedback({
+        type: 'error',
+        text: res.error || (isRtl ? 'فشل حذف الطلب' : 'Failed to delete inquiry'),
+      })
+    }
+  }
+
+  // Derived filtered inquiries & counts
+  const filteredInquiries = inquiries.filter((inq) => {
+    if (inquiryFilter === 'all') return true
+    return inq.status === inquiryFilter
+  })
+
+  const newInquiriesCount = inquiries.filter((inq) => inq.status === 'new').length
 
   // Remove project from slot
   const handleRemoveSlot = async (slotIdx: number) => {
@@ -389,6 +462,230 @@ export default function HomeClient({
           </Link>
         </div>
       </div>
+
+      {/* ============================================================== */}
+      {/* 3.5 CLIENT INQUIRIES & COMMISSIONS DESK (Live CRM Leads Inbox) */}
+      {/* ============================================================== */}
+      <div className="relative bg-[#111215]/90 border border-white/[0.08] rounded-3xl p-5 sm:p-7 space-y-6 shadow-xl overflow-hidden">
+        {/* Architectural drafting crosshairs */}
+        <span className="absolute top-2 start-2 font-mono text-[9px] text-white/20 select-none pointer-events-none" aria-hidden="true">+</span>
+        <span className="absolute top-2 end-2 font-mono text-[9px] text-white/20 select-none pointer-events-none" aria-hidden="true">+</span>
+        <span className="absolute bottom-2 start-2 font-mono text-[9px] text-white/20 select-none pointer-events-none" aria-hidden="true">+</span>
+        <span className="absolute bottom-2 end-2 font-mono text-[9px] text-white/20 select-none pointer-events-none" aria-hidden="true">+</span>
+
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-white/[0.08]">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2.5">
+              <span className="w-2 h-2 rounded-full bg-[#7AD1B8] animate-pulse" />
+              <h2 className="text-sm font-mono uppercase tracking-wider text-white font-semibold flex items-center gap-2">
+                <span>{isRtl ? 'طلبات واستفسارات العملاء المباشرة' : 'Client Commission Briefs & Inquiries'}</span>
+              </h2>
+            </div>
+            <p className="text-xs text-neutral-400 font-sans">
+              {isRtl
+                ? 'استفسارات العملاء المسجلة مباشرة عبر استمارة التواصل في موقعك'
+                : 'Direct architectural inquiry briefs transmitted through your public portfolio contact form'}
+            </p>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] font-mono px-3 py-1 rounded-full bg-white/[0.05] text-neutral-300 border border-white/[0.08]">
+              {inquiries.length} {isRtl ? 'إجمالي الطلبات' : 'Total Leads'}
+            </span>
+            {newInquiriesCount > 0 && (
+              <span className="text-[10px] font-mono px-3 py-1 rounded-full bg-[#7AD1B8]/20 text-[#7AD1B8] border border-[#7AD1B8]/40 font-bold animate-pulse">
+                {newInquiriesCount} {isRtl ? 'جديد' : 'New'}
+              </span>
+            )}
+          </div>
+        </div>
+
+        {/* Filter Tabs */}
+        <div className="flex items-center gap-1.5 flex-wrap">
+          {(['all', 'new', 'contacted', 'quoted', 'archived'] as const).map((filterKey) => {
+            const count = filterKey === 'all' ? inquiries.length : inquiries.filter((i) => i.status === filterKey).length
+            const labels = {
+              all: isRtl ? 'الكل' : 'All',
+              new: isRtl ? 'جديد' : 'New',
+              contacted: isRtl ? 'تم التواصل' : 'Contacted',
+              quoted: isRtl ? 'تم إرسال عرض' : 'Quoted',
+              archived: isRtl ? 'مؤرشف' : 'Archived',
+            }
+            const isActive = inquiryFilter === filterKey
+            return (
+              <button
+                key={filterKey}
+                type="button"
+                onClick={() => {
+                  triggerHaptic('selection')
+                  setInquiryFilter(filterKey)
+                }}
+                className={`px-3 py-1.5 rounded-full text-xs font-mono transition-all flex items-center gap-1.5 cursor-pointer ${
+                  isActive
+                    ? 'bg-white text-black font-bold shadow-sm'
+                    : 'bg-white/[0.03] text-neutral-400 hover:text-white border border-white/[0.06] hover:border-white/20'
+                }`}
+              >
+                <span>{labels[filterKey]}</span>
+                <span className={`text-[10px] px-1.5 py-0.5 rounded-full ${isActive ? 'bg-black text-white' : 'bg-white/10 text-neutral-300'}`}>
+                  {count}
+                </span>
+              </button>
+            )
+          })}
+        </div>
+
+        {/* Inquiries List */}
+        {filteredInquiries.length === 0 ? (
+          <div className="py-12 text-center rounded-2xl bg-white/[0.02] border border-dashed border-white/[0.08] space-y-2">
+            <MessageSquare className="w-8 h-8 text-neutral-600 mx-auto stroke-[1.5]" />
+            <p className="text-xs font-mono text-neutral-400">
+              {isRtl ? 'لا توجد طلبات في هذا التصنيف حالياً' : 'No inquiries found in this category'}
+            </p>
+            <p className="text-[11px] text-neutral-500 max-w-sm mx-auto">
+              {isRtl
+                ? 'أي عميل يقوم بتعبئة استمارة المشروع في صفحة التواصل ستظهر رسالته وبياناته هنا فوراً'
+                : 'Whenever a client submits an inquiry through your contact section, it will appear here in real time.'}
+            </p>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {filteredInquiries.map((inq) => {
+              const statusColors = {
+                new: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
+                contacted: 'bg-sky-500/15 text-sky-300 border-sky-500/30',
+                quoted: 'bg-amber-500/15 text-amber-300 border-amber-500/30',
+                archived: 'bg-neutral-500/15 text-neutral-400 border-neutral-500/30',
+              }
+              const cleanPhone = inq.phone_number?.replace(/[^0-9+]/g, '') || ''
+              const waNumber = cleanPhone.startsWith('+') ? cleanPhone.slice(1) : cleanPhone.startsWith('0') ? `2${cleanPhone}` : cleanPhone
+
+              return (
+                <div
+                  key={inq.id}
+                  className="p-4 sm:p-5 rounded-2xl bg-[#090a0c] border border-white/[0.08] hover:border-white/20 transition-all space-y-3.5 group shadow-sm"
+                >
+                  {/* Top Row: Client Info, Date, Status Selector & Delete */}
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+                    <div className="flex items-center gap-3">
+                      <div className="w-9 h-9 rounded-full bg-white/10 text-white flex items-center justify-center font-bold text-xs uppercase shrink-0 border border-white/10">
+                        {inq.client_name?.slice(0, 2) || 'CL'}
+                      </div>
+                      <div>
+                        <div className="text-sm font-bold text-white flex items-center gap-2">
+                          <span>{inq.client_name}</span>
+                          {inq.service_type && (
+                            <span className="text-[10px] font-mono font-normal px-2.5 py-0.5 rounded-full bg-white/[0.05] text-neutral-300 border border-white/[0.08]">
+                              {inq.service_type}
+                            </span>
+                          )}
+                        </div>
+                        <div className="text-[10px] font-mono text-neutral-500 flex items-center gap-2 mt-0.5">
+                          <Clock className="w-3 h-3" />
+                          <span>{new Date(inq.created_at).toLocaleString(isRtl ? 'ar-EG' : 'en-US', { dateStyle: 'medium', timeStyle: 'short' })}</span>
+                          {inq.area_size && (
+                            <>
+                              <span>•</span>
+                              <span>{inq.area_size}</span>
+                            </>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-2 self-end sm:self-auto shrink-0">
+                      {/* Status Dropdown */}
+                      <select
+                        value={inq.status}
+                        disabled={updatingInquiryId === inq.id}
+                        onChange={(e) => handleUpdateInquiryStatus(inq.id, e.target.value as any)}
+                        className={`text-[10px] font-mono uppercase px-3 py-1.5 rounded-full border cursor-pointer focus:outline-none transition-all ${statusColors[inq.status] || statusColors.new}`}
+                      >
+                        <option value="new" className="bg-[#111215] text-emerald-300">{isRtl ? '● جديد' : '● New'}</option>
+                        <option value="contacted" className="bg-[#111215] text-sky-300">{isRtl ? '● تم التواصل' : '● Contacted'}</option>
+                        <option value="quoted" className="bg-[#111215] text-amber-300">{isRtl ? '● تم إرسال عرض' : '● Quoted'}</option>
+                        <option value="archived" className="bg-[#111215] text-neutral-400">{isRtl ? '● أرشفة' : '● Archived'}</option>
+                      </select>
+
+                      {/* Delete Inquiry Button */}
+                      <button
+                        type="button"
+                        onClick={() => setInquiryToDelete(inq)}
+                        className="p-1.5 text-neutral-500 hover:text-red-400 rounded-full hover:bg-white/[0.04] transition-colors cursor-pointer"
+                        title={isRtl ? 'حذف الطلب' : 'Delete Inquiry'}
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Message / Brief Body */}
+                  {inq.message && (
+                    <div className="p-3.5 rounded-xl bg-white/[0.02] border border-white/[0.05] text-xs font-sans text-neutral-300 leading-relaxed whitespace-pre-line">
+                      {inq.message}
+                    </div>
+                  )}
+
+                  {/* Contact Fast Channels (WhatsApp, Call, Email) */}
+                  <div className="flex items-center gap-2 flex-wrap pt-1">
+                    {inq.phone_number && (
+                      <>
+                        <a
+                          href={`https://wa.me/${waNumber}?text=${encodeURIComponent(
+                            `Hello ${inq.client_name}, this is Eng. Alaa Essa following up on your interior architecture inquiry.`
+                          )}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-xs font-mono transition-all active:scale-95"
+                        >
+                          <MessageCircle className="w-3.5 h-3.5 text-emerald-400" />
+                          <span>WhatsApp</span>
+                        </a>
+
+                        <a
+                          href={`tel:${cleanPhone}`}
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/[0.04] hover:bg-white/[0.08] text-neutral-300 hover:text-white border border-white/[0.08] text-xs font-mono transition-all active:scale-95"
+                          dir="ltr"
+                        >
+                          <Phone className="w-3 h-3 text-neutral-400" />
+                          <span>{inq.phone_number}</span>
+                        </a>
+                      </>
+                    )}
+
+                    {inq.email && (
+                      <a
+                        href={`mailto:${inq.email}?subject=${encodeURIComponent('Interior Architecture Inquiry - Eng. Alaa Essa')}`}
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/[0.04] hover:bg-white/[0.08] text-neutral-300 hover:text-white border border-white/[0.08] text-xs font-mono transition-all active:scale-95"
+                      >
+                        <Mail className="w-3 h-3 text-neutral-400" />
+                        <span>{inq.email}</span>
+                      </a>
+                    )}
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        )}
+      </div>
+
+      {/* Delete Confirmation Modal for Inquiry */}
+      <AdminConfirmModal
+        isOpen={Boolean(inquiryToDelete)}
+        title={isRtl ? 'حذف طلب العميل' : 'Delete Client Inquiry'}
+        message={
+          isRtl
+            ? `هل أنت متأكد من حذف طلب العميل "${inquiryToDelete?.client_name}"؟ لا يمكن التراجع عن هذا الإجراء.`
+            : `Are you sure you want to permanently delete the inquiry from "${inquiryToDelete?.client_name}"? This action cannot be undone.`
+        }
+        confirmLabel={isRtl ? 'نعم، احذف الطلب' : 'Yes, Delete Inquiry'}
+        cancelLabel={isRtl ? 'إلغاء' : 'Cancel'}
+        onConfirm={handleDeleteInquiryConfirm}
+        onCancel={() => setInquiryToDelete(null)}
+        isLoading={isDeletingInquiry}
+        isDestructive={true}
+      />
 
       {/* ============================================================== */}
       {/* 4. TOP 4 FLAGSHIP PROJECTS (Interactive Visual Slot Picker)    */}

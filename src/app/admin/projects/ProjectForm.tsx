@@ -29,7 +29,14 @@ import {
   Unlock,
   RefreshCw,
 } from 'lucide-react'
-import { Project, ProjectSpecs, MaterialSwatch, ProjectAngle } from '@/data/portfolioData'
+import {
+  Project,
+  ProjectSpecs,
+  MaterialSwatch,
+  ProjectAngle,
+  ProjectCategory,
+  DEFAULT_PROJECT_CATEGORIES,
+} from '@/data/portfolioData'
 import { saveProjectAction } from '../actions'
 import { createClient } from '@/lib/supabase/client'
 import UnsavedChangesBar from '@/components/admin/UnsavedChangesBar'
@@ -60,9 +67,11 @@ export const ARCHITECTURAL_SWATCH_PRESETS = [
 export default function ProjectForm({
   initialProject,
   isNew = false,
+  initialCategories = [],
 }: {
   initialProject?: Partial<Project>
   isNew?: boolean
+  initialCategories?: ProjectCategory[]
 }) {
   const router = useRouter()
   const { t, isRtl } = useAdminTranslation()
@@ -70,6 +79,7 @@ export default function ProjectForm({
   const [isSaving, setIsSaving] = useState(false)
   const [isUploading, setIsUploading] = useState(false)
   const [uploadProgress, setUploadProgress] = useState<{ current: number; total: number } | null>(null)
+  const [uploadingAngleIdx, setUploadingAngleIdx] = useState<number | null>(null)
   const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
   const [isSlugManual, setIsSlugManual] = useState(!isNew && Boolean(initialProject?.id))
   const [fieldErrors, setFieldErrors] = useState<{ id?: boolean; titleEn?: boolean; coverImage?: boolean }>({})
@@ -298,6 +308,56 @@ export default function ProjectForm({
     }
   }
 
+  // Handle Cloud Upload for Photographic Perspective Angles (Tab 6)
+  const handleAngleUpload = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+    idx: number
+  ) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    try {
+      setUploadingAngleIdx(idx)
+      const compressed = await compressImage(file)
+      const ext = compressed.name.split('.').pop() || 'webp'
+      const fileName = `${formData.id || 'project'}-angle-${idx + 1}-${Date.now()}.${ext}`
+      const filePath = `angles/${fileName}`
+
+      const supabase = createClient()
+      let bucket = 'project-media'
+      let uploadRes = await supabase.storage
+        .from(bucket)
+        .upload(filePath, compressed, { upsert: true })
+
+      if (uploadRes.error) {
+        bucket = 'portfolio-media'
+        uploadRes = await supabase.storage
+          .from(bucket)
+          .upload(filePath, compressed, { upsert: true })
+      }
+
+      if (uploadRes.error) throw uploadRes.error
+
+      const {
+        data: { publicUrl },
+      } = supabase.storage.from(bucket).getPublicUrl(filePath)
+
+      const updated = [...(formData.angles || [])]
+      updated[idx] = { ...updated[idx], image: publicUrl }
+      setFormData((prev) => ({ ...prev, angles: updated }))
+      setFeedback({ type: 'success', text: 'Perspective render uploaded successfully!' })
+      setTimeout(() => setFeedback(null), 3000)
+    } catch (err: any) {
+      setFeedback({
+        type: 'error',
+        text: err.message || 'Perspective upload failed. You can paste an image URL directly.',
+      })
+    } finally {
+      setUploadingAngleIdx(null)
+      e.target.value = ''
+    }
+  }
+
   // Handle Project Save
   const handleSaveProject = async () => {
     const newErrors = {
@@ -401,7 +461,7 @@ export default function ProjectForm({
             type="button"
             onClick={handleSaveProject}
             disabled={isSaving}
-            className="inline-flex items-center gap-1.5 sm:gap-2 bg-gradient-to-r from-amber-200 via-white to-amber-100 hover:from-white hover:to-amber-50 text-neutral-950 font-semibold px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-xl text-[11px] sm:text-xs uppercase tracking-wider transition-all shadow-lg shadow-amber-950/20 active:scale-95 cursor-pointer disabled:opacity-50"
+            className="inline-flex items-center gap-1.5 sm:gap-2 bg-white hover:bg-neutral-100 text-neutral-950 font-medium px-4 sm:px-6 py-2 sm:py-2.5 rounded-full text-[11px] sm:text-xs uppercase tracking-wider transition-all shadow-lg active:scale-95 cursor-pointer disabled:opacity-50"
           >
             {isSaving ? (
               <>
@@ -444,7 +504,7 @@ export default function ProjectForm({
                   triggerHaptic('selection')
                   setActiveTab(tab.id as any)
                 }}
-                className={`inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl text-xs font-mono whitespace-nowrap transition-all cursor-pointer ${
+                className={`inline-flex items-center gap-1.5 sm:gap-2 px-3.5 sm:px-4 py-2 rounded-full text-xs font-mono whitespace-nowrap transition-all cursor-pointer ${
                   isActive
                     ? 'bg-white text-neutral-950 font-semibold shadow-md'
                     : 'text-neutral-400 hover:text-white hover:bg-white/[0.04]'
@@ -614,33 +674,25 @@ export default function ProjectForm({
               </div>
               {/* Presets */}
               <div className="flex items-center gap-1.5 flex-wrap pt-0.5">
-                {[
-                  { slug: 'living', en: 'Living & Lounges' },
-                  { slug: 'bedroom', en: 'Master Bedrooms' },
-                  { slug: 'kitchen', en: 'Kitchens & Baths' },
-                  { slug: 'commercial', en: 'Commercial & Retail' },
-                  { slug: 'villas', en: 'Private Luxury Villas' },
-                  { slug: 'penthouses', en: 'Penthouses & Duplexes' },
-                  { slug: 'landscape', en: 'Terraces & Landscape' },
-                ].map((preset) => (
+                {(initialCategories && initialCategories.length > 0 ? initialCategories : DEFAULT_PROJECT_CATEGORIES).map((preset: ProjectCategory) => (
                   <button
                     type="button"
-                    key={preset.slug}
+                    key={preset.id}
                     onClick={() => {
                       setFormData((prev) => ({
                         ...prev,
-                        category: preset.slug,
-                        categoryLabelEn: preset.en,
-                        categoryLabel: preset.en,
+                        category: preset.id,
+                        categoryLabelEn: preset.labelEn,
+                        categoryLabel: isRtl ? (preset.labelAr || preset.labelEn) : preset.labelEn,
                       }))
                     }}
-                    className={`px-2 py-0.5 rounded text-[10px] font-mono border transition-all cursor-pointer ${
-                      formData.category === preset.slug
+                    className={`px-3 py-1 rounded-full text-[10px] font-mono border transition-all cursor-pointer ${
+                      formData.category === preset.id
                         ? 'bg-amber-500/20 text-amber-300 border-amber-500/50 font-bold'
                         : 'bg-white/[0.02] text-neutral-400 border-white/[0.06] hover:text-white'
                     }`}
                   >
-                    {preset.en}
+                    {isRtl ? (preset.labelAr || preset.labelEn) : preset.labelEn}
                   </button>
                 ))}
               </div>
@@ -1354,7 +1406,7 @@ export default function ProjectForm({
         <div className="bg-[#111215]/80 border border-white/[0.08] rounded-3xl p-6 sm:p-8 space-y-6">
           <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
             <div>
-              <h2 className="text-xs font-mono uppercase tracking-wider text-amber-500 font-medium">
+              <h2 className="text-xs font-mono uppercase tracking-wider text-[#C5A059] font-medium">
                 Photographic Perspective Angles & Blueprints
               </h2>
               <span className="text-[10px] text-neutral-400 font-mono">
@@ -1372,7 +1424,7 @@ export default function ProjectForm({
                   ],
                 }))
               }
-              className="inline-flex items-center gap-1.5 bg-white/[0.05] hover:bg-white/[0.1] text-amber-400 border border-white/[0.08] hover:border-amber-500/40 px-3.5 py-2 rounded-xl text-xs font-mono transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 bg-white/[0.05] hover:bg-white/[0.1] text-[#7AD1B8] border border-white/[0.08] hover:border-[#7AD1B8]/40 px-4 py-2 rounded-full text-xs font-mono transition-colors cursor-pointer"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>Add Perspective</span>
@@ -1380,53 +1432,114 @@ export default function ProjectForm({
           </div>
 
           <div className="space-y-4">
-            {formData.angles?.map((angle, idx) => (
-              <div
-                key={idx}
-                className="p-4 bg-[#090a0c] border border-white/[0.08] rounded-2xl flex flex-col sm:flex-row items-center gap-4 shadow-sm"
-              >
-                <div className="w-full sm:w-1/3">
-                  <input
-                    type="text"
-                    value={angle.titleEn}
-                    onChange={(e) => {
-                      const updated = [...(formData.angles || [])]
-                      updated[idx].titleEn = e.target.value
-                      setFormData((prev) => ({ ...prev, angles: updated }))
-                    }}
-                    placeholder="Angle Title (e.g. Panoramic Lounge View)"
-                    className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2 text-xs text-white"
-                  />
-                </div>
-
-                <div className="flex-1 w-full sm:w-auto">
-                  <input
-                    type="text"
-                    value={angle.image}
-                    onChange={(e) => {
-                      const updated = [...(formData.angles || [])]
-                      updated[idx].image = e.target.value
-                      setFormData((prev) => ({ ...prev, angles: updated }))
-                    }}
-                    placeholder="Image URL or upload"
-                    className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2 text-xs text-white font-mono"
-                  />
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() =>
-                    setFormData((prev) => ({
-                      ...prev,
-                      angles: prev.angles?.filter((_, i) => i !== idx),
-                    }))
-                  }
-                  className="p-2 text-neutral-500 hover:text-red-400 self-end sm:self-center transition-colors cursor-pointer"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </button>
+            {(!formData.angles || formData.angles.length === 0) ? (
+              <div className="p-8 text-center border border-dashed border-white/[0.08] rounded-2xl">
+                <Layers className="w-8 h-8 text-neutral-600 mx-auto mb-2" />
+                <p className="text-xs text-neutral-400 font-mono">No perspective angles added yet.</p>
+                <p className="text-[11px] text-neutral-500 font-sans mt-1">Add CAD blueprints, orthographic views, or detail camera angles.</p>
               </div>
-            ))}
+            ) : (
+              formData.angles.map((angle, idx) => (
+                <div
+                  key={idx}
+                  className="p-4 bg-[#090a0c] border border-white/[0.08] rounded-2xl flex flex-col sm:flex-row items-center gap-4 shadow-sm"
+                >
+                  {/* Perspective Preview Thumbnail */}
+                  <div className="relative w-20 h-16 rounded-xl overflow-hidden bg-neutral-900 border border-white/10 shrink-0 flex items-center justify-center">
+                    {angle.image ? (
+                      <Image
+                        src={angle.image}
+                        alt={angle.titleEn || `Perspective ${idx + 1}`}
+                        fill
+                        sizes="80px"
+                        className="object-cover"
+                      />
+                    ) : (
+                      <ImageIcon className="w-6 h-6 text-neutral-600" />
+                    )}
+                    {uploadingAngleIdx === idx && (
+                      <div className="absolute inset-0 bg-black/70 flex items-center justify-center">
+                        <Loader2 className="w-4 h-4 animate-spin text-[#7AD1B8]" />
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Angle Title */}
+                  <div className="w-full sm:w-1/3">
+                    <label className="block text-[10px] font-mono text-neutral-400 mb-1 uppercase">
+                      Angle Label (EN)
+                    </label>
+                    <input
+                      type="text"
+                      value={angle.titleEn}
+                      onChange={(e) => {
+                        const updated = [...(formData.angles || [])]
+                        updated[idx].titleEn = e.target.value
+                        setFormData((prev) => ({ ...prev, angles: updated }))
+                      }}
+                      placeholder="e.g. Panoramic Lounge View"
+                      className="w-full bg-white/[0.04] border border-white/[0.08] focus:border-[#7AD1B8]/60 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none"
+                    />
+                  </div>
+
+                  {/* Image URL & Cloud Upload */}
+                  <div className="flex-1 w-full sm:w-auto">
+                    <label className="block text-[10px] font-mono text-neutral-400 mb-1 uppercase">
+                      Render Image Path / URL
+                    </label>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="text"
+                        value={angle.image}
+                        onChange={(e) => {
+                          const updated = [...(formData.angles || [])]
+                          updated[idx].image = e.target.value
+                          setFormData((prev) => ({ ...prev, angles: updated }))
+                        }}
+                        placeholder="https://... or upload from device"
+                        className="flex-1 bg-white/[0.04] border border-white/[0.08] focus:border-[#7AD1B8]/60 rounded-xl px-3.5 py-2 text-xs text-white font-mono focus:outline-none"
+                      />
+                      <label
+                        className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-mono border cursor-pointer transition-all shrink-0 ${
+                          uploadingAngleIdx === idx
+                            ? 'bg-white/[0.05] text-neutral-500 border-white/[0.05] pointer-events-none'
+                            : 'bg-white/[0.05] hover:bg-white/[0.1] text-neutral-200 border-white/[0.1] hover:border-[#7AD1B8]/40'
+                        }`}
+                      >
+                        {uploadingAngleIdx === idx ? (
+                          <Loader2 className="w-3.5 h-3.5 animate-spin text-[#7AD1B8]" />
+                        ) : (
+                          <Upload className="w-3.5 h-3.5 text-[#7AD1B8]" />
+                        )}
+                        <span className="hidden sm:inline">Upload</span>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          disabled={uploadingAngleIdx === idx}
+                          onChange={(e) => handleAngleUpload(e, idx)}
+                          className="hidden"
+                        />
+                      </label>
+                    </div>
+                  </div>
+
+                  {/* Remove Button */}
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        angles: prev.angles?.filter((_, i) => i !== idx),
+                      }))
+                    }
+                    className="p-2 text-neutral-500 hover:text-red-400 self-end sm:self-center transition-colors cursor-pointer"
+                    title="Remove Angle"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
+              ))
+            )}
           </div>
         </div>
       )}

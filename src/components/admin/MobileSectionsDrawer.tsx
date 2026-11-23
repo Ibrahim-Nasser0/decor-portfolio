@@ -75,7 +75,7 @@ export default function MobileSectionsDrawer({ isOpen, onClose }: MobileSections
         {/* Drawer Header (Exact same as Sidebar Identity) */}
         <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
           <div className="flex items-center gap-3">
-            <div className="relative w-11 h-11 rounded-full overflow-hidden border-2 border-amber-500/40 p-0.5 shadow-md shrink-0">
+            <div className="relative w-11 h-11 rounded-full overflow-hidden border-2 border-[#C5A059]/40 p-0.5 shadow-md shrink-0">
               <Image
                 src="/images/alaa.webp"
                 alt="Eng. Alaa Essa"
@@ -83,10 +83,10 @@ export default function MobileSectionsDrawer({ isOpen, onClose }: MobileSections
                 sizes="44px"
                 className="object-cover rounded-full"
               />
-              <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 border-2 border-[#0d0e12] rounded-full" />
+              <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-[#7AD1B8] border-2 border-[#0d0e12] rounded-full" />
             </div>
             <div>
-              <span className="text-[9px] uppercase tracking-[0.25em] font-mono text-amber-500 block font-medium">
+              <span className="text-[9px] uppercase tracking-[0.25em] font-mono text-[#C5A059] block font-medium">
                 {t.nav.studioConsole}
               </span>
               <h3 className="text-sm font-semibold tracking-wide text-white">
@@ -100,7 +100,7 @@ export default function MobileSectionsDrawer({ isOpen, onClose }: MobileSections
 
           <button
             onClick={onClose}
-            className="p-2 text-neutral-400 hover:text-white rounded-xl bg-white/[0.04] border border-white/[0.08] active:scale-95 transition-transform cursor-pointer"
+            className="p-2 text-neutral-400 hover:text-white rounded-full bg-white/[0.04] border border-white/[0.08] active:scale-95 transition-transform cursor-pointer"
             aria-label={t.common.close}
           >
             <X className="w-4 h-4" />
@@ -108,9 +108,9 @@ export default function MobileSectionsDrawer({ isOpen, onClose }: MobileSections
         </div>
 
         {/* Cloud Status Ribbon */}
-        <div className="px-3 py-2 rounded-xl bg-white/[0.02] border border-white/[0.06] flex items-center justify-between text-[10px] font-mono">
-          <span className="flex items-center gap-1.5 text-emerald-400">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+        <div className="px-3 py-2 rounded-full bg-white/[0.02] border border-white/[0.06] flex items-center justify-between text-[10px] font-mono">
+          <span className="flex items-center gap-1.5 text-[#7AD1B8]">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#7AD1B8] animate-pulse" />
             <span>{t.topNav.cloudSync}</span>
           </span>
           <span className="text-neutral-400">{isRtl ? '5 شاشات' : '5 Screens'}</span>
@@ -140,7 +140,7 @@ export default function MobileSectionsDrawer({ isOpen, onClose }: MobileSections
                 onClick={onClose}
                 className={`group flex items-center justify-between px-3.5 py-3 rounded-xl text-xs font-medium tracking-wide transition-all duration-200 ${
                   isActive
-                    ? 'bg-gradient-to-r from-amber-500/15 via-amber-500/5 to-transparent text-white font-semibold border-amber-500 shadow-sm ' +
+                    ? 'bg-white/[0.06] text-white font-semibold border-[#7AD1B8] shadow-sm ' +
                       (isRtl ? 'border-r-2' : 'border-l-2')
                     : 'text-neutral-300 hover:text-white bg-white/[0.02] hover:bg-white/[0.06] border border-white/[0.04]'
                 }`}
@@ -148,7 +148,7 @@ export default function MobileSectionsDrawer({ isOpen, onClose }: MobileSections
                 <div className="flex items-center gap-3">
                   <Icon
                     className={`w-4 h-4 shrink-0 transition-colors ${
-                      isActive ? 'text-amber-400' : 'text-neutral-400 group-hover:text-neutral-200'
+                      isActive ? 'text-[#7AD1B8]' : 'text-neutral-400 group-hover:text-neutral-200'
                     }`}
                   />
                   <span>
@@ -158,7 +158,7 @@ export default function MobileSectionsDrawer({ isOpen, onClose }: MobileSections
                     {item.label}
                   </span>
                 </div>
-                <span className="text-[9px] font-mono text-neutral-500">
+                <span className={`text-[9px] font-mono ${isActive ? 'text-[#7AD1B8]' : 'text-neutral-500'}`}>
                   {isActive ? t.common.active : '→'}
                 </span>
               </Link>
@@ -172,10 +172,10 @@ export default function MobileSectionsDrawer({ isOpen, onClose }: MobileSections
             href="/"
             target="_blank"
             onClick={onClose}
-            className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs text-neutral-300 bg-white/[0.03] hover:bg-white/[0.07] border border-white/[0.06] hover:border-amber-500/30 transition-all group"
+            className="w-full flex items-center justify-between px-4 py-2.5 rounded-full text-xs text-neutral-300 bg-white/[0.03] hover:bg-white/[0.07] border border-white/[0.06] hover:border-[#7AD1B8]/40 transition-all group"
           >
             <span className="flex items-center gap-2">
-              <ExternalLink className="w-3.5 h-3.5 text-amber-400 group-hover:translate-x-0.5 transition-transform" />
+              <ExternalLink className="w-3.5 h-3.5 text-[#7AD1B8] group-hover:translate-x-0.5 transition-transform" />
               <span>{t.nav.publicSite}</span>
             </span>
             <span className="text-[9px] font-mono text-neutral-400 flex items-center gap-1">
@@ -187,7 +187,7 @@ export default function MobileSectionsDrawer({ isOpen, onClose }: MobileSections
           <form action={logoutAction}>
             <button
               type="submit"
-              className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs text-red-400/90 hover:text-red-300 hover:bg-red-950/20 border border-transparent hover:border-red-900/30 transition-all cursor-pointer"
+              className="w-full flex items-center justify-between px-4 py-2.5 rounded-full text-xs text-red-400/90 hover:text-red-300 hover:bg-red-950/20 border border-transparent hover:border-red-900/30 transition-all cursor-pointer"
             >
               <span className="flex items-center gap-2">
                 <LogOut className="w-3.5 h-3.5" />

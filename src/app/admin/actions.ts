@@ -9,6 +9,9 @@ import {
   getProjectById,
   updateDesignerProfile,
   createInquiry,
+  updateInquiryStatus,
+  updateInquiryNotes,
+  deleteClientInquiry,
   saveAdminAccount,
   deleteAdminAccount,
   updateTop4Projects,
@@ -139,6 +142,39 @@ export async function submitInquiryAction(formData: {
   } catch (err: any) {
     console.error('Failed to submit client inquiry:', err)
     return { success: false, error: err.message || 'Failed to submit inquiry' }
+  }
+}
+
+// 6.1 INQUIRY: UPDATE STATUS (CRM WORKFLOW)
+export async function updateInquiryStatusAction(id: string, status: 'new' | 'contacted' | 'quoted' | 'archived') {
+  try {
+    await updateInquiryStatus(id, status)
+    revalidatePath('/admin')
+    return { success: true }
+  } catch (err: any) {
+    return { success: false, error: err.message || 'Failed to update inquiry status' }
+  }
+}
+
+// 6.2 INQUIRY: UPDATE INTERNAL NOTES
+export async function updateInquiryNotesAction(id: string, notes: string) {
+  try {
+    await updateInquiryNotes(id, notes)
+    revalidatePath('/admin')
+    return { success: true }
+  } catch (err: any) {
+    return { success: false, error: err.message || 'Failed to update inquiry notes' }
+  }
+}
+
+// 6.3 INQUIRY: DELETE
+export async function deleteInquiryAction(id: string) {
+  try {
+    await deleteClientInquiry(id)
+    revalidatePath('/admin')
+    return { success: true }
+  } catch (err: any) {
+    return { success: false, error: err.message || 'Failed to delete inquiry' }
   }
 }
 

@@ -19,8 +19,14 @@ import {
   BookOpen,
   MessageSquare,
   HelpCircle,
+  Upload,
+  Globe,
+  Sliders,
+  Share2,
 } from 'lucide-react'
 import { saveProfileAction } from '../actions'
+import { createClient } from '@/lib/supabase/client'
+import { compressImage } from '@/lib/imageCompression'
 import UnsavedChangesBar from '@/components/admin/UnsavedChangesBar'
 import AdminToast from '@/components/admin/AdminToast'
 import { useAdminTranslation } from '@/context/AdminLanguageContext'
@@ -31,7 +37,52 @@ export default function ProfileClient({ initialProfile }: { initialProfile: any 
   const [profile, setProfile] = useState(initialProfile)
   const [initialData, setInitialData] = useState(initialProfile)
   const [isSaving, setIsSaving] = useState(false)
+  const [uploadingField, setUploadingField] = useState<'hero' | 'about' | 'avatar' | null>(null)
   const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
+
+  // Handle direct image file upload to Supabase Storage
+  const handleImageUpload = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+    field: 'heroImageUrl' | 'aboutImageUrl' | 'avatarUrl'
+  ) => {
+    const rawFile = e.target.files?.[0]
+    if (!rawFile) return
+
+    try {
+      setUploadingField(field === 'heroImageUrl' ? 'hero' : field === 'aboutImageUrl' ? 'about' : 'avatar')
+      const file = await compressImage(rawFile)
+      const supabase = createClient()
+      const ext = file.name.split('.').pop() || 'webp'
+      const fileName = `${field}-${Date.now()}.${ext}`
+
+      let bucket = 'profile-media'
+      let uploadRes = await supabase.storage.from(bucket).upload(fileName, file, { upsert: true })
+
+      if (uploadRes.error) {
+        bucket = 'portfolio-media'
+        uploadRes = await supabase.storage.from(bucket).upload(`profile/${fileName}`, file, { upsert: true })
+      }
+
+      if (uploadRes.error) throw uploadRes.error
+
+      const {
+        data: { publicUrl },
+      } = supabase.storage
+        .from(bucket)
+        .getPublicUrl(bucket === 'profile-media' ? fileName : `profile/${fileName}`)
+
+      setProfile((prev: any) => ({ ...prev, [field]: publicUrl }))
+      setFeedback({
+        type: 'success',
+        text: isRtl ? 'تم رفع الصورة وتحديث الرابط بنجاح!' : 'Photo uploaded to cloud successfully!',
+      })
+      setTimeout(() => setFeedback(null), 3000)
+    } catch (err: any) {
+      setFeedback({ type: 'error', text: err.message || 'Failed to upload photo' })
+    } finally {
+      setUploadingField(null)
+    }
+  }
 
   // Dirty state calculation
   const isDirty = JSON.stringify(profile) !== JSON.stringify(initialData)
@@ -254,6 +305,112 @@ export default function ProfileClient({ initialProfile }: { initialProfile: any 
               />
             </div>
           </div>
+
+          {/* Location EN */}
+          <div>
+            <label className="block text-[10px] font-mono text-neutral-400 uppercase mb-1">
+              {isRtl ? 'المقر الجغرافي للاستوديو (بالإنجليزية)' : 'Studio Practice Location (English)'}
+            </label>
+            <div className="relative">
+              <MapPin className="w-4 h-4 text-neutral-500 absolute start-3.5 top-1/2 -translate-y-1/2" />
+              <input
+                type="text"
+                placeholder="NEW CAIRO • SHEIKH ZAYED • CAIRO, EGYPT"
+                value={profile.locationEn || ''}
+                onChange={(e) => setProfile({ ...profile, locationEn: e.target.value })}
+                className="w-full bg-[#090a0c] border border-white/[0.08] focus:border-amber-500/80 rounded-xl ps-10 pe-3.5 py-3 text-[16px] sm:text-xs text-white focus:outline-none font-sans"
+              />
+            </div>
+          </div>
+
+          {/* Location AR */}
+          <div>
+            <label className="block text-[10px] font-mono text-neutral-400 uppercase mb-1">
+              {isRtl ? 'المقر الجغرافي للاستوديو (بالعربية)' : 'Studio Practice Location (Arabic)'}
+            </label>
+            <div className="relative">
+              <MapPin className="w-4 h-4 text-neutral-500 absolute start-3.5 top-1/2 -translate-y-1/2" />
+              <input
+                type="text"
+                placeholder="القاهرة الجديدة • الشيخ زايد • القاهرة، مصر"
+                value={profile.locationAr || ''}
+                onChange={(e) => setProfile({ ...profile, locationAr: e.target.value })}
+                className="w-full bg-[#090a0c] border border-white/[0.08] focus:border-amber-500/80 rounded-xl ps-10 pe-3.5 py-3 text-[16px] sm:text-xs text-white focus:outline-none font-sans"
+              />
+            </div>
+          </div>
+
+          {/* Social Channels Divider */}
+          <div className="md:col-span-2 pt-4 border-t border-white/[0.08]">
+            <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-neutral-400 block mb-3 font-semibold">
+              {isRtl ? 'المنصات والشبكات المهنية المعمارية' : 'Portfolio & Professional Channels'}
+            </span>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div>
+                <label className="block text-[9px] font-mono text-neutral-400 uppercase mb-1">Instagram</label>
+                <input
+                  type="text"
+                  placeholder="@alaaissa.interiors"
+                  value={profile.instagram || ''}
+                  onChange={(e) => setProfile({ ...profile, instagram: e.target.value })}
+                  className="w-full bg-[#090a0c] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none font-mono"
+                />
+              </div>
+              <div>
+                <label className="block text-[9px] font-mono text-neutral-400 uppercase mb-1">LinkedIn</label>
+                <input
+                  type="text"
+                  placeholder="https://linkedin.com/in/alaaessa"
+                  value={profile.linkedin || ''}
+                  onChange={(e) => setProfile({ ...profile, linkedin: e.target.value })}
+                  className="w-full bg-[#090a0c] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none font-mono"
+                />
+              </div>
+              <div>
+                <label className="block text-[9px] font-mono text-neutral-400 uppercase mb-1">Behance</label>
+                <input
+                  type="text"
+                  placeholder="https://behance.net/alaaessa"
+                  value={profile.behance || ''}
+                  onChange={(e) => setProfile({ ...profile, behance: e.target.value })}
+                  className="w-full bg-[#090a0c] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none font-mono"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Architectural Metrics */}
+          <div className="md:col-span-2 pt-4 border-t border-white/[0.08]">
+            <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-neutral-400 block mb-3 font-semibold">
+              {isRtl ? 'النسب والقياسات المعمارية' : 'Architectural Metrics & Fidelity'}
+            </span>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-[9px] font-mono text-neutral-400 uppercase mb-1">
+                  {isRtl ? 'إزاحة عدد المشاريع المنفذة (Built Works Offset)' : 'Built Works / Spaces Counter'}
+                </label>
+                <input
+                  type="number"
+                  value={profile.builtWorksOffset !== undefined ? profile.builtWorksOffset : 80}
+                  onChange={(e) => setProfile({ ...profile, builtWorksOffset: Number(e.target.value) })}
+                  className="w-full bg-[#090a0c] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none font-mono"
+                />
+              </div>
+              <div>
+                <label className="block text-[9px] font-mono text-neutral-400 uppercase mb-1">
+                  {isRtl ? 'نسبة دقة التنفيذ المعماري (CAD Fidelity %)' : 'CAD Execution Fidelity %'}
+                </label>
+                <input
+                  type="number"
+                  min={80}
+                  max={100}
+                  value={profile.cadFidelity !== undefined ? profile.cadFidelity : 100}
+                  onChange={(e) => setProfile({ ...profile, cadFidelity: Number(e.target.value) })}
+                  className="w-full bg-[#090a0c] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none font-mono"
+                />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -292,16 +449,33 @@ export default function ProfileClient({ initialProfile }: { initialProfile: any 
               />
             </div>
 
-            <div>
-              <label className="block text-[9px] font-mono text-neutral-500 uppercase mb-1">
-                Image URL / Asset Path
+            <div className="space-y-1.5">
+              <label className="block text-[9px] font-mono text-neutral-500 uppercase">
+                Image URL / Cloud Asset
               </label>
-              <input
-                type="text"
-                value={profile.heroImageUrl || ''}
-                onChange={(e) => setProfile({ ...profile, heroImageUrl: e.target.value })}
-                className="w-full bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3.5 py-3 text-[16px] sm:text-xs text-white focus:outline-none font-mono"
-              />
+              <div className="flex items-center gap-2">
+                <input
+                  type="text"
+                  value={profile.heroImageUrl || ''}
+                  onChange={(e) => setProfile({ ...profile, heroImageUrl: e.target.value })}
+                  className="flex-1 bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none font-mono"
+                />
+                <label className="inline-flex items-center gap-1.5 px-3 py-2.5 bg-white/[0.05] hover:bg-white/[0.1] text-amber-300 border border-white/[0.08] hover:border-amber-500/40 rounded-xl text-xs font-mono transition-colors cursor-pointer shrink-0">
+                  {uploadingField === 'hero' ? (
+                    <Loader2 className="w-3.5 h-3.5 animate-spin text-amber-400" />
+                  ) : (
+                    <Upload className="w-3.5 h-3.5" />
+                  )}
+                  <span>{uploadingField === 'hero' ? '...' : (isRtl ? 'رفع' : 'Upload')}</span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    disabled={uploadingField !== null}
+                    onChange={(e) => handleImageUpload(e, 'heroImageUrl')}
+                    className="hidden"
+                  />
+                </label>
+              </div>
             </div>
           </div>
 
@@ -326,16 +500,33 @@ export default function ProfileClient({ initialProfile }: { initialProfile: any 
               />
             </div>
 
-            <div>
-              <label className="block text-[9px] font-mono text-neutral-500 uppercase mb-1">
-                Image URL / Asset Path
+            <div className="space-y-1.5">
+              <label className="block text-[9px] font-mono text-neutral-500 uppercase">
+                Image URL / Cloud Asset
               </label>
-              <input
-                type="text"
-                value={profile.aboutImageUrl || ''}
-                onChange={(e) => setProfile({ ...profile, aboutImageUrl: e.target.value })}
-                className="w-full bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3.5 py-3 text-[16px] sm:text-xs text-white focus:outline-none font-mono"
-              />
+              <div className="flex items-center gap-2">
+                <input
+                  type="text"
+                  value={profile.aboutImageUrl || ''}
+                  onChange={(e) => setProfile({ ...profile, aboutImageUrl: e.target.value })}
+                  className="flex-1 bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none font-mono"
+                />
+                <label className="inline-flex items-center gap-1.5 px-3 py-2.5 bg-white/[0.05] hover:bg-white/[0.1] text-emerald-300 border border-white/[0.08] hover:border-emerald-500/40 rounded-xl text-xs font-mono transition-colors cursor-pointer shrink-0">
+                  {uploadingField === 'about' ? (
+                    <Loader2 className="w-3.5 h-3.5 animate-spin text-emerald-400" />
+                  ) : (
+                    <Upload className="w-3.5 h-3.5" />
+                  )}
+                  <span>{uploadingField === 'about' ? '...' : (isRtl ? 'رفع' : 'Upload')}</span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    disabled={uploadingField !== null}
+                    onChange={(e) => handleImageUpload(e, 'aboutImageUrl')}
+                    className="hidden"
+                  />
+                </label>
+              </div>
             </div>
           </div>
 
@@ -360,16 +551,33 @@ export default function ProfileClient({ initialProfile }: { initialProfile: any 
               />
             </div>
 
-            <div>
-              <label className="block text-[9px] font-mono text-neutral-500 uppercase mb-1">
-                Image URL / Asset Path
+            <div className="space-y-1.5">
+              <label className="block text-[9px] font-mono text-neutral-500 uppercase">
+                Image URL / Cloud Asset
               </label>
-              <input
-                type="text"
-                value={profile.avatarUrl || ''}
-                onChange={(e) => setProfile({ ...profile, avatarUrl: e.target.value })}
-                className="w-full bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3.5 py-3 text-[16px] sm:text-xs text-white focus:outline-none font-mono"
-              />
+              <div className="flex items-center gap-2">
+                <input
+                  type="text"
+                  value={profile.avatarUrl || ''}
+                  onChange={(e) => setProfile({ ...profile, avatarUrl: e.target.value })}
+                  className="flex-1 bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none font-mono"
+                />
+                <label className="inline-flex items-center gap-1.5 px-3 py-2.5 bg-white/[0.05] hover:bg-white/[0.1] text-[#7AD1B8] border border-white/[0.08] hover:border-[#7AD1B8]/40 rounded-xl text-xs font-mono transition-colors cursor-pointer shrink-0">
+                  {uploadingField === 'avatar' ? (
+                    <Loader2 className="w-3.5 h-3.5 animate-spin text-[#7AD1B8]" />
+                  ) : (
+                    <Upload className="w-3.5 h-3.5" />
+                  )}
+                  <span>{uploadingField === 'avatar' ? '...' : (isRtl ? 'رفع' : 'Upload')}</span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    disabled={uploadingField !== null}
+                    onChange={(e) => handleImageUpload(e, 'avatarUrl')}
+                    className="hidden"
+                  />
+                </label>
+              </div>
             </div>
           </div>
         </div>

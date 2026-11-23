@@ -376,7 +376,7 @@ export default function ProjectsClient({
           <button
             type="button"
             onClick={() => setShowCvModal(true)}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 border border-emerald-500/30 text-xs font-mono transition-all cursor-pointer active:scale-95"
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 border border-emerald-500/30 text-xs font-mono transition-all cursor-pointer active:scale-95"
             title="Open CV Slots Manager Matrix"
           >
             <Sliders className="w-3.5 h-3.5" />
@@ -387,7 +387,7 @@ export default function ProjectsClient({
             href="/api/cv-pdf"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] text-xs font-mono text-neutral-200 border border-white/[0.08] transition-all"
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/[0.04] hover:bg-white/[0.08] text-xs font-mono text-neutral-200 border border-white/[0.08] transition-all"
             title="Preview LaTeX CV PDF"
           >
             <span>Preview CV</span>
@@ -407,7 +407,7 @@ export default function ProjectsClient({
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder={isRtl ? 'البحث بالعنوان، الموقع، أو المعرف...' : 'Search by title, location, or slug key...'}
-              className="w-full bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl ps-10 pe-10 py-3 text-[16px] sm:text-xs text-white placeholder-neutral-500 focus:outline-none transition-all font-mono"
+              className="w-full bg-[#111215] border border-white/[0.08] focus:border-[#7AD1B8]/80 rounded-xl ps-10 pe-10 py-3 text-[16px] sm:text-xs text-white placeholder-neutral-500 focus:outline-none transition-all font-mono"
             />
             {search && (
               <button
@@ -434,7 +434,7 @@ export default function ProjectsClient({
                   triggerHaptic('selection')
                   setCvOnly(!cvOnly)
                 }}
-                className={`inline-flex items-center gap-1.5 px-3 py-2 min-h-[40px] rounded-xl text-xs font-mono border transition-all cursor-pointer active:scale-95 ${
+                className={`inline-flex items-center gap-1.5 px-3.5 py-2 min-h-[40px] rounded-full text-xs font-mono border transition-all cursor-pointer active:scale-95 ${
                   cvOnly
                     ? 'bg-emerald-500/20 border-emerald-500/50 text-emerald-300 font-bold shadow-sm'
                     : 'bg-white/[0.03] border-white/[0.08] text-neutral-400 hover:text-white'
@@ -451,13 +451,13 @@ export default function ProjectsClient({
                   triggerHaptic('selection')
                   setFeaturedOnly(!featuredOnly)
                 }}
-                className={`inline-flex items-center gap-1.5 px-3 py-2 min-h-[40px] rounded-xl text-xs font-mono border transition-all cursor-pointer active:scale-95 ${
+                className={`inline-flex items-center gap-1.5 px-3.5 py-2 min-h-[40px] rounded-full text-xs font-mono border transition-all cursor-pointer active:scale-95 ${
                   featuredOnly
-                    ? 'bg-amber-500/20 border-amber-500/50 text-amber-300 font-bold shadow-sm'
+                    ? 'bg-[#C5A059]/20 border-[#C5A059]/50 text-[#C5A059] font-bold shadow-sm'
                     : 'bg-white/[0.03] border-white/[0.08] text-neutral-400 hover:text-white'
                 }`}
               >
-                <Star className={`w-3.5 h-3.5 ${featuredOnly ? 'fill-amber-400 text-amber-400' : ''}`} />
+                <Star className={`w-3.5 h-3.5 ${featuredOnly ? 'fill-[#C5A059] text-[#C5A059]' : ''}`} />
                 <span>Featured</span>
               </button>
             </div>
@@ -472,7 +472,7 @@ export default function ProjectsClient({
                 }}
                 className={`p-2 min-w-[38px] min-h-[38px] flex items-center justify-center rounded-lg transition-all active:scale-90 cursor-pointer ${
                   viewMode === 'cards'
-                    ? 'bg-amber-500/20 text-amber-300 shadow-sm'
+                    ? 'bg-white/[0.08] text-white shadow-sm'
                     : 'text-neutral-500 hover:text-neutral-300'
                 }`}
                 title="Mobile Cards View"
@@ -488,7 +488,7 @@ export default function ProjectsClient({
                 }}
                 className={`p-2 min-w-[38px] min-h-[38px] flex items-center justify-center rounded-lg transition-all active:scale-90 cursor-pointer ${
                   viewMode === 'grid'
-                    ? 'bg-amber-500/20 text-amber-300 shadow-sm'
+                    ? 'bg-white/[0.08] text-white shadow-sm'
                     : 'text-neutral-500 hover:text-neutral-300'
                 }`}
                 title="Visual 3D Grid View"
@@ -504,7 +504,7 @@ export default function ProjectsClient({
                 }}
                 className={`hidden sm:flex p-2 min-w-[38px] min-h-[38px] items-center justify-center rounded-lg transition-all active:scale-90 cursor-pointer ${
                   viewMode === 'table'
-                    ? 'bg-amber-500/20 text-amber-300 shadow-sm'
+                    ? 'bg-white/[0.08] text-white shadow-sm'
                     : 'text-neutral-500 hover:text-neutral-300'
                 }`}
                 title="Detailed Table View"
@@ -518,7 +518,7 @@ export default function ProjectsClient({
             <Link
               href="/admin/projects/new"
               onClick={() => triggerHaptic('light')}
-              className="inline-flex items-center justify-center gap-1.5 bg-gradient-to-r from-amber-200 via-white to-amber-100 hover:from-white hover:to-amber-50 text-neutral-950 px-4 py-2 min-h-[40px] rounded-xl text-xs font-semibold uppercase tracking-wider transition-all shadow-md active:scale-95 cursor-pointer shrink-0"
+              className="inline-flex items-center justify-center gap-1.5 bg-white hover:bg-neutral-100 text-neutral-950 px-4 py-2 min-h-[40px] rounded-full text-xs font-semibold uppercase tracking-wider transition-all shadow-md active:scale-95 cursor-pointer shrink-0"
             >
               <Plus className="w-3.5 h-3.5 text-neutral-900" />
               <span>Add</span>
@@ -532,10 +532,10 @@ export default function ProjectsClient({
           <button
             type="button"
             onClick={() => setShowCategoryModal(true)}
-            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl text-xs font-mono whitespace-nowrap bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 transition-all cursor-pointer active:scale-95 shrink-0"
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-mono whitespace-nowrap bg-white/[0.04] hover:bg-white/[0.08] text-neutral-300 border border-white/[0.08] transition-all cursor-pointer active:scale-95 shrink-0"
             title={t.projects.manageCategories}
           >
-            <Sliders className="w-3.5 h-3.5" />
+            <Sliders className="w-3.5 h-3.5 text-[#7AD1B8]" />
             <span>{t.projects.manageCategories}</span>
           </button>
 
@@ -547,7 +547,7 @@ export default function ProjectsClient({
               <button
                 key={cat.id}
                 onClick={() => setActiveCategory(cat.id)}
-                className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-xl text-xs font-mono whitespace-nowrap transition-all cursor-pointer ${
+                className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-mono whitespace-nowrap transition-all cursor-pointer ${
                   isActive
                     ? 'bg-white text-neutral-950 font-semibold shadow-sm'
                     : 'bg-[#111215] text-neutral-400 hover:bg-white/[0.06] hover:text-white border border-white/[0.08]'

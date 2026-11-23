@@ -16,22 +16,22 @@ export default function AdminLoginPage() {
   return (
     <div className="min-h-screen bg-[#090a0c] text-white flex flex-col justify-center items-center px-4 py-12 relative overflow-hidden select-none">
       {/* Background Architectural Grid & Coordinates */}
-      <div className="absolute inset-0 pointer-events-none opacity-[0.12]">
+      <div className="absolute inset-0 pointer-events-none opacity-[0.08]">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:32px_32px]" />
-        <div className="absolute top-0 left-1/3 w-px h-full bg-gradient-to-b from-transparent via-amber-500/30 to-transparent" />
-        <div className="absolute top-0 right-1/3 w-px h-full bg-gradient-to-b from-transparent via-amber-500/30 to-transparent" />
-        <div className="absolute top-1/2 left-0 w-full h-px bg-gradient-to-r from-transparent via-amber-500/30 to-transparent" />
+        <div className="absolute top-0 left-1/3 w-px h-full bg-gradient-to-b from-transparent via-white/20 to-transparent" />
+        <div className="absolute top-0 right-1/3 w-px h-full bg-gradient-to-b from-transparent via-white/20 to-transparent" />
+        <div className="absolute top-1/2 left-0 w-full h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
       </div>
 
       {/* Subtle Ambient Radial Glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[550px] bg-amber-500/[0.04] rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[550px] bg-[#7AD1B8]/[0.025] rounded-full blur-3xl pointer-events-none" />
 
       {/* Top Navigation Strip: Return to Public Site & Language Switcher */}
       <div className="absolute top-4 sm:top-6 start-4 sm:start-6 end-4 sm:end-6 z-20 flex items-center justify-between">
         <Link
           href="/"
           onClick={() => triggerHaptic('light')}
-          className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-neutral-400 hover:text-white bg-white/[0.03] hover:bg-white/[0.08] px-3.5 py-2 min-h-[40px] rounded-xl border border-white/[0.06] transition-all duration-200 group active:scale-95"
+          className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-neutral-400 hover:text-white bg-white/[0.03] hover:bg-white/[0.08] px-4 py-2 min-h-[40px] rounded-full border border-white/[0.06] transition-all duration-200 group active:scale-95"
         >
           <ArrowLeft className={`w-3.5 h-3.5 group-hover:-translate-x-0.5 transition-transform ${isRtl ? 'rotate-180' : ''}`} />
           <span>{t.login.backToMonograph}</span>
@@ -44,11 +44,11 @@ export default function AdminLoginPage() {
             triggerHaptic('selection')
             toggleLang()
           }}
-          className="inline-flex items-center gap-1.5 px-3 py-2 min-h-[40px] rounded-xl bg-white/[0.05] hover:bg-white/[0.1] text-neutral-200 hover:text-white border border-white/[0.1] hover:border-amber-400/50 text-xs font-mono transition-all active:scale-95 cursor-pointer shadow-sm"
+          className="inline-flex items-center gap-1.5 px-3.5 py-2 min-h-[40px] rounded-full bg-white/[0.05] hover:bg-white/[0.1] text-neutral-200 hover:text-white border border-white/[0.1] hover:border-[#7AD1B8]/50 text-xs font-mono transition-all active:scale-95 cursor-pointer shadow-sm"
           title={lang === 'ar' ? 'Switch to English' : 'التحويل للغة العربية'}
           aria-label="Toggle Language"
         >
-          <Languages className="w-3.5 h-3.5 text-amber-400" />
+          <Languages className="w-3.5 h-3.5 text-[#7AD1B8]" />
           <span className="font-bold text-[11px] tracking-wider">
             {lang === 'ar' ? 'English' : 'عربي'}
           </span>
@@ -59,7 +59,7 @@ export default function AdminLoginPage() {
       <div className="w-full max-w-md bg-[#111215]/90 border border-white/[0.1] rounded-3xl p-7 sm:p-10 shadow-2xl relative z-10 backdrop-blur-xl mt-12 sm:mt-0">
         {/* Monogram & Portrait Stamp */}
         <div className="flex flex-col items-center text-center mb-7 sm:mb-8">
-          <div className="relative w-20 h-20 rounded-full overflow-hidden border-2 border-amber-500/50 p-1 mb-4 shadow-xl shadow-amber-950/30">
+          <div className="relative w-20 h-20 rounded-full overflow-hidden border-2 border-[#C5A059]/40 p-1 mb-4 shadow-xl shadow-black/50">
             <Image
               src="/images/alaa.webp"
               alt="Eng. Alaa Essa"
@@ -70,17 +70,17 @@ export default function AdminLoginPage() {
             />
           </div>
 
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/25 mb-2.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
-            <span className="text-[10px] tracking-[0.25em] uppercase text-amber-400 font-mono font-medium">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#7AD1B8]/10 border border-[#7AD1B8]/25 mb-2.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#7AD1B8]" />
+            <span className="text-[10px] tracking-[0.25em] uppercase text-[#7AD1B8] font-mono font-medium">
               {t.login.badge}
             </span>
           </div>
 
-          <h1 className="text-2xl font-serif tracking-wide text-white font-light">
+          <h1 className="text-2xl font-editorial tracking-wide text-white font-light">
             {t.login.title}
           </h1>
-          <p className="text-xs text-neutral-400 mt-1 font-mono tracking-wider">
+          <p className="text-xs text-[#C5A059] mt-1 font-mono tracking-wider">
             {t.login.subtitle}
           </p>
         </div>
@@ -116,7 +116,7 @@ export default function AdminLoginPage() {
                 inputMode="email"
                 autoCapitalize="none"
                 placeholder="alaa.essa.design@gmail.com"
-                className="w-full bg-[#090a0c] border border-white/[0.08] focus:border-amber-500/80 rounded-xl ps-10 pe-4 py-3 text-[16px] sm:text-xs text-white placeholder-neutral-600 focus:outline-none transition-all shadow-inner font-mono"
+                className="w-full bg-[#090a0c] border border-white/[0.08] focus:border-[#7AD1B8]/80 rounded-xl ps-10 pe-4 py-3 text-[16px] sm:text-xs text-white placeholder-neutral-600 focus:outline-none transition-all shadow-inner font-mono"
               />
             </div>
           </div>
@@ -136,7 +136,7 @@ export default function AdminLoginPage() {
                 required
                 autoComplete="current-password"
                 placeholder="••••••••••••"
-                className="w-full bg-[#090a0c] border border-white/[0.08] focus:border-amber-500/80 rounded-xl ps-10 pe-12 py-3 text-[16px] sm:text-xs text-white placeholder-neutral-600 focus:outline-none transition-all shadow-inner font-mono"
+                className="w-full bg-[#090a0c] border border-white/[0.08] focus:border-[#7AD1B8]/80 rounded-xl ps-10 pe-12 py-3 text-[16px] sm:text-xs text-white placeholder-neutral-600 focus:outline-none transition-all shadow-inner font-mono"
               />
               <button
                 type="button"
@@ -156,7 +156,7 @@ export default function AdminLoginPage() {
           <button
             type="submit"
             disabled={isPending}
-            className="w-full mt-3 bg-gradient-to-r from-amber-200 via-white to-amber-100 hover:from-white hover:to-amber-50 text-neutral-950 font-bold py-3.5 px-4 min-h-[48px] rounded-xl text-xs uppercase tracking-widest transition-all duration-200 flex items-center justify-center gap-2 shadow-lg shadow-amber-950/20 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer active:scale-[0.99]"
+            className="w-full mt-3 bg-white hover:bg-neutral-100 text-neutral-950 font-medium py-3.5 px-4 min-h-[48px] rounded-full text-xs uppercase tracking-widest transition-all duration-200 flex items-center justify-center gap-2 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer active:scale-[0.99]"
           >
             {isPending ? (
               <>

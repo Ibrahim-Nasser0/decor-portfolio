@@ -1,13 +1,14 @@
-import { getProjects, getDesignerProfile, getAdminAccounts } from '@/lib/dataRepository'
+import { getProjects, getDesignerProfile, getAdminAccounts, getClientInquiries } from '@/lib/dataRepository'
 import HomeClient from './HomeClient'
 
 export const dynamic = 'force-dynamic'
 
 export default async function AdminHomePage() {
-  const [projects, profile, adminAccounts] = await Promise.all([
+  const [projects, profile, adminAccounts, inquiries] = await Promise.all([
     getProjects(),
     getDesignerProfile(),
     getAdminAccounts(),
+    getClientInquiries(),
   ])
 
   return (
@@ -15,6 +16,7 @@ export default async function AdminHomePage() {
       initialProjects={projects}
       profile={profile}
       adminAccounts={adminAccounts}
+      initialInquiries={inquiries}
     />
   )
 }

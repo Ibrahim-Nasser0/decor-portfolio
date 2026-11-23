@@ -59,7 +59,7 @@ export default function AdminSidebar() {
               href="/admin"
               className="flex items-center gap-3 group min-w-0"
             >
-              <div className="relative w-11 h-11 rounded-full overflow-hidden border-2 border-amber-500/40 p-0.5 shadow-lg group-hover:border-amber-400 transition-colors shrink-0">
+              <div className="relative w-11 h-11 rounded-full overflow-hidden border-2 border-[#C5A059]/40 p-0.5 shadow-lg group-hover:border-[#C5A059] transition-colors shrink-0">
                 <Image
                   src="/images/alaa.webp"
                   alt="Eng. Alaa Essa"
@@ -67,15 +67,15 @@ export default function AdminSidebar() {
                   sizes="48px"
                   className="object-cover rounded-full"
                 />
-                <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 border-2 border-[#0d0e11] rounded-full" />
+                <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-[#7AD1B8] border-2 border-[#0d0e11] rounded-full" />
               </div>
 
               {!isCollapsed && (
                 <div className="min-w-0">
-                  <span className="text-[9px] uppercase tracking-[0.25em] font-mono text-amber-500 block font-medium truncate">
+                  <span className="text-[9px] uppercase tracking-[0.25em] font-mono text-[#C5A059] block font-medium truncate">
                     {t.nav.studioConsole}
                   </span>
-                  <h2 className="text-sm font-semibold tracking-wide text-white group-hover:text-amber-200 transition-colors truncate">
+                  <h2 className="text-sm font-semibold tracking-wide text-white group-hover:text-neutral-200 transition-colors truncate">
                     {t.home.architectName}
                   </h2>
                   <span className="text-[10px] text-neutral-400 font-sans block truncate">
@@ -88,7 +88,7 @@ export default function AdminSidebar() {
             {/* Desktop Collapse / Expand Toggle Button */}
             <button
               onClick={() => setIsCollapsed(!isCollapsed)}
-              className="p-1.5 rounded-lg text-neutral-400 hover:text-white bg-white/[0.03] hover:bg-white/[0.08] border border-white/[0.06] transition-colors cursor-pointer"
+              className="p-1.5 rounded-full text-neutral-400 hover:text-white bg-white/[0.03] hover:bg-white/[0.08] border border-white/[0.06] transition-colors cursor-pointer"
               title={isCollapsed ? 'Expand Sidebar' : 'Collapse Sidebar'}
               aria-label="Toggle Sidebar Width"
             >
@@ -103,11 +103,11 @@ export default function AdminSidebar() {
           {/* Telemetry pill (Expanded only) */}
           {!isCollapsed && (
             <div className="mt-4 pt-3 border-t border-white/[0.06] flex items-center justify-between text-[10px] font-mono text-neutral-400">
-              <span className="flex items-center gap-1.5 text-emerald-400">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="flex items-center gap-1.5 text-[#7AD1B8]">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#7AD1B8] animate-pulse" />
                 <span>{t.topNav.cloudSync}</span>
               </span>
-              <span className="bg-white/[0.04] border border-white/[0.08] px-2 py-0.5 rounded text-[9px] text-neutral-300 font-mono">
+              <span className="bg-white/[0.04] border border-white/[0.08] px-2.5 py-0.5 rounded-full text-[9px] text-neutral-300 font-mono">
                 {isRtl ? '5 شاشات' : '5 Screens'}
               </span>
             </div>
@@ -137,7 +137,7 @@ export default function AdminSidebar() {
                   isCollapsed ? 'justify-center p-3' : 'justify-between px-3.5 py-2.5'
                 } rounded-xl text-xs font-medium tracking-wide transition-all duration-200 relative ${
                   isActive
-                    ? 'bg-gradient-to-r from-amber-500/15 via-amber-500/5 to-transparent text-white font-semibold border-amber-500 shadow-sm ' +
+                    ? 'bg-white/[0.06] text-white font-semibold border-[#7AD1B8] shadow-sm ' +
                       (isRtl ? 'border-r-2' : 'border-l-2')
                     : 'text-neutral-400 hover:text-white hover:bg-white/[0.04]'
                 }`}
@@ -146,7 +146,7 @@ export default function AdminSidebar() {
                 <div className="flex items-center gap-3 min-w-0">
                   <Icon
                     className={`w-4 h-4 shrink-0 transition-colors ${
-                      isActive ? 'text-amber-400' : 'text-neutral-500 group-hover:text-neutral-300'
+                      isActive ? 'text-[#7AD1B8]' : 'text-neutral-500 group-hover:text-neutral-300'
                     }`}
                   />
                   {!isCollapsed && (
@@ -170,11 +170,11 @@ export default function AdminSidebar() {
             target="_blank"
             className={`w-full flex items-center ${
               isCollapsed ? 'justify-center p-2.5' : 'justify-between px-3.5 py-2.5'
-            } rounded-xl text-xs text-neutral-300 bg-white/[0.03] hover:bg-white/[0.07] border border-white/[0.06] hover:border-amber-500/30 transition-all group`}
+            } rounded-full text-xs text-neutral-300 bg-white/[0.03] hover:bg-white/[0.07] border border-white/[0.06] hover:border-[#7AD1B8]/40 transition-all group`}
             title={isCollapsed ? t.topNav.liveSite : undefined}
           >
             <span className="flex items-center gap-2">
-              <ExternalLink className="w-3.5 h-3.5 text-amber-400 group-hover:translate-x-0.5 transition-transform" />
+              <ExternalLink className="w-3.5 h-3.5 text-[#7AD1B8] group-hover:translate-x-0.5 transition-transform" />
               {!isCollapsed && <span>{t.nav.publicSite}</span>}
             </span>
             {!isCollapsed && (
@@ -189,8 +189,8 @@ export default function AdminSidebar() {
             <button
               type="submit"
               className={`w-full flex items-center ${
-                isCollapsed ? 'justify-center p-2' : 'justify-between px-3 py-2'
-              } rounded-xl text-xs text-red-400/90 hover:text-red-300 hover:bg-red-950/20 border border-transparent hover:border-red-900/30 transition-all cursor-pointer`}
+                isCollapsed ? 'justify-center p-2' : 'justify-between px-3.5 py-2'
+              } rounded-full text-xs text-red-400/90 hover:text-red-300 hover:bg-red-950/20 border border-transparent hover:border-red-900/30 transition-all cursor-pointer`}
               title={isCollapsed ? t.nav.logout : undefined}
             >
               <span className="flex items-center gap-2">

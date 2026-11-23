@@ -56,18 +56,18 @@ export default function MobileBottomNav() {
               }}
               className={`flex-1 min-h-[48px] flex flex-col items-center justify-center gap-1 py-1 px-1 rounded-2xl transition-all active:scale-90 ${
                 isActive
-                  ? 'text-amber-400 font-semibold'
+                  ? 'text-[#7AD1B8] font-semibold'
                   : 'text-neutral-400 hover:text-white'
               }`}
             >
               <div className="relative">
                 <Icon
                   className={`w-5 h-5 transition-transform ${
-                    isActive ? 'stroke-[2.3] scale-110 text-amber-400' : 'stroke-[1.8]'
+                    isActive ? 'stroke-[2.3] scale-110 text-[#7AD1B8]' : 'stroke-[1.8]'
                   }`}
                 />
                 {isActive && (
-                  <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-amber-400 shadow-[0_0_8px_#f59e0b]" />
+                  <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-[#7AD1B8] shadow-[0_0_8px_#7ad1b8]" />
                 )}
               </div>
               <span className="text-[10px] font-mono tracking-tight truncate max-w-[58px] sm:max-w-[70px] text-center leading-tight">

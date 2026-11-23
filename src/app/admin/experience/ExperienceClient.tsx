@@ -35,7 +35,18 @@ export default function ExperienceClient({ initialProfile }: { initialProfile: a
 
   // Software & Skills state
   const [software, setSoftware] = useState<any[]>(initialProfile.software || [])
-  const [skills, setSkills] = useState<any>(initialProfile.skills || { technicalEn: [], technicalAr: [] })
+  const [skills, setSkills] = useState<any>(() => {
+    const raw = initialProfile.skills || {}
+    return {
+      technicalEn: raw.technicalEn || ['Spatial Layout Planning', '1:10 Joinery Details', 'BOQ Cost Engineering', 'Corona 4K Photorealism'],
+      technicalAr: raw.technicalAr || [],
+      languages: raw.languages || [
+        { nameEn: 'Arabic', levelEn: 'Native Proficiency' },
+        { nameEn: 'English', levelEn: 'Professional Working Proficiency' },
+      ],
+      hobbiesEn: raw.hobbiesEn || ['Architectural Photography', 'Material Sampling', 'Classical Music'],
+    }
+  })
 
   const [isSaving, setIsSaving] = useState(false)
   const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
@@ -590,6 +601,123 @@ export default function ExperienceClient({ initialProfile }: { initialProfile: a
                   </div>
                 </div>
               ))}
+            </div>
+          </div>
+
+          {/* Section: Architectural Competencies & Spoken Languages */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Spoken Languages Card */}
+            <div className="bg-[#111215]/80 border border-white/[0.08] rounded-3xl p-5 sm:p-7 space-y-4 shadow-xl">
+              <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
+                <h3 className="text-xs font-mono uppercase tracking-wider text-white font-semibold">
+                  {isRtl ? 'اللغات المتقنة (Bento 5)' : 'Spoken Languages (Bento 5)'}
+                </h3>
+                <button
+                  type="button"
+                  onClick={() =>
+                    setSkills((prev: any) => ({
+                      ...prev,
+                      languages: [...(prev.languages || []), { nameEn: 'New Language', levelEn: 'Working Proficiency' }],
+                    }))
+                  }
+                  className="inline-flex items-center gap-1.5 bg-white/[0.05] hover:bg-white/[0.1] text-sky-400 border border-white/[0.08] px-3 py-1.5 rounded-xl text-xs font-mono transition-colors cursor-pointer"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  <span>{isRtl ? 'إضافة لغة' : 'Add Language'}</span>
+                </button>
+              </div>
+
+              <div className="space-y-3">
+                {(skills.languages || []).map((lang: any, idx: number) => (
+                  <div key={idx} className="p-3 bg-[#090a0c] border border-white/[0.08] rounded-2xl flex items-center gap-3">
+                    <input
+                      type="text"
+                      placeholder="Language (e.g. English)"
+                      value={lang.nameEn || ''}
+                      onChange={(e) => {
+                        const updated = [...skills.languages]
+                        updated[idx].nameEn = e.target.value
+                        setSkills((prev: any) => ({ ...prev, languages: updated }))
+                      }}
+                      className="flex-1 bg-[#111215] border border-white/[0.08] rounded-xl px-3 py-2 text-xs text-white"
+                    />
+                    <input
+                      type="text"
+                      placeholder="Proficiency Level"
+                      value={lang.levelEn || ''}
+                      onChange={(e) => {
+                        const updated = [...skills.languages]
+                        updated[idx].levelEn = e.target.value
+                        setSkills((prev: any) => ({ ...prev, languages: updated }))
+                      }}
+                      className="flex-1 bg-[#111215] border border-white/[0.08] rounded-xl px-3 py-2 text-xs text-white font-mono"
+                    />
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setSkills((prev: any) => ({
+                          ...prev,
+                          languages: prev.languages.filter((_: any, i: number) => i !== idx),
+                        }))
+                      }
+                      className="p-1.5 text-neutral-500 hover:text-red-400 transition-colors"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Creative Disciplines & Hobbies Card */}
+            <div className="bg-[#111215]/80 border border-white/[0.08] rounded-3xl p-5 sm:p-7 space-y-4 shadow-xl">
+              <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
+                <h3 className="text-xs font-mono uppercase tracking-wider text-white font-semibold">
+                  {isRtl ? 'الهوايات والاهتمامات المعمارية' : 'Creative Disciplines & Hobbies'}
+                </h3>
+                <button
+                  type="button"
+                  onClick={() =>
+                    setSkills((prev: any) => ({
+                      ...prev,
+                      hobbiesEn: [...(prev.hobbiesEn || []), 'New Discipline'],
+                    }))
+                  }
+                  className="inline-flex items-center gap-1.5 bg-white/[0.05] hover:bg-white/[0.1] text-sky-400 border border-white/[0.08] px-3 py-1.5 rounded-xl text-xs font-mono transition-colors cursor-pointer"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  <span>{isRtl ? 'إضافة هواية' : 'Add Item'}</span>
+                </button>
+              </div>
+
+              <div className="space-y-3">
+                {(skills.hobbiesEn || []).map((hobby: string, idx: number) => (
+                  <div key={idx} className="p-3 bg-[#090a0c] border border-white/[0.08] rounded-2xl flex items-center gap-3">
+                    <input
+                      type="text"
+                      value={hobby}
+                      onChange={(e) => {
+                        const updated = [...skills.hobbiesEn]
+                        updated[idx] = e.target.value
+                        setSkills((prev: any) => ({ ...prev, hobbiesEn: updated }))
+                      }}
+                      className="flex-1 bg-[#111215] border border-white/[0.08] rounded-xl px-3 py-2 text-xs text-white"
+                    />
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setSkills((prev: any) => ({
+                          ...prev,
+                          hobbiesEn: prev.hobbiesEn.filter((_: any, i: number) => i !== idx),
+                        }))
+                      }
+                      className="p-1.5 text-neutral-500 hover:text-red-400 transition-colors"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>

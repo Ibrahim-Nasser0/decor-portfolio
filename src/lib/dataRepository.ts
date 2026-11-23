@@ -684,6 +684,18 @@ export async function updateInquiryNotes(id: string, notes: string) {
   return true
 }
 
+export async function deleteClientInquiry(id: string) {
+  const supabase = await createClient()
+  const { error } = await supabase.from('client_inquiries').delete().eq('id', id)
+
+  if (error) {
+    throw new Error(`Failed to delete client inquiry: ${error.message}`)
+  }
+
+  invalidateInquiriesCache()
+  return true
+}
+
 export async function submitClientInquiry(inquiry: Omit<ClientInquiry, 'id' | 'status' | 'created_at'>) {
   const supabase = await createClient()
   const { error } = await supabase.from('client_inquiries').insert([inquiry])

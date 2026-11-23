@@ -208,10 +208,10 @@ export default function SettingsClient({
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-white/[0.08]">
         <div>
-          <span className="text-[10px] tracking-[0.25em] font-mono text-amber-500 uppercase font-semibold">
+          <span className="text-[10px] tracking-[0.25em] font-mono text-[#C5A059] uppercase font-semibold">
             Section 05 Management
           </span>
-          <h1 className="text-2xl sm:text-3xl font-serif text-white tracking-wide mt-1">
+          <h1 className="text-2xl sm:text-3xl font-editorial text-white tracking-wide mt-1">
             {t.settings.title}
           </h1>
           <p className="text-xs text-neutral-400 mt-1 font-mono">
@@ -223,9 +223,9 @@ export default function SettingsClient({
           <Link
             href="/"
             target="_blank"
-            className="inline-flex items-center gap-2 px-3 py-2 bg-white/[0.03] hover:bg-white/[0.08] text-neutral-300 hover:text-white rounded-xl text-xs font-mono border border-white/[0.08] transition-colors"
+            className="inline-flex items-center gap-2 px-3.5 py-2 bg-white/[0.03] hover:bg-white/[0.08] text-neutral-300 hover:text-white rounded-full text-xs font-mono border border-white/[0.08] transition-colors"
           >
-            <ExternalLink className="w-3.5 h-3.5 text-amber-400" />
+            <ExternalLink className="w-3.5 h-3.5 text-[#7AD1B8]" />
             <span>{t.common.preview}</span>
           </Link>
         </div>
@@ -239,7 +239,7 @@ export default function SettingsClient({
         <div className="lg:col-span-7 bg-[#111215]/90 border border-white/[0.08] rounded-3xl p-5 sm:p-6 space-y-5 shadow-xl">
           <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
             <div className="flex items-center gap-2.5">
-              <Mail className="w-4 h-4 text-amber-400" />
+              <Mail className="w-4 h-4 text-[#7AD1B8]" />
               <div>
                 <h2 className="text-xs font-mono uppercase tracking-wider text-white font-semibold">
                   {t.settings.adminAccountsTitle} ({accounts.length})
@@ -253,7 +253,7 @@ export default function SettingsClient({
             <button
               type="button"
               onClick={() => setShowAddModal(true)}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-400 to-amber-200 text-neutral-950 font-bold text-xs uppercase tracking-wider transition-all active:scale-95 shadow-md font-mono cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white hover:bg-neutral-100 text-neutral-950 font-medium text-xs uppercase tracking-wider transition-all active:scale-95 shadow-md font-mono cursor-pointer"
             >
               <UserPlus className="w-3.5 h-3.5 text-neutral-950 stroke-[2.5]" />
               <span>{t.settings.addAdminEmail}</span>
@@ -382,14 +382,14 @@ export default function SettingsClient({
                   autoCapitalize="none"
                   autoCorrect="off"
                   spellCheck={false}
-                  className="w-full bg-[#090a0c] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3.5 py-3 text-[16px] sm:text-xs text-white focus:outline-none font-mono"
+                  className="w-full bg-[#090a0c] border border-white/[0.08] focus:border-[#7AD1B8]/80 rounded-xl px-3.5 py-3 text-[16px] sm:text-xs text-white focus:outline-none font-mono"
                 />
               </div>
 
               <button
                 type="submit"
                 disabled={isUpdatingPass || !newPass || !confirmPass}
-                className="w-full py-2.5 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] text-neutral-200 hover:text-white border border-white/[0.1] hover:border-amber-400/50 text-xs font-mono font-semibold transition-all disabled:opacity-50 cursor-pointer active:scale-98"
+                className="w-full py-2.5 rounded-full bg-white/[0.05] hover:bg-white/[0.1] text-neutral-200 hover:text-white border border-white/[0.1] hover:border-[#7AD1B8]/50 text-xs font-mono font-semibold transition-all disabled:opacity-50 cursor-pointer active:scale-98"
               >
                 {isUpdatingPass ? t.common.saving : t.settings.updatePasswordButton}
               </button>
@@ -399,7 +399,7 @@ export default function SettingsClient({
           {/* Card: Studio Language Preference */}
           <div className="bg-[#111215]/90 border border-white/[0.08] rounded-3xl p-5 sm:p-6 space-y-4 shadow-xl">
             <div className="flex items-center gap-2.5 pb-3 border-b border-white/[0.08]">
-              <Languages className="w-4 h-4 text-amber-400" />
+              <Languages className="w-4 h-4 text-[#7AD1B8]" />
               <div>
                 <h3 className="text-xs font-mono uppercase tracking-wider text-white font-semibold">
                   {t.settings.preferencesTitle}
@@ -414,9 +414,9 @@ export default function SettingsClient({
               <button
                 type="button"
                 onClick={() => setLang('ar')}
-                className={`py-2.5 px-3 rounded-xl border text-xs font-mono flex items-center justify-center gap-2 transition-all cursor-pointer ${
+                className={`py-2.5 px-3 rounded-full border text-xs font-mono flex items-center justify-center gap-2 transition-all cursor-pointer ${
                   lang === 'ar'
-                    ? 'bg-amber-500/20 border-amber-500/50 text-amber-300 font-bold shadow-md'
+                    ? 'bg-[#7AD1B8]/20 border-[#7AD1B8]/50 text-[#7AD1B8] font-bold shadow-md'
                     : 'bg-white/[0.03] border-white/[0.06] text-neutral-400 hover:text-white'
                 }`}
               >
@@ -426,9 +426,9 @@ export default function SettingsClient({
               <button
                 type="button"
                 onClick={() => setLang('en')}
-                className={`py-2.5 px-3 rounded-xl border text-xs font-mono flex items-center justify-center gap-2 transition-all cursor-pointer ${
+                className={`py-2.5 px-3 rounded-full border text-xs font-mono flex items-center justify-center gap-2 transition-all cursor-pointer ${
                   lang === 'en'
-                    ? 'bg-amber-500/20 border-amber-500/50 text-amber-300 font-bold shadow-md'
+                    ? 'bg-[#7AD1B8]/20 border-[#7AD1B8]/50 text-[#7AD1B8] font-bold shadow-md'
                     : 'bg-white/[0.03] border-white/[0.06] text-neutral-400 hover:text-white'
                 }`}
               >
