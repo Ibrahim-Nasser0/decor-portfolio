@@ -18,17 +18,22 @@ export async function generateMetadata({
   params: Promise<{ id: string }>;
 }): Promise<Metadata> {
   const { id } = await params;
-  const project = await getProjectById(id);
+  const [project, profile] = await Promise.all([
+    getProjectById(id),
+    getDesignerProfile(),
+  ]);
+
+  const brandName = profile?.nameEn || "Alaa Essa";
 
   if (!project) {
     return {
-      title: "Project Not Found | Alaa Issa",
+      title: `Project Not Found | ${brandName}`,
     };
   }
 
   return {
-    title: `${project.titleEn} | Eng. Alaa Issa Architecture`,
-    description: project.descriptionEn,
+    title: `${project.titleEn || project.title} | Eng. ${brandName} Architecture`,
+    description: project.descriptionEn || project.description || `Architectural project by Eng. ${brandName}`,
   };
 }
 
@@ -38,14 +43,15 @@ export default async function ProjectPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const [project, profile] = await Promise.all([
+  const [project, profile, allProjects] = await Promise.all([
     getProjectById(id),
     getDesignerProfile(),
+    getProjects(),
   ]);
 
   if (!project) {
     notFound();
   }
 
-  return <ProjectDetailView project={project} profile={profile} />;
+  return <ProjectDetailView project={project} profile={profile} allProjects={allProjects} />;
 }

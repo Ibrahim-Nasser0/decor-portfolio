@@ -196,7 +196,7 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
                   <div className="relative aspect-[4/3] w-full bg-neutral-100 overflow-hidden border border-neutral-300 shadow-sm group">
                     <Image
                       src={activeImage}
-                      alt={angles[selectedAngleIdx]?.titleEn || project.titleEn}
+                      alt={angles[selectedAngleIdx]?.titleEn || project.titleEn || project.title || "Perspective View"}
                       fill
                       className="object-cover transition-transform duration-700 group-hover:scale-102"
                     />
@@ -219,7 +219,7 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
                       >
                         <Image
                           src={angle.image}
-                          alt={angle.titleEn}
+                          alt={angle.titleEn || `${project.titleEn || project.title || "Perspective"} - View 0${idx + 1}`}
                           fill
                           className="object-cover"
                         />

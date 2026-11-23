@@ -87,6 +87,39 @@ export default function Hero({ profile, projectsCount = 5 }: HeroProps) {
   // Live Studio Clock (Cairo / Alexandria timezone: UTC+2)
   const [studioTime, setStudioTime] = useState<string>("");
 
+  // 3D Perspective Tilt on Portrait Card
+  const cardRef = React.useRef<HTMLDivElement>(null);
+  const [tilt, setTilt] = useState({ x: 0, y: 0 });
+
+  const handleCardMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    const rotateX = Number((((y - centerY) / centerY) * -6).toFixed(2));
+    const rotateY = Number((((x - centerX) / centerX) * 6).toFixed(2));
+    setTilt({ x: rotateX, y: rotateY });
+  };
+
+  const handleCardMouseLeave = () => {
+    setTilt({ x: 0, y: 0 });
+  };
+
+  // Ambient Pointer Spotlight Tracker
+  const heroRef = React.useRef<HTMLElement>(null);
+  const [spotlightPos, setSpotlightPos] = useState({ x: -1000, y: -1000 });
+
+  const handleHeroMouseMove = (e: React.MouseEvent<HTMLElement>) => {
+    if (!heroRef.current) return;
+    const rect = heroRef.current.getBoundingClientRect();
+    setSpotlightPos({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+    });
+  };
+
   useEffect(() => {
     const updateTime = () => {
       try {
@@ -109,9 +142,40 @@ export default function Hero({ profile, projectsCount = 5 }: HeroProps) {
 
   return (
     <section
+      ref={heroRef}
+      onMouseMove={handleHeroMouseMove}
       id="hero"
-      className="relative min-h-[90vh] bg-white pt-4 sm:pt-6 lg:pt-8 pb-12 sm:pb-16 flex flex-col justify-between overflow-hidden select-none"
+      className="relative min-h-[90vh] bg-white pt-6 sm:pt-8 lg:pt-10 pb-12 sm:pb-16 flex flex-col justify-between overflow-hidden select-none"
     >
+      {/* Interactive Cursor Spotlight Glow */}
+      <div
+        className="pointer-events-none absolute -inset-px transition-opacity duration-300 hidden md:block"
+        style={{
+          background: `radial-gradient(650px circle at ${spotlightPos.x}px ${spotlightPos.y}px, rgba(197, 160, 89, 0.04), transparent 75%)`,
+        }}
+      />
+
+      {/* Millimeter CAD Drafting Ruler Ticks across Top Edge */}
+      <div className="absolute top-0 inset-x-0 h-3 border-b border-black/[0.06] flex items-center justify-between px-6 pointer-events-none select-none font-mono text-[7px] text-neutral-300 overflow-hidden hidden md:flex">
+        <span>000MM</span>
+        <span>•</span>
+        <span>050MM</span>
+        <span>•</span>
+        <span>100MM</span>
+        <span>•</span>
+        <span>150MM</span>
+        <span>•</span>
+        <span>200MM</span>
+        <span>•</span>
+        <span>250MM</span>
+        <span>•</span>
+        <span>300MM</span>
+        <span>•</span>
+        <span>350MM</span>
+        <span>•</span>
+        <span>400MM</span>
+      </div>
+
       {/* Background Architectural Drafting Watermark */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[22vw] font-editorial font-black text-black/[0.015] pointer-events-none select-none -z-10 tracking-tighter leading-none animate-float-muted">
         ARCH
@@ -149,16 +213,25 @@ export default function Hero({ profile, projectsCount = 5 }: HeroProps) {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-12 lg:gap-16 2xl:gap-24 items-center">
           {/* Portrait Photo: 1st on Mobile for Strong Visual Identity, Right Column (5 cols) on Desktop */}
           <div className="lg:col-span-5 relative order-1 lg:order-2 animate-hero-entrance [animation-delay:300ms]">
-            <div className="relative mx-auto max-w-[280px] xs:max-w-[320px] sm:max-w-sm lg:max-w-none">
+            <div
+              ref={cardRef}
+              onMouseMove={handleCardMouseMove}
+              onMouseLeave={handleCardMouseLeave}
+              style={{
+                transform: `perspective(900px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
+                transition: tilt.x === 0 && tilt.y === 0 ? "transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)" : "none",
+              }}
+              className="relative mx-auto max-w-[280px] xs:max-w-[320px] sm:max-w-sm lg:max-w-none will-change-transform"
+            >
               {/* Luxury Ambient Atmospheric Glow Aura */}
               <div className="absolute -inset-6 bg-gradient-to-tr from-amber-500/10 via-neutral-900/5 to-transparent rounded-3xl blur-2xl pointer-events-none -z-20 animate-aura-breathe" />
 
               {/* Outer architectural guide frame with Drafting Corner Marks (+) */}
               <div className="absolute -inset-2.5 sm:-inset-4 2xl:-inset-5 border border-neutral-300 -z-10 pointer-events-none transition-all duration-700">
-                <span className="absolute -top-1.5 -left-1.5 font-mono text-[9px] text-neutral-400 leading-none select-none">+</span>
-                <span className="absolute -top-1.5 -right-1.5 font-mono text-[9px] text-neutral-400 leading-none select-none">+</span>
-                <span className="absolute -bottom-1.5 -left-1.5 font-mono text-[9px] text-neutral-400 leading-none select-none">+</span>
-                <span className="absolute -bottom-1.5 -right-1.5 font-mono text-[9px] text-neutral-400 leading-none select-none">+</span>
+                <span className="absolute -top-1.5 -left-1.5 font-mono text-[9px] text-neutral-400 leading-none select-none transition-transform group-hover:rotate-90">+</span>
+                <span className="absolute -top-1.5 -right-1.5 font-mono text-[9px] text-neutral-400 leading-none select-none transition-transform group-hover:rotate-90">+</span>
+                <span className="absolute -bottom-1.5 -left-1.5 font-mono text-[9px] text-neutral-400 leading-none select-none transition-transform group-hover:rotate-90">+</span>
+                <span className="absolute -bottom-1.5 -right-1.5 font-mono text-[9px] text-neutral-400 leading-none select-none transition-transform group-hover:rotate-90">+</span>
               </div>
 
               {/* Main Portrait Frame with Atmospheric Depth */}
@@ -197,6 +270,40 @@ export default function Hero({ profile, projectsCount = 5 }: HeroProps) {
                   <span className="text-neutral-500 text-[8px] sm:text-[9px] block tracking-widest mt-0.5">
                     {location}
                   </span>
+                </div>
+              </div>
+
+              {/* Tactile Architectural Material Palette Chips */}
+              <div className="mt-4 p-2 sm:p-2.5 bg-white/95 backdrop-blur-md border border-neutral-300 shadow-xs flex items-center justify-between gap-2 text-[9px] font-technical uppercase">
+                <span className="font-mono text-[8px] text-neutral-400 tracking-wider">PALETTE //</span>
+                <div className="flex items-center gap-2">
+                  <div className="group/chip relative flex items-center gap-1.5 cursor-pointer">
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#E8E3D9] border border-black/20 shadow-2xs group-hover/chip:scale-130 transition-transform" />
+                    <span className="text-neutral-700 font-semibold group-hover/chip:text-black text-[8px] sm:text-[9px]">TRAVERTINE</span>
+                    <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 px-2 py-0.5 bg-black text-white text-[8px] font-mono tracking-widest whitespace-nowrap opacity-0 group-hover/chip:opacity-100 transition-opacity pointer-events-none rounded-2xs shadow-md z-30">
+                      NAVONA HONED • 3000K
+                    </span>
+                  </div>
+
+                  <span className="text-neutral-300">•</span>
+
+                  <div className="group/chip relative flex items-center gap-1.5 cursor-pointer">
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#7D6242] border border-black/20 shadow-2xs group-hover/chip:scale-130 transition-transform" />
+                    <span className="text-neutral-700 font-semibold group-hover/chip:text-black text-[8px] sm:text-[9px]">WALNUT</span>
+                    <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 px-2 py-0.5 bg-black text-white text-[8px] font-mono tracking-widest whitespace-nowrap opacity-0 group-hover/chip:opacity-100 transition-opacity pointer-events-none rounded-2xs shadow-md z-30">
+                      FLUTED AMERICAN • MATTE
+                    </span>
+                  </div>
+
+                  <span className="text-neutral-300">•</span>
+
+                  <div className="group/chip relative flex items-center gap-1.5 cursor-pointer">
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#C5A059] border border-black/20 shadow-2xs group-hover/chip:scale-130 transition-transform" />
+                    <span className="text-neutral-700 font-semibold group-hover/chip:text-black text-[8px] sm:text-[9px]">BRASS</span>
+                    <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 px-2 py-0.5 bg-black text-white text-[8px] font-mono tracking-widest whitespace-nowrap opacity-0 group-hover/chip:opacity-100 transition-opacity pointer-events-none rounded-2xs shadow-md z-30">
+                      AGED PVD BRUSHED • 240G
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>

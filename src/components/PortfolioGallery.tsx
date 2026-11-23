@@ -176,7 +176,7 @@ export default function PortfolioGallery({ initialProjects = PROJECTS }: Portfol
                   >
                     <Image
                       src={project.coverImage}
-                      alt={project.titleEn}
+                      alt={project.titleEn || project.title || "Architectural Project"}
                       fill
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                       className="object-cover transition-transform duration-700 ease-out group-hover:scale-108"
@@ -212,31 +212,35 @@ export default function PortfolioGallery({ initialProjects = PROJECTS }: Portfol
                       {/* Meta Coordinates & Practice Attribution Row */}
                       <div className="flex items-center justify-between gap-2 text-[10px] sm:text-[11px] font-technical text-neutral-500 mb-2.5 uppercase tracking-wider">
                         <div className="flex items-center gap-2 truncate">
-                          <span className="flex items-center gap-1">
-                            <MapPin className="w-3 h-3 text-neutral-800 shrink-0" />
-                            <span className="truncate max-w-[110px]">{project.locationEn}</span>
-                          </span>
-                          <span className="text-neutral-300">•</span>
-                          <span>{project.area}</span>
+                          {project.locationEn && (
+                            <span className="flex items-center gap-1 truncate">
+                              <MapPin className="w-3 h-3 text-neutral-800 shrink-0" />
+                              <span className="truncate max-w-[120px]">{project.locationEn}</span>
+                            </span>
+                          )}
+                          {project.locationEn && project.area && <span className="text-neutral-300">•</span>}
+                          {project.area && <span className="shrink-0">{project.area}</span>}
                         </div>
 
                         {/* Firm / Freelance Attribution Label */}
                         <span className="px-2 py-0.5 bg-neutral-100 text-neutral-800 border border-neutral-300/80 text-[9px] font-mono uppercase tracking-wider font-semibold shrink-0 group-hover:bg-black group-hover:text-white group-hover:border-black transition-colors duration-300">
-                          {project.firmEn || "Freelance Practice"}
+                          {project.firmEn || "Alaa Essa Studio"}
                         </span>
                       </div>
 
                       {/* Monumental Editorial Title */}
                       <Link href={`/projects/${project.id}`}>
                         <h3 className="text-lg sm:text-xl font-editorial font-bold text-black uppercase tracking-tight leading-snug group-hover:underline transition-all">
-                          {project.titleEn}
+                          {project.titleEn || project.title || "Untitled Project"}
                         </h3>
                       </Link>
 
                       {/* Narrative Excerpt */}
-                      <p className="text-xs sm:text-[13px] text-neutral-600 mt-2.5 line-clamp-2 leading-relaxed font-sans">
-                        {project.descriptionEn}
-                      </p>
+                      {(project.descriptionEn || project.description) && (
+                        <p className="text-xs sm:text-[13px] text-neutral-600 mt-2.5 line-clamp-2 leading-relaxed font-sans">
+                          {project.descriptionEn || project.description}
+                        </p>
+                      )}
                     </div>
 
                     {/* Architectural Material Palette & Action Footer */}
@@ -263,7 +267,7 @@ export default function PortfolioGallery({ initialProjects = PROJECTS }: Portfol
                       {/* Footer Row: Style & Case Study Link */}
                       <div className="flex items-center justify-between pt-1">
                         <span className="text-[10px] font-technical uppercase tracking-wider text-neutral-500 font-medium truncate max-w-[160px]">
-                          {project.styleEn}
+                          {project.styleEn || project.categoryLabelEn || project.category}
                         </span>
 
                         <Link

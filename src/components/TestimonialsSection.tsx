@@ -57,7 +57,7 @@ export default function TestimonialsSection() {
                 <div className="relative w-11 h-11 rounded-full overflow-hidden border border-[#c5a880]/40 shrink-0">
                   <Image
                     src={test.avatar}
-                    alt={test.name}
+                    alt={test.name || "Client"}
                     fill
                     className="object-cover"
                   />

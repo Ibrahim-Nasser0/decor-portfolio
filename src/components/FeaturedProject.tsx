@@ -82,7 +82,7 @@ export default function FeaturedProject() {
             <div className="relative aspect-[4/3] rounded-2xl overflow-hidden glass-panel border border-white/10 group shadow-2xl">
               <Image
                 src={project.gallery[selectedImageIdx]}
-                alt={project.title}
+                alt={project.title || "Featured Project"}
                 fill
                 priority
                 className="object-cover transition-transform duration-700 group-hover:scale-102"

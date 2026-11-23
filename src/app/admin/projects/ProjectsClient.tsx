@@ -605,7 +605,7 @@ export default function ProjectsClient({
                 <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-xl overflow-hidden bg-neutral-900 shrink-0 border border-white/[0.1]">
                   <Image
                     src={project.coverImage || '/images/projects/project-1.jpg'}
-                    alt={project.titleEn}
+                    alt={project.titleEn || project.title || 'Project'}
                     fill
                     sizes="96px"
                     loading="lazy"
@@ -1176,7 +1176,7 @@ export default function ProjectsClient({
                             <div className="relative w-14 h-14 rounded-xl overflow-hidden border border-white/10 shrink-0 bg-neutral-900">
                               <Image
                                 src={p.coverImage}
-                                alt={p.titleEn}
+                                alt={p.titleEn || p.title || 'Project'}
                                 fill
                                 sizes="56px"
                                 className="object-cover"
@@ -1232,7 +1232,7 @@ export default function ProjectsClient({
                     >
                       <div className="flex items-center gap-3 min-w-0">
                         <div className="relative w-10 h-10 rounded-xl overflow-hidden border border-white/10 shrink-0 bg-neutral-900">
-                          <Image src={p.coverImage} alt={p.titleEn} fill sizes="40px" className="object-cover" />
+                          <Image src={p.coverImage} alt={p.titleEn || p.title || 'Project'} fill sizes="40px" className="object-cover" />
                         </div>
                         <div className="min-w-0">
                           <div className="text-xs font-medium text-white truncate">{p.titleEn}</div>

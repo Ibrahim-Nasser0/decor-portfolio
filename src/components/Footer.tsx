@@ -9,8 +9,6 @@ import {
   ArrowUp,
   ArrowUpRight,
   MapPin,
-  MessageCircle,
-  Building2,
   Compass,
   FileDown,
   FileText,
@@ -113,66 +111,8 @@ export default function Footer({ profile }: FooterProps) {
       className="bg-white border-t border-neutral-300 pt-16 sm:pt-20 2xl:pt-28 pb-10 sm:pb-14 relative text-black select-none overflow-hidden"
     >
       <div className="max-w-7xl 2xl:max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 2xl:px-12">
-        {/* Top Architectural Invitation Marquee Card */}
-        <div
-          className={`pb-12 sm:pb-16 transition-all duration-700 ease-out ${
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
-          }`}
-        >
-          <div className="relative bg-[#faf9f6] border border-neutral-300/80 p-6 sm:p-10 lg:p-12 shadow-xs overflow-hidden">
-            {/* Drafting Crosshairs in Card Corners */}
-            <span className="absolute top-2 start-2 font-mono text-[9px] text-neutral-400 select-none">+</span>
-            <span className="absolute top-2 end-2 font-mono text-[9px] text-neutral-400 select-none">+</span>
-            <span className="absolute bottom-2 start-2 font-mono text-[9px] text-neutral-400 select-none">+</span>
-            <span className="absolute bottom-2 end-2 font-mono text-[9px] text-neutral-400 select-none">+</span>
-
-            <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 relative z-10">
-              <div className="space-y-3.5 max-w-2xl">
-                <div className="flex items-center gap-2.5 text-[10px] sm:text-xs font-technical uppercase tracking-[0.25em] text-neutral-500 font-bold">
-                  <span className="relative flex h-2 w-2 items-center justify-center">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#7AD1B8] opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-[#7AD1B8]"></span>
-                  </span>
-                  <span>COMMISSIONS OPEN • 2026/2027 CALENDAR</span>
-                </div>
-
-                <h3 className="text-2xl sm:text-4xl lg:text-5xl font-editorial font-bold text-black uppercase tracking-tight leading-[1.05]">
-                  Have an Intentional Space in Mind?
-                </h3>
-
-                <p className="text-xs sm:text-sm text-neutral-600 font-sans leading-relaxed">
-                  Whether formulating a private residential sanctuary, penthouse suite, or bespoke commercial concept, let us explore the spatial possibilities from layout logic to turnkey execution.
-                </p>
-              </div>
-
-              {/* Action Buttons */}
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 shrink-0">
-                <a
-                  href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
-                    `Hello Eng. ${name}, I would like to inquire about booking an interior design consultation.`
-                  )}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-5 py-3.5 border border-neutral-300 hover:border-black bg-white hover:bg-neutral-50 text-black text-xs uppercase tracking-widest font-technical font-medium transition-all duration-200 flex items-center justify-center gap-2 shadow-2xs active:scale-98"
-                >
-                  <MessageCircle className="w-4 h-4 text-emerald-600" />
-                  <span>WhatsApp Direct</span>
-                </a>
-
-                <a
-                  href="#contact"
-                  className="group px-6 py-3.5 bg-black hover:bg-neutral-800 text-white text-xs uppercase tracking-widest font-technical font-medium transition-all duration-200 flex items-center justify-center gap-2 shadow-xs hover:shadow-md active:scale-98"
-                >
-                  <span>Start a Project Brief</span>
-                  <ArrowUpRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-
         {/* Main 4-Column Monograph Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 sm:gap-12 py-12 sm:py-16 border-t border-b border-neutral-200">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 sm:gap-12 pb-12 sm:pb-16 border-b border-neutral-200">
           {/* Column 1: Identity & Studio Ethos (4 cols) */}
           <div
             className={`lg:col-span-4 space-y-5 transition-all duration-700 delay-100 ease-out ${

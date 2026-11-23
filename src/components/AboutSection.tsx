@@ -16,6 +16,8 @@ import {
   Briefcase,
   Layers,
   Sparkles,
+  Compass,
+  SunMedium,
 } from "lucide-react";
 
 interface AboutSectionProps {
@@ -94,21 +96,25 @@ export default function AboutSection({ profile }: AboutSectionProps) {
       title: "Spatial Ergonomics",
       desc: "Rigorous circulation analysis ensuring every square meter is functional, serene, and naturally flowing.",
       tag: "01 / CIRCULATION",
+      icon: Compass,
     },
     {
       title: "Circadian Lighting",
       desc: "Layered 3000K warm architectural lighting schemes engineered to elevate texture and promote calm.",
       tag: "02 / LUMEN DYNAMICS",
+      icon: SunMedium,
     },
     {
       title: "Bespoke Millwork",
       desc: "Tailored joinery detailing, acoustic wall fluting, and floating cabinetry executed with zero-gap precision.",
       tag: "03 / JOINERY ART",
+      icon: Layers,
     },
     {
       title: "Turnkey Execution",
       desc: "Millimeter-accurate executive shop drawings and attentive direct on-site supervision ensuring real-world fidelity.",
       tag: "04 / REALIZATION",
+      icon: Briefcase,
     },
   ];
 
@@ -202,6 +208,48 @@ export default function AboutSection({ profile }: AboutSectionProps) {
                   </div>
                   <div className="text-[9px] sm:text-[10px] 2xl:text-xs uppercase text-neutral-300 tracking-widest truncate">
                     {title}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Studio Materiality Library (Physical tactile specimens) */}
+            <div className="p-4 sm:p-5 bg-neutral-50/90 border border-neutral-300 space-y-3 shadow-xs">
+              <div className="flex items-center justify-between pb-2 border-b border-neutral-200 text-[10px] sm:text-[11px] font-mono uppercase tracking-wider text-neutral-400">
+                <span className="text-black font-semibold">TACTILE MATERIALITY</span>
+                <span>SAMPLE KIT // 2026</span>
+              </div>
+
+              <div className="grid grid-cols-2 gap-2 text-[10px] font-technical uppercase">
+                <div className="p-2 bg-white border border-neutral-200/90 flex items-center gap-2.5 hover:border-black transition-colors group/mat">
+                  <span className="w-4 h-4 rounded-xs bg-[#E8E3D9] border border-black/15 shrink-0 shadow-2xs group-hover/mat:scale-115 transition-transform" />
+                  <div className="min-w-0">
+                    <span className="font-bold text-black block truncate text-[9px] sm:text-[10px]">Travertine</span>
+                    <span className="text-[8px] font-mono text-neutral-400 block">Navona • Honed</span>
+                  </div>
+                </div>
+
+                <div className="p-2 bg-white border border-neutral-200/90 flex items-center gap-2.5 hover:border-black transition-colors group/mat">
+                  <span className="w-4 h-4 rounded-xs bg-[#7D6242] border border-black/15 shrink-0 shadow-2xs group-hover/mat:scale-115 transition-transform" />
+                  <div className="min-w-0">
+                    <span className="font-bold text-black block truncate text-[9px] sm:text-[10px]">Fluted Oak</span>
+                    <span className="text-[8px] font-mono text-neutral-400 block">American • 5%</span>
+                  </div>
+                </div>
+
+                <div className="p-2 bg-white border border-neutral-200/90 flex items-center gap-2.5 hover:border-black transition-colors group/mat">
+                  <span className="w-4 h-4 rounded-xs bg-[#C5A059] border border-black/15 shrink-0 shadow-2xs group-hover/mat:scale-115 transition-transform" />
+                  <div className="min-w-0">
+                    <span className="font-bold text-black block truncate text-[9px] sm:text-[10px]">Brushed Brass</span>
+                    <span className="text-[8px] font-mono text-neutral-400 block">PVD • 240 Grit</span>
+                  </div>
+                </div>
+
+                <div className="p-2 bg-white border border-neutral-200/90 flex items-center gap-2.5 hover:border-black transition-colors group/mat">
+                  <span className="w-4 h-4 rounded-xs bg-[#F0EDE6] border border-black/15 shrink-0 shadow-2xs group-hover/mat:scale-115 transition-transform" />
+                  <div className="min-w-0">
+                    <span className="font-bold text-black block truncate text-[9px] sm:text-[10px]">Tactile Bouclé</span>
+                    <span className="text-[8px] font-mono text-neutral-400 block">High-Pile • Ecru</span>
                   </div>
                 </div>
               </div>
@@ -335,10 +383,9 @@ export default function AboutSection({ profile }: AboutSectionProps) {
 
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <span className="text-[10px] 2xl:text-xs font-mono font-bold text-neutral-400 group-hover:text-black transition-colors">
-                          0{idx + 1}
+                        <span className="p-1 rounded-2xs bg-neutral-100 group-hover:bg-black text-neutral-600 group-hover:text-white transition-colors shrink-0">
+                          <pillar.icon className="w-3.5 h-3.5" />
                         </span>
-                        <span className="w-1.5 h-[1px] bg-neutral-300 group-hover:bg-black transition-colors" />
                         <h4 className="text-xs 2xl:text-sm font-technical font-bold uppercase tracking-wider text-black">
                           {pillar.title}
                         </h4>

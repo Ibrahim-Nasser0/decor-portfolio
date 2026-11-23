@@ -436,7 +436,7 @@ export default function HomeClient({
                   <div className="relative w-full h-36 sm:h-32 bg-neutral-900 overflow-hidden">
                     <Image
                       src={project.coverImage || '/images/projects/project-1.jpg'}
-                      alt={project.titleEn}
+                      alt={project.titleEn || project.title || 'Project'}
                       fill
                       sizes="(max-width: 768px) 85vw, 25vw"
                       className="object-cover group-hover:scale-105 transition-transform duration-300"
@@ -688,7 +688,7 @@ export default function HomeClient({
                       <div className="relative w-12 h-12 rounded-xl overflow-hidden bg-neutral-900 shrink-0 border border-white/[0.08]">
                         <Image
                           src={proj.coverImage || '/images/projects/project-1.jpg'}
-                          alt={proj.titleEn}
+                          alt={proj.titleEn || proj.title || 'Project'}
                           fill
                           sizes="48px"
                           className="object-cover"
