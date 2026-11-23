@@ -14,7 +14,7 @@ export default function AdminLayout({
 }) {
   return (
     <AdminLanguageProvider>
-      <div className="min-h-screen bg-[#0a0b0d] text-neutral-100 flex flex-col lg:flex-row font-sans selection:bg-amber-500/20 selection:text-amber-200 relative overflow-x-clip">
+      <div className="min-h-[100dvh] bg-[#0a0b0d] text-neutral-100 flex flex-col lg:flex-row font-sans selection:bg-amber-500/20 selection:text-amber-200 relative overflow-x-clip touch-manipulation">
         {/* Background Architectural Drafting Grid & Atmospheric Ambient Glows */}
         <div className="fixed inset-0 pointer-events-none z-0 bg-[radial-gradient(#ffffff06_1px,transparent_1px)] [background-size:24px_24px]" />
         <div className="fixed -top-40 -right-40 w-96 h-96 bg-amber-500/[0.03] rounded-full blur-3xl pointer-events-none z-0" />
@@ -23,8 +23,8 @@ export default function AdminLayout({
         {/* Desktop Fixed Sidebar */}
         <AdminSidebar />
 
-        {/* Main Content Area */}
-        <main className="flex-1 min-w-0 flex flex-col relative z-10 pb-28 lg:pb-12">
+        {/* Main Content Area with Safe Bottom Padding */}
+        <main className="flex-1 min-w-0 flex flex-col relative z-10 pb-[calc(env(safe-area-inset-bottom,0px)+86px)] lg:pb-12">
           {/* Sticky Top Navigation Bar (Mobile & Desktop) */}
           <AdminTopNav />
 

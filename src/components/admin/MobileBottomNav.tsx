@@ -11,6 +11,7 @@ import {
   Settings,
 } from 'lucide-react'
 import { useAdminTranslation } from '@/context/AdminLanguageContext'
+import { triggerHaptic } from '@/lib/haptics'
 
 export default function MobileBottomNav() {
   const pathname = usePathname()
@@ -33,9 +34,9 @@ export default function MobileBottomNav() {
   return (
     <nav
       aria-label="Mobile Studio Navigation Dock"
-      className="lg:hidden fixed bottom-3 inset-x-2.5 sm:bottom-4 max-w-lg mx-auto z-40 bg-[#0d0e12]/94 backdrop-blur-2xl border border-white/[0.12] rounded-[24px] py-1.5 px-1 sm:px-2 shadow-[0_12px_40px_rgba(0,0,0,0.85)] ring-1 ring-white/[0.04] select-none"
+      className="lg:hidden fixed bottom-[calc(env(safe-area-inset-bottom,0px)+10px)] inset-x-2.5 max-w-lg mx-auto z-40 bg-[#0d0e12]/96 backdrop-blur-2xl border border-white/[0.14] rounded-[24px] py-1 px-1 sm:px-2 shadow-[0_16px_48px_rgba(0,0,0,0.92)] ring-1 ring-white/[0.05] select-none"
     >
-      <div className="flex items-center justify-between gap-0.5 sm:gap-1">
+      <div className="flex items-center justify-between gap-0.5">
         {navItems.map((item) => {
           const Icon = item.icon
           const isActive =
@@ -50,7 +51,10 @@ export default function MobileBottomNav() {
             <Link
               key={item.href}
               href={item.href}
-              className={`flex-1 flex flex-col items-center justify-center gap-1 py-1 px-1 rounded-xl transition-all active:scale-95 ${
+              onClick={() => {
+                if (!isActive) triggerHaptic('selection')
+              }}
+              className={`flex-1 min-h-[48px] flex flex-col items-center justify-center gap-1 py-1 px-1 rounded-2xl transition-all active:scale-90 ${
                 isActive
                   ? 'text-amber-400 font-semibold'
                   : 'text-neutral-400 hover:text-white'

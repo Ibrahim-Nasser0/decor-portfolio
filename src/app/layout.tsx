@@ -1,6 +1,15 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { AudioProvider } from "@/context/AudioContext";
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
+  viewportFit: "cover",
+  themeColor: "#0a0b0d",
+};
 
 export const metadata: Metadata = {
   title: "Alaa Issa | Interior Architecture & Design Portfolio",

@@ -6,6 +6,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Compass, ArrowUpRight, Languages, Menu } from 'lucide-react'
 import { useAdminTranslation } from '@/context/AdminLanguageContext'
+import { triggerHaptic } from '@/lib/haptics'
 import MobileSectionsDrawer from './MobileSectionsDrawer'
 
 export default function AdminTopNav() {
@@ -43,8 +44,8 @@ export default function AdminTopNav() {
 
   return (
     <>
-      <header className="sticky top-0 z-30 w-full bg-[#0c0d0e]/92 backdrop-blur-xl border-b border-white/[0.08] shadow-[0_4px_20px_rgba(0,0,0,0.5)] select-none transition-all">
-        <div className="px-3 sm:px-6 lg:px-8 py-2.5 sm:py-3 flex items-center justify-between gap-2 sm:gap-3">
+      <header className="sticky top-0 z-30 w-full pt-[env(safe-area-inset-top,0px)] bg-[#0c0d0e]/94 backdrop-blur-xl border-b border-white/[0.08] shadow-[0_4px_20px_rgba(0,0,0,0.5)] select-none transition-all">
+        <div className="px-3 sm:px-6 lg:px-8 py-2 sm:py-3 flex items-center justify-between gap-2 sm:gap-3">
           {/* ============================================================== */}
           {/* Left: Architect Cartouche & Breadcrumbs                        */}
           {/* ============================================================== */}
@@ -52,15 +53,18 @@ export default function AdminTopNav() {
             {/* Architect Portrait Badge (Can also trigger menu on mobile) */}
             <button
               type="button"
-              onClick={() => setDrawerOpen(true)}
-              className="lg:pointer-events-none relative w-7 h-7 sm:w-8 sm:h-8 rounded-full overflow-hidden border border-amber-500/40 p-0.5 shrink-0 bg-neutral-900 shadow-sm active:scale-95 transition-transform cursor-pointer lg:cursor-default"
+              onClick={() => {
+                triggerHaptic('light')
+                setDrawerOpen(true)
+              }}
+              className="lg:pointer-events-none relative w-8 h-8 sm:w-9 sm:h-9 rounded-full overflow-hidden border border-amber-500/40 p-0.5 shrink-0 bg-neutral-900 shadow-sm active:scale-90 transition-transform cursor-pointer lg:cursor-default"
               title="Eng. Alaa Essa"
             >
               <Image
                 src="/images/alaa.webp"
                 alt="Eng. Alaa Essa"
                 fill
-                sizes="32px"
+                sizes="36px"
                 className="object-cover rounded-full"
               />
             </button>
@@ -87,11 +91,14 @@ export default function AdminTopNav() {
           {/* Right: Language Switcher, Cloud Telemetry, Live Link & Menu   */}
           {/* ============================================================== */}
           <div className="flex items-center gap-1.5 sm:gap-3 text-xs font-mono shrink-0">
-            {/* Language Switcher Button (Clean Toggle AR / EN) */}
+            {/* Language Switcher Button (Clean Toggle AR / EN) with min 44px hit */}
             <button
               type="button"
-              onClick={toggleLang}
-              className="inline-flex items-center gap-1.5 px-2 sm:px-3 py-1.5 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] text-neutral-200 hover:text-white border border-white/[0.1] hover:border-amber-400/50 text-xs font-mono transition-all active:scale-95 cursor-pointer shadow-sm"
+              onClick={() => {
+                triggerHaptic('selection')
+                toggleLang()
+              }}
+              className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-2 min-h-[40px] rounded-xl bg-white/[0.05] hover:bg-white/[0.1] text-neutral-200 hover:text-white border border-white/[0.1] hover:border-amber-400/50 text-xs font-mono transition-all active:scale-95 cursor-pointer shadow-sm"
               title={lang === 'ar' ? 'Switch to English' : 'التحويل للغة العربية'}
               aria-label="Toggle Language"
             >
@@ -122,7 +129,8 @@ export default function AdminTopNav() {
             <Link
               href="/"
               target="_blank"
-              className="inline-flex items-center gap-1.5 px-2 sm:px-3 py-1.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] text-neutral-300 hover:text-white border border-white/[0.08] hover:border-amber-500/40 text-xs font-mono transition-all group active:scale-95"
+              onClick={() => triggerHaptic('light')}
+              className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-2 min-h-[40px] rounded-xl bg-white/[0.04] hover:bg-white/[0.08] text-neutral-300 hover:text-white border border-white/[0.08] hover:border-amber-500/40 text-xs font-mono transition-all group active:scale-95"
               title="Open Public Monograph in New Tab"
             >
               <span className="hidden sm:inline">{t.topNav.liveSite}</span>
@@ -130,11 +138,14 @@ export default function AdminTopNav() {
               <ArrowUpRight className="w-3.5 h-3.5 text-amber-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
             </Link>
 
-            {/* Mobile Hamburger / Menu Drawer Trigger (Mobile only) */}
+            {/* Mobile Hamburger / Menu Drawer Trigger (Mobile only, min 44px hit) */}
             <button
               type="button"
-              onClick={() => setDrawerOpen(true)}
-              className="lg:hidden p-1.5 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] text-amber-400 border border-white/[0.1] active:scale-95 transition-all cursor-pointer"
+              onClick={() => {
+                triggerHaptic('light')
+                setDrawerOpen(true)
+              }}
+              className="lg:hidden p-2 min-w-[40px] min-h-[40px] flex items-center justify-center rounded-xl bg-white/[0.05] hover:bg-white/[0.1] text-amber-400 border border-white/[0.1] active:scale-90 transition-all cursor-pointer"
               title="Open Menu"
               aria-label="Open Studio Menu"
             >
