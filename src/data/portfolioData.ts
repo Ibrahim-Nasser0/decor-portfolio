@@ -215,7 +215,7 @@ export const PROJECTS: Project[] = [
     category: "living",
     categoryLabel: "صالونات ومعيشة",
     categoryLabelEn: "Living & Lounges",
-    firmEn: "Alaa Issa Studio",
+    firmEn: "Alaa Essa Studio",
     coverImage: "/images/projects/project-1.jpg",
     gallery: [
       "/images/projects/project-1.jpg",
@@ -495,7 +495,7 @@ export const FAQS = [
   },
   {
     q: "هل تشرف م. آلاء عيسى على موقع التنفيذ شخصياً؟",
-    qEn: "Does Eng. Alaa Issa personally supervise the site execution?",
+    qEn: "Does Eng. Alaa Essa personally supervise the site execution?",
     a: "نعم، في باقات الإشراف والتنفيذ الكامل أقوم بزيارات ميدانية دورية لمتابعة أدق التفاصيل من تأسيسات السباكة والكهرباء وحتى تركيب الأخشاب والرخام لضمان مطابقة الواقع للتصميم المعتمد.",
     aEn: "Yes. Under supervision and turnkey execution contracts, I conduct scheduled and milestone site inspections overseeing electromechanical rough-ins, finishings, marble installations, and custom joinery to guarantee 100% fidelity to the design.",
   },

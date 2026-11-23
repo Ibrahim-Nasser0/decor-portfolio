@@ -192,7 +192,7 @@ export default function SkillsSection({ profile }: SkillsSectionProps) {
           {/* Dynamic 3ds Max / Corona / Photorealism Engine               */}
           {/* ------------------------------------------------------------ */}
           <div
-            className={`lg:col-span-8 bg-neutral-950 text-white border border-neutral-900 p-6 sm:p-8 2xl:p-10 flex flex-col justify-between relative overflow-hidden group shadow-md hover:border-neutral-700 hover:shadow-2xl transition-all duration-500 ${
+            className={`lg:col-span-8 bg-neutral-950 text-white border border-neutral-900 p-6 sm:p-8 2xl:p-10 flex flex-col justify-between relative overflow-hidden group shadow-md hover:border-neutral-700 hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-500 ${
               isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
             }`}
           >
@@ -292,6 +292,11 @@ export default function SkillsSection({ profile }: SkillsSectionProps) {
                 {primaryTool.engine?.toUpperCase() || "AUTODESK & CHAOS"}
               </span>
             </div>
+
+            {/* Bottom Hairline Expanding Indicator */}
+            <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-neutral-900 overflow-hidden">
+              <div className="h-full bg-emerald-400 w-0 group-hover:w-full transition-all duration-500 ease-out" />
+            </div>
           </div>
 
           {/* ------------------------------------------------------------ */}
@@ -300,7 +305,7 @@ export default function SkillsSection({ profile }: SkillsSectionProps) {
           {/* ------------------------------------------------------------ */}
           <div
             style={{ transitionDelay: "100ms" }}
-            className={`lg:col-span-4 bg-white border border-neutral-300 hover:border-black p-6 sm:p-7 2xl:p-8 flex flex-col justify-between shadow-xs hover:shadow-xl transition-all duration-500 group relative ${
+            className={`lg:col-span-4 bg-white border border-neutral-300 hover:border-black p-6 sm:p-7 2xl:p-8 flex flex-col justify-between shadow-xs hover:shadow-xl hover:-translate-y-1.5 transition-all duration-500 group relative overflow-hidden ${
               isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
             }`}
           >
@@ -377,6 +382,11 @@ export default function SkillsSection({ profile }: SkillsSectionProps) {
               <span className="uppercase tracking-wider text-black font-semibold">TOLERANCE: &lt; 2MM</span>
               <span className="truncate">{cadTool.deliverable || "1:10 • 1:20 • 1:50"}</span>
             </div>
+
+            {/* Bottom Hairline Expanding Indicator */}
+            <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-neutral-100 overflow-hidden">
+              <div className="h-full bg-black w-0 group-hover:w-full transition-all duration-500 ease-out" />
+            </div>
           </div>
 
           {/* ------------------------------------------------------------ */}
@@ -385,7 +395,7 @@ export default function SkillsSection({ profile }: SkillsSectionProps) {
           {/* ------------------------------------------------------------ */}
           <div
             style={{ transitionDelay: "150ms" }}
-            className={`lg:col-span-4 bg-white border border-neutral-300 hover:border-black p-6 sm:p-7 2xl:p-8 flex flex-col justify-between shadow-xs hover:shadow-xl transition-all duration-500 group relative ${
+            className={`lg:col-span-4 bg-white border border-neutral-300 hover:border-black p-6 sm:p-7 2xl:p-8 flex flex-col justify-between shadow-xs hover:shadow-xl hover:-translate-y-1.5 transition-all duration-500 group relative overflow-hidden ${
               isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
             }`}
           >
@@ -431,6 +441,11 @@ export default function SkillsSection({ profile }: SkillsSectionProps) {
               <span className="text-black font-semibold">COORDINATION</span>
               <span className="truncate">{bimTool.deliverable || "BIM LEVEL 2"}</span>
             </div>
+
+            {/* Bottom Hairline Expanding Indicator */}
+            <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-neutral-100 overflow-hidden">
+              <div className="h-full bg-black w-0 group-hover:w-full transition-all duration-500 ease-out" />
+            </div>
           </div>
 
           {/* ------------------------------------------------------------ */}
@@ -439,7 +454,7 @@ export default function SkillsSection({ profile }: SkillsSectionProps) {
           {/* ------------------------------------------------------------ */}
           <div
             style={{ transitionDelay: "200ms" }}
-            className={`lg:col-span-4 bg-[#F5F4F0] border border-neutral-300 hover:border-black p-6 sm:p-7 2xl:p-8 flex flex-col justify-between shadow-xs hover:shadow-xl transition-all duration-500 group relative ${
+            className={`lg:col-span-4 bg-[#F5F4F0] border border-neutral-300 hover:border-black p-6 sm:p-7 2xl:p-8 flex flex-col justify-between shadow-xs hover:shadow-xl hover:-translate-y-1.5 transition-all duration-500 group relative overflow-hidden ${
               isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
             }`}
           >
@@ -485,6 +500,11 @@ export default function SkillsSection({ profile }: SkillsSectionProps) {
               <span className="text-black font-semibold truncate">{institution.toUpperCase()}</span>
               <span className="shrink-0">{grade.toUpperCase()}</span>
             </div>
+
+            {/* Bottom Hairline Expanding Indicator */}
+            <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-neutral-200 overflow-hidden">
+              <div className="h-full bg-black w-0 group-hover:w-full transition-all duration-500 ease-out" />
+            </div>
           </div>
 
           {/* ------------------------------------------------------------ */}
@@ -493,7 +513,7 @@ export default function SkillsSection({ profile }: SkillsSectionProps) {
           {/* ------------------------------------------------------------ */}
           <div
             style={{ transitionDelay: "250ms" }}
-            className={`lg:col-span-4 bg-white border border-neutral-300 hover:border-black p-6 sm:p-7 2xl:p-8 flex flex-col justify-between shadow-xs hover:shadow-xl transition-all duration-500 group relative ${
+            className={`lg:col-span-4 bg-white border border-neutral-300 hover:border-black p-6 sm:p-7 2xl:p-8 flex flex-col justify-between shadow-xs hover:shadow-xl hover:-translate-y-1.5 transition-all duration-500 group relative overflow-hidden ${
               isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
             }`}
           >
@@ -538,6 +558,11 @@ export default function SkillsSection({ profile }: SkillsSectionProps) {
             <div className="pt-3.5 mt-5 border-t border-neutral-200 flex items-center justify-between text-[10px] font-mono text-neutral-500 uppercase tracking-wider">
               <span className="text-black font-semibold">OUTPUT</span>
               <span className="truncate">{editorialTool.deliverable || "PUBLICATION GRADE"}</span>
+            </div>
+
+            {/* Bottom Hairline Expanding Indicator */}
+            <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-neutral-100 overflow-hidden">
+              <div className="h-full bg-black w-0 group-hover:w-full transition-all duration-500 ease-out" />
             </div>
           </div>
 

@@ -326,7 +326,7 @@ export default function ArchitecturalCaseStudy() {
             <div className="pt-2 flex flex-col sm:flex-row gap-4">
               <a
                 href={`https://wa.me/${DESIGNER_INFO.whatsappNumber}?text=${encodeURIComponent(
-                  "Hello Eng. Alaa Issa, I reviewed the Tagamoa Residence case study and would like to schedule an architectural consultation for my project."
+                  "Hello Eng. Alaa Essa, I reviewed the Tagamoa Residence case study and would like to schedule an architectural consultation for my project."
                 )}`}
                 target="_blank"
                 rel="noopener noreferrer"

@@ -60,7 +60,7 @@ export default function FeaturedProject() {
           <div>
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#c5a880]/10 border border-[#c5a880]/20 text-[#dfbe95] text-xs font-semibold uppercase tracking-wider mb-3">
               <Sparkles className="w-3.5 h-3.5" />
-              <span>{t("مشروع مميز • تصميم وإشراف م. آلاء عيسى", "Featured Work • By Eng. Alaa Issa")}</span>
+              <span>{t("مشروع مميز • تصميم وإشراف م. آلاء عيسى", "Featured Work • By Eng. Alaa Essa")}</span>
             </div>
             <h2 className="text-2xl sm:text-4xl font-bold text-white font-serif tracking-tight">
               {t(project.title, project.titleEn)}

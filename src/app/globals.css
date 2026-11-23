@@ -287,3 +287,98 @@
 .animate-soundwave-4 {
   animation: soundwave4 0.95s ease-in-out infinite;
 }
+
+/* ==========================================================================
+   Luxury Architectural Monograph Animations (Vercel & Architectural Standards)
+   ========================================================================== */
+
+/* Shimmer sweep effect for high-end CTAs and cards */
+@keyframes shimmerSweep {
+  0% {
+    transform: translateX(-150%) skewX(-20deg);
+  }
+  100% {
+    transform: translateX(250%) skewX(-20deg);
+  }
+}
+
+.animate-shimmer-sweep {
+  animation: shimmerSweep 3.5s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+}
+
+/* Micro Gauge Line Fill */
+@keyframes gaugeFill {
+  0% {
+    transform: scaleX(0);
+    opacity: 0.3;
+  }
+  100% {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+}
+
+.animate-gauge-fill {
+  transform-origin: left;
+  animation: gaugeFill 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Luxury Soft Ambient Float */
+@keyframes floatSoft {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-6px) rotate(0.4deg);
+  }
+}
+
+.animate-float-soft {
+  animation: floatSoft 6s ease-in-out infinite;
+}
+
+/* Ambient Aura Breathe */
+@keyframes auraBreathe {
+  0%, 100% {
+    opacity: 0.35;
+    transform: scale(0.98);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.04);
+  }
+}
+
+.animate-aura-breathe {
+  animation: auraBreathe 5s ease-in-out infinite;
+}
+
+/* Grand Marquee Continuous Scroll */
+@keyframes marqueeScroll {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marqueeScroll 32s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* Luxury Motion Utility Classes */
+.transition-luxury {
+  transition: all 500ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.transition-luxury-slow {
+  transition: all 800ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+

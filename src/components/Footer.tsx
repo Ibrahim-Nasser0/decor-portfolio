@@ -35,6 +35,7 @@ interface FooterProps {
 export default function Footer({ profile }: FooterProps) {
   const footerRef = useRef<HTMLElement>(null);
   const [isVisible, setIsVisible] = useState(false);
+  const [studioTime, setStudioTime] = useState<string>("");
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -51,8 +52,26 @@ export default function Footer({ profile }: FooterProps) {
       observer.observe(currentRef);
     }
 
+    const updateTime = () => {
+      try {
+        const now = new Date();
+        const timeStr = now.toLocaleTimeString("en-US", {
+          timeZone: "Africa/Cairo",
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: true,
+        });
+        setStudioTime(timeStr);
+      } catch {
+        setStudioTime("");
+      }
+    };
+    updateTime();
+    const interval = setInterval(updateTime, 30000);
+
     return () => {
       if (currentRef) observer.unobserve(currentRef);
+      clearInterval(interval);
     };
   }, []);
 
@@ -61,7 +80,7 @@ export default function Footer({ profile }: FooterProps) {
   };
 
   const avatarSrc = profile?.avatarUrl || "/images/alaa.webp";
-  const name = profile?.nameEn || DESIGNER_INFO.nameEn || "ALAA ISSA";
+  const name = profile?.nameEn || DESIGNER_INFO.nameEn || "ALAA ESSA";
   const title = profile?.titleEn || DESIGNER_INFO.titleEn || "INTERIOR ARCHITECTURE & SPATIAL DESIGN";
   const location = profile?.locationEn || DESIGNER_INFO.locationEn || "NEW CAIRO • SHEIKH ZAYED • CAIRO, EGYPT";
   const phone = profile?.phone || DESIGNER_INFO.phone;
@@ -193,7 +212,7 @@ export default function Footer({ profile }: FooterProps) {
               </div>
               <div className="flex items-center gap-2 text-[10px] text-neutral-400 font-mono tracking-wider">
                 <Compass className="w-3 h-3 text-neutral-400 shrink-0" />
-                <span>30°02&apos;N 31°14&apos;E • CAIRO CLT (UTC+2)</span>
+                <span>30°02&apos;N 31°14&apos;E • {studioTime ? `${studioTime} CAIRO (UTC+2)` : "CAIRO CLT (UTC+2)"}</span>
               </div>
             </div>
 
@@ -201,8 +220,8 @@ export default function Footer({ profile }: FooterProps) {
             <div className="pt-2 flex flex-wrap gap-2.5">
               <a
                 href="/api/portfolio-pdf"
-                download="Alaa-Issa-Architectural-Portfolio-2026.pdf"
-                className="group inline-flex items-center gap-2 px-3.5 py-2.5 bg-neutral-900 hover:bg-black text-white rounded-sm border border-neutral-800 text-[11px] font-technical uppercase tracking-wider transition-all duration-300 hover:shadow-md active:scale-95"
+                download="Alaa-Essa-Architectural-Portfolio-2026.pdf"
+                className="group relative overflow-hidden inline-flex items-center gap-2 px-3.5 py-2.5 bg-neutral-900 hover:bg-black text-white rounded-sm border border-neutral-800 text-[11px] font-technical uppercase tracking-wider transition-all duration-300 hover:shadow-md active:scale-95"
                 title="Download Architectural Monograph (PDF)"
               >
                 <FileDown className="w-4 h-4 text-[#7AD1B8] group-hover:scale-110 transition-transform" />
@@ -352,6 +371,40 @@ export default function Footer({ profile }: FooterProps) {
             <span className="text-lg sm:text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight text-neutral-400 group-hover:text-neutral-800 transition-colors duration-500">
               INTERIOR ARCHITECTURE
             </span>
+          </div>
+        </div>
+
+        {/* Continuous Architectural Monograph Marquee */}
+        <div className="my-6 sm:my-8 py-3 overflow-hidden border-y border-neutral-200 bg-neutral-50/70 select-none">
+          <div className="animate-marquee whitespace-nowrap flex items-center gap-8 font-technical text-[10px] sm:text-[11px] tracking-[0.25em] uppercase text-neutral-500 font-semibold">
+            <span>ALAA ESSA ARCHITECTURAL PRACTICE</span>
+            <span className="text-neutral-300">•</span>
+            <span>RESIDENTIAL SANCTUARIES</span>
+            <span className="text-neutral-300">•</span>
+            <span>CIRCADIAN 3000K LIGHTING</span>
+            <span className="text-neutral-300">•</span>
+            <span>BESPOKE JOINERY &amp; MILLWORK</span>
+            <span className="text-neutral-300">•</span>
+            <span>HYPER-REALISTIC CORONA 3D VISUALIZATION</span>
+            <span className="text-neutral-300">•</span>
+            <span>TURNKEY SITE SUPERVISION</span>
+            <span className="text-neutral-300">•</span>
+            <span>ALEXANDRIA &amp; CAIRO</span>
+            <span className="text-neutral-300">•</span>
+            <span>ALAA ESSA ARCHITECTURAL PRACTICE</span>
+            <span className="text-neutral-300">•</span>
+            <span>RESIDENTIAL SANCTUARIES</span>
+            <span className="text-neutral-300">•</span>
+            <span>CIRCADIAN 3000K LIGHTING</span>
+            <span className="text-neutral-300">•</span>
+            <span>BESPOKE JOINERY &amp; MILLWORK</span>
+            <span className="text-neutral-300">•</span>
+            <span>HYPER-REALISTIC CORONA 3D VISUALIZATION</span>
+            <span className="text-neutral-300">•</span>
+            <span>TURNKEY SITE SUPERVISION</span>
+            <span className="text-neutral-300">•</span>
+            <span>ALEXANDRIA &amp; CAIRO</span>
+            <span className="text-neutral-300">•</span>
           </div>
         </div>
 

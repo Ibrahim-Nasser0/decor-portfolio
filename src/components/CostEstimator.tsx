@@ -99,7 +99,7 @@ export default function CostEstimator() {
   };
 
   const whatsappMessage = encodeURIComponent(
-    `Hello Eng. Alaa Issa, I calculated an indicative estimate for my project on your website:
+    `Hello Eng. Alaa Essa, I calculated an indicative estimate for my project on your website:
 - Property Type: ${selectedPropObj.labelEn}
 - Area: ${area} m²
 - Specification: ${selectedTierObj.labelEn}

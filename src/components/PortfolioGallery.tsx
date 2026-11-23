@@ -165,7 +165,7 @@ export default function PortfolioGallery({ initialProjects = PROJECTS }: Portfol
                 <article
                   key={project.id}
                   style={{ animationDelay: `${delayMs}ms` }}
-                  className={`group bg-white border border-neutral-300 hover:border-black transition-all duration-500 flex flex-col justify-between shadow-xs hover:shadow-xl hover:-translate-y-1.5 ${
+                  className={`group relative bg-white border border-neutral-300 hover:border-black transition-all duration-500 flex flex-col justify-between shadow-xs hover:shadow-2xl hover:-translate-y-2 overflow-hidden ${
                     isVisible ? "animate-card-entrance" : "opacity-0"
                   }`}
                 >
@@ -179,11 +179,11 @@ export default function PortfolioGallery({ initialProjects = PROJECTS }: Portfol
                       alt={project.titleEn}
                       fill
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                      className="object-cover transition-transform duration-700 ease-out group-hover:scale-106"
+                      className="object-cover transition-transform duration-700 ease-out group-hover:scale-108"
                     />
 
                     {/* Dark gradient vignette on hover */}
-                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/25 transition-colors duration-500 pointer-events-none" />
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors duration-500 pointer-events-none" />
 
                     {/* Category Label Badge (Top Left) */}
                     <div className="absolute top-3 start-3 px-2.5 py-1 bg-white/95 backdrop-blur-xs text-[9px] sm:text-[10px] font-technical uppercase tracking-[0.14em] text-black font-bold border border-black/15 shadow-xs transition-transform duration-300 group-hover:translate-x-0.5">
@@ -276,6 +276,11 @@ export default function PortfolioGallery({ initialProjects = PROJECTS }: Portfol
                       </div>
                     </div>
                   </div>
+
+                  {/* Bottom Hairline Expanding Indicator */}
+                  <div className="w-full h-[2px] bg-neutral-100 overflow-hidden">
+                    <div className="h-full bg-black w-0 group-hover:w-full transition-all duration-500 ease-out" />
+                  </div>
                 </article>
               );
             })}
@@ -286,7 +291,7 @@ export default function PortfolioGallery({ initialProjects = PROJECTS }: Portfol
         <div className={`mt-14 sm:mt-16 pt-6 border-t border-neutral-200 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] font-technical text-neutral-500 uppercase tracking-wider transition-all duration-700 ${isVisible ? "opacity-100" : "opacity-0"}`}>
           <div className="flex items-center gap-2">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block animate-pulse" />
-            <span>All projects designed, modeled, and supervised by Eng. Alaa Issa</span>
+            <span>All projects designed, modeled, and supervised by Eng. Alaa Essa</span>
           </div>
           <a
             href="#contact"

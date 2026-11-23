@@ -62,7 +62,7 @@ export default function ExperienceSection({ profile }: ExperienceSectionProps) {
       ? profile.education
       : DESIGNER_INFO.education || [];
 
-  const name = profile?.nameEn || DESIGNER_INFO.nameEn || "Alaa Issa";
+  const name = profile?.nameEn || DESIGNER_INFO.nameEn || "Alaa Essa";
   const statement = profile?.statementEn || DESIGNER_INFO.statementEn;
   const whatsappNumber = profile?.whatsappNumber || DESIGNER_INFO.whatsappNumber;
 
@@ -228,7 +228,7 @@ export default function ExperienceSection({ profile }: ExperienceSectionProps) {
                       )}
 
                       {/* Main Milestone Card with Elevated Hover Effect */}
-                      <div className="p-5 sm:p-6 bg-white border border-neutral-300 rounded-2xl group-hover:border-black group-hover:shadow-lg transition-all duration-300 space-y-3">
+                      <div className="p-5 sm:p-6 bg-white border border-neutral-300 rounded-2xl group-hover:border-black group-hover:shadow-xl group-hover:-translate-y-1 transition-all duration-300 space-y-3">
                         {/* Period & Location Row */}
                         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-neutral-100 pb-2.5">
                           <div className="flex items-center gap-2 flex-wrap">

@@ -68,7 +68,7 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
   const activeImage = angles[selectedAngleIdx]?.image || project.coverImage;
 
   const whatsappMessage = encodeURIComponent(
-    `Hello Eng. Alaa Issa, I reviewed the case study for "${project.titleEn}" (${project.area}, ${project.locationEn}) and would like to schedule an architectural consultation for a similar project.`
+    `Hello Eng. Alaa Essa, I reviewed the case study for "${project.titleEn}" (${project.area}, ${project.locationEn}) and would like to schedule an architectural consultation for a similar project.`
   );
 
   return (
@@ -473,7 +473,7 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
         {/* Action Bottom Bar */}
         <footer className="border-t border-neutral-200 bg-neutral-50 p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="text-xs font-technical text-neutral-500">
-            Monograph Case Study • Eng. Alaa Issa Interior Architecture
+            Monograph Case Study • Eng. Alaa Essa Interior Architecture
           </div>
 
           <div className="flex items-center gap-3 w-full sm:w-auto">

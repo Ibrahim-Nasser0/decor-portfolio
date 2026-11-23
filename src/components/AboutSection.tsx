@@ -157,6 +157,9 @@ export default function AboutSection({ profile }: AboutSectionProps) {
             }`}
           >
             <div className="relative mx-auto max-w-[300px] xs:max-w-xs sm:max-w-sm lg:max-w-none">
+              {/* Luxury Ambient Atmospheric Glow Aura */}
+              <div className="absolute -inset-6 bg-gradient-to-tr from-amber-500/10 via-neutral-900/5 to-transparent rounded-3xl blur-2xl pointer-events-none -z-20 animate-aura-breathe" />
+
               {/* Outer decorative architectural outline with Drafting Crosshairs (+) */}
               <div
                 className="absolute -inset-2.5 sm:-inset-4 2xl:-inset-5 border border-neutral-300 -z-10 pointer-events-none transition-transform duration-700 ease-out"
@@ -321,10 +324,15 @@ export default function AboutSection({ profile }: AboutSectionProps) {
                   <div
                     key={pillar.title}
                     style={{ transitionDelay: `${350 + idx * 70}ms` }}
-                    className={`p-3.5 sm:p-4 2xl:p-5 bg-neutral-50/70 border border-neutral-200/90 rounded-xs space-y-1.5 transition-all duration-500 ease-out hover:border-black hover:bg-white hover:shadow-md hover:-translate-y-0.5 group ${
+                    className={`relative p-3.5 sm:p-4 2xl:p-5 bg-neutral-50/70 border border-neutral-200/90 rounded-xs space-y-1.5 transition-all duration-500 ease-out hover:border-black hover:bg-white hover:shadow-lg hover:-translate-y-1.5 group overflow-hidden ${
                       isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
                     }`}
                   >
+                    {/* Top Architectural Drafting Pip */}
+                    <span className="absolute top-1.5 end-2 font-mono text-[8px] text-neutral-300 group-hover:text-black transition-colors select-none">
+                      +
+                    </span>
+
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <span className="text-[10px] 2xl:text-xs font-mono font-bold text-neutral-400 group-hover:text-black transition-colors">
@@ -342,6 +350,11 @@ export default function AboutSection({ profile }: AboutSectionProps) {
                     <p className="text-[11px] 2xl:text-xs text-neutral-600 font-sans leading-relaxed group-hover:text-neutral-800 transition-colors">
                       {pillar.desc}
                     </p>
+
+                    {/* Bottom Hairline Expanding Indicator */}
+                    <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-neutral-100 overflow-hidden">
+                      <div className="h-full bg-black w-0 group-hover:w-full transition-all duration-500 ease-out" />
+                    </div>
                   </div>
                 ))}
               </div>

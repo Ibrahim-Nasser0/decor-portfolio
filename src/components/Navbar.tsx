@@ -28,7 +28,7 @@ export default function Navbar({ profile }: NavbarProps) {
 
   // Dynamic branding from Supabase designer profile
   const avatarSrc = profile?.avatarUrl || "/images/alaa.webp";
-  const brandName = profile?.nameEn || "ALAA ISSA";
+  const brandName = profile?.nameEn || "ALAA ESSA";
   const titleShort = profile?.titleEn ? profile.titleEn.split('&')[0].trim().toUpperCase() : "INTERIOR ARCHITECT";
   const locationShort = profile?.locationEn ? profile.locationEn.split(',')[0].split('|')[0].trim().toUpperCase() : "CAIRO";
   const brandSubtitle = `${titleShort} • ${locationShort}`;
@@ -198,10 +198,10 @@ export default function Navbar({ profile }: NavbarProps) {
           </div>
         </div>
 
-        {/* Reading Scroll Progress Bar */}
-        <div className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-neutral-100 overflow-hidden">
+        {/* Reading Scroll Progress Bar with Luxury Gradient */}
+        <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-neutral-100 overflow-hidden">
           <div
-            className="h-full bg-black transition-all duration-150 ease-out"
+            className="h-full bg-gradient-to-r from-black via-neutral-800 to-[#c5a059] transition-all duration-150 ease-out"
             style={{ width: `${scrollProgress}%` }}
           />
         </div>

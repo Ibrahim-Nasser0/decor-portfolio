@@ -30,7 +30,7 @@ interface ContactSectionProps {
 }
 
 export default function ContactSection({ profile }: ContactSectionProps) {
-  const name = profile?.nameEn || DESIGNER_INFO.nameEn || "Alaa Issa";
+  const name = profile?.nameEn || DESIGNER_INFO.nameEn || "Alaa Essa";
   const title = profile?.titleEn || DESIGNER_INFO.titleEn || "Interior Architecture & Spatial Design";
   const phone = profile?.phone || DESIGNER_INFO.phone;
   const email = profile?.email || DESIGNER_INFO.email;

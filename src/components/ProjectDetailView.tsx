@@ -71,7 +71,7 @@ export default function ProjectDetailView({ project, profile }: ProjectDetailVie
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Profile data resolution
-  const brandName = profile?.nameEn || DESIGNER_INFO.nameEn || "ALAA ISSA";
+  const brandName = profile?.nameEn || DESIGNER_INFO.nameEn || "ALAA ESSA";
   const avatarSrc = profile?.avatarUrl || "/images/alaa.webp";
   const whatsappNumber = profile?.whatsappNumber || DESIGNER_INFO.whatsappNumber;
   const titleShort = profile?.titleEn ? profile.titleEn.split('&')[0].trim().toUpperCase() : "INTERIOR ARCHITECT";
@@ -879,7 +879,7 @@ export default function ProjectDetailView({ project, profile }: ProjectDetailVie
                       <line x1="0" y1="50" x2="190" y2="50" stroke="currentColor" strokeWidth="1" />
                       <line x1="0" y1="75" x2="190" y2="75" stroke="currentColor" strokeWidth="1" />
                       <line x1="95" y1="75" x2="95" y2="100" stroke="currentColor" strokeWidth="1" />
-                      <text x="10" y="17" fontSize="9" fontWeight="bold" fontFamily="sans-serif" fill="currentColor">ALAA ISSA PRACTICE</text>
+                      <text x="10" y="17" fontSize="9" fontWeight="bold" fontFamily="sans-serif" fill="currentColor">ALAA ESSA PRACTICE</text>
                       <text x="10" y="42" fontSize="8" fontFamily="sans-serif" fill="currentColor" opacity="0.8">DWG: GROUND LEVEL PLAN</text>
                       <text x="10" y="67" fontSize="8" fontFamily="sans-serif" fill="currentColor" opacity="0.6">SCALE: 1:50 • LEVEL +0.00</text>
                       <text x="10" y="92" fontSize="7" fontWeight="bold" fontFamily="sans-serif" fill="currentColor">APPROVED</text>
@@ -915,7 +915,7 @@ export default function ProjectDetailView({ project, profile }: ProjectDetailVie
                       <line x1="0" y1="25" x2="190" y2="25" stroke="currentColor" strokeWidth="1" />
                       <line x1="0" y1="50" x2="190" y2="50" stroke="currentColor" strokeWidth="1" />
                       <line x1="0" y1="75" x2="190" y2="75" stroke="currentColor" strokeWidth="1" />
-                      <text x="10" y="17" fontSize="9" fontWeight="bold" fontFamily="sans-serif" fill="currentColor">ALAA ISSA PRACTICE</text>
+                      <text x="10" y="17" fontSize="9" fontWeight="bold" fontFamily="sans-serif" fill="currentColor">ALAA ESSA PRACTICE</text>
                       <text x="10" y="42" fontSize="8" fontFamily="sans-serif" fill="currentColor" opacity="0.8">DWG: REFLECTED CEILING (RCP)</text>
                       <text x="10" y="67" fontSize="8" fontFamily="sans-serif" fill="currentColor" opacity="0.6">LIGHTING CIRCUITS A/B/C</text>
                       <text x="10" y="92" fontSize="7" fontWeight="bold" fontFamily="sans-serif" fill="currentColor">APPROVED</text>
@@ -957,7 +957,7 @@ export default function ProjectDetailView({ project, profile }: ProjectDetailVie
                       <line x1="0" y1="25" x2="190" y2="25" stroke="currentColor" strokeWidth="1" />
                       <line x1="0" y1="50" x2="190" y2="50" stroke="currentColor" strokeWidth="1" />
                       <line x1="0" y1="75" x2="190" y2="75" stroke="currentColor" strokeWidth="1" />
-                      <text x="10" y="17" fontSize="9" fontWeight="bold" fontFamily="sans-serif" fill="currentColor">ALAA ISSA PRACTICE</text>
+                      <text x="10" y="17" fontSize="9" fontWeight="bold" fontFamily="sans-serif" fill="currentColor">ALAA ESSA PRACTICE</text>
                       <text x="10" y="42" fontSize="8" fontFamily="sans-serif" fill="currentColor" opacity="0.8">DWG: VERTICAL SECTIONS</text>
                       <text x="10" y="67" fontSize="8" fontFamily="sans-serif" fill="currentColor" opacity="0.6">MILLWORK REVEAL 1:10</text>
                       <text x="10" y="92" fontSize="7" fontWeight="bold" fontFamily="sans-serif" fill="currentColor">APPROVED</text>
@@ -1292,7 +1292,7 @@ export default function ProjectDetailView({ project, profile }: ProjectDetailVie
                     <line x1="0" y1="25" x2="190" y2="25" stroke="currentColor" strokeWidth="1" />
                     <line x1="0" y1="50" x2="190" y2="50" stroke="currentColor" strokeWidth="1" />
                     <line x1="0" y1="75" x2="190" y2="75" stroke="currentColor" strokeWidth="1" />
-                    <text x="10" y="17" fontSize="9" fontWeight="bold" fontFamily="sans-serif" fill="currentColor">ALAA ISSA PRACTICE</text>
+                    <text x="10" y="17" fontSize="9" fontWeight="bold" fontFamily="sans-serif" fill="currentColor">ALAA ESSA PRACTICE</text>
                     <text x="10" y="42" fontSize="8" fontFamily="sans-serif" fill="currentColor">DWG: GROUND LEVEL PLAN</text>
                     <text x="10" y="67" fontSize="8" fontFamily="sans-serif" fill="currentColor">SCALE: 1:50 • APPROVED</text>
                   </g>
@@ -1316,7 +1316,7 @@ export default function ProjectDetailView({ project, profile }: ProjectDetailVie
                     <rect x="0" y="0" width="190" height="100" fill={blueprintTheme === "cyanotype" ? "#081526" : "#ffffff"} stroke="currentColor" strokeWidth="1.5" />
                     <line x1="0" y1="25" x2="190" y2="25" stroke="currentColor" strokeWidth="1" />
                     <line x1="0" y1="50" x2="190" y2="50" stroke="currentColor" strokeWidth="1" />
-                    <text x="10" y="17" fontSize="9" fontWeight="bold" fontFamily="sans-serif" fill="currentColor">ALAA ISSA PRACTICE</text>
+                    <text x="10" y="17" fontSize="9" fontWeight="bold" fontFamily="sans-serif" fill="currentColor">ALAA ESSA PRACTICE</text>
                     <text x="10" y="42" fontSize="8" fontFamily="sans-serif" fill="currentColor">DWG: CEILING &amp; LIGHTING (RCP)</text>
                   </g>
                 </svg>
@@ -1337,7 +1337,7 @@ export default function ProjectDetailView({ project, profile }: ProjectDetailVie
                   </g>
                   <g transform="translate(560, 310)">
                     <rect x="0" y="0" width="190" height="100" fill={blueprintTheme === "cyanotype" ? "#081526" : "#ffffff"} stroke="currentColor" strokeWidth="1.5" />
-                    <text x="10" y="17" fontSize="9" fontWeight="bold" fontFamily="sans-serif" fill="currentColor">ALAA ISSA PRACTICE</text>
+                    <text x="10" y="17" fontSize="9" fontWeight="bold" fontFamily="sans-serif" fill="currentColor">ALAA ESSA PRACTICE</text>
                     <text x="10" y="42" fontSize="8" fontFamily="sans-serif" fill="currentColor">DWG: JOINERY SECTIONS</text>
                   </g>
                 </svg>
