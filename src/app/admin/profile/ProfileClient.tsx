@@ -23,6 +23,7 @@ import {
 import { saveProfileAction } from '../actions'
 import UnsavedChangesBar from '@/components/admin/UnsavedChangesBar'
 import { useAdminTranslation } from '@/context/AdminLanguageContext'
+import { triggerHaptic } from '@/lib/haptics'
 
 export default function ProfileClient({ initialProfile }: { initialProfile: any }) {
   const { t, isRtl } = useAdminTranslation()
@@ -121,7 +122,8 @@ export default function ProfileClient({ initialProfile }: { initialProfile: any 
           <button
             type="submit"
             disabled={isSaving}
-            className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-200 via-white to-amber-100 hover:from-white hover:to-amber-50 text-neutral-950 font-semibold px-5 py-2.5 rounded-xl text-xs uppercase tracking-wider transition-all shadow-lg active:scale-95 cursor-pointer disabled:opacity-50"
+            onClick={() => triggerHaptic('success')}
+            className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-200 via-white to-amber-100 hover:from-white hover:to-amber-50 text-neutral-950 font-bold px-5 py-2.5 min-h-[44px] rounded-xl text-xs uppercase tracking-wider transition-all shadow-lg active:scale-95 cursor-pointer disabled:opacity-50"
           >
             {isSaving ? (
               <>
@@ -161,7 +163,7 @@ export default function ProfileClient({ initialProfile }: { initialProfile: any 
               type="text"
               value={profile.nameEn || ''}
               onChange={(e) => setProfile({ ...profile, nameEn: e.target.value })}
-              className="w-full bg-[#090a0c] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none"
+              className="w-full bg-[#090a0c] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3.5 py-3 text-[16px] sm:text-xs text-white focus:outline-none"
             />
           </div>
 
@@ -174,7 +176,7 @@ export default function ProfileClient({ initialProfile }: { initialProfile: any 
               type="text"
               value={profile.nameAr || ''}
               onChange={(e) => setProfile({ ...profile, nameAr: e.target.value })}
-              className="w-full bg-[#090a0c] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none font-sans"
+              className="w-full bg-[#090a0c] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3.5 py-3 text-[16px] sm:text-xs text-white focus:outline-none font-sans"
             />
           </div>
 
@@ -187,7 +189,7 @@ export default function ProfileClient({ initialProfile }: { initialProfile: any 
               type="text"
               value={profile.titleEn || ''}
               onChange={(e) => setProfile({ ...profile, titleEn: e.target.value })}
-              className="w-full bg-[#090a0c] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none"
+              className="w-full bg-[#090a0c] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3.5 py-3 text-[16px] sm:text-xs text-white focus:outline-none"
             />
           </div>
 
@@ -200,7 +202,7 @@ export default function ProfileClient({ initialProfile }: { initialProfile: any 
               type="text"
               value={profile.titleAr || ''}
               onChange={(e) => setProfile({ ...profile, titleAr: e.target.value })}
-              className="w-full bg-[#090a0c] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none font-sans"
+              className="w-full bg-[#090a0c] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3.5 py-3 text-[16px] sm:text-xs text-white focus:outline-none font-sans"
             />
           </div>
 
@@ -210,12 +212,13 @@ export default function ProfileClient({ initialProfile }: { initialProfile: any 
               {t.profile.phone}
             </label>
             <div className="relative">
-              <Phone className="w-3.5 h-3.5 text-neutral-500 absolute left-3 top-1/2 -translate-y-1/2" />
+              <Phone className="w-4 h-4 text-neutral-500 absolute start-3.5 top-1/2 -translate-y-1/2" />
               <input
-                type="text"
+                type="tel"
+                inputMode="tel"
                 value={profile.phone || ''}
                 onChange={(e) => setProfile({ ...profile, phone: e.target.value })}
-                className="w-full bg-[#090a0c] border border-white/[0.08] focus:border-amber-500/80 rounded-xl pl-9 pr-3.5 py-2.5 text-xs text-white focus:outline-none font-mono"
+                className="w-full bg-[#090a0c] border border-white/[0.08] focus:border-amber-500/80 rounded-xl ps-10 pe-3.5 py-3 text-[16px] sm:text-xs text-white focus:outline-none font-mono"
               />
             </div>
           </div>
@@ -226,9 +229,10 @@ export default function ProfileClient({ initialProfile }: { initialProfile: any 
               {t.profile.whatsapp}
             </label>
             <div className="relative">
-              <PhoneCall className="w-3.5 h-3.5 text-emerald-400 absolute left-3 top-1/2 -translate-y-1/2" />
+              <PhoneCall className="w-4 h-4 text-emerald-400 absolute start-3.5 top-1/2 -translate-y-1/2" />
               <input
-                type="text"
+                type="tel"
+                inputMode="tel"
                 value={profile.whatsappNumber || profile.whatsapp || ''}
                 onChange={(e) =>
                   setProfile({
@@ -237,7 +241,7 @@ export default function ProfileClient({ initialProfile }: { initialProfile: any 
                     whatsapp: e.target.value,
                   })
                 }
-                className="w-full bg-[#090a0c] border border-white/[0.08] focus:border-amber-500/80 rounded-xl pl-9 pr-3.5 py-2.5 text-xs text-white focus:outline-none font-mono"
+                className="w-full bg-[#090a0c] border border-white/[0.08] focus:border-amber-500/80 rounded-xl ps-10 pe-3.5 py-3 text-[16px] sm:text-xs text-white focus:outline-none font-mono"
               />
             </div>
           </div>
@@ -248,12 +252,16 @@ export default function ProfileClient({ initialProfile }: { initialProfile: any 
               {t.profile.email}
             </label>
             <div className="relative">
-              <Mail className="w-3.5 h-3.5 text-neutral-500 absolute left-3 top-1/2 -translate-y-1/2" />
+              <Mail className="w-4 h-4 text-neutral-500 absolute start-3.5 top-1/2 -translate-y-1/2" />
               <input
                 type="email"
+                inputMode="email"
+                autoCapitalize="none"
+                autoCorrect="off"
+                spellCheck={false}
                 value={profile.email || ''}
                 onChange={(e) => setProfile({ ...profile, email: e.target.value })}
-                className="w-full bg-[#090a0c] border border-white/[0.08] focus:border-amber-500/80 rounded-xl pl-9 pr-3.5 py-2.5 text-xs text-white focus:outline-none font-mono"
+                className="w-full bg-[#090a0c] border border-white/[0.08] focus:border-amber-500/80 rounded-xl ps-10 pe-3.5 py-3 text-[16px] sm:text-xs text-white focus:outline-none font-mono"
               />
             </div>
           </div>
@@ -303,7 +311,7 @@ export default function ProfileClient({ initialProfile }: { initialProfile: any 
                 type="text"
                 value={profile.heroImageUrl || ''}
                 onChange={(e) => setProfile({ ...profile, heroImageUrl: e.target.value })}
-                className="w-full bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3 py-2 text-xs text-white focus:outline-none font-mono"
+                className="w-full bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3.5 py-3 text-[16px] sm:text-xs text-white focus:outline-none font-mono"
               />
             </div>
           </div>
@@ -337,7 +345,7 @@ export default function ProfileClient({ initialProfile }: { initialProfile: any 
                 type="text"
                 value={profile.aboutImageUrl || ''}
                 onChange={(e) => setProfile({ ...profile, aboutImageUrl: e.target.value })}
-                className="w-full bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3 py-2 text-xs text-white focus:outline-none font-mono"
+                className="w-full bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3.5 py-3 text-[16px] sm:text-xs text-white focus:outline-none font-mono"
               />
             </div>
           </div>
@@ -371,7 +379,7 @@ export default function ProfileClient({ initialProfile }: { initialProfile: any 
                 type="text"
                 value={profile.avatarUrl || ''}
                 onChange={(e) => setProfile({ ...profile, avatarUrl: e.target.value })}
-                className="w-full bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3 py-2 text-xs text-white focus:outline-none font-mono"
+                className="w-full bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3.5 py-3 text-[16px] sm:text-xs text-white focus:outline-none font-mono"
               />
             </div>
           </div>
@@ -412,7 +420,7 @@ export default function ProfileClient({ initialProfile }: { initialProfile: any 
                   type="text"
                   value={profile.subtitleEn || ''}
                   onChange={(e) => setProfile({ ...profile, subtitleEn: e.target.value })}
-                  className="w-full bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none"
+                  className="w-full bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3.5 py-3 text-[16px] sm:text-xs text-white focus:outline-none"
                 />
               </div>
 
@@ -424,7 +432,7 @@ export default function ProfileClient({ initialProfile }: { initialProfile: any 
                   type="text"
                   value={profile.subtitleAr || ''}
                   onChange={(e) => setProfile({ ...profile, subtitleAr: e.target.value })}
-                  className="w-full bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none font-sans"
+                  className="w-full bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3.5 py-3 text-[16px] sm:text-xs text-white focus:outline-none font-sans"
                 />
               </div>
             </div>
@@ -450,7 +458,7 @@ export default function ProfileClient({ initialProfile }: { initialProfile: any 
                   rows={4}
                   value={profile.aboutIntroEn || ''}
                   onChange={(e) => setProfile({ ...profile, aboutIntroEn: e.target.value })}
-                  className="w-full bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl p-3 text-xs text-white focus:outline-none"
+                  className="w-full bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl p-3.5 text-[16px] sm:text-xs text-white focus:outline-none leading-relaxed"
                 />
               </div>
 
@@ -462,7 +470,7 @@ export default function ProfileClient({ initialProfile }: { initialProfile: any 
                   rows={4}
                   value={profile.aboutIntroAr || ''}
                   onChange={(e) => setProfile({ ...profile, aboutIntroAr: e.target.value })}
-                  className="w-full bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl p-3 text-xs text-white focus:outline-none font-sans"
+                  className="w-full bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl p-3.5 text-[16px] sm:text-xs text-white focus:outline-none font-sans leading-relaxed"
                 />
               </div>
             </div>
@@ -488,7 +496,7 @@ export default function ProfileClient({ initialProfile }: { initialProfile: any 
                   rows={3}
                   value={profile.aboutExperienceEn || ''}
                   onChange={(e) => setProfile({ ...profile, aboutExperienceEn: e.target.value })}
-                  className="w-full bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl p-3 text-xs text-white focus:outline-none"
+                  className="w-full bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl p-3.5 text-[16px] sm:text-xs text-white focus:outline-none leading-relaxed"
                 />
               </div>
 
@@ -500,7 +508,7 @@ export default function ProfileClient({ initialProfile }: { initialProfile: any 
                   rows={3}
                   value={profile.aboutExperienceAr || ''}
                   onChange={(e) => setProfile({ ...profile, aboutExperienceAr: e.target.value })}
-                  className="w-full bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl p-3 text-xs text-white focus:outline-none font-sans"
+                  className="w-full bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl p-3.5 text-[16px] sm:text-xs text-white focus:outline-none font-sans leading-relaxed"
                 />
               </div>
             </div>
@@ -526,7 +534,7 @@ export default function ProfileClient({ initialProfile }: { initialProfile: any 
                   rows={2}
                   value={profile.statementEn || ''}
                   onChange={(e) => setProfile({ ...profile, statementEn: e.target.value })}
-                  className="w-full bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl p-3 text-xs text-white focus:outline-none"
+                  className="w-full bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl p-3.5 text-[16px] sm:text-xs text-white focus:outline-none leading-relaxed"
                 />
               </div>
 
@@ -538,7 +546,7 @@ export default function ProfileClient({ initialProfile }: { initialProfile: any 
                   rows={2}
                   value={profile.statementAr || ''}
                   onChange={(e) => setProfile({ ...profile, statementAr: e.target.value })}
-                  className="w-full bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl p-3 text-xs text-white focus:outline-none font-sans"
+                  className="w-full bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl p-3.5 text-[16px] sm:text-xs text-white focus:outline-none font-sans leading-relaxed"
                 />
               </div>
             </div>

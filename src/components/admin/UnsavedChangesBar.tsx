@@ -1,7 +1,8 @@
 'use client'
 
 import { useEffect } from 'react'
-import { AlertCircle, Save, RotateCcw, Loader2 } from 'lucide-react'
+import { Save, RotateCcw, Loader2 } from 'lucide-react'
+import { triggerHaptic } from '@/lib/haptics'
 
 interface UnsavedChangesBarProps {
   isDirty: boolean
@@ -32,40 +33,46 @@ export default function UnsavedChangesBar({
   if (!isDirty) return null
 
   return (
-    <div className="fixed bottom-[80px] lg:bottom-6 left-1/2 -translate-x-1/2 z-50 w-full max-w-xl px-4 animate-fade-in select-none">
-      <div className="bg-[#141519]/95 border border-amber-500/50 rounded-2xl p-4 shadow-2xl backdrop-blur-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs font-mono shadow-amber-950/30">
-        <div className="flex items-center gap-2.5 text-amber-300">
+    <div className="fixed bottom-[calc(env(safe-area-inset-bottom,0px)+76px)] lg:bottom-6 left-1/2 -translate-x-1/2 z-50 w-full max-w-lg px-3 animate-in slide-in-from-bottom-4 duration-200 select-none">
+      <div className="bg-[#141519]/96 border border-amber-500/60 rounded-2xl p-2.5 sm:p-3.5 shadow-2xl backdrop-blur-2xl flex items-center justify-between gap-2.5 text-xs font-mono shadow-amber-950/40 ring-1 ring-amber-400/30">
+        <div className="flex items-center gap-2 text-amber-300 min-w-0">
           <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse shrink-0" />
-          <span className="font-semibold">Unsaved Changes Detected</span>
-          <span className="text-neutral-400 hidden sm:inline">• (Press Ctrl+S)</span>
+          <span className="font-semibold truncate">Unsaved</span>
+          <span className="text-neutral-400 text-[10px] hidden sm:inline">• (Ctrl+S)</span>
         </div>
 
-        <div className="flex items-center gap-2 self-end sm:self-auto">
+        <div className="flex items-center gap-2 shrink-0">
           <button
             type="button"
-            onClick={onDiscard}
+            onClick={() => {
+              triggerHaptic('selection')
+              onDiscard()
+            }}
             disabled={isSaving}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-neutral-400 hover:text-white bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] transition-colors cursor-pointer disabled:opacity-50"
+            className="inline-flex items-center gap-1.5 px-3 py-2 min-h-[40px] rounded-xl text-neutral-400 hover:text-white bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] active:scale-95 transition-all cursor-pointer disabled:opacity-50"
           >
             <RotateCcw className="w-3.5 h-3.5" />
-            <span>Discard</span>
+            <span className="text-[11px]">Discard</span>
           </button>
 
           <button
             type="button"
-            onClick={onSave}
+            onClick={() => {
+              triggerHaptic('success')
+              onSave()
+            }}
             disabled={isSaving}
-            className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-xl bg-gradient-to-r from-amber-200 via-white to-amber-100 hover:from-white hover:to-amber-50 text-neutral-950 font-semibold uppercase tracking-wider transition-all shadow-md active:scale-95 cursor-pointer disabled:opacity-50"
+            className="inline-flex items-center gap-1.5 px-4 py-2 min-h-[40px] rounded-xl bg-gradient-to-r from-amber-200 via-white to-amber-100 hover:from-white hover:to-amber-50 text-neutral-950 font-bold uppercase tracking-wider transition-all shadow-md active:scale-95 cursor-pointer disabled:opacity-50"
           >
             {isSaving ? (
               <>
                 <Loader2 className="w-3.5 h-3.5 animate-spin text-neutral-900" />
-                <span>Saving...</span>
+                <span className="text-[11px]">Saving...</span>
               </>
             ) : (
               <>
                 <Save className="w-3.5 h-3.5" />
-                <span>Save Now</span>
+                <span className="text-[11px]">Save</span>
               </>
             )}
           </button>

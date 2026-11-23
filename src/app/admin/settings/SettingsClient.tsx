@@ -29,6 +29,7 @@ import {
   Languages,
 } from 'lucide-react'
 import { AdminAccount } from '@/data/portfolioData'
+import { triggerHaptic } from '@/lib/haptics'
 import {
   addAdminAccountAction,
   deleteAdminAccountAction,
@@ -349,14 +350,21 @@ export default function SettingsClient({
                     placeholder="••••••••••••"
                     required
                     minLength={6}
-                    className="w-full bg-[#090a0c] border border-white/[0.08] focus:border-amber-500/80 rounded-xl pl-3 pr-10 py-2.5 text-xs text-white focus:outline-none font-mono"
+                    autoCapitalize="none"
+                    autoCorrect="off"
+                    spellCheck={false}
+                    className="w-full bg-[#090a0c] border border-white/[0.08] focus:border-amber-500/80 rounded-xl ps-3.5 pe-12 py-3 text-[16px] sm:text-xs text-white focus:outline-none font-mono"
                   />
                   <button
                     type="button"
-                    onClick={() => setShowUpdatePass(!showUpdatePass)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-500 hover:text-neutral-300 p-1 cursor-pointer"
+                    onClick={() => {
+                      triggerHaptic('light')
+                      setShowUpdatePass(!showUpdatePass)
+                    }}
+                    className="absolute end-1 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-white p-2.5 min-w-[44px] min-h-[44px] flex items-center justify-center cursor-pointer"
+                    aria-label="Toggle password visibility"
                   >
-                    {showUpdatePass ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                    {showUpdatePass ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
                 </div>
               </div>
@@ -372,7 +380,10 @@ export default function SettingsClient({
                   placeholder="••••••••••••"
                   required
                   minLength={6}
-                  className="w-full bg-[#090a0c] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none font-mono"
+                  autoCapitalize="none"
+                  autoCorrect="off"
+                  spellCheck={false}
+                  className="w-full bg-[#090a0c] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3.5 py-3 text-[16px] sm:text-xs text-white focus:outline-none font-mono"
                 />
               </div>
 
@@ -469,11 +480,19 @@ export default function SettingsClient({
       </div>
 
       {/* ============================================================== */}
-      {/* MODAL: ADD ADMIN EMAIL                                         */}
+      {/* BOTTOM SHEET: ADD ADMIN EMAIL                                  */}
       {/* ============================================================== */}
       {showAddModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
-          <div className="bg-[#0e1014] border border-white/[0.12] rounded-3xl w-full max-w-md p-5 sm:p-6 space-y-4 shadow-2xl animate-in zoom-in-95 duration-200">
+        <div className="fixed inset-0 z-50 flex flex-col justify-end sm:justify-center p-0 sm:p-4 bg-black/85 backdrop-blur-md animate-in fade-in duration-200">
+          <div
+            className="fixed inset-0 bg-transparent cursor-pointer"
+            onClick={() => setShowAddModal(false)}
+          />
+
+          <div className="relative z-10 bg-[#0e1014] border-t sm:border border-white/[0.14] rounded-t-[28px] sm:rounded-3xl w-full max-w-md mx-auto p-5 sm:p-6 pb-[calc(env(safe-area-inset-bottom,0px)+20px)] sm:pb-6 space-y-4 shadow-2xl animate-in slide-in-from-bottom duration-300">
+            {/* Drag Handle Bar */}
+            <div className="w-12 h-1.5 bg-white/20 rounded-full mx-auto sm:hidden -mt-1 mb-1" />
+
             <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
               <div className="flex items-center gap-2">
                 <UserPlus className="w-4 h-4 text-amber-400" />
@@ -483,8 +502,12 @@ export default function SettingsClient({
               </div>
               <button
                 type="button"
-                onClick={() => setShowAddModal(false)}
-                className="p-1.5 text-neutral-400 hover:text-white rounded-lg bg-white/[0.04] cursor-pointer"
+                onClick={() => {
+                  triggerHaptic('light')
+                  setShowAddModal(false)
+                }}
+                className="p-2 min-w-[40px] min-h-[40px] flex items-center justify-center text-neutral-400 hover:text-white rounded-xl bg-white/[0.04] active:scale-90 transition-transform cursor-pointer"
+                aria-label="Close"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -497,11 +520,15 @@ export default function SettingsClient({
                 </label>
                 <input
                   type="email"
+                  inputMode="email"
+                  autoCapitalize="none"
+                  autoCorrect="off"
+                  spellCheck={false}
                   value={newEmail}
                   onChange={(e) => setNewEmail(e.target.value)}
                   placeholder="architect@domain.com"
                   required
-                  className="w-full bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none font-mono"
+                  className="w-full bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3.5 py-3 text-[16px] sm:text-xs text-white focus:outline-none font-mono"
                 />
               </div>
 
@@ -517,14 +544,21 @@ export default function SettingsClient({
                     placeholder="••••••••••••"
                     required
                     minLength={6}
-                    className="w-full bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl pl-3 pr-10 py-2.5 text-xs text-white focus:outline-none font-mono"
+                    autoCapitalize="none"
+                    autoCorrect="off"
+                    spellCheck={false}
+                    className="w-full bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl ps-3.5 pe-12 py-3 text-[16px] sm:text-xs text-white focus:outline-none font-mono"
                   />
                   <button
                     type="button"
-                    onClick={() => setShowNewPassword(!showNewPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-500 hover:text-neutral-300 p-1 cursor-pointer"
+                    onClick={() => {
+                      triggerHaptic('light')
+                      setShowNewPassword(!showNewPassword)
+                    }}
+                    className="absolute end-1 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-white p-2.5 min-w-[44px] min-h-[44px] flex items-center justify-center cursor-pointer"
+                    aria-label="Toggle password visibility"
                   >
-                    {showNewPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                    {showNewPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
                 </div>
               </div>
@@ -536,7 +570,7 @@ export default function SettingsClient({
                 <select
                   value={newRole}
                   onChange={(e) => setNewRole(e.target.value)}
-                  className="w-full bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none font-mono"
+                  className="w-full bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3.5 py-3 text-[16px] sm:text-xs text-white focus:outline-none font-mono"
                 >
                   <option value="Studio Principal">Studio Principal</option>
                   <option value="Administrator">Administrator</option>
@@ -544,18 +578,18 @@ export default function SettingsClient({
                 </select>
               </div>
 
-              <div className="flex items-center justify-end gap-2.5 pt-2">
+              <div className="flex items-center justify-end gap-3 pt-2">
                 <button
                   type="button"
                   onClick={() => setShowAddModal(false)}
-                  className="px-4 py-2 rounded-xl text-xs font-mono text-neutral-400 hover:text-white bg-white/[0.04] cursor-pointer"
+                  className="px-4 py-2.5 min-h-[44px] rounded-xl text-xs font-mono text-neutral-400 hover:text-white bg-white/[0.04] active:scale-95 transition-all cursor-pointer"
                 >
                   {t.common.cancel}
                 </button>
                 <button
                   type="submit"
                   disabled={isAdding || !newEmail || !newPassword}
-                  className="px-5 py-2 rounded-xl bg-gradient-to-r from-amber-400 to-amber-200 text-neutral-950 font-bold text-xs uppercase tracking-wider transition-all disabled:opacity-50 cursor-pointer shadow-md"
+                  className="px-5 py-2.5 min-h-[44px] rounded-xl bg-gradient-to-r from-amber-400 to-amber-200 text-neutral-950 font-bold text-xs uppercase tracking-wider transition-all disabled:opacity-50 active:scale-95 cursor-pointer shadow-md"
                 >
                   {isAdding ? t.common.saving : t.common.create}
                 </button>
@@ -566,11 +600,19 @@ export default function SettingsClient({
       )}
 
       {/* ============================================================== */}
-      {/* MODAL: DELETE CONFIRMATION                                     */}
+      {/* BOTTOM SHEET: DELETE CONFIRMATION                              */}
       {/* ============================================================== */}
       {accountToDelete && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
-          <div className="bg-[#0e1014] border border-red-900/30 rounded-3xl w-full max-w-sm p-5 sm:p-6 space-y-4 shadow-2xl animate-in zoom-in-95 duration-200">
+        <div className="fixed inset-0 z-50 flex flex-col justify-end sm:justify-center p-0 sm:p-4 bg-black/85 backdrop-blur-md animate-in fade-in duration-200">
+          <div
+            className="fixed inset-0 bg-transparent cursor-pointer"
+            onClick={() => setAccountToDelete(null)}
+          />
+
+          <div className="relative z-10 bg-[#0e1014] border-t sm:border border-red-900/40 rounded-t-[28px] sm:rounded-3xl w-full max-w-sm mx-auto p-5 sm:p-6 pb-[calc(env(safe-area-inset-bottom,0px)+20px)] sm:pb-6 space-y-4 shadow-2xl animate-in slide-in-from-bottom duration-300">
+            {/* Drag Handle Bar */}
+            <div className="w-12 h-1.5 bg-white/20 rounded-full mx-auto sm:hidden -mt-1 mb-1" />
+
             <div className="w-10 h-10 rounded-2xl bg-red-950/40 border border-red-800/40 flex items-center justify-center text-red-400">
               <AlertTriangle className="w-5 h-5" />
             </div>
@@ -584,11 +626,11 @@ export default function SettingsClient({
               </p>
             </div>
 
-            <div className="flex items-center justify-end gap-2.5 pt-2">
+            <div className="flex items-center justify-end gap-3 pt-2">
               <button
                 type="button"
                 onClick={() => setAccountToDelete(null)}
-                className="px-4 py-2 rounded-xl text-xs font-mono text-neutral-400 hover:text-white bg-white/[0.04] cursor-pointer"
+                className="px-4 py-2.5 min-h-[44px] rounded-xl text-xs font-mono text-neutral-400 hover:text-white bg-white/[0.04] active:scale-95 transition-all cursor-pointer"
               >
                 {t.common.cancel}
               </button>
@@ -596,7 +638,7 @@ export default function SettingsClient({
                 type="button"
                 onClick={confirmDeleteAccount}
                 disabled={isDeleting}
-                className="px-4 py-2 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold text-xs uppercase tracking-wider transition-all cursor-pointer shadow-md"
+                className="px-5 py-2.5 min-h-[44px] rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold text-xs uppercase tracking-wider transition-all active:scale-95 cursor-pointer shadow-md"
               >
                 {isDeleting ? t.common.saving : t.common.delete}
               </button>

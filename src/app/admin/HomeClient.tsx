@@ -28,6 +28,7 @@ import {
 import { Project } from '@/data/portfolioData'
 import { updateTop4ProjectsAction } from '@/app/admin/actions'
 import { useAdminTranslation } from '@/context/AdminLanguageContext'
+import { triggerHaptic } from '@/lib/haptics'
 
 interface HomeClientProps {
   initialProjects: Project[]
@@ -381,12 +382,12 @@ export default function HomeClient({
           </div>
         </div>
 
-        {/* The 4 Visual Slots Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+        {/* Mobile Horizontal Snap Carousel (< sm) + Desktop Responsive Grid (>= sm) */}
+        <div className="flex sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-3.5 overflow-x-auto sm:overflow-x-visible pb-2 sm:pb-0 no-scrollbar snap-x snap-mandatory -mx-1 px-1 sm:mx-0 sm:px-0">
           {top4Slots.map((project, slotIdx) => (
             <div
               key={slotIdx}
-              className={`rounded-2xl border transition-all flex flex-col justify-between overflow-hidden relative ${
+              className={`min-w-[82vw] sm:min-w-0 snap-center shrink-0 sm:shrink rounded-2xl border transition-all flex flex-col justify-between overflow-hidden relative ${
                 project
                   ? 'bg-[#090a0c] border-white/[0.1] hover:border-amber-500/40 shadow-md group'
                   : 'bg-white/[0.02] border-dashed border-amber-500/30 hover:border-amber-500/60 p-5 items-center justify-center text-center min-h-[220px]'
@@ -395,26 +396,26 @@ export default function HomeClient({
               {project ? (
                 <>
                   {/* Slot Image Banner */}
-                  <div className="relative w-full h-32 bg-neutral-900 overflow-hidden">
+                  <div className="relative w-full h-36 sm:h-32 bg-neutral-900 overflow-hidden">
                     <Image
                       src={project.coverImage || '/images/projects/project-1.jpg'}
                       alt={project.titleEn}
                       fill
-                      sizes="(max-width: 768px) 100vw, 25vw"
+                      sizes="(max-width: 768px) 85vw, 25vw"
                       className="object-cover group-hover:scale-105 transition-transform duration-300"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/40" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-black/50" />
                     
                     {/* Slot Number Stamp */}
-                    <span className="absolute top-2 left-2 px-2 py-0.5 rounded-md text-[9px] font-mono bg-black/80 text-amber-300 border border-amber-400/30 font-bold">
+                    <span className="absolute top-2.5 start-2.5 px-2.5 py-0.5 rounded-lg text-[10px] font-mono bg-black/85 text-amber-300 border border-amber-400/30 font-bold shadow-sm">
                       #{slotIdx + 1}
                     </span>
 
-                    <span className="absolute top-2 right-2 px-2 py-0.5 rounded-md text-[9px] font-mono bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-semibold">
+                    <span className="absolute top-2.5 end-2.5 px-2.5 py-0.5 rounded-lg text-[10px] font-mono bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-semibold shadow-sm">
                       📄 CV Active
                     </span>
 
-                    <div className="absolute bottom-2 left-2 right-2 truncate">
+                    <div className="absolute bottom-2.5 start-2.5 end-2.5 truncate">
                       <span className="text-[10px] font-mono text-neutral-300 uppercase tracking-wider block truncate">
                         {project.categoryLabelEn || project.category}
                       </span>
@@ -424,30 +425,37 @@ export default function HomeClient({
                   {/* Slot Info & Controls */}
                   <div className="p-3.5 space-y-3 flex-1 flex flex-col justify-between">
                     <div>
-                      <h3 className="text-xs font-semibold text-white truncate">
+                      <h3 className="text-sm sm:text-xs font-semibold text-white truncate">
                         {project.titleEn}
                       </h3>
-                      <p className="text-[10px] text-neutral-400 font-mono truncate mt-0.5">
+                      <p className="text-[11px] sm:text-[10px] text-neutral-400 font-mono truncate mt-0.5">
                         {project.locationEn || 'Egypt'}
                       </p>
                     </div>
 
-                    <div className="flex items-center gap-1.5 pt-2 border-t border-white/[0.06]">
+                    <div className="flex items-center gap-2 pt-2 border-t border-white/[0.06]">
                       <button
                         type="button"
-                        onClick={() => setSelectedSlotIndex(slotIdx)}
-                        className="flex-1 py-1.5 px-2 rounded-lg bg-white/[0.05] hover:bg-white/[0.1] text-neutral-200 text-[10px] font-mono transition-colors text-center cursor-pointer"
+                        onClick={() => {
+                          triggerHaptic('light')
+                          setSelectedSlotIndex(slotIdx)
+                        }}
+                        className="flex-1 py-2 px-3 min-h-[40px] rounded-xl bg-white/[0.05] hover:bg-white/[0.1] text-neutral-200 text-xs sm:text-[10px] font-mono font-medium transition-all text-center cursor-pointer active:scale-95"
                       >
                         {t.home.changeProject}
                       </button>
 
                       <button
                         type="button"
-                        onClick={() => handleRemoveSlot(slotIdx)}
-                        className="p-1.5 rounded-lg bg-red-950/20 hover:bg-red-950/40 text-red-400 border border-red-900/30 transition-colors cursor-pointer"
+                        onClick={() => {
+                          triggerHaptic('warning')
+                          handleRemoveSlot(slotIdx)
+                        }}
+                        className="p-2 min-w-[40px] min-h-[40px] flex items-center justify-center rounded-xl bg-red-950/20 hover:bg-red-950/40 text-red-400 border border-red-900/30 active:scale-90 transition-transform cursor-pointer"
                         title={t.home.removeSlot}
+                        aria-label="Remove from slot"
                       >
-                        <X className="w-3.5 h-3.5" />
+                        <X className="w-4 h-4" />
                       </button>
                     </div>
                   </div>
@@ -456,14 +464,17 @@ export default function HomeClient({
                 /* Empty Slot Card */
                 <button
                   type="button"
-                  onClick={() => setSelectedSlotIndex(slotIdx)}
-                  className="w-full h-full flex flex-col items-center justify-center gap-2.5 p-4 group cursor-pointer"
+                  onClick={() => {
+                    triggerHaptic('light')
+                    setSelectedSlotIndex(slotIdx)
+                  }}
+                  className="w-full h-full min-h-[220px] flex flex-col items-center justify-center gap-2.5 p-4 group active:scale-98 transition-transform cursor-pointer"
                 >
-                  <div className="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/30 group-hover:scale-110 transition-transform flex items-center justify-center font-bold">
-                    <Plus className="w-5 h-5 stroke-[2.5]" />
+                  <div className="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-400 border border-amber-500/30 group-hover:scale-110 transition-transform flex items-center justify-center font-bold">
+                    <Plus className="w-6 h-6 stroke-[2.5]" />
                   </div>
                   <div className="space-y-0.5 text-center">
-                    <span className="text-[10px] font-mono uppercase text-amber-300 font-bold block">
+                    <span className="text-[11px] font-mono uppercase text-amber-300 font-bold block">
                       #{slotIdx + 1} {t.home.slot}
                     </span>
                     <span className="text-xs text-neutral-400 font-sans block">
@@ -473,6 +484,21 @@ export default function HomeClient({
                 </button>
               )}
             </div>
+          ))}
+        </div>
+
+        {/* Mobile Swipe Pagination Dots Indicator (< sm) */}
+        <div className="flex sm:hidden items-center justify-center gap-1.5 pt-1">
+          {[0, 1, 2, 3].map((slotIdx) => (
+            <span
+              key={slotIdx}
+              className={`h-1.5 rounded-full transition-all ${
+                top4Slots[slotIdx]
+                  ? 'w-5 bg-amber-400'
+                  : 'w-1.5 bg-white/20'
+              }`}
+              aria-label={`Slot ${slotIdx + 1}`}
+            />
           ))}
         </div>
       </div>
@@ -570,11 +596,20 @@ export default function HomeClient({
       </div>
 
       {/* ============================================================== */}
-      {/* 6. SELECT PROJECT MODAL (Assign to Top 4 Slot)                */}
+      {/* 6. SELECT PROJECT BOTTOM SHEET (Assign to Top 4 Slot)          */}
       {/* ============================================================== */}
       {selectedSlotIndex !== null && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
-          <div className="bg-[#0e1014] border border-white/[0.12] rounded-3xl w-full max-w-lg p-5 sm:p-6 space-y-4 shadow-2xl animate-in zoom-in-95 duration-200 max-h-[85vh] flex flex-col">
+        <div className="fixed inset-0 z-50 flex flex-col justify-end sm:justify-center p-0 sm:p-4 bg-black/85 backdrop-blur-md animate-in fade-in duration-200">
+          {/* Backdrop Dismiss Area */}
+          <div
+            className="fixed inset-0 bg-transparent cursor-pointer"
+            onClick={() => setSelectedSlotIndex(null)}
+          />
+
+          <div className="relative z-10 bg-[#0e1014] border-t sm:border border-white/[0.14] rounded-t-[28px] sm:rounded-3xl w-full max-w-lg mx-auto p-5 sm:p-6 pb-[calc(env(safe-area-inset-bottom,0px)+20px)] sm:pb-6 space-y-4 shadow-2xl animate-in slide-in-from-bottom duration-300 max-h-[88vh] flex flex-col">
+            {/* Mobile Drag Handle Indicator */}
+            <div className="w-12 h-1.5 bg-white/20 rounded-full mx-auto sm:hidden -mt-1 mb-1" />
+
             <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
               <div className="flex items-center gap-2">
                 <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
@@ -584,22 +619,29 @@ export default function HomeClient({
               </div>
               <button
                 type="button"
-                onClick={() => setSelectedSlotIndex(null)}
-                className="p-1.5 text-neutral-400 hover:text-white rounded-lg bg-white/[0.04] cursor-pointer"
+                onClick={() => {
+                  triggerHaptic('light')
+                  setSelectedSlotIndex(null)
+                }}
+                className="p-2 min-w-[40px] min-h-[40px] flex items-center justify-center text-neutral-400 hover:text-white rounded-xl bg-white/[0.04] active:scale-90 transition-transform cursor-pointer"
+                aria-label="Close"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
-            <div className="overflow-y-auto no-scrollbar space-y-2 flex-1 pr-1">
+            <div className="overflow-y-auto no-scrollbar space-y-2.5 flex-1 pr-1 overscroll-contain">
               {projects.map((proj) => {
                 const isAlreadySelected = top4Slots.some((p) => p?.id === proj.id)
                 return (
                   <button
                     key={proj.id}
                     type="button"
-                    onClick={() => handleAssignProjectToSlot(selectedSlotIndex, proj)}
-                    className={`w-full p-3 rounded-2xl border transition-all flex items-center justify-between gap-3 text-start cursor-pointer ${
+                    onClick={() => {
+                      triggerHaptic('selection')
+                      handleAssignProjectToSlot(selectedSlotIndex, proj)
+                    }}
+                    className={`w-full min-h-[56px] p-3 rounded-2xl border transition-all flex items-center justify-between gap-3 text-start active:scale-[0.98] cursor-pointer ${
                       isAlreadySelected
                         ? 'bg-amber-500/10 border-amber-500/40 text-amber-200'
                         : 'bg-white/[0.03] border-white/[0.06] hover:bg-white/[0.08] hover:border-white/20 text-white'
@@ -627,11 +669,11 @@ export default function HomeClient({
 
                     <div className="shrink-0 text-xs font-mono">
                       {isAlreadySelected ? (
-                        <span className="text-[9px] px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                        <span className="text-[9px] px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 font-semibold">
                           Selected
                         </span>
                       ) : (
-                        <span className="text-neutral-400 group-hover:text-amber-400">
+                        <span className="text-xs px-3 py-1 rounded-xl bg-white/[0.06] text-amber-300 font-mono font-medium">
                           Assign →
                         </span>
                       )}

@@ -20,6 +20,7 @@ import {
 import { saveProfileAction } from '../actions'
 import UnsavedChangesBar from '@/components/admin/UnsavedChangesBar'
 import { useAdminTranslation } from '@/context/AdminLanguageContext'
+import { triggerHaptic } from '@/lib/haptics'
 
 export default function ExperienceClient({ initialProfile }: { initialProfile: any }) {
   const { t, isRtl } = useAdminTranslation()
@@ -146,7 +147,8 @@ export default function ExperienceClient({ initialProfile }: { initialProfile: a
           <button
             type="submit"
             disabled={isSaving}
-            className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-200 via-white to-amber-100 hover:from-white hover:to-amber-50 text-neutral-950 font-semibold px-5 py-2.5 rounded-xl text-xs uppercase tracking-wider transition-all shadow-lg active:scale-95 cursor-pointer disabled:opacity-50"
+            onClick={() => triggerHaptic('success')}
+            className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-200 via-white to-amber-100 hover:from-white hover:to-amber-50 text-neutral-950 font-bold px-5 py-2.5 min-h-[44px] rounded-xl text-xs uppercase tracking-wider transition-all shadow-lg active:scale-95 cursor-pointer disabled:opacity-50"
           >
             {isSaving ? (
               <>
@@ -241,8 +243,11 @@ export default function ExperienceClient({ initialProfile }: { initialProfile: a
                     </span>
                     <button
                       type="button"
-                      onClick={() => setExperience(experience.filter((_, i) => i !== idx))}
-                      className="p-1.5 text-neutral-500 hover:text-red-400 transition-colors cursor-pointer"
+                      onClick={() => {
+                        triggerHaptic('warning')
+                        setExperience(experience.filter((_, i) => i !== idx))
+                      }}
+                      className="p-2 min-w-[44px] min-h-[44px] flex items-center justify-center text-neutral-500 hover:text-red-400 active:scale-90 transition-transform cursor-pointer"
                       title={t.common.delete}
                     >
                       <Trash2 className="w-4 h-4" />
@@ -262,7 +267,7 @@ export default function ExperienceClient({ initialProfile }: { initialProfile: a
                           updated[idx].period = e.target.value
                           setExperience(updated)
                         }}
-                        className="w-full bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none font-mono"
+                        className="w-full bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3.5 py-3 text-[16px] sm:text-xs text-white focus:outline-none font-mono"
                       />
                     </div>
 
@@ -278,7 +283,7 @@ export default function ExperienceClient({ initialProfile }: { initialProfile: a
                           updated[idx].role = e.target.value
                           setExperience(updated)
                         }}
-                        className="w-full bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none"
+                        className="w-full bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3.5 py-3 text-[16px] sm:text-xs text-white focus:outline-none"
                       />
                     </div>
 
@@ -294,7 +299,7 @@ export default function ExperienceClient({ initialProfile }: { initialProfile: a
                           updated[idx].company = e.target.value
                           setExperience(updated)
                         }}
-                        className="w-full bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none"
+                        className="w-full bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3.5 py-3 text-[16px] sm:text-xs text-white focus:outline-none"
                       />
                     </div>
 
@@ -310,7 +315,7 @@ export default function ExperienceClient({ initialProfile }: { initialProfile: a
                           updated[idx].location = e.target.value
                           setExperience(updated)
                         }}
-                        className="w-full bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none"
+                        className="w-full bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3.5 py-3 text-[16px] sm:text-xs text-white focus:outline-none"
                       />
                     </div>
 
@@ -326,7 +331,7 @@ export default function ExperienceClient({ initialProfile }: { initialProfile: a
                           updated[idx].description = e.target.value
                           setExperience(updated)
                         }}
-                        className="w-full bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl p-3 text-xs text-white focus:outline-none"
+                        className="w-full bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl p-3.5 text-[16px] sm:text-xs text-white focus:outline-none leading-relaxed"
                       />
                     </div>
                   </div>
@@ -377,8 +382,11 @@ export default function ExperienceClient({ initialProfile }: { initialProfile: a
                     </span>
                     <button
                       type="button"
-                      onClick={() => setEducation(education.filter((_, i) => i !== idx))}
-                      className="p-1.5 text-neutral-500 hover:text-red-400 transition-colors cursor-pointer"
+                      onClick={() => {
+                        triggerHaptic('warning')
+                        setEducation(education.filter((_, i) => i !== idx))
+                      }}
+                      className="p-2 min-w-[44px] min-h-[44px] flex items-center justify-center text-neutral-500 hover:text-red-400 active:scale-90 transition-transform cursor-pointer"
                       title={t.common.delete}
                     >
                       <Trash2 className="w-4 h-4" />
@@ -398,7 +406,7 @@ export default function ExperienceClient({ initialProfile }: { initialProfile: a
                           updated[idx].degree = e.target.value
                           setEducation(updated)
                         }}
-                        className="w-full bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none"
+                        className="w-full bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3.5 py-3 text-[16px] sm:text-xs text-white focus:outline-none"
                       />
                     </div>
 
@@ -414,7 +422,7 @@ export default function ExperienceClient({ initialProfile }: { initialProfile: a
                           updated[idx].institution = e.target.value
                           setEducation(updated)
                         }}
-                        className="w-full bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none"
+                        className="w-full bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3.5 py-3 text-[16px] sm:text-xs text-white focus:outline-none"
                       />
                     </div>
 
@@ -430,7 +438,7 @@ export default function ExperienceClient({ initialProfile }: { initialProfile: a
                           updated[idx].year = e.target.value
                           setEducation(updated)
                         }}
-                        className="w-full bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none font-mono"
+                        className="w-full bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3.5 py-3 text-[16px] sm:text-xs text-white focus:outline-none font-mono"
                       />
                     </div>
 
@@ -446,7 +454,7 @@ export default function ExperienceClient({ initialProfile }: { initialProfile: a
                           updated[idx].grade = e.target.value
                           setEducation(updated)
                         }}
-                        className="w-full bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none font-mono"
+                        className="w-full bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3.5 py-3 text-[16px] sm:text-xs text-white focus:outline-none font-mono"
                       />
                     </div>
                   </div>
@@ -513,8 +521,11 @@ export default function ExperienceClient({ initialProfile }: { initialProfile: a
 
                     <button
                       type="button"
-                      onClick={() => setSoftware(software.filter((_, i) => i !== idx))}
-                      className="p-1.5 text-neutral-500 hover:text-red-400 transition-colors cursor-pointer"
+                      onClick={() => {
+                        triggerHaptic('warning')
+                        setSoftware(software.filter((_, i) => i !== idx))
+                      }}
+                      className="p-2 min-w-[44px] min-h-[44px] flex items-center justify-center text-neutral-500 hover:text-red-400 active:scale-90 transition-transform cursor-pointer"
                       title={t.common.delete}
                     >
                       <Trash2 className="w-4 h-4" />
@@ -534,7 +545,7 @@ export default function ExperienceClient({ initialProfile }: { initialProfile: a
                           updated[idx].name = e.target.value
                           setSoftware(updated)
                         }}
-                        className="w-full bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none font-mono"
+                        className="w-full bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3.5 py-3 text-[16px] sm:text-xs text-white focus:outline-none font-mono"
                       />
                     </div>
 
@@ -550,7 +561,7 @@ export default function ExperienceClient({ initialProfile }: { initialProfile: a
                           updated[idx].engine = e.target.value
                           setSoftware(updated)
                         }}
-                        className="w-full bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none"
+                        className="w-full bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3.5 py-3 text-[16px] sm:text-xs text-white focus:outline-none"
                       />
                     </div>
 

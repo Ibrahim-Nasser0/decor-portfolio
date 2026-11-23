@@ -37,6 +37,7 @@ import {
 } from '../actions'
 import { ProjectCategory, DEFAULT_PROJECT_CATEGORIES } from '@/data/portfolioData'
 import { useAdminTranslation } from '@/context/AdminLanguageContext'
+import { triggerHaptic } from '@/lib/haptics'
 
 export default function ProjectsClient({
   initialProjects,
@@ -386,20 +387,25 @@ export default function ProjectsClient({
       {/* Action Header: Search, Filters & View Mode Switcher */}
       <div className="space-y-3">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          {/* Search Input */}
+          {/* Search Input (No iOS Auto-zoom, Bidirectional) */}
           <div className="relative flex-1">
-            <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-400" />
+            <Search className="w-4 h-4 absolute start-3.5 top-1/2 -translate-y-1/2 text-neutral-400" />
             <input
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search by title, location, or slug key..."
-              className="w-full bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl pl-10 pr-9 py-2.5 text-xs text-white placeholder-neutral-500 focus:outline-none transition-all font-mono"
+              className="w-full bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl ps-10 pe-10 py-3 text-[16px] sm:text-xs text-white placeholder-neutral-500 focus:outline-none transition-all font-mono"
             />
             {search && (
               <button
-                onClick={() => setSearch('')}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-500 hover:text-white p-1"
+                type="button"
+                onClick={() => {
+                  triggerHaptic('light')
+                  setSearch('')
+                }}
+                className="absolute end-2 top-1/2 -translate-y-1/2 text-neutral-500 hover:text-white p-2 min-w-[36px] min-h-[36px] flex items-center justify-center cursor-pointer"
+                aria-label="Clear search"
               >
                 <X className="w-3.5 h-3.5" />
               </button>
@@ -411,72 +417,96 @@ export default function ProjectsClient({
             <div className="flex items-center gap-1.5">
               {/* CV Only Filter */}
               <button
-                onClick={() => setCvOnly(!cvOnly)}
-                className={`inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-xs font-mono border transition-all cursor-pointer ${
+                type="button"
+                onClick={() => {
+                  triggerHaptic('selection')
+                  setCvOnly(!cvOnly)
+                }}
+                className={`inline-flex items-center gap-1.5 px-3 py-2 min-h-[40px] rounded-xl text-xs font-mono border transition-all cursor-pointer active:scale-95 ${
                   cvOnly
-                    ? 'bg-emerald-500/20 border-emerald-500/50 text-emerald-300 font-bold'
+                    ? 'bg-emerald-500/20 border-emerald-500/50 text-emerald-300 font-bold shadow-sm'
                     : 'bg-white/[0.03] border-white/[0.08] text-neutral-400 hover:text-white'
                 }`}
               >
-                <FileText className={`w-3 h-3 ${cvOnly ? 'text-[#7AD1B8]' : ''}`} />
+                <FileText className={`w-3.5 h-3.5 ${cvOnly ? 'text-[#7AD1B8]' : ''}`} />
                 <span>CV ({cvCount})</span>
               </button>
 
               {/* Featured Only Filter */}
               <button
-                onClick={() => setFeaturedOnly(!featuredOnly)}
-                className={`inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-xs font-mono border transition-all cursor-pointer ${
+                type="button"
+                onClick={() => {
+                  triggerHaptic('selection')
+                  setFeaturedOnly(!featuredOnly)
+                }}
+                className={`inline-flex items-center gap-1.5 px-3 py-2 min-h-[40px] rounded-xl text-xs font-mono border transition-all cursor-pointer active:scale-95 ${
                   featuredOnly
-                    ? 'bg-amber-500/20 border-amber-500/50 text-amber-300 font-bold'
+                    ? 'bg-amber-500/20 border-amber-500/50 text-amber-300 font-bold shadow-sm'
                     : 'bg-white/[0.03] border-white/[0.08] text-neutral-400 hover:text-white'
                 }`}
               >
-                <Star className={`w-3 h-3 ${featuredOnly ? 'fill-amber-400 text-amber-400' : ''}`} />
+                <Star className={`w-3.5 h-3.5 ${featuredOnly ? 'fill-amber-400 text-amber-400' : ''}`} />
                 <span>Featured</span>
               </button>
             </div>
 
-            {/* View Mode Switcher (Cards | Grid | Table) */}
+            {/* View Mode Switcher (Cards | Grid | Table - Table hidden on small mobile) */}
             <div className="flex items-center bg-[#111215] border border-white/[0.08] rounded-xl p-1 gap-1">
               <button
-                onClick={() => setViewMode('cards')}
-                className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
+                type="button"
+                onClick={() => {
+                  triggerHaptic('selection')
+                  setViewMode('cards')
+                }}
+                className={`p-2 min-w-[38px] min-h-[38px] flex items-center justify-center rounded-lg transition-all active:scale-90 cursor-pointer ${
                   viewMode === 'cards'
-                    ? 'bg-amber-500/20 text-amber-300'
+                    ? 'bg-amber-500/20 text-amber-300 shadow-sm'
                     : 'text-neutral-500 hover:text-neutral-300'
                 }`}
                 title="Mobile Cards View"
+                aria-label="Cards view"
               >
-                <Smartphone className="w-3.5 h-3.5" />
+                <Smartphone className="w-4 h-4" />
               </button>
               <button
-                onClick={() => setViewMode('grid')}
-                className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
+                type="button"
+                onClick={() => {
+                  triggerHaptic('selection')
+                  setViewMode('grid')
+                }}
+                className={`p-2 min-w-[38px] min-h-[38px] flex items-center justify-center rounded-lg transition-all active:scale-90 cursor-pointer ${
                   viewMode === 'grid'
-                    ? 'bg-amber-500/20 text-amber-300'
+                    ? 'bg-amber-500/20 text-amber-300 shadow-sm'
                     : 'text-neutral-500 hover:text-neutral-300'
                 }`}
                 title="Visual 3D Grid View"
+                aria-label="Grid view"
               >
-                <LayoutGrid className="w-3.5 h-3.5" />
+                <LayoutGrid className="w-4 h-4" />
               </button>
               <button
-                onClick={() => setViewMode('table')}
-                className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
+                type="button"
+                onClick={() => {
+                  triggerHaptic('selection')
+                  setViewMode('table')
+                }}
+                className={`hidden sm:flex p-2 min-w-[38px] min-h-[38px] items-center justify-center rounded-lg transition-all active:scale-90 cursor-pointer ${
                   viewMode === 'table'
-                    ? 'bg-amber-500/20 text-amber-300'
+                    ? 'bg-amber-500/20 text-amber-300 shadow-sm'
                     : 'text-neutral-500 hover:text-neutral-300'
                 }`}
                 title="Detailed Table View"
+                aria-label="Table view"
               >
-                <List className="w-3.5 h-3.5" />
+                <List className="w-4 h-4" />
               </button>
             </div>
 
             {/* Add Project Button */}
             <Link
               href="/admin/projects/new"
-              className="inline-flex items-center justify-center gap-1.5 bg-gradient-to-r from-amber-200 via-white to-amber-100 hover:from-white hover:to-amber-50 text-neutral-950 px-3.5 py-1.5 rounded-xl text-xs font-semibold uppercase tracking-wider transition-all shadow-md active:scale-95 cursor-pointer shrink-0"
+              onClick={() => triggerHaptic('light')}
+              className="inline-flex items-center justify-center gap-1.5 bg-gradient-to-r from-amber-200 via-white to-amber-100 hover:from-white hover:to-amber-50 text-neutral-950 px-4 py-2 min-h-[40px] rounded-xl text-xs font-semibold uppercase tracking-wider transition-all shadow-md active:scale-95 cursor-pointer shrink-0"
             >
               <Plus className="w-3.5 h-3.5 text-neutral-900" />
               <span>Add</span>
@@ -598,40 +628,48 @@ export default function ProjectsClient({
               </div>
 
               {/* Bottom Thumb Action Row (Ergonomic Touch Targets) */}
-              <div className="pt-2 border-t border-white/[0.06] flex items-center justify-between gap-2 flex-wrap">
-                <div className="flex items-center gap-1.5">
+              <div className="pt-2.5 border-t border-white/[0.06] flex items-center justify-between gap-2 flex-wrap">
+                <div className="flex items-center gap-2">
                   {/* CV Quick Toggle Pill */}
                   <button
-                    onClick={() => handleToggleCv(project)}
+                    type="button"
+                    onClick={() => {
+                      triggerHaptic('light')
+                      handleToggleCv(project)
+                    }}
                     disabled={togglingCvId === project.id}
-                    className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-xs font-mono border transition-all cursor-pointer active:scale-95 ${
+                    className={`inline-flex items-center gap-1.5 px-3 py-2 min-h-[40px] rounded-xl text-xs font-mono border transition-all cursor-pointer active:scale-95 ${
                       project.includeInCv !== false
-                        ? 'bg-emerald-500/20 border-emerald-500/60 text-emerald-300 font-bold'
+                        ? 'bg-emerald-500/20 border-emerald-500/60 text-emerald-300 font-bold shadow-sm'
                         : 'bg-white/[0.03] border-white/[0.08] text-neutral-400 hover:text-white'
                     }`}
                   >
                     {togglingCvId === project.id ? (
-                      <Loader2 className="w-3 h-3 animate-spin" />
+                      <Loader2 className="w-3.5 h-3.5 animate-spin" />
                     ) : (
-                      <FileText className={`w-3 h-3 ${project.includeInCv !== false ? 'text-[#7AD1B8]' : ''}`} />
+                      <FileText className={`w-3.5 h-3.5 ${project.includeInCv !== false ? 'text-[#7AD1B8]' : ''}`} />
                     )}
                     <span>{project.includeInCv !== false ? 'CV (Selected)' : 'Add to CV'}</span>
                   </button>
 
                   {/* Featured Quick Toggle Pill */}
                   <button
-                    onClick={() => handleToggleFeatured(project)}
+                    type="button"
+                    onClick={() => {
+                      triggerHaptic('light')
+                      handleToggleFeatured(project)
+                    }}
                     disabled={togglingFeaturedId === project.id}
-                    className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-xs font-mono border transition-all cursor-pointer active:scale-95 ${
+                    className={`inline-flex items-center gap-1.5 px-3 py-2 min-h-[40px] rounded-xl text-xs font-mono border transition-all cursor-pointer active:scale-95 ${
                       project.featured
-                        ? 'bg-amber-500/20 border-amber-500/60 text-amber-300 font-bold'
+                        ? 'bg-amber-500/20 border-amber-500/60 text-amber-300 font-bold shadow-sm'
                         : 'bg-white/[0.03] border-white/[0.08] text-neutral-400 hover:text-white'
                     }`}
                   >
                     {togglingFeaturedId === project.id ? (
-                      <Loader2 className="w-3 h-3 animate-spin" />
+                      <Loader2 className="w-3.5 h-3.5 animate-spin" />
                     ) : (
-                      <Star className={`w-3 h-3 ${project.featured ? 'fill-amber-400 text-amber-400' : ''}`} />
+                      <Star className={`w-3.5 h-3.5 ${project.featured ? 'fill-amber-400 text-amber-400' : ''}`} />
                     )}
                     <span>{project.featured ? 'Featured' : 'Feature'}</span>
                   </button>
@@ -641,15 +679,19 @@ export default function ProjectsClient({
                   {/* Clone */}
                   <button
                     type="button"
-                    onClick={() => handleDuplicate(project)}
+                    onClick={() => {
+                      triggerHaptic('light')
+                      handleDuplicate(project)
+                    }}
                     disabled={duplicatingId === project.id}
-                    className="p-1.5 bg-white/[0.03] hover:bg-white/[0.08] text-neutral-400 hover:text-amber-400 rounded-lg border border-white/[0.08] transition-colors"
+                    className="p-2 min-w-[38px] min-h-[38px] flex items-center justify-center bg-white/[0.03] hover:bg-white/[0.08] text-neutral-400 hover:text-amber-400 rounded-xl border border-white/[0.08] active:scale-90 transition-all cursor-pointer"
                     title="Duplicate project"
+                    aria-label="Duplicate project"
                   >
                     {duplicatingId === project.id ? (
-                      <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                      <Loader2 className="w-4 h-4 animate-spin" />
                     ) : (
-                      <Copy className="w-3.5 h-3.5" />
+                      <Copy className="w-4 h-4" />
                     )}
                   </button>
 
@@ -657,27 +699,36 @@ export default function ProjectsClient({
                   <Link
                     href={`/projects/${project.id}`}
                     target="_blank"
-                    className="p-1.5 bg-white/[0.03] hover:bg-white/[0.08] text-neutral-400 hover:text-white rounded-lg border border-white/[0.08]"
+                    onClick={() => triggerHaptic('light')}
+                    className="p-2 min-w-[38px] min-h-[38px] flex items-center justify-center bg-white/[0.03] hover:bg-white/[0.08] text-neutral-400 hover:text-white rounded-xl border border-white/[0.08] active:scale-90 transition-all"
                     title="View live page"
+                    aria-label="View live page"
                   >
-                    <ExternalLink className="w-3.5 h-3.5" />
+                    <ExternalLink className="w-4 h-4" />
                   </Link>
 
                   {/* Edit */}
                   <Link
                     href={`/admin/projects/${project.id}`}
-                    className="inline-flex items-center gap-1 bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/30 px-3 py-1.5 rounded-xl text-xs font-mono font-semibold active:scale-95 transition-all"
+                    onClick={() => triggerHaptic('light')}
+                    className="inline-flex items-center gap-1.5 bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/30 px-3.5 py-2 min-h-[38px] rounded-xl text-xs font-mono font-semibold active:scale-95 transition-all"
                   >
-                    <Edit3 className="w-3 h-3" />
+                    <Edit3 className="w-3.5 h-3.5" />
                     <span>Edit</span>
                   </Link>
 
                   {/* Delete */}
                   <button
-                    onClick={() => setProjectToDelete(project)}
-                    className="p-1.5 text-neutral-500 hover:text-red-400 rounded-lg transition-colors cursor-pointer"
+                    type="button"
+                    onClick={() => {
+                      triggerHaptic('warning')
+                      setProjectToDelete(project)
+                    }}
+                    className="p-2 min-w-[38px] min-h-[38px] flex items-center justify-center text-neutral-500 hover:text-red-400 hover:bg-red-950/20 rounded-xl active:scale-90 transition-all cursor-pointer"
+                    title="Delete project"
+                    aria-label="Delete project"
                   >
-                    <Trash2 className="w-3.5 h-3.5" />
+                    <Trash2 className="w-4 h-4" />
                   </button>
                 </div>
               </div>
@@ -979,10 +1030,18 @@ export default function ProjectsClient({
         </div>
       )}
 
-      {/* Delete Confirmation Modal */}
+      {/* Delete Confirmation Bottom Sheet */}
       {projectToDelete && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
-          <div className="w-full max-w-md bg-[#131417] border border-white/[0.1] rounded-3xl p-6 sm:p-7 shadow-2xl space-y-5">
+        <div className="fixed inset-0 z-50 flex flex-col justify-end sm:justify-center p-0 sm:p-4 bg-black/85 backdrop-blur-md animate-in fade-in duration-200">
+          <div
+            className="fixed inset-0 bg-transparent cursor-pointer"
+            onClick={() => setProjectToDelete(null)}
+          />
+
+          <div className="relative z-10 w-full max-w-md mx-auto bg-[#131417] border-t sm:border border-red-900/40 rounded-t-[28px] sm:rounded-3xl p-5 sm:p-7 pb-[calc(env(safe-area-inset-bottom,0px)+20px)] sm:pb-7 shadow-2xl space-y-5 animate-in slide-in-from-bottom duration-300">
+            {/* Drag Handle Bar */}
+            <div className="w-12 h-1.5 bg-white/20 rounded-full mx-auto sm:hidden -mt-1 mb-1" />
+
             <div className="flex items-start gap-4">
               <div className="p-3 bg-red-950/40 text-red-400 border border-red-800/60 rounded-2xl shrink-0">
                 <AlertTriangle className="w-5 h-5" />
@@ -1006,7 +1065,7 @@ export default function ProjectsClient({
                 type="button"
                 onClick={() => setProjectToDelete(null)}
                 disabled={isDeleting}
-                className="px-4 py-2 rounded-xl text-xs font-mono text-neutral-300 hover:bg-white/[0.05] border border-white/[0.08] transition-colors cursor-pointer"
+                className="px-4 py-2.5 min-h-[44px] rounded-xl text-xs font-mono text-neutral-300 hover:bg-white/[0.05] border border-white/[0.08] active:scale-95 transition-all cursor-pointer"
               >
                 Cancel
               </button>
@@ -1014,7 +1073,7 @@ export default function ProjectsClient({
                 type="button"
                 onClick={confirmDelete}
                 disabled={isDeleting}
-                className="inline-flex items-center gap-2 bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded-xl text-xs font-mono transition-colors shadow-md cursor-pointer disabled:opacity-50"
+                className="inline-flex items-center gap-2 bg-red-600 hover:bg-red-500 text-white px-5 py-2.5 min-h-[44px] rounded-xl text-xs font-mono font-bold active:scale-95 transition-all shadow-md cursor-pointer disabled:opacity-50"
               >
                 {isDeleting ? (
                   <>
@@ -1030,17 +1089,28 @@ export default function ProjectsClient({
         </div>
       )}
 
-      {/* CV Showcase Manager Matrix Modal */}
+      {/* CV Showcase Manager Matrix Bottom Sheet */}
       {showCvModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-fade-in overflow-y-auto">
-          <div className="w-full max-w-3xl bg-[#121316] border border-white/[0.1] rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6 my-8">
+        <div className="fixed inset-0 z-50 flex flex-col justify-end sm:justify-center p-0 sm:p-4 bg-black/85 backdrop-blur-md animate-in fade-in duration-200">
+          <div
+            className="fixed inset-0 bg-transparent cursor-pointer"
+            onClick={() => {
+              setShowCvModal(false)
+              setSwappingProjectId(null)
+            }}
+          />
+
+          <div className="relative z-10 w-full max-w-3xl mx-auto bg-[#121316] border-t sm:border border-white/[0.12] rounded-t-[28px] sm:rounded-3xl p-5 sm:p-8 pb-[calc(env(safe-area-inset-bottom,0px)+20px)] sm:pb-8 shadow-2xl space-y-6 max-h-[88vh] overflow-y-auto no-scrollbar animate-in slide-in-from-bottom duration-300">
+            {/* Drag Handle Bar */}
+            <div className="w-12 h-1.5 bg-white/20 rounded-full mx-auto sm:hidden -mt-1 mb-1" />
+
             <div className="flex items-center justify-between pb-4 border-b border-white/[0.08]">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+                <div className="w-10 h-10 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 shrink-0">
                   <FileText className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="text-base font-semibold text-white flex items-center gap-2">
+                  <h3 className="text-base font-semibold text-white flex items-center gap-2 flex-wrap">
                     <span>LaTeX CV Showcase Matrix</span>
                     <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-bold">
                       {cvCount} / 4 Slots
@@ -1055,10 +1125,12 @@ export default function ProjectsClient({
               <button
                 type="button"
                 onClick={() => {
+                  triggerHaptic('light')
                   setShowCvModal(false)
                   setSwappingProjectId(null)
                 }}
-                className="p-2 text-neutral-400 hover:text-white rounded-xl bg-white/[0.03] border border-white/[0.08] cursor-pointer"
+                className="p-2 min-w-[40px] min-h-[40px] flex items-center justify-center text-neutral-400 hover:text-white rounded-xl bg-white/[0.03] border border-white/[0.08] active:scale-90 transition-transform cursor-pointer"
+                aria-label="Close"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -1226,10 +1298,18 @@ export default function ProjectsClient({
         </div>
       )}
 
-      {/* Category Management Modal */}
+      {/* Category Management Bottom Sheet */}
       {showCategoryModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
-          <div className="bg-[#0e1014] border border-white/[0.12] rounded-3xl w-full max-w-lg p-5 sm:p-6 space-y-5 shadow-2xl animate-in zoom-in-95 duration-200 max-h-[85vh] flex flex-col select-none">
+        <div className="fixed inset-0 z-50 flex flex-col justify-end sm:justify-center p-0 sm:p-4 bg-black/85 backdrop-blur-md animate-in fade-in duration-200">
+          <div
+            className="fixed inset-0 bg-transparent cursor-pointer"
+            onClick={() => setShowCategoryModal(false)}
+          />
+
+          <div className="relative z-10 bg-[#0e1014] border-t sm:border border-white/[0.12] rounded-t-[28px] sm:rounded-3xl w-full max-w-lg mx-auto p-5 sm:p-6 pb-[calc(env(safe-area-inset-bottom,0px)+20px)] sm:pb-6 space-y-5 shadow-2xl animate-in slide-in-from-bottom duration-300 max-h-[88vh] flex flex-col select-none">
+            {/* Drag Handle Bar */}
+            <div className="w-12 h-1.5 bg-white/20 rounded-full mx-auto sm:hidden -mt-1 mb-1" />
+
             <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
               <div className="flex items-center gap-2">
                 <Sliders className="w-4 h-4 text-amber-400" />
@@ -1239,8 +1319,12 @@ export default function ProjectsClient({
               </div>
               <button
                 type="button"
-                onClick={() => setShowCategoryModal(false)}
-                className="p-1.5 text-neutral-400 hover:text-white rounded-lg bg-white/[0.04] cursor-pointer"
+                onClick={() => {
+                  triggerHaptic('light')
+                  setShowCategoryModal(false)
+                }}
+                className="p-2 min-w-[40px] min-h-[40px] flex items-center justify-center text-neutral-400 hover:text-white rounded-xl bg-white/[0.04] active:scale-90 transition-transform cursor-pointer"
+                aria-label="Close"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -1258,7 +1342,7 @@ export default function ProjectsClient({
                   placeholder={t.projects.categoryNameEn}
                   value={newCatLabelEn}
                   onChange={(e) => setNewCatLabelEn(e.target.value)}
-                  className="bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3 py-2 text-xs text-white placeholder-neutral-500 focus:outline-none font-mono"
+                  className="bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3.5 py-3 text-[16px] sm:text-xs text-white placeholder-neutral-500 focus:outline-none font-mono"
                   required
                 />
                 <input
@@ -1266,7 +1350,7 @@ export default function ProjectsClient({
                   placeholder={t.projects.categoryNameAr}
                   value={newCatLabelAr}
                   onChange={(e) => setNewCatLabelAr(e.target.value)}
-                  className="bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3 py-2 text-xs text-white placeholder-neutral-500 focus:outline-none font-sans"
+                  className="bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-3.5 py-3 text-[16px] sm:text-xs text-white placeholder-neutral-500 focus:outline-none font-sans"
                   required
                 />
               </div>
@@ -1274,14 +1358,14 @@ export default function ProjectsClient({
               <button
                 type="submit"
                 disabled={isSavingCategory || (!newCatLabelEn && !newCatLabelAr)}
-                className="w-full py-2 rounded-xl bg-gradient-to-r from-amber-400 to-amber-200 text-neutral-950 font-bold text-xs uppercase tracking-wider transition-all disabled:opacity-50 cursor-pointer"
+                className="w-full py-2.5 min-h-[44px] rounded-xl bg-gradient-to-r from-amber-400 to-amber-200 text-neutral-950 font-bold text-xs uppercase tracking-wider transition-all disabled:opacity-50 active:scale-98 cursor-pointer"
               >
                 {isSavingCategory ? t.common.saving : t.projects.addCategory}
               </button>
             </form>
 
             {/* List of Registered Categories */}
-            <div className="overflow-y-auto no-scrollbar space-y-2 flex-1 pr-1">
+            <div className="overflow-y-auto no-scrollbar space-y-2 flex-1 pr-1 overscroll-contain">
               <div className="text-[10px] font-mono uppercase text-neutral-400 tracking-wider">
                 Active Categories ({categories.length})
               </div>
@@ -1309,13 +1393,17 @@ export default function ProjectsClient({
                       </span>
                       <button
                         type="button"
-                        onClick={() => handleDeleteCategory(cat.id)}
-                        className={`p-1.5 rounded-lg text-red-400 hover:bg-red-950/30 transition-colors cursor-pointer ${
+                        onClick={() => {
+                          triggerHaptic('warning')
+                          handleDeleteCategory(cat.id)
+                        }}
+                        className={`p-2 min-w-[38px] min-h-[38px] flex items-center justify-center rounded-lg text-red-400 hover:bg-red-950/30 active:scale-90 transition-transform cursor-pointer ${
                           count > 0 ? 'opacity-40 cursor-not-allowed' : ''
                         }`}
                         title={count > 0 ? 'Cannot delete category with active projects' : 'Delete category'}
+                        aria-label="Delete category"
                       >
-                        <Trash2 className="w-3.5 h-3.5" />
+                        <Trash2 className="w-4 h-4" />
                       </button>
                     </div>
                   </div>
