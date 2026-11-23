@@ -186,4 +186,56 @@ export interface AdminLocale {
     preferencesTitle: string
     languagePreference: string
   }
+  projectForm: {
+    backToProjects: string
+    newProjectTitle: string
+    editProjectTitle: string
+    tabGeneral: string
+    tabMedia: string
+    tabStory: string
+    tabSpecs: string
+    tabMaterials: string
+    tabAngles: string
+    slugLabel: string
+    slugHelp: string
+    titleEnLabel: string
+    titleArLabel: string
+    categoryLabel: string
+    firmLabel: string
+    locationEnLabel: string
+    locationArLabel: string
+    yearLabel: string
+    areaLabel: string
+    styleEnLabel: string
+    styleArLabel: string
+    coverImageLabel: string
+    coverImageHelp: string
+    beforeImageLabel: string
+    galleryLabel: string
+    galleryHelp: string
+    uploadButton: string
+    compressing: string
+    saveProject: string
+    savingProject: string
+    conceptLabel: string
+    challengeLabel: string
+    solutionLabel: string
+    specsTitle: string
+    materialsTitle: string
+    addSwatch: string
+    addAngle: string
+    sliderComparison: string
+    livePreview: string
+  }
+  login: {
+    title: string
+    subtitle: string
+    badge: string
+    emailLabel: string
+    passwordLabel: string
+    submitButton: string
+    authenticating: string
+    backToMonograph: string
+    securityNotice: string
+  }
 }

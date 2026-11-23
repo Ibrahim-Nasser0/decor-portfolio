@@ -22,6 +22,7 @@ import {
 } from 'lucide-react'
 import { saveProfileAction } from '../actions'
 import UnsavedChangesBar from '@/components/admin/UnsavedChangesBar'
+import AdminToast from '@/components/admin/AdminToast'
 import { useAdminTranslation } from '@/context/AdminLanguageContext'
 import { triggerHaptic } from '@/lib/haptics'
 
@@ -47,6 +48,18 @@ export default function ProfileClient({ initialProfile }: { initialProfile: any 
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [profile, isDirty])
 
+  // Prevent accidental window close or reload when dirty
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (isDirty) {
+        e.preventDefault()
+        e.returnValue = ''
+      }
+    }
+    window.addEventListener('beforeunload', handleBeforeUnload)
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload)
+  }, [isDirty])
+
   const handleSave = async (e?: React.FormEvent) => {
     if (e) e.preventDefault()
     setIsSaving(true)
@@ -68,32 +81,8 @@ export default function ProfileClient({ initialProfile }: { initialProfile: any 
 
   return (
     <form onSubmit={handleSave} className="space-y-8 animate-fade-in relative pb-28 select-none">
-      {/* Toast Feedback */}
-      {feedback && (
-        <div
-          className={`p-4 rounded-2xl border flex items-center justify-between gap-3 text-xs font-mono shadow-xl transition-all ${
-            feedback.type === 'success'
-              ? 'bg-emerald-950/50 border-emerald-800/80 text-emerald-200'
-              : 'bg-red-950/50 border-red-800/80 text-red-200'
-          }`}
-        >
-          <div className="flex items-center gap-2.5">
-            {feedback.type === 'success' ? (
-              <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-            ) : (
-              <AlertCircle className="w-4 h-4 text-red-400 shrink-0" />
-            )}
-            <span>{feedback.text}</span>
-          </div>
-          <button
-            type="button"
-            onClick={() => setFeedback(null)}
-            className="text-neutral-400 hover:text-white p-1 cursor-pointer"
-          >
-            ✕
-          </button>
-        </div>
-      )}
+      {/* Floating Toast Feedback (Zero Layout Shift) */}
+      <AdminToast feedback={feedback} onClose={() => setFeedback(null)} />
 
       {/* Top Header Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-white/[0.08]">

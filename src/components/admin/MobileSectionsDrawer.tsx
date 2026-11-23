@@ -28,6 +28,26 @@ export default function MobileSectionsDrawer({ isOpen, onClose }: MobileSections
   const pathname = usePathname()
   const { t, isRtl } = useAdminTranslation()
 
+  // Lock body scroll and handle Escape key
+  React.useEffect(() => {
+    if (!isOpen) return
+
+    const originalOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose()
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => {
+      document.body.style.overflow = originalOverflow
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [isOpen, onClose])
+
   if (!isOpen) return null
 
   // 1-to-1 parity with Desktop Sidebar navigation
@@ -93,7 +113,7 @@ export default function MobileSectionsDrawer({ isOpen, onClose }: MobileSections
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
             <span>{t.topNav.cloudSync}</span>
           </span>
-          <span className="text-neutral-400">5 Screens</span>
+          <span className="text-neutral-400">{isRtl ? '5 شاشات' : '5 Screens'}</span>
         </div>
 
         {/* Monograph Sections Header */}

@@ -29,6 +29,7 @@ import { Project } from '@/data/portfolioData'
 import { updateTop4ProjectsAction } from '@/app/admin/actions'
 import { useAdminTranslation } from '@/context/AdminLanguageContext'
 import { triggerHaptic } from '@/lib/haptics'
+import AdminToast from '@/components/admin/AdminToast'
 
 interface HomeClientProps {
   initialProjects: Project[]
@@ -46,6 +47,26 @@ export default function HomeClient({
   const [copied, setCopied] = useState(false)
   const [selectedSlotIndex, setSelectedSlotIndex] = useState<number | null>(null)
   const [savingTop4, setSavingTop4] = useState(false)
+  const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
+
+  // Lock body scroll and Escape key listener for slot selector modal
+  React.useEffect(() => {
+    if (selectedSlotIndex === null) return
+
+    const originalOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setSelectedSlotIndex(null)
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => {
+      document.body.style.overflow = originalOverflow
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [selectedSlotIndex])
 
   // Derive Top 4 Projects (slots 0..3)
   const cvProjects = projects
@@ -74,7 +95,10 @@ export default function HomeClient({
       setCopied(true)
       setTimeout(() => setCopied(false), 3000)
     } catch {
-      // Fallback
+      setFeedback({
+        type: 'error',
+        text: isRtl ? 'تعذر نسخ الرابط إلى الحافظة تلقائياً' : 'Failed to copy link to clipboard',
+      })
     }
   }
 
@@ -106,6 +130,11 @@ export default function HomeClient({
           },
         }))
       )
+    } else {
+      setFeedback({
+        type: 'error',
+        text: res.error || (isRtl ? 'فشل حفظ اختيار المشروع في القائمة' : 'Failed to update flagship projects showcase'),
+      })
     }
     setSavingTop4(false)
   }
@@ -130,12 +159,20 @@ export default function HomeClient({
           },
         }))
       )
+    } else {
+      setFeedback({
+        type: 'error',
+        text: res.error || (isRtl ? 'فشل إزالة المشروع من القائمة' : 'Failed to remove project from showcase slot'),
+      })
     }
     setSavingTop4(false)
   }
 
   return (
     <div className="p-4 sm:p-6 lg:p-8 2xl:p-10 max-w-7xl mx-auto space-y-6 sm:space-y-8 animate-fade-in relative z-10 select-none">
+      {/* Floating Toast Notification (Zero Layout Shift) */}
+      <AdminToast feedback={feedback} onClose={() => setFeedback(null)} />
+
       {/* ============================================================== */}
       {/* 1. TOP STUDIO HERO & IDENTITY STRIP                            */}
       {/* ============================================================== */}
@@ -243,7 +280,7 @@ export default function HomeClient({
                 {t.home.downloadCv}
               </div>
               <p className="text-[11px] text-neutral-400 font-sans mt-0.5 truncate">
-                LaTeX Monograph 1-Page PDF
+                {isRtl ? 'ملف سيرة ذاتية صفحة واحدة LaTeX' : 'LaTeX Monograph 1-Page PDF'}
               </p>
             </div>
           </div>
@@ -266,7 +303,7 @@ export default function HomeClient({
                 {t.home.downloadPortfolio}
               </div>
               <p className="text-[11px] text-neutral-400 font-sans mt-0.5 truncate">
-                Multi-Page Architectural Dossier
+                {isRtl ? 'ملف بورتفوليو معماري متعدد الصفحات' : 'Multi-Page Architectural Dossier'}
               </p>
             </div>
           </div>
@@ -372,7 +409,7 @@ export default function HomeClient({
 
           <div className="flex items-center gap-2 shrink-0">
             <span className="text-[10px] font-mono px-2.5 py-1 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30 font-semibold">
-              {assignedSlotsCount} / 4 Slots
+              {assignedSlotsCount} / 4 {isRtl ? 'مشاريع محددة' : 'Slots'}
             </span>
             {savingTop4 && (
               <span className="text-[10px] font-mono text-neutral-400 animate-pulse">
@@ -412,12 +449,12 @@ export default function HomeClient({
                     </span>
 
                     <span className="absolute top-2.5 end-2.5 px-2.5 py-0.5 rounded-lg text-[10px] font-mono bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-semibold shadow-sm">
-                      📄 CV Active
+                      {isRtl ? '📄 مفعّل بالـ CV' : '📄 CV Active'}
                     </span>
 
                     <div className="absolute bottom-2.5 start-2.5 end-2.5 truncate">
                       <span className="text-[10px] font-mono text-neutral-300 uppercase tracking-wider block truncate">
-                        {project.categoryLabelEn || project.category}
+                        {isRtl ? (project.categoryLabel || project.categoryLabelEn || project.category) : (project.categoryLabelEn || project.category)}
                       </span>
                     </div>
                   </div>
@@ -426,10 +463,10 @@ export default function HomeClient({
                   <div className="p-3.5 space-y-3 flex-1 flex flex-col justify-between">
                     <div>
                       <h3 className="text-sm sm:text-xs font-semibold text-white truncate">
-                        {project.titleEn}
+                        {isRtl ? (project.title || project.titleEn) : project.titleEn}
                       </h3>
                       <p className="text-[11px] sm:text-[10px] text-neutral-400 font-mono truncate mt-0.5">
-                        {project.locationEn || 'Egypt'}
+                        {isRtl ? (project.location || project.locationEn || 'مصر') : (project.locationEn || 'Egypt')}
                       </p>
                     </div>
 
@@ -539,11 +576,11 @@ export default function HomeClient({
             <span className="text-2xl sm:text-3xl font-light text-white font-serif">
               {assignedSlotsCount}
             </span>
-            <span className="text-xs font-mono text-neutral-500">/ 4 max</span>
+            <span className="text-xs font-mono text-neutral-500">/ 4 {isRtl ? 'كحد أقصى' : 'max'}</span>
           </div>
           <div className="text-[10px] font-mono text-neutral-500 mt-2 flex items-center justify-between pt-2 border-t border-white/[0.04]">
             <span className={assignedSlotsCount === 4 ? 'text-emerald-400 font-bold' : 'text-neutral-400'}>
-              {assignedSlotsCount === 4 ? 'Optimal (4/4)' : `${4 - assignedSlotsCount} slots left`}
+              {assignedSlotsCount === 4 ? (isRtl ? 'مكتمل (4/4)' : 'Optimal (4/4)') : (isRtl ? `متبقي ${4 - assignedSlotsCount} أماكن` : `${4 - assignedSlotsCount} slots left`)}
             </span>
             <span className="text-[#7AD1B8]">●</span>
           </div>
@@ -564,7 +601,7 @@ export default function HomeClient({
             {featuredProjects.length}
           </div>
           <div className="text-[10px] font-mono text-neutral-500 mt-2 flex items-center justify-between pt-2 border-t border-white/[0.04]">
-            <span>Active in slider</span>
+            <span>{isRtl ? 'معروض في السلايدر' : 'Active in slider'}</span>
             <span className="text-amber-400 group-hover:translate-x-0.5 transition-transform">→</span>
           </div>
         </Link>
@@ -659,10 +696,10 @@ export default function HomeClient({
                       </div>
                       <div className="min-w-0">
                         <div className="text-xs font-semibold truncate">
-                          {proj.titleEn}
+                          {isRtl ? (proj.title || proj.titleEn) : proj.titleEn}
                         </div>
                         <div className="text-[10px] text-neutral-400 font-mono truncate">
-                          {proj.categoryLabelEn || proj.category} • {proj.locationEn}
+                          {isRtl ? (proj.categoryLabel || proj.categoryLabelEn || proj.category) : (proj.categoryLabelEn || proj.category)} • {isRtl ? (proj.location || proj.locationEn || 'مصر') : (proj.locationEn || 'Egypt')}
                         </div>
                       </div>
                     </div>
@@ -670,11 +707,11 @@ export default function HomeClient({
                     <div className="shrink-0 text-xs font-mono">
                       {isAlreadySelected ? (
                         <span className="text-[9px] px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 font-semibold">
-                          Selected
+                          {isRtl ? 'تم اختياره' : 'Selected'}
                         </span>
                       ) : (
                         <span className="text-xs px-3 py-1 rounded-xl bg-white/[0.06] text-amber-300 font-mono font-medium">
-                          Assign →
+                          {isRtl ? 'اختيار ←' : 'Assign →'}
                         </span>
                       )}
                     </div>

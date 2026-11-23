@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import {
@@ -30,6 +30,7 @@ import {
 } from 'lucide-react'
 import { AdminAccount } from '@/data/portfolioData'
 import { triggerHaptic } from '@/lib/haptics'
+import AdminToast from '@/components/admin/AdminToast'
 import {
   addAdminAccountAction,
   deleteAdminAccountAction,
@@ -177,34 +178,32 @@ export default function SettingsClient({
     { num: '05', label: t.nav.settings, href: '/admin/settings', icon: Sliders },
   ]
 
+  // Lock body scroll and handle Escape key for modals
+  useEffect(() => {
+    const hasModal = Boolean(showAddModal || accountToDelete)
+    if (!hasModal) return
+
+    const originalOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setShowAddModal(false)
+        setAccountToDelete(null)
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => {
+      document.body.style.overflow = originalOverflow
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [showAddModal, accountToDelete])
+
   return (
     <div className="p-4 sm:p-6 lg:p-8 2xl:p-10 max-w-7xl mx-auto space-y-6 sm:space-y-8 animate-fade-in relative z-10 pb-28 select-none">
-      {/* Toast Feedback */}
-      {feedback && (
-        <div
-          className={`p-4 rounded-2xl border flex items-center justify-between gap-3 text-xs font-mono shadow-xl transition-all ${
-            feedback.type === 'success'
-              ? 'bg-emerald-950/60 border-emerald-800/80 text-emerald-200'
-              : 'bg-red-950/60 border-red-800/80 text-red-200'
-          }`}
-        >
-          <div className="flex items-center gap-2.5">
-            {feedback.type === 'success' ? (
-              <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-            ) : (
-              <AlertCircle className="w-4 h-4 text-red-400 shrink-0" />
-            )}
-            <span>{feedback.text}</span>
-          </div>
-          <button
-            type="button"
-            onClick={() => setFeedback(null)}
-            className="text-neutral-400 hover:text-white p-1 cursor-pointer"
-          >
-            ✕
-          </button>
-        </div>
-      )}
+      {/* Floating Toast Notification (Zero Layout Shift) */}
+      <AdminToast feedback={feedback} onClose={() => setFeedback(null)} />
 
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-white/[0.08]">

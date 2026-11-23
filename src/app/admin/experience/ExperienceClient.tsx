@@ -19,6 +19,8 @@ import {
 } from 'lucide-react'
 import { saveProfileAction } from '../actions'
 import UnsavedChangesBar from '@/components/admin/UnsavedChangesBar'
+import AdminToast from '@/components/admin/AdminToast'
+import AdminConfirmModal from '@/components/admin/AdminConfirmModal'
 import { useAdminTranslation } from '@/context/AdminLanguageContext'
 import { triggerHaptic } from '@/lib/haptics'
 
@@ -37,6 +39,11 @@ export default function ExperienceClient({ initialProfile }: { initialProfile: a
 
   const [isSaving, setIsSaving] = useState(false)
   const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
+  const [itemToDelete, setItemToDelete] = useState<{
+    type: 'milestone' | 'education' | 'software'
+    index: number
+    title: string
+  } | null>(null)
 
   // Snapshot for dirty tracking
   const [initialData, setInitialData] = useState({
@@ -49,6 +56,18 @@ export default function ExperienceClient({ initialProfile }: { initialProfile: a
   const isDirty =
     JSON.stringify({ experience, education, software, skills }) !==
     JSON.stringify(initialData)
+
+  // Prevent accidental window close or reload when dirty
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (isDirty) {
+        e.preventDefault()
+        e.returnValue = ''
+      }
+    }
+    window.addEventListener('beforeunload', handleBeforeUnload)
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload)
+  }, [isDirty])
 
   // Ctrl+S / Cmd+S shortcut
   useEffect(() => {
@@ -93,32 +112,8 @@ export default function ExperienceClient({ initialProfile }: { initialProfile: a
 
   return (
     <form onSubmit={handleSave} className="space-y-6 sm:space-y-8 animate-fade-in relative pb-28 select-none">
-      {/* Toast Feedback */}
-      {feedback && (
-        <div
-          className={`p-4 rounded-2xl border flex items-center justify-between gap-3 text-xs font-mono shadow-xl transition-all ${
-            feedback.type === 'success'
-              ? 'bg-emerald-950/50 border-emerald-800/80 text-emerald-200'
-              : 'bg-red-950/50 border-red-800/80 text-red-200'
-          }`}
-        >
-          <div className="flex items-center gap-2.5">
-            {feedback.type === 'success' ? (
-              <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-            ) : (
-              <AlertCircle className="w-4 h-4 text-red-400 shrink-0" />
-            )}
-            <span>{feedback.text}</span>
-          </div>
-          <button
-            type="button"
-            onClick={() => setFeedback(null)}
-            className="text-neutral-400 hover:text-white p-1 cursor-pointer"
-          >
-            ✕
-          </button>
-        </div>
-      )}
+      {/* Floating Toast Feedback (Zero Layout Shift) */}
+      <AdminToast feedback={feedback} onClose={() => setFeedback(null)} />
 
       {/* Top Header & Save Button */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-white/[0.08]">
@@ -245,7 +240,11 @@ export default function ExperienceClient({ initialProfile }: { initialProfile: a
                       type="button"
                       onClick={() => {
                         triggerHaptic('warning')
-                        setExperience(experience.filter((_, i) => i !== idx))
+                        setItemToDelete({
+                          type: 'milestone',
+                          index: idx,
+                          title: exp.role || `Milestone #${idx + 1}`,
+                        })
                       }}
                       className="p-2 min-w-[44px] min-h-[44px] flex items-center justify-center text-neutral-500 hover:text-red-400 active:scale-90 transition-transform cursor-pointer"
                       title={t.common.delete}
@@ -384,7 +383,11 @@ export default function ExperienceClient({ initialProfile }: { initialProfile: a
                       type="button"
                       onClick={() => {
                         triggerHaptic('warning')
-                        setEducation(education.filter((_, i) => i !== idx))
+                        setItemToDelete({
+                          type: 'education',
+                          index: idx,
+                          title: edu.degree || `Degree #${idx + 1}`,
+                        })
                       }}
                       className="p-2 min-w-[44px] min-h-[44px] flex items-center justify-center text-neutral-500 hover:text-red-400 active:scale-90 transition-transform cursor-pointer"
                       title={t.common.delete}
@@ -523,7 +526,11 @@ export default function ExperienceClient({ initialProfile }: { initialProfile: a
                       type="button"
                       onClick={() => {
                         triggerHaptic('warning')
-                        setSoftware(software.filter((_, i) => i !== idx))
+                        setItemToDelete({
+                          type: 'software',
+                          index: idx,
+                          title: tool.name || `Tool #${idx + 1}`,
+                        })
                       }}
                       className="p-2 min-w-[44px] min-h-[44px] flex items-center justify-center text-neutral-500 hover:text-red-400 active:scale-90 transition-transform cursor-pointer"
                       title={t.common.delete}
@@ -594,6 +601,48 @@ export default function ExperienceClient({ initialProfile }: { initialProfile: a
         isSaving={isSaving}
         onSave={handleSave}
         onDiscard={handleDiscard}
+      />
+
+      {/* Item Deletion Confirmation Modal */}
+      <AdminConfirmModal
+        isOpen={itemToDelete !== null}
+        title={
+          isRtl
+            ? `تأكيد حذف ${
+                itemToDelete?.type === 'milestone'
+                  ? 'المحطة المهنية'
+                  : itemToDelete?.type === 'education'
+                  ? 'المؤهل الدراسي'
+                  : 'أداة التصميم'
+              }`
+            : `Confirm Delete ${
+                itemToDelete?.type === 'milestone'
+                  ? 'Career Milestone'
+                  : itemToDelete?.type === 'education'
+                  ? 'Degree'
+                  : 'Design Tool'
+              }`
+        }
+        message={
+          isRtl
+            ? `هل أنت متأكد من رغبتك في حذف "${itemToDelete?.title}" نهائياً من سيرتك وسجلات الاستوديو؟`
+            : `Are you sure you want to permanently delete "${itemToDelete?.title}"? This item will be removed from your portfolio and CV.`
+        }
+        confirmLabel={isRtl ? 'نعم، حذف' : 'Delete'}
+        cancelLabel={isRtl ? 'إلغاء' : 'Cancel'}
+        isDestructive={true}
+        onConfirm={() => {
+          if (!itemToDelete) return
+          if (itemToDelete.type === 'milestone') {
+            setExperience((prev) => prev.filter((_, i) => i !== itemToDelete.index))
+          } else if (itemToDelete.type === 'education') {
+            setEducation((prev) => prev.filter((_, i) => i !== itemToDelete.index))
+          } else if (itemToDelete.type === 'software') {
+            setSoftware((prev) => prev.filter((_, i) => i !== itemToDelete.index))
+          }
+          setItemToDelete(null)
+        }}
+        onCancel={() => setItemToDelete(null)}
       />
     </form>
   )

@@ -33,7 +33,10 @@ import { Project, ProjectSpecs, MaterialSwatch, ProjectAngle } from '@/data/port
 import { saveProjectAction } from '../actions'
 import { createClient } from '@/lib/supabase/client'
 import UnsavedChangesBar from '@/components/admin/UnsavedChangesBar'
+import AdminToast from '@/components/admin/AdminToast'
 import { compressImage } from '@/lib/imageCompression'
+import { useAdminTranslation } from '@/context/AdminLanguageContext'
+import { triggerHaptic } from '@/lib/haptics'
 
 const CATEGORY_OPTIONS = [
   { value: 'living', labelEn: 'Living & Lounges' },
@@ -62,12 +65,14 @@ export default function ProjectForm({
   isNew?: boolean
 }) {
   const router = useRouter()
+  const { t, isRtl } = useAdminTranslation()
   const [activeTab, setActiveTab] = useState<'general' | 'media' | 'story' | 'specs' | 'materials' | 'angles'>('general')
   const [isSaving, setIsSaving] = useState(false)
   const [isUploading, setIsUploading] = useState(false)
   const [uploadProgress, setUploadProgress] = useState<{ current: number; total: number } | null>(null)
   const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
   const [isSlugManual, setIsSlugManual] = useState(!isNew && Boolean(initialProject?.id))
+  const [fieldErrors, setFieldErrors] = useState<{ id?: boolean; titleEn?: boolean; coverImage?: boolean }>({})
   
   // Interactive Slider Preview in Tab 2
   const [sliderPos, setSliderPos] = useState(50)
@@ -295,15 +300,30 @@ export default function ProjectForm({
 
   // Handle Project Save
   const handleSaveProject = async () => {
-    if (!formData.id || !formData.titleEn || !formData.coverImage) {
+    const newErrors = {
+      id: !formData.id,
+      titleEn: !formData.titleEn,
+      coverImage: !formData.coverImage,
+    }
+
+    if (newErrors.id || newErrors.titleEn || newErrors.coverImage) {
+      triggerHaptic('warning')
+      setFieldErrors(newErrors)
       setFeedback({
         type: 'error',
-        text: 'Please fill in Project ID/Slug, English Title, and Cover Image.',
+        text: isRtl
+          ? 'يرجى استكمال الحقول المطلوبة: معرف المشروع (Slug)، عنوان المشروع، وصورة الغلاف.'
+          : 'Please fill in Project ID/Slug, English Title, and Cover Image.',
       })
-      setActiveTab('general')
+      if (newErrors.coverImage && !newErrors.id && !newErrors.titleEn) {
+        setActiveTab('media')
+      } else {
+        setActiveTab('general')
+      }
       return
     }
 
+    setFieldErrors({})
     setIsSaving(true)
     const payloadToSave: Project = {
       ...formData,
@@ -333,28 +353,32 @@ export default function ProjectForm({
   }
 
   return (
-    <div className="space-y-8 animate-fade-in">
-      {/* Top Sticky Header */}
-      <div className="sticky top-[57px] lg:top-0 z-30 bg-[#090a0c]/95 backdrop-blur-xl -mx-4 sm:-mx-8 lg:-mx-10 px-4 sm:px-8 lg:px-10 py-3 sm:py-4 border-b border-white/[0.08] flex items-center justify-between gap-3">
+    <div className="space-y-8 animate-fade-in relative pb-16">
+      {/* Floating Toast Notification (Zero Layout Shift) */}
+      <AdminToast feedback={feedback} onClose={() => setFeedback(null)} />
+
+      {/* Top Sticky Header (Sticks cleanly below top nav on mobile & desktop) */}
+      <div className="sticky top-[57px] lg:top-[57px] z-20 bg-[#090a0c]/95 backdrop-blur-xl -mx-4 sm:-mx-8 lg:-mx-10 px-4 sm:px-8 lg:px-10 py-3 sm:py-4 border-b border-white/[0.08] flex items-center justify-between gap-3 shadow-lg">
         <div className="flex items-center gap-2.5 sm:gap-4 min-w-0">
           <Link
             href="/admin/projects"
+            onClick={() => triggerHaptic('light')}
             className="p-2 sm:p-2.5 bg-white/[0.03] hover:bg-white/[0.08] text-neutral-400 hover:text-white rounded-xl border border-white/[0.08] transition-colors shrink-0"
-            title="Back to Projects"
+            title={t.projectForm.backToProjects}
           >
-            <ArrowLeft className="w-4 h-4" />
+            <ArrowLeft className={`w-4 h-4 ${isRtl ? 'rotate-180' : ''}`} />
           </Link>
           <div className="min-w-0">
             <div className="flex items-center gap-2">
               <span className="text-[9px] sm:text-[10px] tracking-[0.2em] font-mono text-amber-500 uppercase">
-                {isNew ? 'New Entry' : 'Editing Monograph'}
+                {isNew ? t.projectForm.newProjectTitle : t.projectForm.editProjectTitle}
               </span>
               <span className="text-[10px] font-mono text-neutral-500 hidden sm:inline">
-                (Press Ctrl+S to save)
+                (Ctrl+S)
               </span>
             </div>
             <h1 className="text-sm sm:text-lg lg:text-xl font-serif text-white tracking-wide truncate max-w-[180px] sm:max-w-md">
-              {formData.titleEn || 'Untitled Project'}
+              {formData.titleEn || (isRtl ? 'مشروع بدون اسم' : 'Untitled Project')}
             </h1>
           </div>
         </div>
@@ -364,11 +388,12 @@ export default function ProjectForm({
             <Link
               href={`/projects/${formData.id}`}
               target="_blank"
+              onClick={() => triggerHaptic('light')}
               className="inline-flex items-center gap-1.5 p-2 sm:px-3 sm:py-2 bg-white/[0.03] hover:bg-white/[0.08] text-neutral-300 hover:text-white rounded-xl text-xs font-mono border border-white/[0.08] transition-colors"
               title="Open Live Public View"
             >
               <ExternalLink className="w-3.5 h-3.5 text-amber-400" />
-              <span className="hidden sm:inline">Live View</span>
+              <span className="hidden sm:inline">{t.projectForm.livePreview}</span>
             </Link>
           )}
 
@@ -381,55 +406,32 @@ export default function ProjectForm({
             {isSaving ? (
               <>
                 <Loader2 className="w-3.5 h-3.5 animate-spin text-neutral-900" />
-                <span className="hidden sm:inline">Saving...</span>
+                <span className="hidden sm:inline">{t.projectForm.savingProject}</span>
               </>
             ) : (
               <>
                 <Save className="w-3.5 h-3.5" />
-                <span>Save<span className="hidden sm:inline"> Project</span></span>
+                <span>{t.projectForm.saveProject}</span>
               </>
             )}
           </button>
         </div>
       </div>
 
-      {/* Toast Feedback */}
-      {feedback && (
-        <div
-          className={`p-4 rounded-2xl border flex items-center justify-between gap-3 text-xs font-mono shadow-xl transition-all ${
-            feedback.type === 'success'
-              ? 'bg-emerald-950/50 border-emerald-800/80 text-emerald-200'
-              : 'bg-red-950/50 border-red-800/80 text-red-200'
-          }`}
-        >
-          <div className="flex items-center gap-2.5">
-            {feedback.type === 'success' ? (
-              <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-            ) : (
-              <AlertCircle className="w-4 h-4 text-red-400 shrink-0" />
-            )}
-            <span>{feedback.text}</span>
-          </div>
-          <button onClick={() => setFeedback(null)} className="text-neutral-400 hover:text-white p-1">
-            ✕
-          </button>
-        </div>
-      )}
-
       {/* Tabs Navigation with Scroll Affordance */}
       <div className="relative -mx-2 sm:mx-0">
         {/* Subtle Edge Gradients indicating horizontal scrollability on small screens */}
-        <div className="pointer-events-none absolute left-0 top-0 bottom-2 w-4 bg-gradient-to-r from-[#0a0b0d] to-transparent z-10 lg:hidden" />
-        <div className="pointer-events-none absolute right-0 top-0 bottom-2 w-6 bg-gradient-to-l from-[#0a0b0d] to-transparent z-10 lg:hidden" />
+        <div className="pointer-events-none absolute start-0 top-0 bottom-2 w-4 bg-gradient-to-r from-[#0a0b0d] to-transparent z-10 lg:hidden" />
+        <div className="pointer-events-none absolute end-0 top-0 bottom-2 w-6 bg-gradient-to-l from-[#0a0b0d] to-transparent z-10 lg:hidden" />
 
         <div className="flex items-center gap-1.5 sm:gap-2 border-b border-white/[0.08] overflow-x-auto pb-2 scrollbar-none px-2 sm:px-0">
           {[
-            { id: 'general', label: '1. General Info', icon: FileText },
-            { id: 'media', label: '2. Media & Gallery', icon: ImageIcon },
-            { id: 'story', label: '3. Narrative & Story', icon: BookOpen },
-            { id: 'specs', label: '4. Technical Specs', icon: Sliders },
-            { id: 'materials', label: '5. Materials & Swatches', icon: Palette },
-            { id: 'angles', label: '6. Angles & CAD', icon: Layers },
+            { id: 'general', label: t.projectForm.tabGeneral, icon: FileText },
+            { id: 'media', label: t.projectForm.tabMedia, icon: ImageIcon },
+            { id: 'story', label: t.projectForm.tabStory, icon: BookOpen },
+            { id: 'specs', label: t.projectForm.tabSpecs, icon: Sliders },
+            { id: 'materials', label: t.projectForm.tabMaterials, icon: Palette },
+            { id: 'angles', label: t.projectForm.tabAngles, icon: Layers },
           ].map((tab) => {
             const Icon = tab.icon
             const isActive = activeTab === tab.id
@@ -438,7 +440,10 @@ export default function ProjectForm({
               <button
                 type="button"
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id as any)}
+                onClick={() => {
+                  triggerHaptic('selection')
+                  setActiveTab(tab.id as any)
+                }}
                 className={`inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl text-xs font-mono whitespace-nowrap transition-all cursor-pointer ${
                   isActive
                     ? 'bg-white text-neutral-950 font-semibold shadow-md'
@@ -467,23 +472,35 @@ export default function ProjectForm({
             {/* English Title */}
             <div>
               <label className="block text-xs font-mono text-neutral-300 mb-2 uppercase">
-                Project Title (English) *
+                {t.projectForm.titleEnLabel} *
               </label>
               <input
                 type="text"
                 required
                 value={formData.titleEn}
-                onChange={(e) => handleTitleEnChange(e.target.value)}
+                onChange={(e) => {
+                  setFieldErrors((prev) => ({ ...prev, titleEn: false }))
+                  handleTitleEnChange(e.target.value)
+                }}
                 placeholder="e.g. Tagamoa Residence - Warm Japandi Living Suite"
-                className="w-full bg-[#090a0c] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-4 py-3 text-xs text-white focus:outline-none font-sans"
+                className={`w-full bg-[#090a0c] border rounded-xl px-4 py-3 text-xs text-white focus:outline-none font-sans ${
+                  fieldErrors.titleEn
+                    ? 'border-red-500/80 ring-1 ring-red-500/50 bg-red-950/10'
+                    : 'border-white/[0.08] focus:border-amber-500/80'
+                }`}
               />
+              {fieldErrors.titleEn && (
+                <span className="text-[10px] text-red-400 font-mono mt-1 block">
+                  {isRtl ? 'عنوان المشروع مطلوب' : 'Project title is required'}
+                </span>
+              )}
             </div>
 
             {/* Slug ID with Intelligent Auto-Derivation & Manual Unlock */}
             <div>
               <div className="flex items-center justify-between mb-2">
                 <label className="text-xs font-mono text-neutral-300 uppercase">
-                  Project Slug / URL Identifier *
+                  {t.projectForm.slugLabel} *
                 </label>
                 {isNew && (
                   <button
@@ -500,12 +517,12 @@ export default function ProjectForm({
                     {isSlugManual ? (
                       <>
                         <RefreshCw className="w-2.5 h-2.5" />
-                        <span>Reset Auto</span>
+                        <span>{isRtl ? 'استعادة التلقائي' : 'Reset Auto'}</span>
                       </>
                     ) : (
                       <>
                         <Unlock className="w-2.5 h-2.5" />
-                        <span>Edit Slug</span>
+                        <span>{isRtl ? 'تعديل المعرف' : 'Edit Slug'}</span>
                       </>
                     )}
                   </button>
@@ -517,25 +534,36 @@ export default function ProjectForm({
                   required
                   disabled={!isNew && Boolean(initialProject?.id)}
                   value={formData.id}
-                  onChange={(e) => handleManualSlugChange(e.target.value)}
+                  onChange={(e) => {
+                    setFieldErrors((prev) => ({ ...prev, id: false }))
+                    handleManualSlugChange(e.target.value)
+                  }}
                   placeholder="e.g. tagamoa-japandi-residence"
                   className={`w-full bg-[#090a0c] border rounded-xl px-4 py-3 text-xs text-white placeholder-neutral-600 focus:outline-none font-mono ${
                     !isNew
                       ? 'border-white/[0.04] opacity-60 cursor-not-allowed'
+                      : fieldErrors.id
+                      ? 'border-red-500/80 ring-1 ring-red-500/50 bg-red-950/10'
                       : isSlugManual
                       ? 'border-amber-500/50 focus:border-amber-500'
                       : 'border-white/[0.08] focus:border-amber-500/80'
                   }`}
                 />
                 {isNew && !isSlugManual && (
-                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[9px] font-mono px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-300 border border-amber-500/20">
-                    Auto-derived
+                  <span className="absolute end-3 top-1/2 -translate-y-1/2 text-[9px] font-mono px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-300 border border-amber-500/20">
+                    {isRtl ? 'توليد تلقائي' : 'Auto-derived'}
                   </span>
                 )}
               </div>
-              <span className="text-[10px] text-neutral-400 font-mono mt-1.5 block">
-                Public URL: /projects/{formData.id || 'slug-key'}
-              </span>
+              {fieldErrors.id ? (
+                <span className="text-[10px] text-red-400 font-mono mt-1.5 block">
+                  {isRtl ? 'معرف المشروع (Slug) مطلوب' : 'Project slug is required'}
+                </span>
+              ) : (
+                <span className="text-[10px] text-neutral-400 font-mono mt-1.5 block">
+                  Public URL: /projects/{formData.id || 'slug-key'}
+                </span>
+              )}
             </div>
 
             {/* Category (Customizable & Dynamic) */}
@@ -796,9 +824,16 @@ export default function ProjectForm({
                 type="text"
                 required
                 value={formData.coverImage}
-                onChange={(e) => setFormData((prev) => ({ ...prev, coverImage: e.target.value }))}
+                onChange={(e) => {
+                  setFieldErrors((prev) => ({ ...prev, coverImage: false }))
+                  setFormData((prev) => ({ ...prev, coverImage: e.target.value }))
+                }}
                 placeholder="https://... or upload to Supabase"
-                className="flex-1 bg-[#090a0c] border border-white/[0.08] focus:border-amber-500/80 rounded-xl px-4 py-3 text-xs text-white focus:outline-none font-mono"
+                className={`flex-1 bg-[#090a0c] border rounded-xl px-4 py-3 text-xs text-white focus:outline-none font-mono ${
+                  fieldErrors.coverImage
+                    ? 'border-red-500/80 ring-1 ring-red-500/50 bg-red-950/10'
+                    : 'border-white/[0.08] focus:border-amber-500/80'
+                }`}
               />
               <label className="inline-flex items-center gap-2 bg-white/[0.05] hover:bg-white/[0.1] text-white px-5 py-3 rounded-xl text-xs font-mono cursor-pointer border border-white/[0.08] hover:border-amber-500/40 transition-colors shrink-0">
                 <Upload className="w-3.5 h-3.5 text-amber-400" />
@@ -811,6 +846,12 @@ export default function ProjectForm({
                 />
               </label>
             </div>
+
+            {fieldErrors.coverImage && (
+              <span className="text-[10px] text-red-400 font-mono block">
+                {isRtl ? 'صورة الغلاف الرئيسية مطلوبة' : 'Cover image is required'}
+              </span>
+            )}
 
             {formData.coverImage && (
               <div className="relative w-full max-w-md h-56 rounded-2xl overflow-hidden border border-white/[0.1] bg-black shadow-lg">

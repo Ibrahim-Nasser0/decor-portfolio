@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import {
@@ -38,6 +38,7 @@ import {
 import { ProjectCategory, DEFAULT_PROJECT_CATEGORIES } from '@/data/portfolioData'
 import { useAdminTranslation } from '@/context/AdminLanguageContext'
 import { triggerHaptic } from '@/lib/haptics'
+import AdminToast from '@/components/admin/AdminToast'
 
 export default function ProjectsClient({
   initialProjects,
@@ -206,7 +207,13 @@ export default function ProjectsClient({
   async function handleDeleteCategory(catId: string) {
     const assignedCount = getCategoryCount(catId)
     if (assignedCount > 0) {
-      alert(`Cannot delete this category because it is currently assigned to ${assignedCount} project(s). Please reassign them first.`)
+      triggerHaptic('warning')
+      setStatusMessage({
+        type: 'error',
+        text: isRtl
+          ? `لا يمكن حذف هذا التصنيف لأنه مرتبط حالياً بـ (${assignedCount}) مشاريع. يرجى نقل المشاريع لتصنيف آخر أولاً.`
+          : `Cannot delete category "${catId}" because it is currently assigned to ${assignedCount} project(s). Please reassign them first.`,
+      })
       return
     }
 
@@ -286,33 +293,32 @@ export default function ProjectsClient({
     }
   }
 
+  // Escape key and body scroll lock for overlays
+  useEffect(() => {
+    const hasModal = Boolean(projectToDelete || showCategoryModal || showCvModal)
+    if (!hasModal) return
+
+    const originalOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setProjectToDelete(null)
+        setShowCategoryModal(false)
+        setShowCvModal(false)
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => {
+      document.body.style.overflow = originalOverflow
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [projectToDelete, showCategoryModal, showCvModal])
+
   return (
     <div className="space-y-5 animate-fade-in pb-12">
-      {/* Toast Alert Banner */}
-      {statusMessage && (
-        <div
-          className={`p-4 rounded-2xl border flex items-center justify-between gap-3 text-xs font-mono transition-all duration-300 shadow-xl ${
-            statusMessage.type === 'success'
-              ? 'bg-emerald-950/60 border-emerald-800/80 text-emerald-200'
-              : 'bg-red-950/60 border-red-800/80 text-red-200'
-          }`}
-        >
-          <div className="flex items-center gap-2.5">
-            {statusMessage.type === 'success' ? (
-              <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-            ) : (
-              <AlertCircle className="w-4 h-4 text-red-400 shrink-0" />
-            )}
-            <span>{statusMessage.text}</span>
-          </div>
-          <button
-            onClick={() => setStatusMessage(null)}
-            className="text-neutral-400 hover:text-white p-1"
-          >
-            ✕
-          </button>
-        </div>
-      )}
+      {/* Floating Toast Notification (Zero Layout Shift) */}
+      <AdminToast feedback={statusMessage} onClose={() => setStatusMessage(null)} />
 
       {/* CV Showcase Tracking Banner (Max 4 Rule) */}
       <div className="bg-[#111215]/90 border border-white/[0.08] p-3.5 sm:p-4 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-md">
@@ -323,7 +329,7 @@ export default function ProjectsClient({
           <div>
             <div className="flex items-center gap-2 flex-wrap">
               <span className="text-xs font-semibold text-white tracking-wide">
-                LaTeX CV Showcase
+                {isRtl ? 'مشاريع السيرة الذاتية (LaTeX CV)' : 'LaTeX CV Showcase'}
               </span>
               <span
                 className={`text-[10px] font-mono px-2 py-0.5 rounded-full font-bold border ${
@@ -334,14 +340,20 @@ export default function ProjectsClient({
                     : 'bg-amber-500/20 text-amber-300 border-amber-500/40'
                 }`}
               >
-                {cvCount} / 4 Selected
+                {cvCount} / 4 {isRtl ? 'محدد' : 'Selected'}
               </span>
             </div>
             <p className="text-[11px] text-neutral-400 font-sans mt-0.5">
               {cvCount === 4
-                ? 'Optimal: exactly 4 featured projects will appear on the typeset LaTeX CV.'
+                ? isRtl
+                  ? 'مكتمل: 4 مشاريع محددة ستظهر بتنسيق أنيق في السيرة الذاتية LaTeX.'
+                  : 'Optimal: exactly 4 featured projects will appear on the typeset LaTeX CV.'
                 : cvCount < 4
-                ? `Select ${4 - cvCount} more project${4 - cvCount > 1 ? 's' : ''} to reach the 4-project limit.`
+                ? isRtl
+                  ? `حدد ${4 - cvCount} مشروع إضافي للوصول للحد الأقصى (4 مشاريع).`
+                  : `Select ${4 - cvCount} more project${4 - cvCount > 1 ? 's' : ''} to reach the 4-project limit.`
+                : isRtl
+                ? 'تنبيه: تم تحديد أكثر من 4 مشاريع؛ يرجى إلغاء تحديد بعضها.'
                 : 'Warning: more than 4 selected; please uncheck to maintain clean CV typesetting.'}
             </p>
           </div>
@@ -394,7 +406,7 @@ export default function ProjectsClient({
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search by title, location, or slug key..."
+              placeholder={isRtl ? 'البحث بالعنوان، الموقع، أو المعرف...' : 'Search by title, location, or slug key...'}
               className="w-full bg-[#111215] border border-white/[0.08] focus:border-amber-500/80 rounded-xl ps-10 pe-10 py-3 text-[16px] sm:text-xs text-white placeholder-neutral-500 focus:outline-none transition-all font-mono"
             />
             {search && (
@@ -559,12 +571,17 @@ export default function ProjectsClient({
       {filteredProjects.length === 0 ? (
         <div className="bg-[#111215]/80 border border-white/[0.08] rounded-3xl py-20 text-center space-y-4">
           <Layers className="w-10 h-10 text-neutral-600 mx-auto" />
-          <h3 className="text-base font-semibold text-white">No Projects Match</h3>
+          <h3 className="text-base font-semibold text-white">
+            {isRtl ? 'لا توجد مشاريع مطابقة للبحث' : 'No Projects Match'}
+          </h3>
           <p className="text-neutral-400 text-xs font-mono max-w-sm mx-auto">
-            Try resetting your search query, clearing filters, or adding a new project.
+            {isRtl
+              ? 'جرب تغيير كلمة البحث أو إعادة تعيين الفلاتر لعرض كافة المشاريع.'
+              : 'Try resetting your search query, clearing filters, or adding a new project.'}
           </p>
           <button
             onClick={() => {
+              triggerHaptic('light')
               setSearch('')
               setActiveCategory('all')
               setFeaturedOnly(false)
@@ -572,7 +589,7 @@ export default function ProjectsClient({
             }}
             className="text-xs font-mono text-amber-400 hover:text-amber-300 underline underline-offset-4 cursor-pointer"
           >
-            Reset Filters
+            {isRtl ? 'إعادة ضبط الفلاتر' : 'Reset Filters'}
           </button>
         </div>
       ) : viewMode === 'cards' ? (

@@ -4,14 +4,14 @@ import { useState } from 'react'
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
-import { Compass, ArrowUpRight, Languages, Menu } from 'lucide-react'
+import { Compass, ArrowUpRight, Languages, Menu, ChevronLeft } from 'lucide-react'
 import { useAdminTranslation } from '@/context/AdminLanguageContext'
 import { triggerHaptic } from '@/lib/haptics'
 import MobileSectionsDrawer from './MobileSectionsDrawer'
 
 export default function AdminTopNav() {
   const pathname = usePathname()
-  const { t, lang, toggleLang } = useAdminTranslation()
+  const { t, lang, toggleLang, isRtl } = useAdminTranslation()
   const [drawerOpen, setDrawerOpen] = useState(false)
 
   if (pathname === '/admin/login') {
@@ -20,24 +20,41 @@ export default function AdminTopNav() {
 
   const getSectionInfo = () => {
     if (pathname === '/admin') {
-      return { num: '01', title: t.nav.home }
+      return { num: '01', title: t.nav.home, subTitle: null, backHref: null }
+    }
+    if (pathname === '/admin/projects/new') {
+      return {
+        num: '02',
+        title: t.nav.projects,
+        subTitle: t.projectForm.newProjectTitle,
+        backHref: '/admin/projects',
+      }
+    }
+    if (pathname.startsWith('/admin/projects/') && pathname !== '/admin/projects') {
+      return {
+        num: '02',
+        title: t.nav.projects,
+        subTitle: t.projectForm.editProjectTitle,
+        backHref: '/admin/projects',
+      }
     }
     if (pathname.startsWith('/admin/projects')) {
-      return { num: '02', title: t.nav.projects }
+      return { num: '02', title: t.nav.projects, subTitle: null, backHref: null }
     }
     if (pathname.startsWith('/admin/experience') || pathname.startsWith('/admin/skills')) {
-      return { num: '03', title: t.nav.experience }
+      return { num: '03', title: t.nav.experience, subTitle: null, backHref: null }
     }
-    if (pathname.startsWith('/admin/profile')) {
-      return { num: '04', title: t.nav.profile }
+    if (
+      pathname.startsWith('/admin/profile') ||
+      pathname.startsWith('/admin/hero') ||
+      pathname.startsWith('/admin/about')
+    ) {
+      return { num: '04', title: t.nav.profile, subTitle: null, backHref: null }
     }
     if (pathname.startsWith('/admin/settings')) {
-      return { num: '05', title: t.nav.settings }
+      return { num: '05', title: t.nav.settings, subTitle: null, backHref: null }
     }
-    if (pathname.startsWith('/admin/hero') || pathname.startsWith('/admin/about')) {
-      return { num: '04', title: t.nav.profile }
-    }
-    return { num: '••', title: t.nav.studioConsole }
+    return { num: '••', title: t.nav.studioConsole, subTitle: null, backHref: null }
   }
 
   const current = getSectionInfo()
@@ -77,13 +94,41 @@ export default function AdminTopNav() {
 
             <span className="text-neutral-600 font-mono text-xs hidden sm:inline">/</span>
 
-            {/* Section Title */}
-            <div className="min-w-0">
-              <span className="text-xs font-serif tracking-wide text-neutral-200 truncate block">
-                <span className="font-sans text-xs font-semibold text-white">
+            {/* Back Arrow for Sub-Routes */}
+            {current.backHref && (
+              <Link
+                href={current.backHref}
+                onClick={() => triggerHaptic('light')}
+                className="p-1 min-w-[28px] min-h-[28px] flex items-center justify-center rounded-lg text-neutral-400 hover:text-white hover:bg-white/[0.08] active:scale-90 transition-all"
+                title={t.common.back}
+                aria-label={t.common.back}
+              >
+                <ChevronLeft className={`w-4 h-4 ${isRtl ? 'rotate-180' : ''}`} />
+              </Link>
+            )}
+
+            {/* Section Title & Sub-Route Breadcrumb */}
+            <div className="min-w-0 flex items-center gap-1.5 truncate">
+              {current.backHref ? (
+                <Link
+                  href={current.backHref}
+                  className="font-sans text-xs font-semibold text-neutral-400 hover:text-white transition-colors truncate"
+                >
+                  {current.title}
+                </Link>
+              ) : (
+                <span className="font-sans text-xs font-semibold text-white truncate">
                   {current.title}
                 </span>
-              </span>
+              )}
+              {current.subTitle && (
+                <>
+                  <span className="text-neutral-600 font-mono text-xs">/</span>
+                  <span className="text-xs font-medium text-amber-300 truncate max-w-[140px] sm:max-w-xs">
+                    {current.subTitle}
+                  </span>
+                </>
+              )}
             </div>
           </div>
 

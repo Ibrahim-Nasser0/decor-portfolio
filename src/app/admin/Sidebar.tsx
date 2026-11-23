@@ -108,7 +108,7 @@ export default function AdminSidebar() {
                 <span>{t.topNav.cloudSync}</span>
               </span>
               <span className="bg-white/[0.04] border border-white/[0.08] px-2 py-0.5 rounded text-[9px] text-neutral-300 font-mono">
-                5 Screens
+                {isRtl ? '5 شاشات' : '5 Screens'}
               </span>
             </div>
           )}
