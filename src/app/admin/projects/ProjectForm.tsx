@@ -42,6 +42,7 @@ import { createClient } from '@/lib/supabase/client'
 import UnsavedChangesBar from '@/components/admin/UnsavedChangesBar'
 import AdminToast from '@/components/admin/AdminToast'
 import { compressImage } from '@/lib/imageCompression'
+import { deleteStorageFile } from '@/lib/storageUtils'
 import { useAdminTranslation } from '@/context/AdminLanguageContext'
 import { triggerHaptic } from '@/lib/haptics'
 
@@ -223,6 +224,9 @@ export default function ProjectForm({
     const files = e.target.files
     if (!files || files.length === 0) return
 
+    // Capture the existing image URL to automatically clean it up from Supabase Storage
+    const previousUrl = targetField !== 'gallery' ? (formData[targetField] as string) : null
+
     try {
       setIsUploading(true)
       const supabase = createClient()
@@ -293,7 +297,16 @@ export default function ProjectForm({
         } = supabase.storage.from(bucket).getPublicUrl(filePath)
 
         setFormData((prev) => ({ ...prev, [targetField]: publicUrl }))
-        setFeedback({ type: 'success', text: 'Image uploaded to Supabase Storage successfully!' })
+
+        // Automatically delete the other/previous image from Supabase Storage
+        if (previousUrl && previousUrl !== publicUrl) {
+          await deleteStorageFile(previousUrl)
+        }
+
+        setFeedback({
+          type: 'success',
+          text: isRtl ? 'تم رفع الصورة وحذف الصورة السابقة تلقائياً!' : 'Image uploaded and previous file cleaned up automatically!',
+        })
         setTimeout(() => setFeedback(null), 3000)
       }
     } catch (err: any) {
@@ -315,6 +328,8 @@ export default function ProjectForm({
   ) => {
     const file = e.target.files?.[0]
     if (!file) return
+
+    const previousUrl = formData.angles?.[idx]?.image
 
     try {
       setUploadingAngleIdx(idx)
@@ -345,7 +360,16 @@ export default function ProjectForm({
       const updated = [...(formData.angles || [])]
       updated[idx] = { ...updated[idx], image: publicUrl }
       setFormData((prev) => ({ ...prev, angles: updated }))
-      setFeedback({ type: 'success', text: 'Perspective render uploaded successfully!' })
+
+      // Automatically delete the other/previous angle image from Supabase Storage
+      if (previousUrl && previousUrl !== publicUrl) {
+        await deleteStorageFile(previousUrl)
+      }
+
+      setFeedback({
+        type: 'success',
+        text: isRtl ? 'تم رفع الزاوية وحذف الصورة السابقة تلقائياً!' : 'Perspective render uploaded and previous image cleaned up!',
+      })
       setTimeout(() => setFeedback(null), 3000)
     } catch (err: any) {
       setFeedback({
@@ -1042,12 +1066,14 @@ export default function ProjectForm({
                   </div>
                   <button
                     type="button"
-                    onClick={() =>
+                    onClick={() => {
+                      const urlToDelete = formData.gallery[idx]
                       setFormData((prev) => ({
                         ...prev,
                         gallery: prev.gallery.filter((_, i) => i !== idx),
                       }))
-                    }
+                      if (urlToDelete) deleteStorageFile(urlToDelete)
+                    }}
                     className="absolute top-2 right-2 p-1.5 bg-red-950/90 hover:bg-red-800 text-red-200 rounded-lg opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity cursor-pointer shadow-md"
                     title="Remove Image"
                   >
@@ -1526,12 +1552,14 @@ export default function ProjectForm({
                   {/* Remove Button */}
                   <button
                     type="button"
-                    onClick={() =>
+                    onClick={() => {
+                      const angleToDelete = formData.angles?.[idx]
                       setFormData((prev) => ({
                         ...prev,
                         angles: prev.angles?.filter((_, i) => i !== idx),
                       }))
-                    }
+                      if (angleToDelete?.image) deleteStorageFile(angleToDelete.image)
+                    }}
                     className="p-2 text-neutral-500 hover:text-red-400 self-end sm:self-center transition-colors cursor-pointer"
                     title="Remove Angle"
                   >

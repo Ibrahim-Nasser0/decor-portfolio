@@ -27,6 +27,7 @@ import {
 import { saveProfileAction } from '../actions'
 import { createClient } from '@/lib/supabase/client'
 import { compressImage } from '@/lib/imageCompression'
+import { deleteStorageFile } from '@/lib/storageUtils'
 import UnsavedChangesBar from '@/components/admin/UnsavedChangesBar'
 import AdminToast from '@/components/admin/AdminToast'
 import { useAdminTranslation } from '@/context/AdminLanguageContext'
@@ -47,6 +48,9 @@ export default function ProfileClient({ initialProfile }: { initialProfile: any 
   ) => {
     const rawFile = e.target.files?.[0]
     if (!rawFile) return
+
+    // Capture the existing image URL to automatically clean it up from Supabase Storage
+    const previousUrl = profile[field]
 
     try {
       setUploadingField(field === 'heroImageUrl' ? 'hero' : field === 'aboutImageUrl' ? 'about' : 'avatar')
@@ -72,15 +76,22 @@ export default function ProfileClient({ initialProfile }: { initialProfile: any 
         .getPublicUrl(bucket === 'profile-media' ? fileName : `profile/${fileName}`)
 
       setProfile((prev: any) => ({ ...prev, [field]: publicUrl }))
+
+      // Automatically delete the other/previous image from Supabase Storage
+      if (previousUrl && previousUrl !== publicUrl) {
+        await deleteStorageFile(previousUrl)
+      }
+
       setFeedback({
         type: 'success',
-        text: isRtl ? 'تم رفع الصورة وتحديث الرابط بنجاح!' : 'Photo uploaded to cloud successfully!',
+        text: isRtl ? 'تم رفع الصورة وحذف الصورة السابقة تلقائياً!' : 'Photo uploaded and previous image cleaned up automatically!',
       })
       setTimeout(() => setFeedback(null), 3000)
     } catch (err: any) {
       setFeedback({ type: 'error', text: err.message || 'Failed to upload photo' })
     } finally {
       setUploadingField(null)
+      e.target.value = ''
     }
   }
 
